@@ -31,7 +31,7 @@ public class ChooseOrderListActivity extends BaseActivity implements View.OnClic
     private RelativeLayout layout_header;
     private PullLoadMoreRecyclerView pr_list;
     private List<OrderList> list = new ArrayList<>();
-    private List<Integer> piclist = new ArrayList<>();
+    private List<String> piclist = new ArrayList<>();
     private ChooseGoodsListAdapter adapter;
 
     @Override
@@ -74,9 +74,9 @@ public class ChooseOrderListActivity extends BaseActivity implements View.OnClic
         orderList1.setPic(R.mipmap.ic_launcher);
         list.add(orderList1);
 
-        piclist.add(R.mipmap.ic_launcher);
-        piclist.add(R.mipmap.ic_launcher);
-        piclist.add(R.mipmap.ic_launcher);
+//        piclist.add(R.mipmap.ic_launcher);
+//        piclist.add(R.mipmap.ic_launcher);
+//        piclist.add(R.mipmap.ic_launcher);
 
         adapter=new ChooseGoodsListAdapter(list,piclist,this);
         pr_list.setAdapter(adapter);

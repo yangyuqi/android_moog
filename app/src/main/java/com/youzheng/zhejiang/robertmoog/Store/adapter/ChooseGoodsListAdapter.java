@@ -17,7 +17,7 @@ import java.util.List;
 
 public class ChooseGoodsListAdapter extends RecyclerView.Adapter {
     private List<OrderList> list;
-    private List<Integer> piclist;
+    private List<String> piclist;
     private Context context;
     private LayoutInflater layoutInflater;
     public static final int TYPE_ONE_IMAGE = 0;
@@ -28,7 +28,7 @@ public class ChooseGoodsListAdapter extends RecyclerView.Adapter {
         this.mOnItemClickListener = mOnItemClickListener;
     }
 
-    public ChooseGoodsListAdapter(List<OrderList> list, List<Integer> piclist, Context context) {
+    public ChooseGoodsListAdapter(List<OrderList> list, List<String> piclist, Context context) {
         this.list = list;
         this.piclist=piclist;
         this.context = context;

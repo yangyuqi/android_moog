@@ -56,7 +56,7 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
     private TextView tv_confirm;
     private DrawerLayout drawer_layout;
     private List<OrderList> list = new ArrayList<>();
-    private List<Integer> piclist = new ArrayList<>();
+    private List<String> piclist = new ArrayList<>();
     private ReturnGoodsTimeAdapter goodsTimeAdapter;
     private ReturnGoodsListAdapter adapter;
     private List<String> strlist=new ArrayList<>();
@@ -112,9 +112,9 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
         orderList1.setPic(R.mipmap.ic_launcher);
         list.add(orderList1);
 
-        piclist.add(R.mipmap.ic_launcher);
-        piclist.add(R.mipmap.ic_launcher);
-        piclist.add(R.mipmap.ic_launcher);
+//        piclist.add(R.mipmap.ic_launcher);
+//        piclist.add(R.mipmap.ic_launcher);
+//        piclist.add(R.mipmap.ic_launcher);
 
 
         adapter=new ReturnGoodsListAdapter(list,piclist,this);

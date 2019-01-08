@@ -17,7 +17,7 @@ import java.util.List;
 
 public class ProfessionalCustomerOrderListAdapter extends RecyclerView.Adapter {
     private List<OrderList> list;
-    private List<Integer> piclist;
+    private List<String> piclist;
     private Context context;
     private LayoutInflater layoutInflater;
     public static final int TYPE_ONE_IMAGE = 0;
@@ -27,7 +27,7 @@ public class ProfessionalCustomerOrderListAdapter extends RecyclerView.Adapter {
     public void setOnItemClickListener(OnRecyclerViewAdapterItemClickListener mOnItemClickListener) {
         this.mOnItemClickListener = mOnItemClickListener;
     }
-    public ProfessionalCustomerOrderListAdapter(List<OrderList> list, List<Integer> piclist, Context context) {
+    public ProfessionalCustomerOrderListAdapter(List<OrderList> list, List<String> piclist, Context context) {
         this.list = list;
         this.piclist=piclist;
         this.context = context;

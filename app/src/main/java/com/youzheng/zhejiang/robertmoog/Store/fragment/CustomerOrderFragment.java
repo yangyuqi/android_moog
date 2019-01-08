@@ -54,7 +54,7 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
     private TextView tv_confirm;
     private DrawerLayout drawer_layout;
     private List<OrderList> list = new ArrayList<>();
-    private List<Integer> piclist = new ArrayList<>();
+    private List<String> piclist = new ArrayList<>();
     private ProfessionalCustomerOrderListAdapter adapter;
     private GoodsTimeAdapter goodsTimeAdapter;
     private List<String> strlist = new ArrayList<>();
@@ -108,9 +108,9 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
         orderList1.setPic(R.mipmap.ic_launcher);
         list.add(orderList1);
 
-        piclist.add(R.mipmap.ic_launcher);
-        piclist.add(R.mipmap.ic_launcher);
-        piclist.add(R.mipmap.ic_launcher);
+//        piclist.add(R.mipmap.ic_launcher);
+//        piclist.add(R.mipmap.ic_launcher);
+//        piclist.add(R.mipmap.ic_launcher);
 
         adapter = new ProfessionalCustomerOrderListAdapter(list, piclist, getActivity());
         rv_list.setAdapter(adapter);
