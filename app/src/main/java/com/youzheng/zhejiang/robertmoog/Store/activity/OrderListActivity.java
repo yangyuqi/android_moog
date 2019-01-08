@@ -1,5 +1,6 @@
 package com.youzheng.zhejiang.robertmoog.Store.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
@@ -17,18 +18,24 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
+import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
 import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
+import com.youzheng.zhejiang.robertmoog.Model.Home.EnumsDatas;
+import com.youzheng.zhejiang.robertmoog.Model.Home.EnumsDatasBean;
+import com.youzheng.zhejiang.robertmoog.Model.Home.EnumsDatasBeanDatas;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.GoodsTimeAdapter;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.OrderListAdapter;
 import com.youzheng.zhejiang.robertmoog.Store.bean.NewOrderListBean;
 import com.youzheng.zhejiang.robertmoog.Store.bean.OrderList;
 import com.youzheng.zhejiang.robertmoog.Store.bean.StoreCustomerDetail;
+import com.youzheng.zhejiang.robertmoog.Store.listener.OnRecyclerViewAdapterItemClickListener;
 import com.youzheng.zhejiang.robertmoog.Store.view.RecycleViewDivider;
 
 import java.io.IOException;
@@ -41,7 +48,7 @@ import okhttp3.Request;
 /**
  * 订单列表界面
  */
-public class OrderListActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class OrderListActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener, OnRecyclerViewAdapterItemClickListener {
 
 
     private ImageView btnBack;
@@ -76,14 +83,15 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
     private TextView tv_confirm;
     private DrawerLayout drawer_layout;
     private GoodsTimeAdapter goodsTimeAdapter;
-    private List<String> strlist=new ArrayList<>();
+    private List<EnumsDatasBeanDatas> strlist=new ArrayList<>();
 
     private int page=1;
     private int pageSize=10;
     private int customerId;
     private String orderCode="";
-    private String startDate="";
-    private String endDate="";
+    private String timeQuantum="";
+    private Boolean isCustomer=false;
+    private int who;
 
 
     @Override
@@ -92,6 +100,44 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
         setContentView(R.layout.activity_order_list);
         initView();
         setListener();
+        initGetDate();
+    }
+
+    private void initGetDate() {
+        OkHttpClientManager.postAsynJson(gson.toJson(new HashMap<>()), UrlUtils.LIST_DATA+"?access_token="+access_token, new OkHttpClientManager.StringCallback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(String response) {
+                Log.e("获取时间枚举",response);
+                BaseModel baseModel = gson.fromJson(response,BaseModel.class);
+                if (baseModel.getCode()==PublicUtils.code){
+                    EnumsDatas enumsDatas = gson.fromJson(gson.toJson(baseModel.getDatas()),EnumsDatas.class);
+                    if (enumsDatas.getEnums().size()>0){
+                        for (final EnumsDatasBean bean : enumsDatas.getEnums()){
+                            if (bean.getClassName().equals("InstallStatus")){//  TimeQuantum
+//                                final List<String> date = new ArrayList<String>();
+                                List<EnumsDatasBeanDatas> list1=new ArrayList<>();
+                                for (int i = 0; i < bean.getDatas().size(); i++) {
+                                    list1.add(bean.getDatas().get(i));
+                                }
+                                strlist=list1;
+                            }
+                        }
+
+                        goodsTimeAdapter.setUI(strlist);
+
+                        timeQuantum=strlist.get(0).getId();
+
+                    }
+
+                }
+            }
+        });
+
     }
 
     private void setListener() {
@@ -100,14 +146,14 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
             public void onRefresh() {
                 page=1;
                 list.clear();
-                initData(page,pageSize,customerId,orderCode,startDate,endDate);
+                initData(page,pageSize,orderCode,timeQuantum,isCustomer);
 
             }
 
             @Override
             public void onLoadMore() {
                 page++;
-                initData(page,pageSize,customerId,orderCode,startDate,endDate);
+                initData(page,pageSize,orderCode,timeQuantum,isCustomer);
             }
         });
 
@@ -133,6 +179,8 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
         gv_time = (GridView) findViewById(R.id.gv_time);
         tv_again = (TextView) findViewById(R.id.tv_again);
         tv_confirm = (TextView) findViewById(R.id.tv_confirm);
+        tv_again.setOnClickListener(this);
+        tv_confirm.setOnClickListener(this);
         drawer_layout= (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);//禁止手势滑动
         gv_time.setOnItemClickListener(this);
@@ -148,33 +196,31 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
         rv_list.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
-        strlist.add("全部");
-        strlist.add("一到三个月");
-        strlist.add("一到三个月");
-        strlist.add("一到三个月");
-        strlist.add("一到三个月");
-        strlist.add("一到三个月");
+
 
         goodsTimeAdapter=new GoodsTimeAdapter(strlist,this);
         gv_time.setAdapter(goodsTimeAdapter);
         goodsTimeAdapter.notifyDataSetChanged();
+
+
+        adapter.setOnItemClickListener(this);
+
 
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        initData(page,pageSize,customerId,orderCode,startDate,endDate);
+        initData(page,pageSize,orderCode,timeQuantum,isCustomer);
     }
 
-    private void initData(int page, int pageSize, int customerId, String orderCode, String startDate, String endDate) {
+    private void initData(int page, int pageSize, String orderCode,String timeQuantum,Boolean isCustomer) {
         HashMap<String,Object> map=new HashMap<>();
         map.put("pageNum",page);
         map.put("pageSize",pageSize);
-        map.put("customerId",customerId);
         map.put("orderCode",orderCode);
-        map.put("startDate",startDate);
-        map.put("endDate",endDate);
+        map.put("timeQuantum",timeQuantum);
+        map.put("identifion",isCustomer);
 
         OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.ORDERLIST_LIST + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
@@ -228,10 +274,23 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
                 break;
             case R.id.tv_time:
                 drawer_layout.openDrawer(GravityCompat.END);
+
                 break;
 
             case R.id.btnBack:
                 finish();
+                break;
+
+            case R.id.tv_again:
+                 goodsTimeAdapter.setSelectItem(0);
+                timeQuantum=strlist.get(0).getId();
+                break;
+
+            case R.id.tv_confirm:
+                initData(page,pageSize,orderCode,timeQuantum,isCustomer);
+                drawer_layout.closeDrawer(GravityCompat.END);
+                goodsTimeAdapter.setSelectItem(who);
+                timeQuantum=strlist.get(who).getId();
                 break;
         }
     }
@@ -239,5 +298,19 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         goodsTimeAdapter.setSelectItem(position);
+        timeQuantum=strlist.get(position).getId();
+        who=position;
+
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        Intent intent=new Intent(this,StoreOrderlistDetailActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onItemLongClick(View view, int position) {
+
     }
 }

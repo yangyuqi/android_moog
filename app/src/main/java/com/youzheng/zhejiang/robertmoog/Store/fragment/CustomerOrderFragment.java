@@ -128,16 +128,16 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
         });
 
 
-        strlist.add("全部");
-        strlist.add("一到三个月");
-        strlist.add("一到三个月");
-        strlist.add("一到三个月");
-        strlist.add("一到三个月");
-        strlist.add("一到三个月");
+//        strlist.add("全部");
+//        strlist.add("一到三个月");
+//        strlist.add("一到三个月");
+//        strlist.add("一到三个月");
+//        strlist.add("一到三个月");
+//        strlist.add("一到三个月");
 
-        goodsTimeAdapter=new GoodsTimeAdapter(strlist,getActivity());
-        gv_time.setAdapter(goodsTimeAdapter);
-        goodsTimeAdapter.notifyDataSetChanged();
+//        goodsTimeAdapter=new GoodsTimeAdapter(strlist,getActivity());
+//        gv_time.setAdapter(goodsTimeAdapter);
+//        goodsTimeAdapter.notifyDataSetChanged();
 
 
     }

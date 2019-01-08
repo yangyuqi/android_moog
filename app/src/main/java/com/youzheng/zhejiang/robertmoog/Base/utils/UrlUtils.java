@@ -86,7 +86,7 @@ public class UrlUtils {
 
     public static String ORDERLIST_LIST = BASE_URL+"/v1/app/customer/orderList";
 
-
+    public static String ORDERLIST_LIST_DETAIL = BASE_URL+"/v1/app/customer/orderDetail";
 
 
 

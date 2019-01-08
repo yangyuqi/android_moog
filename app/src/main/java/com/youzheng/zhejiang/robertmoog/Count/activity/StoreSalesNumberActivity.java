@@ -122,6 +122,10 @@ public class StoreSalesNumberActivity extends BaseActivity implements View.OnCli
     @Override
     protected void onResume() {
         super.onResume();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");// HH:mm:ss
+        Date date = new Date(System.currentTimeMillis());
+        tv_startDate.setText(simpleDateFormat.format(date));
+        tv_endDate.setText(simpleDateFormat.format(date));
         initData(page,pageSize,isDay,starstDate,endsDate);
     }
 
