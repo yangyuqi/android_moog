@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#5B7F95</color>
+    <color name="colorPrimaryDark">#5B7F95</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="color_air_blue">#B7C9D3</color>
+    <color name="bg_main">#4E4E4E</color>
+    <color name="bg_all">#F3F3FC</color>
+    <color name="bg_background_white">#FFFFFF</color>
+    <color name="divider_color">#EAEAEA</color>
+    <color name="divider_color_item">#F3F3F3</color>
+    <color name="text_main">#4E4E4E</color>
+    <color name="text_drak_gray">#B7B7B7</color>
+    <color name="text_drak_black">#000</color>
+    <color name="text_golden">#C6893F</color>
+    <color name="text_blue">#1B365D</color>
+    <color name="text_golden2">#C3802A</color>
+    <color name="bg_old_blue">#1A355C</color>
+    <color name="bg_rou">#F6F6F6</color>
+    <color name="dark1">#aad3d7d4</color>
+    <color name="bg_dialog">#F8F8F8</color>
+
+
+    <color name="contents_text">#000000</color>
+    <color name="encode_view">#ffffff</color>
+    <color name="possible_result_points">#ffbd21</color>
+    <color name="result_minor_text">#c0c0c0</color>
+    <color name="result_points">#99cc00</color>
+    <color name="result_text">#ffffff</color>
+    <color name="result_view">#000000</color>
+    <color name="status_text">#ffffff</color>
+    <color name="viewfinder_mask">#50000000</color>
+    <color name="react">#ffffff</color>
+    <color name="scanLineColor">#ffffff</color>
+    <color name="defaultColor">#ffffff</color>
+
+</resources>
