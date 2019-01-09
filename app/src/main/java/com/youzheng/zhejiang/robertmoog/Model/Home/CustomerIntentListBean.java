@@ -1,12 +1,13 @@
 package com.youzheng.zhejiang.robertmoog.Model.Home;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CustomerIntentListBean {
    private String id ;
    private String custCode ;
    private Integer productCount ;
-   private List<ProductListBean> productList ;
+   private List<ProductListBean> productList = new ArrayList<>();
 
    private String name ;
    private String sku ;

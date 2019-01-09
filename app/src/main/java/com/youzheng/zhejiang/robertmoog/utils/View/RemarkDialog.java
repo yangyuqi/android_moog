@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
 import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
+import com.youzheng.zhejiang.robertmoog.Home.activity.AttentionGoodsActivity;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.utils.SharedPreferencesUtils;
@@ -23,17 +24,18 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.greenrobot.event.EventBus;
 import okhttp3.Request;
 
 
 public class RemarkDialog extends Dialog implements View.OnClickListener{
 
-    Context mcontext ;
+    AttentionGoodsActivity mcontext ;
     private String id , remark ;
     EditText confrim_dialog_tv_content ;
     TextView tv_no ,tv_ok ;
     String token ;
-    public RemarkDialog(Context context, String id, String remark){
+    public RemarkDialog(AttentionGoodsActivity context, String id, String remark){
         super(context, R.style.DeleteDialogStyle);
         mcontext = context;
         token = (String) SharedPreferencesUtils.getParam(context, PublicUtils.access_token,"");
@@ -88,6 +90,7 @@ public class RemarkDialog extends Dialog implements View.OnClickListener{
                     public void onResponse(String response) {
                         BaseModel baseModel = new Gson().fromJson(response,BaseModel.class);
                         if (baseModel.getCode()==PublicUtils.code){
+                            EventBus.getDefault().post("refresh");
                             dismiss();
                         }
                     }

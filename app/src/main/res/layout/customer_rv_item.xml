@@ -163,14 +163,13 @@
 
                     <RelativeLayout
                         android:id="@+id/main_right_drawer_layout"
-                        android:layout_width="60dp"
+                        android:layout_width="65dp"
                         android:layout_height="match_parent"
                         android:background="@color/text_golden"
                         >
                         <TextView
                             android:textSize="@dimen/text_size_15"
-                            android:textColor="@color/text_main"
-                            android:ems="1"
+                            android:textColor="@color/bg_background_white"
                             android:id="@+id/tv_test"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

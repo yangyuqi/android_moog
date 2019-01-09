@@ -148,7 +148,7 @@
                 android:background="@color/bg_background_white"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="1dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -175,7 +175,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="1dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -191,6 +191,7 @@
                     android:background="@color/bg_background_white"
                     />
                 <TextView
+                    android:hint="请选择提货方式"
                     android:drawablePadding="@dimen/space_10"
                     android:drawableRight="@mipmap/group_9_4"
                     android:id="@+id/tv_get_state"
@@ -200,7 +201,7 @@
                     android:paddingLeft="@dimen/space_30"
                     android:textColor="@color/text_main"
                     android:textSize="13sp"
-                    android:gravity="center_vertical"
+                    android:gravity="center_vertical|end"
                     android:paddingRight="15dp"
                     android:background="@color/bg_background_white"
                     />
@@ -211,7 +212,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="1dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -227,6 +228,7 @@
                     android:background="@color/bg_background_white"
                     />
                 <TextView
+                    android:hint="请选择配送方式"
                     android:drawablePadding="@dimen/space_10"
                     android:drawableRight="@mipmap/group_9_4"
                     android:id="@+id/tv_dispatching_type"
@@ -236,7 +238,7 @@
                     android:paddingLeft="@dimen/space_30"
                     android:textColor="@color/text_main"
                     android:textSize="13sp"
-                    android:gravity="center_vertical"
+                    android:gravity="center_vertical|end"
                     android:paddingRight="15dp"
                     android:background="@color/bg_background_white"
                     />
@@ -249,7 +251,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="1dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -265,6 +267,7 @@
                     android:background="@color/bg_background_white"
                     />
                 <TextView
+                    android:hint="请选择收款方式"
                     android:id="@+id/tv_get_money_type"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
@@ -272,7 +275,7 @@
                     android:paddingLeft="@dimen/space_30"
                     android:textColor="@color/text_main"
                     android:textSize="13sp"
-                    android:gravity="center_vertical"
+                    android:gravity="center_vertical|end"
                     android:drawablePadding="@dimen/space_10"
                     android:drawableRight="@mipmap/group_9_4"
                     android:paddingRight="15dp"
@@ -287,7 +290,7 @@
                 android:background="@color/bg_background_white"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="1dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -305,6 +308,7 @@
 
 
                 <TextView
+                    android:hint="未使用"
                     android:drawablePadding="@dimen/space_10"
                     android:drawableRight="@mipmap/group_9_4"
                     android:id="@+id/tv_get_ticket"
@@ -325,7 +329,7 @@
                 android:background="@color/bg_background_white"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="1dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -342,19 +346,20 @@
                     />
 
 
-                <TextView
+                <EditText
+                    android:text="0"
                     android:layout_marginRight="@dimen/space_15"
-                    android:id="@+id/tv_door_ticket"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/edt_door_ticket"
+                    android:layout_width="80dp"
                     android:layout_height="wrap_content"
-                    android:text="哈哈哈哈"
                     android:textColor="@color/text_drak_black"
                     android:textSize="13sp"
-                    android:gravity="center_vertical"
+                    android:gravity="center"
                     android:background="@drawable/bg_order"
                     android:padding="5dp"
                     android:paddingLeft="@dimen/space_15"
                     android:paddingRight="@dimen/space_15"
+                    android:inputType="number"
                     />
 
 
@@ -464,7 +469,7 @@
                         android:id="@+id/tv_cut_money_of_juan"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="-￥8"
+                        android:text="-¥0"
                         android:textColor="@color/text_main"
                         android:textSize="13sp"
                         android:gravity="center_vertical"
@@ -500,7 +505,7 @@
                         android:id="@+id/tv_cut_money_of_promotion"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="-￥100"
+                        android:text="-¥0"
                         android:textColor="@color/text_main"
                         android:textSize="13sp"
                         android:gravity="center_vertical"
@@ -535,7 +540,7 @@
                         android:id="@+id/tv_cut_money_of_store"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="-￥80"
+                        android:text="-¥0"
                         android:textColor="@color/text_main"
                         android:textSize="13sp"
                         android:gravity="center_vertical"

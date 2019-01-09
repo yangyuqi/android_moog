@@ -1,9 +1,20 @@
 package com.youzheng.zhejiang.robertmoog.Model.Home;
 
-public class AddressDatasBean {
+import java.io.Serializable;
+
+public class AddressDatasBean implements Serializable{
     private String shipPerson ;
     private String shipMobile ;
     private String shipAddress ;
+    private String addressId ;
+
+    public String getAddressId() {
+        return addressId;
+    }
+
+    public void setAddressId(String addressId) {
+        this.addressId = addressId;
+    }
 
     public String getShipPerson() {
         return shipPerson;

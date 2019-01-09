@@ -28,7 +28,7 @@
 
         <!-- 扫描取景框 -->
         <com.youzheng.zhejiang.robertmoog.utils.QRcode.view.ViewfinderView
-            android:layout_marginTop="-70dp"
+            android:layout_marginTop="-60dp"
             android:id="@+id/viewfinder_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -57,8 +57,18 @@
                 android:text="收起扫描区"
                 android:gravity="center"
                 android:textColor="@color/text_main"
-                android:drawableRight="@mipmap/group_12_3"
+                android:id="@+id/tv_mm"
                 />
+
+                <ImageView
+                    android:id="@+id/iv_preview"
+                    android:layout_marginLeft="@dimen/space_5"
+                    android:layout_centerVertical="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/tv_mm"
+                    android:src="@mipmap/group_12_3"
+                    />
 
         </RelativeLayout>
 

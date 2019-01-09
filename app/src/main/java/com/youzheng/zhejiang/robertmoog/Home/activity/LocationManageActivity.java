@@ -3,6 +3,7 @@ package com.youzheng.zhejiang.robertmoog.Home.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -31,7 +32,7 @@ public class LocationManageActivity extends BaseActivity {
     ListView ls ;
     CommonAdapter<AddressDatasBean> adapter ;
     List<AddressDatasBean> data =new ArrayList<>();
-    private String customerId  , pageNum = "1" ,pageSize ="20";
+    private String customerId  , pageNum = "1" ,pageSize ="20" ,type;
 
 
     @Override
@@ -82,14 +83,27 @@ public class LocationManageActivity extends BaseActivity {
             }
         });
         customerId = getIntent().getStringExtra("customerId");
+        type = getIntent().getStringExtra("type");
         data.clear();
         ls = (ListView) findViewById(R.id.ls_location);
         adapter = new CommonAdapter<AddressDatasBean>(mContext,data,R.layout.location_ls_item) {
             @Override
-            public void convert(ViewHolder helper, AddressDatasBean item) {
+            public void convert(ViewHolder helper, final AddressDatasBean item) {
                 helper.setText(R.id.tv_name,item.getShipPerson());
                 helper.setText(R.id.tv_phone,item.getShipMobile());
                 helper.setText(R.id.tv_details,item.getShipAddress());
+
+                helper.getConvertView().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (type!=null){
+                            Intent intent = new Intent();
+                            intent.putExtra("address",item);
+                            setResult(2,intent);
+                            finish();
+                        }
+                    }
+                });
             }
         };
         ls.setAdapter(adapter);
