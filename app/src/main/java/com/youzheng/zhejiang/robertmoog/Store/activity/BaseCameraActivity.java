@@ -346,7 +346,8 @@ public class BaseCameraActivity extends BaseActivity {
                     if (isTailor){
                         startUcrop(uri1);
                     }else {
-                        setHeadIvEvenSendMine(bm1 ,picturePath1);
+                        Bitmap bm12 = Bimp.revitionImageSize(picturePath1);
+                        setHeadIvEvenSendMine(bm12 ,picturePath1);
                     }
 
                     Bimp.drr.clear();

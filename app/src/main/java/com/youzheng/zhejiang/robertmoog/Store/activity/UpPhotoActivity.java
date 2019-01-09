@@ -43,6 +43,8 @@ import okhttp3.Request;
 import okhttp3.Response;
 import rx.Subscriber;
 import rx.schedulers.Schedulers;
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
 
 public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickListener, OnRecyclerViewAdapterItemClickListener {
 
@@ -73,23 +75,31 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
     private TextView tv_cancel;
     private List<String> addlist=new ArrayList<>();
     private   List<File> fileList=new ArrayList<>();
+    private String response;
 
-    Handler handler=new Handler(){
+
+
+    private Handler handler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what){
                 case 1:
-                    showToast("成功");
-                    break;
+                    BaseModel baseModel = gson.fromJson(response,BaseModel.class);
+                    if (baseModel.getCode()==PublicUtils.code){
+                        showToast("图片上传成功");
+                        finish();
+                    }
+
+                   break;
 
                 case 2:
-                    showToast("失败");
+                    showToast("图片上传失败");
                     break;
+
             }
         }
     };
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,28 +122,48 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
         gv_photo = (GridView) findViewById(R.id.gv_photo);
         textHeadNext.setOnClickListener(this);
 
-        addlist=getIntent().getStringArrayListExtra("picturePath");
+        path=getIntent().getStringExtra("picturePath");
+        list.add(path);
+        Log.e("ppp",path+"");
+        adapter=new AddphotoAdapter(list,this);
+        gv_photo.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+        adapter.setOnItemClickListener(this);
+
     }
 
     @Override
     protected void setHeadIvEvenSendMine(Bitmap bm, String picturePath) {
         super.setHeadIvEvenSendMine(bm, picturePath);
         list.add(picturePath);
-        adapter=new AddphotoAdapter(list,this);
-        gv_photo.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        Log.e("www",picturePath+"");
+        Log.e("2131",list.size()+"");
+
+
+
+        if (list.size()!=0){
+            for (int i = 0; i <list.size() ; i++) {
+                path=list.get(i);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        LuBan(path);
+                    }
+                }).start();
+
+                Log.e("集合路径",path);
+
+
+            }
+        }
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        list=addlist;
-        adapter=new AddphotoAdapter(list,this);
-        gv_photo.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-        Log.e("2131",list.size()+"");
 
-        adapter.setOnItemClickListener(this);
     }
 
 
@@ -145,7 +175,6 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
                 break;
             case R.id.btnBack:
                 list.clear();
-                addlist.clear();
                 fileList.clear();
                 finish();
                 break;
@@ -168,20 +197,35 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
         }
     }
 
-    private void CommitPic() {
-//        HashMap<String,Object> map=new HashMap<>();
-//        map.put("posters",fileList);
-        if (list.size()!=0){
-            for (int i = 0; i <list.size() ; i++) {
-                path=list.get(i);
-                Log.e("集合路径",path);
-                File file=new File(path);
-                fileList.add(file);
 
-            }
-        }
 
-        OkHttpClientManager.getInstance().sendMultipart(UrlUtils.UPLOAD_FILE + "?access_token=" + access_token,new HashMap<String, Object>(),"posters",fileList)
+    private void LuBan(String picpath){
+        Luban.with(this)
+                .load(picpath)                                   // 传人要压缩的图片列表
+                .ignoreBy(100)                                  // 忽略不压缩图片的大小
+//                .setTargetDir(getPath())                        // 设置压缩后文件存储位置
+                .setCompressListener(new OnCompressListener() { //设置回调
+                    @Override
+                    public void onStart() {
+                        // TODO 压缩开始前调用，可以在方法内启动 loading UI
+                    }
+
+                    @Override
+                    public void onSuccess(File file) {
+                        // TODO 压缩成功后调用，返回压缩后的图片文件
+                        fileList.add(file);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        // TODO 当压缩过程出现问题时调用
+                    }
+                }).launch();    //启动压缩
+
+    }
+
+    private void upPic(List<File> pic){
+        OkHttpClientManager.getInstance().sendMultipart(UrlUtils.UPLOAD_FILE + "?access_token=" + access_token,new HashMap<String, Object>(),"posters",pic)
                 .subscribeOn(Schedulers.newThread())
                 .subscribe(new Subscriber<String>() {
                     @Override
@@ -191,41 +235,22 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
 
                     @Override
                     public void onError(Throwable throwable) {
-
+                        Log.e("图片上传失败",throwable.getMessage());
+                        Message message=new Message();
+                        message.what=2;
+                        handler.sendMessage(message);
                     }
 
                     @Override
                     public void onNext(String s) {
                         Log.e("图片上传成功",s);
-//                        BaseModel baseModel = gson.fromJson(s,BaseModel.class);
-//                        if (baseModel.getCode()==PublicUtils.code){
-//                            showToast("图片上传成功");
-//                            finish();
-//                        }
+                        response=s;
+                        Message message=new Message();
+                        message.what=1;
+                        handler.sendMessage(message);
+
                     }
                 });
-//
-//        try {
-//            OkHttpClientManager.postAsyn(UrlUtils.UPLOAD_FILE + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
-//                @Override
-//                public void onFailure(Request request, IOException e) {
-//
-//
-//                }
-//                @Override
-//                public void onResponse(String response) {
-//                    Log.e("今日门店销量",response);
-//                    BaseModel baseModel = gson.fromJson(response,BaseModel.class);
-//                    if (baseModel.getCode()==PublicUtils.code){
-//                       showToast("成功");
-//                    }
-//
-//                }
-//            },file,"file");
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
     }
 
     public void showStopDialog() {
@@ -249,7 +274,8 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
         tv_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               CommitPic();
+               upPic(fileList);
+               showToast("正在上传图片，请稍候！");
                 dialogBuilder.dismiss();
             }
         });
