@@ -101,10 +101,10 @@ public class SampleOutMangerActivity extends BaseCameraActivity implements View.
     @Override
     protected void setHeadIvEvenSendMine(Bitmap bm, String picturePath) {
         super.setHeadIvEvenSendMine(bm, picturePath);
-        list.clear();
-        list.add(picturePath);
+//        list.clear();
+//        list.add(picturePath);
         Intent intent=new Intent(this,UpPhotoActivity.class);
-        intent.putExtra("picturePath", (Serializable) list);
+        intent.putExtra("picturePath", picturePath);
         Log.e("路径",picturePath);
         startActivity(intent);
     }
