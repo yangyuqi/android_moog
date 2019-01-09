@@ -8,8 +8,17 @@ public class CustomerIntentListBean {
    private String custCode ;
    private Integer productCount ;
    private List<ProductListBean> productList = new ArrayList<>();
+   private boolean isExpress = false ;
 
-   private String name ;
+    public boolean isExpress() {
+        return isExpress;
+    }
+
+    public void setExpress(boolean express) {
+        isExpress = express;
+    }
+
+    private String name ;
    private String sku ;
    private String photo ;
    private String createDate ;

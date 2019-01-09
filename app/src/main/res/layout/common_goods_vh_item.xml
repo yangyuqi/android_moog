@@ -42,11 +42,12 @@
             >
 
             <TextView
+                android:singleLine="true"
                 android:id="@+id/tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/text_drak_black"
-                android:textSize="@dimen/text_size_18"
+                android:textSize="@dimen/text_size_17"
                 android:text="ywqeqw"
                 />
 

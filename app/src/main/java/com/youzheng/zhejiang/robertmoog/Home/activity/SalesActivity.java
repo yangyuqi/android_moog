@@ -37,7 +37,7 @@ import com.youzheng.zhejiang.robertmoog.Model.Home.SaleData;
 import com.youzheng.zhejiang.robertmoog.Model.Home.SaleDataBean;
 import com.youzheng.zhejiang.robertmoog.Model.Home.ScanDatasBean;
 import com.youzheng.zhejiang.robertmoog.R;
-import com.youzheng.zhejiang.robertmoog.Store.StoreOrderlistDetailActivity;
+import com.youzheng.zhejiang.robertmoog.Store.activity.StoreOrderlistDetailActivity;
 import com.youzheng.zhejiang.robertmoog.utils.QRcode.android.CaptureActivity;
 
 import java.io.IOException;

@@ -78,7 +78,7 @@ public class UrlUtils {
 
 
     public static String COUPON_RECORD_DETAIL = BASE_URL+"/v1/app/shop/couponUsageRecord";
-
+    public static String GETCOMBO_INFO = BASE_URL+"/v1/app/shop/getComboInfo";
 
 
     public static String SET_MEAL_LIST = BASE_URL+"/v1/app/shop/getComboTypes";
@@ -88,7 +88,7 @@ public class UrlUtils {
     public static String ADD_INTENTION_GOODS = BASE_URL+"/v1/app/customer/addIntentProduct";
 
 
-    public static String ORDERLIST_LIST_DETAIL = BASE_URL+"/v1/app/customer/orderDetail";
+    public static String ORDERLIST_LIST_DETAIL = BASE_URL+"/v1/app/shop/getComboInfo";
 
 
 

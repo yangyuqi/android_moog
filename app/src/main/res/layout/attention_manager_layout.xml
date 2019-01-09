@@ -32,6 +32,7 @@
 
 
     <RelativeLayout
+        android:id="@+id/rl_search"
         android:background="@color/bg_background_white"
         android:layout_width="match_parent"
         android:layout_height="45dp">
@@ -79,11 +80,26 @@
         </LinearLayout>
     </RelativeLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/recycler_view"
         ></android.support.v7.widget.RecyclerView>
 
+        <ListView
+            android:layout_marginTop="@dimen/space_1"
+            android:scrollbars="none"
+            android:overScrollMode="never"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/ls"
+            android:dividerHeight="@dimen/space_divider_2"
+            ></ListView>
+
+    </RelativeLayout>
 
 </LinearLayout>

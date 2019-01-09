@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -64,6 +65,8 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
         return new CustomerIntentViewHolder(view);
     }
 
+    List<ProductListBean> listBeanList ;
+
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder viewHolder, final int i) {
 
@@ -75,12 +78,19 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
                 ((CustomerIntentViewHolder) viewHolder).rl_show.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (productList.size()>0){
-                            productList.clear();
-                        }else {
-                            productList = data.get(i).getProductList().subList(1,data.get(i).getProductList().size());
+                        listBeanList = new ArrayList<>();
+                        if (data.get(i).getProductList().size()>0) {
+                            if (data.get(i).isExpress()) {
+                                listBeanList.clear();
+                                ((CustomerIntentViewHolder) viewHolder).iv_show_more.setImageResource(R.mipmap.group_14_1);
+                                data.get(i).setExpress(false);
+                            } else {
+                                listBeanList = data.get(i).getProductList().subList(1, data.get(i).getProductList().size());
+                                ((CustomerIntentViewHolder) viewHolder).iv_show_more.setImageResource(R.mipmap.group_12_3);
+                                data.get(i).setExpress(true);
+                            }
                         }
-                        CommonAdapter<ProductListBean> commonAdapter = new CommonAdapter<ProductListBean>(context,productList,R.layout.customer_nols_item) {
+                        CommonAdapter<ProductListBean> commonAdapter = new CommonAdapter<ProductListBean>(context,listBeanList,R.layout.customer_nols_item) {
                             @Override
                             public void convert(ViewHolder helper, ProductListBean item) {
                                 helper.setText(R.id.tv_name,item.getName());
@@ -107,6 +117,7 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
                 ((CustomerIntentViewHolder) viewHolder).rl_show.setVisibility(View.GONE);
             }
 
+
             LinearLayout view = ((CustomerIntentViewHolder) viewHolder).ll_width;
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
             params.width = (int) PublicUtils.dip2px(PublicUtils.px2dip(widWidth));
@@ -116,7 +127,14 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
             ((CustomerIntentViewHolder) viewHolder).tv_name.setText(data.get(i).getName());
             ((CustomerIntentViewHolder) viewHolder).tv_desc.setText(data.get(i).getSku());
             ((CustomerIntentViewHolder) viewHolder).tv_time.setText(data.get(i).getCreateDate());
+
             Glide.with(context).load(data.get(i).getPhoto()).error(R.mipmap.type_icon).into(((CustomerIntentViewHolder) viewHolder).iv_icon);
+
+            if (data.get(i).getProductList().size()>0){
+                ((CustomerIntentViewHolder) viewHolder).hsv.setVisibility(View.VISIBLE);
+            }else {
+                ((CustomerIntentViewHolder) viewHolder).hsv.setVisibility(View.GONE);
+            }
 
             ((CustomerIntentViewHolder) viewHolder).iv_delete.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -195,10 +213,10 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         View rl_show ,main_right_drawer_layout;
         TextView tv_phone ,tv_time ,tv_name ,tv_desc ,tv_num;
-        ImageView iv_mesg , iv_delete ,iv_icon;
+        ImageView iv_mesg , iv_delete ,iv_icon ,iv_show_more;
         NoScrollListView ls ;
         LinearLayout ll_width ;
-
+        HorizontalScrollView hsv ;
         public CustomerIntentViewHolder(@NonNull View itemView) {
             super(itemView);
             tv_phone = itemView.findViewById(R.id.tv_phone);
@@ -212,6 +230,8 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
             ll_width = itemView.findViewById(R.id.ll_width);
             iv_delete = itemView.findViewById(R.id.iv_delete);
             main_right_drawer_layout = itemView.findViewById(R.id.main_right_drawer_layout);
+            hsv = itemView.findViewById(R.id.hsv);
+            iv_show_more = itemView.findViewById(R.id.iv_show_more);
         }
     }
 }

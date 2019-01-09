@@ -53,6 +53,7 @@
         </RelativeLayout>
 
         <HorizontalScrollView
+            android:id="@+id/hsv"
             android:overScrollMode="never"
             android:layout_width="wrap_content"
             android:layout_height="145dp">
@@ -184,6 +185,12 @@
 
         </HorizontalScrollView>
 
+        <com.youzheng.zhejiang.robertmoog.utils.View.NoScrollListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/no_ls"
+            ></com.youzheng.zhejiang.robertmoog.utils.View.NoScrollListView>
+
         <RelativeLayout
             android:id="@+id/rl_show"
             android:layout_width="match_parent"
@@ -214,22 +221,17 @@
                     />
 
                 <ImageView
+                    android:id="@+id/iv_show_more"
                     android:layout_marginLeft="@dimen/space_5"
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/group_12_3"
+                    android:src="@mipmap/group_14_1"
                     />
 
             </LinearLayout>
 
         </RelativeLayout>
-
-        <com.youzheng.zhejiang.robertmoog.utils.View.NoScrollListView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/no_ls"
-            ></com.youzheng.zhejiang.robertmoog.utils.View.NoScrollListView>
 
     </LinearLayout>
 

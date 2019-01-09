@@ -56,12 +56,14 @@ public class AttentionIntentActivity extends BaseActivity {
         tabLayout = (TabLayout) findViewById(R.id.tab);
         ls = (ListView) findViewById(R.id.ls);
         if (role.equals(PublicUtils.SHOP_SELLER)){
-            tabLayout.setVisibility(View.VISIBLE);
-        }else if (role.equals(PublicUtils.SHOP_LEADER)){
             tabLayout.setVisibility(View.GONE);
+            startActivity(new Intent(mContext,AttentionManagerActivity.class));
+            finish();
+        }else if (role.equals(PublicUtils.SHOP_LEADER)){
+            tabLayout.setVisibility(View.VISIBLE);
+            initData(0);
         }
         initEvent();
-        initData(0);
     }
 
     private void initData(final int i) {
@@ -133,7 +135,6 @@ public class AttentionIntentActivity extends BaseActivity {
             public void convert(ViewHolder helper, final ShopPersonalListBean item) {
                 if (i==0) {
                     helper.setText(R.id.tv_name, item.getName() + "  (" + item.getBusinessRole() + ")");
-
                     helper.getConvertView().setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

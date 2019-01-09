@@ -1,5 +1,6 @@
 package com.youzheng.zhejiang.robertmoog.Home.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -118,7 +119,7 @@ public class SetMealActivity extends BaseActivity{
         ls = findViewById(R.id.ls);
         adapter = new CommonAdapter<HomeListDataBean>(mContext,data,R.layout.set_meal_ls_item) {
             @Override
-            public void convert(ViewHolder helper, HomeListDataBean item) {
+            public void convert(ViewHolder helper, final HomeListDataBean item) {
                 helper.setText(R.id.tv_name,item.getComboCode());
                 helper.setText(R.id.tv_desc,item.getComboName());
                 Glide.with(mContext).load(item.getImgUrl()).error(R.mipmap.type_icon).into((ImageView) helper.getView(R.id.iv_icon));
@@ -132,6 +133,15 @@ public class SetMealActivity extends BaseActivity{
                     }
                 };
                 listView.setAdapter(adapter);
+
+                helper.getConvertView().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(mContext,SetMealDetailsActivity.class);
+                        intent.putExtra("id",item.getComId());
+                        startActivity(intent);
+                    }
+                });
             }
         };
         ls.setAdapter(adapter);
