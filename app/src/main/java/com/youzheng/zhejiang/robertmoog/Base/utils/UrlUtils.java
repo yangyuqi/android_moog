@@ -88,6 +88,8 @@ public class UrlUtils {
     public static String ADD_INTENTION_GOODS = BASE_URL+"/v1/app/customer/addIntentProduct";
 
 
+    public static String ORDERLIST_LIST_DETAIL = BASE_URL+"/v1/app/customer/orderDetail";
+
 
 
 

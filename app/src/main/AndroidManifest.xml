@@ -201,10 +201,10 @@
         <activity
             android:name=".Home.activity.SetMealActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".Store.StoreOrderlistDetailActivity"></activity>
 
         <activity android:name=".Home.activity.CouponActivity"
             android:theme="@style/MyDialogStyleBottom" />
+        <activity android:name=".Store.activity.StoreOrderlistDetailActivity"></activity>
     </application>
 
 </manifest>
