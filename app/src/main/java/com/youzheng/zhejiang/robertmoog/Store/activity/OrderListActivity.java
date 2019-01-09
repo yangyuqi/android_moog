@@ -8,6 +8,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -48,7 +51,7 @@ import okhttp3.Request;
 /**
  * 订单列表界面
  */
-public class OrderListActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener, OnRecyclerViewAdapterItemClickListener {
+public class OrderListActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener, OnRecyclerViewAdapterItemClickListener, TextWatcher {
 
 
     private ImageView btnBack;
@@ -92,6 +95,9 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
     private String timeQuantum="";
     private Boolean isCustomer=false;
     private int who;
+    private String edit;
+
+    private List<NewOrderListBean.OrderListBean.OrderItemInfosBean> itemlist=new ArrayList<>();
 
 
     @Override
@@ -118,7 +124,7 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
                     EnumsDatas enumsDatas = gson.fromJson(gson.toJson(baseModel.getDatas()),EnumsDatas.class);
                     if (enumsDatas.getEnums().size()>0){
                         for (final EnumsDatasBean bean : enumsDatas.getEnums()){
-                            if (bean.getClassName().equals("InstallStatus")){//  TimeQuantum
+                            if (bean.getClassName().equals("TimeQuantum")){//  TimeQuantum
 //                                final List<String> date = new ArrayList<String>();
                                 List<EnumsDatasBeanDatas> list1=new ArrayList<>();
                                 for (int i = 0; i < bean.getDatas().size(); i++) {
@@ -130,7 +136,7 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
 
                         goodsTimeAdapter.setUI(strlist);
 
-                        timeQuantum=strlist.get(0).getId();
+
 
                     }
 
@@ -192,18 +198,22 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
         rv_list.setLinearLayout();
         rv_list.setColorSchemeResources(R.color.colorPrimary);
 
-        adapter = new OrderListAdapter(list, piclist, this);
+        adapter = new OrderListAdapter(list, this);
         rv_list.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+
 
 
 
         goodsTimeAdapter=new GoodsTimeAdapter(strlist,this);
         gv_time.setAdapter(goodsTimeAdapter);
-        goodsTimeAdapter.notifyDataSetChanged();
+
 
 
         adapter.setOnItemClickListener(this);
+
+        tv_search.addTextChangedListener(this);
+
+
 
 
     }
@@ -251,14 +261,8 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
         List<NewOrderListBean.OrderListBean> orderListBeans=listBean.getOrderList();
 
         if (orderListBeans.size()!=0){
-            for (int i = 0; i <orderListBeans.size() ; i++) {
-                if (list.get(i).getProductNum()==1){
-                    list.add(orderListBeans.get(i));
-                }else {
-                    piclist.add(orderListBeans.get(i).getOrderItemInfos().get(i).getPhoto());
-                }
-            }
-            adapter.setUI(list,piclist,this);
+            list.addAll(orderListBeans);
+            adapter.setUI(list,this);
         }else {
             showToast(getString(R.string.load_list_erron));
         }
@@ -271,10 +275,18 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
             default:
                 break;
             case R.id.iv_search:
+                edit=tv_search.getText().toString();
+               //tv_search.setText("D1548784201901070011");
+                if (TextUtils.isEmpty(edit)){
+                    showToast("请输入订单编号");
+                }else {
+                    orderCode=edit;
+                    list.clear();
+                    initData(page,pageSize,orderCode,timeQuantum,isCustomer);
+                }
                 break;
             case R.id.tv_time:
                 drawer_layout.openDrawer(GravityCompat.END);
-
                 break;
 
             case R.id.btnBack:
@@ -306,11 +318,31 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
     @Override
     public void onItemClick(View view, int position) {
         Intent intent=new Intent(this,StoreOrderlistDetailActivity.class);
+        intent.putExtra("OrderGoodsId",list.get(position).getId());
         startActivity(intent);
     }
 
     @Override
     public void onItemLongClick(View view, int position) {
+
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+               if (tv_search.length()==0){
+                   list.clear();
+                   orderCode="";
+                   initData(page,pageSize,orderCode,timeQuantum,isCustomer);
+               }
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
 
     }
 }

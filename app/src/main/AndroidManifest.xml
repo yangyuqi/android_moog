@@ -192,6 +192,7 @@
         <activity android:name=".Store.activity.ReturnGoodsManger.ReturnGoodsDetailActivity" />
         <activity android:name=".Store.activity.ReturnGoods.ReturnGoodsSuccessActivity" />
         <activity android:name=".Store.activity.ReturnGoods.ChooseOrderListActivity" />
+        <activity android:name=".Store.activity.CheckPicActivity" />
         <activity
             android:name=".Home.activity.ShopActionActivity"
             android:screenOrientation="portrait" />

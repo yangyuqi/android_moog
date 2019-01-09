@@ -15,6 +15,7 @@ import com.youzheng.zhejiang.robertmoog.Store.bean.NewOrderListBean;
 import com.youzheng.zhejiang.robertmoog.Store.bean.OrderList;
 import com.youzheng.zhejiang.robertmoog.Store.listener.OnRecyclerViewAdapterItemClickListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class OrderListAdapter extends RecyclerView.Adapter {
@@ -30,22 +31,21 @@ public class OrderListAdapter extends RecyclerView.Adapter {
         this.mOnItemClickListener = mOnItemClickListener;
     }
 
-    public OrderListAdapter(List<NewOrderListBean.OrderListBean> list, List<String> piclist,Context context) {
+    public OrderListAdapter(List<NewOrderListBean.OrderListBean> list, Context context) {
         this.list = list;
-        this.piclist=piclist;
+
         this.context = context;
         layoutInflater = LayoutInflater.from(context);
     }
 
-    public void setUI(List<NewOrderListBean.OrderListBean> list, List<String> piclist,Context context){
+    public void setUI(List<NewOrderListBean.OrderListBean> list, Context context) {
         this.list = list;
-        this.piclist=piclist;
         notifyDataSetChanged();
     }
 
     @Override
     public int getItemViewType(int position) {
-        NewOrderListBean.OrderListBean bean=list.get(position);
+        NewOrderListBean.OrderListBean bean = list.get(position);
         if (bean.getProductNum() == 1) {
             return TYPE_ONE_IMAGE;
         } else {
@@ -56,8 +56,8 @@ public class OrderListAdapter extends RecyclerView.Adapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_ONE_IMAGE) {
-            View view = layoutInflater.inflate(R.layout.item_orderlist, parent,false);
-            final OneImageHolder oneImageHolder=new OneImageHolder(view);
+            View view = layoutInflater.inflate(R.layout.item_orderlist, parent, false);
+            final OneImageHolder oneImageHolder = new OneImageHolder(view);
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -66,7 +66,7 @@ public class OrderListAdapter extends RecyclerView.Adapter {
                     int position = oneImageHolder.getLayoutPosition();
                     //设置监听
                     if (mOnItemClickListener != null) {
-                        mOnItemClickListener.onItemClick(view ,position );
+                        mOnItemClickListener.onItemClick(view, position);
                     }
 
                 }
@@ -74,8 +74,8 @@ public class OrderListAdapter extends RecyclerView.Adapter {
 
             return oneImageHolder;
         } else {
-            View view = layoutInflater.inflate(R.layout.item_order_style, parent,false);
-            final MoreImageHolder moreImageHolder=new MoreImageHolder(view);
+            View view = layoutInflater.inflate(R.layout.item_order_style, parent, false);
+            final MoreImageHolder moreImageHolder = new MoreImageHolder(view);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -83,7 +83,7 @@ public class OrderListAdapter extends RecyclerView.Adapter {
                     int position = moreImageHolder.getLayoutPosition();
                     //设置监听
                     if (mOnItemClickListener != null) {
-                        mOnItemClickListener.onItemClick(view ,position );
+                        mOnItemClickListener.onItemClick(view, position);
                     }
 
                 }
@@ -96,36 +96,51 @@ public class OrderListAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof OneImageHolder) {
-            setOneImageData((OneImageHolder) holder,position);
+            setOneImageData((OneImageHolder) holder, position);
         } else {
-            setMoreImageData((MoreImageHolder) holder,position);
+            setMoreImageData((MoreImageHolder) holder, position);
         }
     }
 
-    private void setMoreImageData(MoreImageHolder holder,int position) {
+    private void setMoreImageData(MoreImageHolder holder, int position) {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         holder.mRvListPic.setLayoutManager(linearLayoutManager);
-        MoreGoodsAdapter moreGoodsAdapter=new MoreGoodsAdapter(piclist,context);
+        MoreGoodsAdapter moreGoodsAdapter = new MoreGoodsAdapter(piclist, context);
         holder.mRvListPic.setAdapter(moreGoodsAdapter);
         moreGoodsAdapter.notifyDataSetChanged();
-//        holder.mTvDate.setText(list.get(position).getText());
-//        holder.mTvOrderNum.setText(list.get(position).getText());
-//        holder.mTvCount.setText(list.get(position).getText());
-//        holder.mTvMoney.setText(list.get(position).getText());
+
+        piclist=new ArrayList<>();
+        if (list.size() != 0) {
+            for (NewOrderListBean.OrderListBean.OrderItemInfosBean itemInfosBean : list.get(position).getOrderItemInfos()) {
+                piclist.add(itemInfosBean.getPhoto());
+            }
+        }
+
+        moreGoodsAdapter.setPic(piclist);
+        NewOrderListBean.OrderListBean beans = list.get(position);
+        holder.mTvDate.setText(beans.getCreateDate());
+        holder.mTvOrderNum.setText(beans.getOrderCode());
+        holder.mTvCount.setText("共" + beans.getProductNum() + "件商品");
+        holder.mTvMoney.setText(context.getString(R.string.label_money)+beans.getPayAmount());
 
     }
 
-    private void setOneImageData(OneImageHolder holder,int position) {
-        NewOrderListBean.OrderListBean beans=list.get(position);
+    private void setOneImageData(OneImageHolder holder, int position) {
+        NewOrderListBean.OrderListBean beans = list.get(position);
         holder.tv_date.setText(beans.getCreateDate());
         holder.tv_order_num.setText(beans.getOrderCode());
-        holder.tv_count.setText("共"+beans.getProductNum()+"件商品");
-        holder.tv_money.setText(beans.getPayAmount());
-        NewOrderListBean.OrderListBean.OrderItemInfosBean itemInfosBean=beans.getOrderItemInfos().get(position);
-        Glide.with(context).load(itemInfosBean.getPhoto()).into(holder.iv_goods);
-        holder.tv_goods_number.setText(itemInfosBean.getCode());
-        holder.tv_goods_content.setText(itemInfosBean.getName());
+        holder.tv_count.setText("共" + beans.getProductNum() + "件商品");
+        holder.tv_money.setText(context.getString(R.string.label_money)+beans.getPayAmount());
+
+        if (list.size() != 0) {
+            for (NewOrderListBean.OrderListBean.OrderItemInfosBean itemInfosBean : list.get(position).getOrderItemInfos()) {
+                Glide.with(context).load(itemInfosBean.getPhoto()).error(R.mipmap.group_9_1).into(holder.iv_goods);
+                holder.tv_goods_number.setText(itemInfosBean.getCode());
+                holder.tv_goods_content.setText(itemInfosBean.getName());
+            }
+
+    }
 
     }
 

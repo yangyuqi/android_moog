@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.bean.SampleOutPic;
 
@@ -58,6 +59,7 @@ public class SampleDetailAdapter extends BaseAdapter {
         }
         SampleOutPic.SampleImgIssueDataBean.ListBean bean=list.get(position);
         Glide.with(context).load(bean.getSmallUrl()).into(viewHolder.iv_photo);
+        viewHolder.iv_photo.setScaleType(ImageView.ScaleType.FIT_XY);
         return convertView;
     }
     class ViewHolder{

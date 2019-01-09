@@ -23,16 +23,21 @@ public class MoreGoodsAdapter extends RecyclerView.Adapter<MoreGoodsAdapter.PicH
         layoutInflater = LayoutInflater.from(context);
     }
 
+    public void setPic(List<String> list){
+        this.list = list;
+        notifyDataSetChanged();
+        }
+
     @Override
     public PicHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view=layoutInflater.inflate(R.layout.item_order_pic,parent,false);
+        View view=layoutInflater.inflate(R.layout.item_order_list_pic,parent,false);
         PicHolder picHolder=new PicHolder(view);
         return picHolder;
     }
 
     @Override
     public void onBindViewHolder(PicHolder holder, int position) {
-        Glide.with(context).load(list.get(position)).into(holder.iv_pic);
+        Glide.with(context).load(list.get(position)).error(R.mipmap.group_9_1).into(holder.iv_pic);
     }
 
     @Override

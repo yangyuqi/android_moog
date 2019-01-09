@@ -3,6 +3,7 @@ package com.youzheng.zhejiang.robertmoog.Store.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,10 +43,10 @@ public class OneOrderDetailAdapter  extends RecyclerView.Adapter<OneOrderDetailA
     @Override
     public void onBindViewHolder(@NonNull OneHolder oneHolder, int position) {
         OrderlistDetail.OrderItemDataBean.OrderProductListBean bean=list.get(position);
-        Glide.with(context).load(bean.getPhoto()).into(oneHolder.iv_goods);
+        Glide.with(context).load(bean.getPhoto()).error(R.mipmap.group_9_1).into(oneHolder.iv_goods);
         oneHolder.tv_goods_code.setText(bean.getSku());
         oneHolder.tv_goods_content.setText(bean.getName());
-        oneHolder.tv_money.setText(bean.getPrice());
+        oneHolder.tv_money.setText(context.getString(R.string.label_money)+bean.getPrice());
         oneHolder.tv_number.setText("X "+bean.getCount()+"");
 
         oneHolder.tv_goods_code.setText(bean.getSku());

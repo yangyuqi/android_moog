@@ -106,13 +106,13 @@ public class StoreSalesNumberActivity extends BaseActivity implements View.OnCli
             public void onRefresh() {
                page=1;
                list.clear();
-               initData(page,pageSize,isDay,starstDate,endsDate);
+               initData(isDay,starstDate,endsDate);
             }
 
             @Override
             public void onLoadMore() {
                 page++;
-                initData(page,pageSize,isDay,starstDate,endsDate);
+                initData(isDay,starstDate,endsDate);
             }
         });
 
@@ -126,7 +126,7 @@ public class StoreSalesNumberActivity extends BaseActivity implements View.OnCli
         Date date = new Date(System.currentTimeMillis());
         tv_startDate.setText(simpleDateFormat.format(date));
         tv_endDate.setText(simpleDateFormat.format(date));
-        initData(page,pageSize,isDay,starstDate,endsDate);
+        initData(isDay,starstDate,endsDate);
     }
 
     private void initView() {
@@ -160,10 +160,8 @@ public class StoreSalesNumberActivity extends BaseActivity implements View.OnCli
 
     }
 
-    private void initData(int page,int pageSize,boolean isDay,String startDate,String endDate) {
+    private void initData(boolean isDay,String startDate,String endDate) {
         HashMap<String,Object> map=new HashMap<>();
-        map.put("pageNum",page);
-        map.put("pageSize",pageSize);
         map.put("isDay",isDay);
         map.put("startDate",startDate);
         map.put("endDate",endDate);
@@ -236,7 +234,7 @@ public class StoreSalesNumberActivity extends BaseActivity implements View.OnCli
             case R.id.tv_check:
                 list.clear();
                 isDay=false;
-                initData(page,pageSize,isDay,starstDate,endsDate);
+                initData(isDay,starstDate,endsDate);
                 break;
         }
     }

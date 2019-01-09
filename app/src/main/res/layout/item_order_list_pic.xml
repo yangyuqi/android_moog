@@ -5,10 +5,11 @@
     android:orientation="vertical">
 
     <ImageView
-        android:id="@+id/iv_photo"
-        android:layout_width="98dp"
-        android:layout_height="98dp"
+        android:id="@+id/iv_pic"
+        android:layout_width="88dp"
+        android:layout_height="88dp"
         android:scaleType="centerCrop"
-        android:src="@mipmap/group_9_1"/>
+        android:layout_marginRight="10dp"
+        android:src="@mipmap/ic_launcher"/>
 
 </LinearLayout>

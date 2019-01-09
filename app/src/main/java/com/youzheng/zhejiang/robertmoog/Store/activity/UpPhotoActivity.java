@@ -72,7 +72,7 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
      */
     private TextView tv_cancel;
     private List<String> addlist=new ArrayList<>();
-    private   List<File> fileList;
+    private   List<File> fileList=new ArrayList<>();
 
     Handler handler=new Handler(){
         @Override
@@ -132,16 +132,7 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
         gv_photo.setAdapter(adapter);
         adapter.notifyDataSetChanged();
         Log.e("2131",list.size()+"");
-        if (list.size()!=0){
-            for (int i = 0; i <list.size() ; i++) {
-                path=list.get(i);
-                Log.e("集合路径",path);
-                File file=new File(path);
 
-                fileList = new ArrayList<>();
-                fileList.add(file);
-            }
-        }
         adapter.setOnItemClickListener(this);
     }
 
@@ -180,6 +171,15 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
     private void CommitPic() {
 //        HashMap<String,Object> map=new HashMap<>();
 //        map.put("posters",fileList);
+        if (list.size()!=0){
+            for (int i = 0; i <list.size() ; i++) {
+                path=list.get(i);
+                Log.e("集合路径",path);
+                File file=new File(path);
+                fileList.add(file);
+
+            }
+        }
 
         OkHttpClientManager.getInstance().sendMultipart(UrlUtils.UPLOAD_FILE + "?access_token=" + access_token,new HashMap<String, Object>(),"posters",fileList)
                 .subscribeOn(Schedulers.newThread())

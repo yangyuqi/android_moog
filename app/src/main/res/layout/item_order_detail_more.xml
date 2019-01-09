@@ -20,6 +20,7 @@
             android:id="@+id/iv_goods"
             android:layout_width="88dp"
             android:layout_height="88dp"
+            android:scaleType="centerCrop"
             android:src="@mipmap/ic_launcher"/>
 
         <LinearLayout
@@ -151,7 +152,7 @@
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:background="@color/bg_background_white"
-        android:layout_height="300dp"></com.youzheng.zhejiang.robertmoog.Store.view.MyListView>
+        android:layout_height="wrap_content"></com.youzheng.zhejiang.robertmoog.Store.view.MyListView>
 
 
 

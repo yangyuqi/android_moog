@@ -49,12 +49,12 @@ public class MoreOrderDetailAdapter extends RecyclerView.Adapter<MoreOrderDetail
     @Override
     public void onBindViewHolder(@NonNull final MoreHolder moreHolder, final int position) {
         OrderlistDetail.OrderItemDataBean.OrderSetMealListBean bean = list.get(position);
-        Glide.with(context).load(bean.getPhoto()).into(moreHolder.iv_goods);
+        Glide.with(context).load(bean.getPhoto()).error(R.mipmap.group_9_1).into(moreHolder.iv_goods);
         moreHolder.tv_goods_code.setText(bean.getCode());
-        moreHolder.tv_goods_content.setText(bean.getComboDescribe());
+        moreHolder.tv_goods_content.setText(bean.getComboName());
         moreHolder.tv_money.setText(context.getString(R.string.label_money) + bean.getPrice());
         moreHolder.tv_number.setText("X"+bean.getCount()+"");
-        moreHolder.tv_meal_name.setText(bean.getComboName());
+        moreHolder.tv_meal_name.setText(bean.getComboDescribe());
 
         moreHolder.iv_isShow.setOnClickListener(new View.OnClickListener() {
             @Override

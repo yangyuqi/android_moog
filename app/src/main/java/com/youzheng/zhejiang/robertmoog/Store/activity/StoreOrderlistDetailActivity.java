@@ -2,11 +2,13 @@ package com.youzheng.zhejiang.robertmoog.Store.activity;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -14,6 +16,8 @@ import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
 import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
+import com.youzheng.zhejiang.robertmoog.Home.activity.SalesActivity;
+import com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.MoreOrderDetailAdapter;
@@ -141,7 +145,7 @@ public class StoreOrderlistDetailActivity extends BaseActivity implements View.O
     /**
      * ￥17700
      */
-    private TextView tv_get_money_of_now;
+    private TextView tv_get_money_of_now,tv_goods_num;
     /**
      * 该订单是长工CC推荐来的，未结算
      */
@@ -152,7 +156,8 @@ public class StoreOrderlistDetailActivity extends BaseActivity implements View.O
 
     private OneOrderDetailAdapter oneOrderDetailAdapter;
     private MoreOrderDetailAdapter moreOrderDetailAdapter;
-    private int id;
+    private String id;
+    private LinearLayout lin_is_cut;
 
     private String code;
     private String createDate;
@@ -191,6 +196,7 @@ public class StoreOrderlistDetailActivity extends BaseActivity implements View.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store_orderlist_detail);
+        id=getIntent().getStringExtra("OrderGoodsId");
         initView();
     }
 
@@ -231,12 +237,24 @@ public class StoreOrderlistDetailActivity extends BaseActivity implements View.O
         tv_cut_money_of_store = (TextView) findViewById(R.id.tv_cut_money_of_store);
         tv_get_money_of_now = (TextView) findViewById(R.id.tv_get_money_of_now);
         tv_content = (TextView) findViewById(R.id.tv_content);
+        lin_is_cut=findViewById(R.id.lin_is_cut);
+        tv_goods_num=findViewById(R.id.tv_goods_num);
 
 
-        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        rv_list_one.setLayoutManager(linearLayoutManager);
-        rv_list_more.setLayoutManager(linearLayoutManager);
+
+        LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        rv_list_one.setLayoutManager(manager);
+        rv_list_one.setAdapter(oneOrderDetailAdapter);
+        rv_list_one.addItemDecoration(new RecycleViewDivider(StoreOrderlistDetailActivity.this, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
+
+
+
+        LinearLayoutManager manager2 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        rv_list_more.setLayoutManager(manager2);
+        rv_list_more.setAdapter(oneOrderDetailAdapter);
+        rv_list_more.addItemDecoration(new RecycleViewDivider(StoreOrderlistDetailActivity.this, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
+
+
 
         oneOrderDetailAdapter=new OneOrderDetailAdapter(onelist,this);
         rv_list_one.setAdapter(oneOrderDetailAdapter);
@@ -255,7 +273,7 @@ public class StoreOrderlistDetailActivity extends BaseActivity implements View.O
         initData(id);
     }
 
-    private void initData(int id) {
+    private void initData(String id) {
         HashMap<String,Object> map=new HashMap<>();
         map.put("id",id);
 
@@ -297,12 +315,150 @@ public class StoreOrderlistDetailActivity extends BaseActivity implements View.O
         }
 
 
+        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getAccount())){
+            account=orderlistDetail.getOrderItemData().getAccount();
+            tv_customer.setText(account);
+        }
+
+        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getBusinessRole())){
+            businessRole=orderlistDetail.getOrderItemData().getBusinessRole();
+            if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getCreateUser())){
+                createUser=orderlistDetail.getOrderItemData().getCreateUser();
+                tv_maker.setText(createUser+"("+businessRole+")");
+            }
+        }
+
+        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getShipPerson())){
+            shipPerson=orderlistDetail.getOrderItemData().getShipPerson();
+            tv_name.setText(shipPerson);
+        }
+
+        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getShipMobile())){
+            shipMobile=orderlistDetail.getOrderItemData().getShipMobile();
+            tv_phone.setText(settingphone(shipMobile));
+        }
+
+
+        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getShipAddress())){
+            shipAddress=orderlistDetail.getOrderItemData().getShipAddress();
+            tv_address.setText(shipAddress);
+        }
+
+        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getInstallStatus())){
+            installStatus=orderlistDetail.getOrderItemData().getInstallStatus();
+            tv_progress_state.setText(installStatus);
+        }
+
+        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getMaxAmount())){
+            maxAmount=orderlistDetail.getOrderItemData().getMaxAmount();
+            tv_over_money.setText(maxAmount);
+        }
+
+        if (orderlistDetail.getOrderItemData().isIsOrderDerate()==true){
+            tv_cut_money.setText(getString(R.string.label_money)+orderDerate);
+        }else {
+            lin_is_cut.setVisibility(View.GONE);
+        }
+
+        if (orderlistDetail.getOrderItemData().isIsMoen()==true){
+            tv_belong.setVisibility(View.VISIBLE);
+        }else {
+            tv_belong.setVisibility(View.GONE);
+        }
+
+
+        if (orderlistDetail.getOrderItemData().isIsFreeGift()==true){
+            tv_or_send.setText("有赠送礼品");
+        }else {
+            tv_or_send.setText("无赠送礼品");
+        }
+
+        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getPickUpStatus())){
+            pickUpStatus=orderlistDetail.getOrderItemData().getPickUpStatus();
+            tv_get_state.setText(pickUpStatus);
+        }
+
+        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getShoppingMethod())){
+            shoppingMethod=orderlistDetail.getOrderItemData().getShoppingMethod();
+            tv_dispatching_type.setText(shoppingMethod);
+        }
+
+        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getPaymentMethod())){
+            paymentMethod=orderlistDetail.getOrderItemData().getPaymentMethod();
+            tv_get_money_type.setText(paymentMethod);
+        }
+
+        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getProductCount())){
+            productCount=orderlistDetail.getOrderItemData().getProductCount();
+            tv_goods_num.setText(productCount);
+        }
+
+        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getProductCount())){
+            productCount=orderlistDetail.getOrderItemData().getProductCount();
+            tv_goods_num.setText(productCount);
+        }
+
+        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getAmountPayable())){
+            amountPayable=orderlistDetail.getOrderItemData().getAmountPayable();
+            tv_should_money.setText(amountPayable);
+        }
+
+        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getCouponDerate())){
+            couponDerate=orderlistDetail.getOrderItemData().getCouponDerate();
+            tv_cut_money_of_juan.setText("-"+getString(R.string.label_money)+couponDerate);
+        }
+
+        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getOrderDerate())){
+            orderDerate=orderlistDetail.getOrderItemData().getOrderDerate();
+           tv_cut_money_of_promotion.setText("-"+getString(R.string.label_money)+orderDerate);
+        }
+
+        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getShopDerate())){
+            shopDerate=orderlistDetail.getOrderItemData().getShopDerate();
+            tv_cut_money_of_store.setText("-"+getString(R.string.label_money)+shopDerate);
+        }
+
+        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getPayAmount())){
+            payAmount=orderlistDetail.getOrderItemData().getPayAmount();
+            tv_get_money_of_now.setText(getString(R.string.label_money)+payAmount);
+        }
+
+        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getComment())){
+            comment=orderlistDetail.getOrderItemData().getComment();
+            tv_content.setText(comment);
+        }else {
+            tv_content.setText("无");
+        }
 
 
 
+         List<OrderlistDetail.OrderItemDataBean.OrderProductListBean> onelists=orderlistDetail.getOrderItemData().getOrderProductList();
+        if (onelists.size()!=0){
+            onelist.addAll(onelists);
+            oneOrderDetailAdapter.setUI(onelist);
+        }else {
+            rv_list_one.setVisibility(View.GONE);
+        }
 
 
+         List<OrderlistDetail.OrderItemDataBean.OrderSetMealListBean> morelists=orderlistDetail.getOrderItemData().getOrderSetMealList();
+        if (morelists.size()!=0){
+            morelist.addAll(morelists);
+            moreOrderDetailAdapter.setUI(morelist);
+        }else {
+            rv_list_more.setVisibility(View.GONE);
+        }
+    }
 
+    /**
+     * 手机号用****号隐藏中间数字
+     *
+     * @param phone
+     * @return
+     */
+    public static String settingphone(String phone) {
+        String phone_s = phone.replaceAll("(\\d{3})\\d{4}(\\d{4})", "$1****$2");
+        return phone_s;
     }
 
     @Override

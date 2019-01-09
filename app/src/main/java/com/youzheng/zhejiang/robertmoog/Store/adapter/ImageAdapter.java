@@ -46,7 +46,7 @@ public class ImageAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, int position) {//必须实现
         View view =layoutInflater.inflate(R.layout.item_image,container,false);
         ImageView imageView=view.findViewById(R.id.iv_image);
-        Glide.with(context).load(list.get(position)).into(imageView);
+        Glide.with(context).load(list.get(position)).error(R.mipmap.group_9_1).into(imageView);
         container.addView(view);
         return view;
     }

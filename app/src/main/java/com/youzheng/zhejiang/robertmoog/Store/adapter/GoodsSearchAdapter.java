@@ -60,7 +60,7 @@ public class GoodsSearchAdapter extends BaseAdapter {
             viewHolder= (ViewHolder) convertView.getTag();
         }
         GoodsList.ProductListDetailDataBean bean=list.get(position);
-        Glide.with(context).load(bean.getSmallImageUrl()).into(viewHolder.iv_goods);
+        Glide.with(context).load(bean.getSmallImageUrl()).error(R.mipmap.group_9_1).into(viewHolder.iv_goods);
         viewHolder.tv_goods_name.setText(bean.getSkuId());
         viewHolder.tv_goods_content.setText(bean.getName());
         viewHolder.tv_goods_money.setText("￥"+bean.getPrice());
