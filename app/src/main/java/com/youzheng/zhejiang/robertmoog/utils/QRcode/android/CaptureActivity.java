@@ -39,6 +39,7 @@ import com.youzheng.zhejiang.robertmoog.Home.activity.SearchGoodsActivity;
 import com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider;
 import com.youzheng.zhejiang.robertmoog.Home.adapter.SearchResultAdapter;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
+import com.youzheng.zhejiang.robertmoog.Model.Home.IntentProductsBeanAdd;
 import com.youzheng.zhejiang.robertmoog.Model.Home.OrderSetMealDatasBean;
 import com.youzheng.zhejiang.robertmoog.Model.Home.ProductListBean;
 import com.youzheng.zhejiang.robertmoog.Model.Home.ScanDatas;
@@ -93,11 +94,13 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
         return viewfinderView;
     }
     private TextView tv_confrim ;
-    private String customerId ;
+    private String customerId ,type ;
     public Handler getHandler() {
         return handler;
     }
     int widWidth ;
+    private ImageView iv_preview ;
+
     public CameraManager getCameraManager() {
         return cameraManager;
     }
@@ -135,6 +138,9 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
         if (config == null) {
             config = new ZxingConfig();
         }
+        getWindow().setSoftInputMode
+                (WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN|
+                        WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         setContentView(R.layout.activity_capture);
 
         WindowManager manager = this.getWindowManager();
@@ -155,11 +161,20 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
         findViewById(R.id.rl_text).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                findViewById(R.id.largeLabel).setVisibility(View.GONE);
+                if (isPreview) {
+                    iv_preview.setImageResource(R.mipmap.group_14_1);
+                    findViewById(R.id.largeLabel).setVisibility(View.GONE);
+                    isPreview = false;
+                }else {
+                    iv_preview.setImageResource(R.mipmap.group_12_3);
+                    findViewById(R.id.largeLabel).setVisibility(View.VISIBLE);
+                    isPreview = true;
+                }
             }
         });
     }
 
+    private boolean isPreview = true;
 
     private void initView() {
         previewView = findViewById(R.id.preview_view);
@@ -178,6 +193,10 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
         recycler_view = findViewById(R.id.recycler_view);
         tv_confrim = findViewById(R.id.tv_confrim);
         customerId = getIntent().getStringExtra("customerId");
+        type = getIntent().getStringExtra("type");
+        if (type!=null){
+            ((TextView)findViewById(R.id.textHeadTitle)).setText("添加意向商品");
+        }
         addapter = new SearchResultAdapter();
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recycler_view.setLayoutManager(manager);
@@ -187,22 +206,58 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
         findViewById(R.id.iv_next).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(CaptureActivity.this, SearchGoodsActivity.class));
+                startActivityForResult(new Intent(CaptureActivity.this, SearchGoodsActivity.class),2);
             }
         });
+
+        iv_preview = findViewById(R.id.iv_preview);
 
         tv_confrim.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(CaptureActivity.this, SalesActivity.class);
-                intent.putExtra("customerId",customerId);
-                intent.putExtra("data",datasBeanList);
-                startActivity(intent);
-
+                    if (datasBeanList.size() > 0) {
+                        if (type==null) {
+                            Intent intent = new Intent(CaptureActivity.this, SalesActivity.class);
+                            intent.putExtra("customerId", customerId);
+                            intent.putExtra("data", datasBeanList);
+                            startActivity(intent);
+                        }else {
+                            addIntention();
+                        }
+                    } else {
+                        showToast("请添加商品");
+                    }
             }
         });
     }
 
+    private void addIntention() {
+        Map<String,Object> map = new HashMap<>();
+        map.put("customerId",customerId);
+        ArrayList<IntentProductsBeanAdd> beanAdds = new ArrayList<>();
+        for (ScanDatasBean bean :datasBeanList){
+            IntentProductsBeanAdd beanAdd = new IntentProductsBeanAdd();
+            beanAdd.setDealerProductId(bean.getId());
+            beanAdd.setSetMeal(bean.isSetMeal());
+            beanAdds.add(beanAdd);
+        }
+        map.put("intentProducts",beanAdds);
+        OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.ADD_INTENTION_GOODS + "?access_token=" + token, new OkHttpClientManager.StringCallback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(String response) {
+                BaseModel baseModel = gson.fromJson(response,BaseModel.class);
+                if (baseModel.getCode()==PublicUtils.code){
+                    finish();
+                }
+                showToast(baseModel.getMsg());
+            }
+        });
+    }
 
 
     /**
@@ -350,6 +405,30 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
             }).run();
 
         }
+
+        if (requestCode==2&&resultCode==2){
+            ScanDatasBean scanDatasBean = (ScanDatasBean) data.getSerializableExtra("data");
+            if (scanDatasBean!=null){
+                datasBeanList.add(scanDatasBean);
+
+                Map<String,ScanDatasBean> map = new HashMap<>();
+                for (ScanDatasBean bean : datasBeanList){
+                    String id = bean.getId();
+                    if (map.containsKey(id)){
+                        ScanDatasBean datasBean = map.get(id);
+                        bean.setNum(datasBean.getNum()+bean.getNum());
+                    }
+                    map.put(id, bean);
+                }
+                datasBeanList.clear();
+                datasBeanList.addAll(map.values());
+                if (type==null) {
+                    addapter.setDate(datasBeanList, mContext, "2", widWidth);
+                }else {
+                    addapter.setDate(datasBeanList,mContext,"4",widWidth);
+                }
+            }
+        }
     }
 
     public void addData(String code){
@@ -368,7 +447,22 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
                     ScanDatas scanDatas = gson.fromJson(gson.toJson(baseModel.getDatas()),ScanDatas.class);
                     if (scanDatas.getSelectProducts().size()>0){
                         datasBeanList.addAll(scanDatas.getSelectProducts());
-                        addapter.setDate(datasBeanList,CaptureActivity.this,"2",widWidth);
+                        Map<String,ScanDatasBean> map = new HashMap<>();
+                        for (ScanDatasBean bean : datasBeanList){
+                            String id = bean.getId();
+                            if (map.containsKey(id)){
+                                ScanDatasBean datasBean = map.get(id);
+                                bean.setNum(datasBean.getNum()+bean.getNum());
+                            }
+                            map.put(id, bean);
+                        }
+                        datasBeanList.clear();
+                        datasBeanList.addAll(map.values());
+                        if (type==null) {
+                            addapter.setDate(datasBeanList, mContext, "2", widWidth);
+                        }else {
+                            addapter.setDate(datasBeanList,mContext,"4",widWidth);
+                        }
                     }
                 }
             }
@@ -393,7 +487,11 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
             }else {
                 datasBeanList.add(scanDatasBean);
             }
-            addapter.setDate(datasBeanList,mContext,"2",widWidth);
+            if (type==null) {
+                addapter.setDate(datasBeanList, mContext, "2", widWidth);
+            }else {
+                addapter.setDate(datasBeanList,mContext,"4",widWidth);
+            }
         }
     }
 }

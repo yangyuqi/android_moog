@@ -2,6 +2,7 @@ package com.youzheng.zhejiang.robertmoog.Home.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -35,7 +36,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private List<ScanDatasBean> objects;
     private Context context ;
     private int widWidth ;
-    private String type = "";//1表示搜索2.表示扫一扫3.表示卖货
+    private String type = "";//1表示搜索2.表示扫一扫3.表示卖货 4.表示意向商品
 
     public void setDate(List<ScanDatasBean> objects , Context context ,String type ,int widWidth) {
         this.objects = objects;
@@ -78,7 +79,9 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 ((CommonGoodsViewHolder) holder).tv_confirm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        EventBus.getDefault().post(objects.get(position));
+                        Intent intent = new Intent();
+                        intent.putExtra("data",objects.get(position));
+                        ((BaseActivity)context).setResult(2,intent);
                         ((BaseActivity)context).finish();
                     }
                 });
@@ -100,6 +103,9 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 ((CommonGoodsViewHolder) holder).ll_num.setVisibility(View.GONE);
                 ((CommonGoodsViewHolder) holder).tv_get_num.setVisibility(View.VISIBLE);
                 ((CommonGoodsViewHolder) holder).tv_get_num.setText(context.getResources().getString(R.string.label_X)+objects.get(position).getNum());
+            }else if (type.equals("4")){
+                ((CommonGoodsViewHolder) holder).ll_num.setVisibility(View.GONE);
+                ((CommonGoodsViewHolder) holder).tv_confirm.setVisibility(View.GONE);
             }
 
         }else if (holder instanceof CommonGoodsTypeViewHolder){
@@ -154,7 +160,9 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 ((CommonGoodsTypeViewHolder) holder).tv_confirm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        EventBus.getDefault().post(objects.get(position));
+                        Intent intent = new Intent();
+                        intent.putExtra("data",objects.get(position));
+                        ((BaseActivity)context).setResult(2,intent);
                         ((BaseActivity)context).finish();
                     }
                 });
@@ -174,6 +182,9 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 ((CommonGoodsTypeViewHolder) holder).tv_confirm.setVisibility(View.GONE);
                 ((CommonGoodsTypeViewHolder) holder).ll_num.setVisibility(View.GONE);
                 ((CommonGoodsTypeViewHolder) holder).tv_get_num.setText(context.getResources().getString(R.string.label_X)+objects.get(position).getNum());
+            }else {
+                ((CommonGoodsTypeViewHolder) holder).ll_num.setVisibility(View.GONE);
+                ((CommonGoodsTypeViewHolder) holder).tv_confirm.setVisibility(View.GONE);
             }
         }
     }

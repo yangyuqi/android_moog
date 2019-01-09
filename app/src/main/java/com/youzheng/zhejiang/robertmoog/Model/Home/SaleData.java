@@ -1,8 +1,9 @@
 package com.youzheng.zhejiang.robertmoog.Model.Home;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class SaleData<T> {
+public class SaleData {
     private String amountPayable ;
     private String payAmount ;
     private String orderDerate ;
@@ -13,8 +14,8 @@ public class SaleData<T> {
     private String shipAddress ;
     private String addressId ;
     private String rules ;
-    private List<T> useCouponList ;
-    private List<T> notUseCouponList ;
+    private ArrayList<CouponListBean> useCouponList ;
+    private ArrayList<CouponListBean> notUseCouponList ;
 
     public String getAmountPayable() {
         return amountPayable;
@@ -96,19 +97,19 @@ public class SaleData<T> {
         this.rules = rules;
     }
 
-    public List<T> getUseCouponList() {
+    public ArrayList<CouponListBean> getUseCouponList() {
         return useCouponList;
     }
 
-    public void setUseCouponList(List<T> useCouponList) {
+    public void setUseCouponList(ArrayList<CouponListBean> useCouponList) {
         this.useCouponList = useCouponList;
     }
 
-    public List<T> getNotUseCouponList() {
+    public ArrayList<CouponListBean> getNotUseCouponList() {
         return notUseCouponList;
     }
 
-    public void setNotUseCouponList(List<T> notUseCouponList) {
+    public void setNotUseCouponList(ArrayList<CouponListBean> notUseCouponList) {
         this.notUseCouponList = notUseCouponList;
     }
 }

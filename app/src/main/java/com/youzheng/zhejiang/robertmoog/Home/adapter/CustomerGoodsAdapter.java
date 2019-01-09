@@ -17,6 +17,7 @@ import com.google.gson.Gson;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
 import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
+import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.Model.Home.CustomerIntentData;
 import com.youzheng.zhejiang.robertmoog.Model.Home.CustomerIntentListBean;
 import com.youzheng.zhejiang.robertmoog.Model.Home.ProductListBean;
@@ -53,6 +54,7 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
     public void setData(List<CustomerIntentListBean> dataList  , Context context){
         data = dataList ;
         this.context = context ;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -84,8 +86,8 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
                                 helper.setText(R.id.tv_name,item.getName());
                                 helper.setText(R.id.tv_time,item.getCreateDate());
                                 helper.setText(R.id.tv_desc,item.getSku());
-                                Glide.with(context).load(item.getPhoto()).into((ImageView) helper.getView(R.id.iv_icon));
-                                LinearLayout view = ((CustomerIntentViewHolder) viewHolder).ll_width;
+                                Glide.with(context).load(item.getPhoto()).error(R.mipmap.type_icon).into((ImageView) helper.getView(R.id.iv_icon));
+                                LinearLayout view = helper.getView(R.id.ll_width);
                                 LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
                                 params.width = (int) PublicUtils.dip2px(PublicUtils.px2dip(widWidth));
                                 view.setLayoutParams(params);
@@ -114,7 +116,7 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
             ((CustomerIntentViewHolder) viewHolder).tv_name.setText(data.get(i).getName());
             ((CustomerIntentViewHolder) viewHolder).tv_desc.setText(data.get(i).getSku());
             ((CustomerIntentViewHolder) viewHolder).tv_time.setText(data.get(i).getCreateDate());
-            Glide.with(context).load(data.get(i).getPhoto()).into(((CustomerIntentViewHolder) viewHolder).iv_icon);
+            Glide.with(context).load(data.get(i).getPhoto()).error(R.mipmap.type_icon).into(((CustomerIntentViewHolder) viewHolder).iv_icon);
 
             ((CustomerIntentViewHolder) viewHolder).iv_delete.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -139,7 +141,11 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
                                 @Override
                                 public void onResponse(String response) {
-
+                                    BaseModel baseModel = gson.fromJson(response,BaseModel.class);
+                                    if (baseModel.getCode()==PublicUtils.code){
+                                        data.remove(i);
+                                        notifyDataSetChanged();
+                                    }
                                 }
                             });
                         }
@@ -204,6 +210,7 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
             ls = itemView.findViewById(R.id.no_ls);
             iv_icon = itemView.findViewById(R.id.iv_icon);
             ll_width = itemView.findViewById(R.id.ll_width);
+            iv_delete = itemView.findViewById(R.id.iv_delete);
             main_right_drawer_layout = itemView.findViewById(R.id.main_right_drawer_layout);
         }
     }

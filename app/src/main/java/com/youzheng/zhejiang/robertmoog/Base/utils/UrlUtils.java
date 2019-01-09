@@ -85,7 +85,7 @@ public class UrlUtils {
     public static String MEAL_USER_LIST = BASE_URL+"/v1/app/shop/getComboList";
 
     public static String ORDERLIST_LIST = BASE_URL+"/v1/app/customer/orderList";
-
+    public static String ADD_INTENTION_GOODS = BASE_URL+"/v1/app/customer/addIntentProduct";
 
 
 

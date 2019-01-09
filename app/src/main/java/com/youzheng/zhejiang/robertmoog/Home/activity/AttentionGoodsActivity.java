@@ -23,6 +23,7 @@ import com.youzheng.zhejiang.robertmoog.Home.adapter.CommonAdapter;
 import com.youzheng.zhejiang.robertmoog.Home.adapter.CustomerGoodsAdapter;
 import com.youzheng.zhejiang.robertmoog.Home.adapter.ViewHolder;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
+import com.youzheng.zhejiang.robertmoog.Model.Home.CustomerData;
 import com.youzheng.zhejiang.robertmoog.Model.Home.CustomerIntentDataBean;
 import com.youzheng.zhejiang.robertmoog.Model.Home.IntentProductList;
 import com.youzheng.zhejiang.robertmoog.Model.Home.ShopPersonalListBean;
@@ -38,6 +39,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.greenrobot.event.EventBus;
+import de.greenrobot.event.Subscribe;
 import okhttp3.Request;
 import rx.functions.Action1;
 
@@ -61,9 +64,27 @@ public class AttentionGoodsActivity extends BaseActivity {
         initView();
         bean = (ShopPersonalListBean) getIntent().getSerializableExtra("label");
         registerBean = (RegisterBean) getIntent().getSerializableExtra("registerBean");
-        initData();
-
+        EventBus.getDefault().register(this);
         initClick();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void onEvent(String d){
+        if (d.equals("refresh")){
+            initData();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initData();
     }
 
     private void initClick() {
@@ -76,6 +97,12 @@ public class AttentionGoodsActivity extends BaseActivity {
                     public void call(Boolean aBoolean) {
                         if (aBoolean){
                             Intent intent = new Intent(mContext, CaptureActivity.class);
+                            intent.putExtra("type","");
+                            if (bean!=null) {
+                                intent.putExtra("customerId",bean.getCustomerId());
+                            }else {
+                                intent.putExtra("customerId",registerBean.getCustomerId());
+                            }
                             startActivity(intent);
                         }
                     }
@@ -102,18 +129,23 @@ public class AttentionGoodsActivity extends BaseActivity {
             public void onResponse(String response) {
                 BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                 if (baseModel.getCode()== PublicUtils.code){
-                    final CustomerIntentDataBean intentDataBean = gson.fromJson(gson.toJson(baseModel.getDatas()),CustomerIntentDataBean.class);
-                    if (intentDataBean.getRemark()!=null){
-                        tv_attention.setText(intentDataBean.getRemark());
+                    final CustomerData intentDataBean = gson.fromJson(gson.toJson(baseModel.getDatas()),CustomerData.class);
+                    if (intentDataBean.getCustomerIntentData().getRemark()!=null){
+                        tv_attention.setText(intentDataBean.getCustomerIntentData().getRemark());
                     }
-                    if (intentDataBean.getIntentProductList().size()>0){
-                        adapter.setData(intentDataBean.getIntentProductList());
-                        adapter.notifyDataSetChanged();
+                    if (intentDataBean.getCustomerIntentData().isIntent()) {
+                        if (intentDataBean.getCustomerIntentData().getIntentProductList().size() > 0) {
+                            adapter.setData(intentDataBean.getCustomerIntentData().getIntentProductList());
+                            adapter.notifyDataSetChanged();
+                        }else {
+                            adapter.setData(new ArrayList<IntentProductList>());
+                            adapter.notifyDataSetChanged();
+                        }
                     }
                     tv_update_intent.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            RemarkDialog remarkDialog = new RemarkDialog(mContext,intentDataBean.getId(),intentDataBean.getRemark());
+                            RemarkDialog remarkDialog = new RemarkDialog(AttentionGoodsActivity.this,intentDataBean.getCustomerIntentData().getId(),intentDataBean.getCustomerIntentData().getRemark());
                             remarkDialog.show();
                         }
                     });
@@ -141,10 +173,10 @@ public class AttentionGoodsActivity extends BaseActivity {
             public void convert(ViewHolder helper, final IntentProductList item) {
                 helper.setText(R.id.tv_name,item.getName());
                 helper.setText(R.id.tv_desc,item.getSku());
-                helper.setText(R.id.tv_price,R.string.label_money+""+item.getPrice());
-                Glide.with(mContext).load(item.getPhoto()).into((ImageView) helper.getView(R.id.iv_icon));
+                helper.setText(R.id.tv_price,"¥"+item.getPrice());
+                Glide.with(mContext).load(item.getPhoto()).error(R.mipmap.type_icon).into((ImageView) helper.getView(R.id.iv_icon));
                 RelativeLayout view = helper.getView(R.id.rl_width);
-                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) view.getLayoutParams();
+                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
                 params.width = (int) PublicUtils.dip2px(PublicUtils.px2dip(widWidth));
                 view.setLayoutParams(params);
 

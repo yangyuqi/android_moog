@@ -77,11 +77,13 @@ public class AttentionManagerActivity extends BaseActivity {
                     if (datas.getCustomerIntentList().size()>0){
                         List<CustomerIntentListBean> customerList = datas.getCustomerIntentList();
                         for (int  i = 0 ; i<customerList.size();i++){
-                            customerList.get(i).setGoodsId(customerList.get(i).getProductList().get(0).getId());
-                            customerList.get(i).setPhoto(customerList.get(i).getProductList().get(0).getPhoto());
-                            customerList.get(i).setName(customerList.get(i).getProductList().get(0).getName());
-                            customerList.get(i).setSku(customerList.get(i).getProductList().get(0).getSku());
-                            customerList.get(i).setCreateDate(customerList.get(i).getProductList().get(0).getCreateDate());
+                            if (customerList.get(i).getProductList().size()>0) {
+                                customerList.get(i).setGoodsId(customerList.get(i).getProductList().get(0).getId());
+                                customerList.get(i).setPhoto(customerList.get(i).getProductList().get(0).getPhoto());
+                                customerList.get(i).setName(customerList.get(i).getProductList().get(0).getName());
+                                customerList.get(i).setSku(customerList.get(i).getProductList().get(0).getSku());
+                                customerList.get(i).setCreateDate(customerList.get(i).getProductList().get(0).getCreateDate());
+                            }
                         }
                         adapter.setData(customerList,mContext);
                     }

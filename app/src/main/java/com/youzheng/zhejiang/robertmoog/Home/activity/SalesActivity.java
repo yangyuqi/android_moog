@@ -5,9 +5,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -23,14 +26,18 @@ import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
 import com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider;
 import com.youzheng.zhejiang.robertmoog.Home.adapter.SearchResultAdapter;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
+import com.youzheng.zhejiang.robertmoog.Model.Home.AddressDatasBean;
+import com.youzheng.zhejiang.robertmoog.Model.Home.CouponListBean;
 import com.youzheng.zhejiang.robertmoog.Model.Home.EnumsDatas;
 import com.youzheng.zhejiang.robertmoog.Model.Home.EnumsDatasBean;
+import com.youzheng.zhejiang.robertmoog.Model.Home.OrderGoodsId;
 import com.youzheng.zhejiang.robertmoog.Model.Home.OrderProductDatasBean;
 import com.youzheng.zhejiang.robertmoog.Model.Home.OrderSetMealDatasBean;
 import com.youzheng.zhejiang.robertmoog.Model.Home.SaleData;
 import com.youzheng.zhejiang.robertmoog.Model.Home.SaleDataBean;
 import com.youzheng.zhejiang.robertmoog.Model.Home.ScanDatasBean;
 import com.youzheng.zhejiang.robertmoog.R;
+import com.youzheng.zhejiang.robertmoog.Store.StoreOrderlistDetailActivity;
 import com.youzheng.zhejiang.robertmoog.utils.QRcode.android.CaptureActivity;
 
 import java.io.IOException;
@@ -53,14 +60,20 @@ public class SalesActivity extends BaseActivity {
     TextView tv_confrim ;
     Map<String,Object> map = new HashMap<>();
     private OptionsPickerView pvCustomTime;
-    TextView tv_name ,tv_phone ,tv_details ,tv_get_state , tv_dispatching_type ,tv_get_money_type ,tv_get_money_of_now ,tv_should_money ,edt_content;
+    TextView tv_name ,tv_phone ,tv_details ,tv_get_state , tv_dispatching_type ,tv_get_money_type ,tv_get_money_of_now ,tv_should_money ,edt_content ,tv_cut_money_of_store,tv_cut_money_of_promotion ,tv_get_ticket;
     String PickUpStatus ,ShoppingMethod ,paymentMethod;
     Switch sv_life ,sv_present ;
-    private String payAmount ;
+    private String payAmount  ;
+    EditText edt_door_ticket ;
 
+    private ArrayList<CouponListBean> useCouponList  = new ArrayList<>();
+    private ArrayList<CouponListBean> notUseCouponList = new ArrayList<>();
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setSoftInputMode
+                (WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN|
+                        WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         setContentView(R.layout.sales_layout);
         WindowManager manager = this.getWindowManager();
         DisplayMetrics outMetrics = new DisplayMetrics();
@@ -82,8 +95,9 @@ public class SalesActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext,LocationManageActivity.class);
+                intent.putExtra("type","1");
                 intent.putExtra("customerId",customerId);
-                startActivity(intent);
+                startActivityForResult(intent,2);
             }
         });
 
@@ -215,6 +229,34 @@ public class SalesActivity extends BaseActivity {
                 });
             }
         });
+
+        edt_door_ticket.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                    initData();
+                tv_cut_money_of_store.setText("-¥"+s.toString());
+            }
+        });
+
+        tv_get_ticket.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext,CouponActivity.class);
+                intent.putExtra("useCouponList",useCouponList);
+                intent.putExtra("notUseCouponList",notUseCouponList);
+                startActivityForResult(intent,3);
+            }
+        });
     }
 
     private void orderConfirm() {
@@ -268,7 +310,13 @@ public class SalesActivity extends BaseActivity {
             @Override
             public void onResponse(String response) {
                 BaseModel baseModel = gson.fromJson(response,BaseModel.class);
-                showToast(baseModel.getMsg());
+                if (baseModel.getCode()==PublicUtils.code){
+                    OrderGoodsId goodsId = gson.fromJson(gson.toJson(baseModel.getDatas()),OrderGoodsId.class);
+                    Intent intent = new Intent(mContext, StoreOrderlistDetailActivity.class);
+                    intent.putExtra("OrderGoodsId",String.valueOf(goodsId.getId()));
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
 
@@ -280,6 +328,8 @@ public class SalesActivity extends BaseActivity {
     }
 
     private void initData() {
+
+        map.put("shopDerate",edt_door_ticket.getText().toString());
         map.put("customerId",customerId);
         if (addressId!=null){
             map.put("addressId",addressId);
@@ -317,6 +367,9 @@ public class SalesActivity extends BaseActivity {
                     payAmount = saleData.getSaleData().getPayAmount();
                     tv_get_money_of_now.setText("¥"+payAmount);
                     tv_should_money.setText("¥"+saleData.getSaleData().getAmountPayable());
+                    tv_cut_money_of_promotion.setText("¥"+saleData.getSaleData().getOrderDerate());
+                    notUseCouponList = saleData.getSaleData().getNotUseCouponList();
+                    useCouponList = saleData.getSaleData().getUseCouponList();
                     if (saleData.getSaleData().getAddressId()==null){
                         findViewById(R.id.rl_address).setVisibility(View.GONE);
                         findViewById(R.id.ll_address).setVisibility(View.VISIBLE);
@@ -348,7 +401,8 @@ public class SalesActivity extends BaseActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(mContext,LocationManageActivity.class);
                 intent.putExtra("customerId",customerId);
-                startActivity(intent);
+                intent.putExtra("type","1");
+                startActivityForResult(intent,2);
             }
         });
         tv_confrim = findViewById(R.id.tv_confrim);
@@ -373,6 +427,10 @@ public class SalesActivity extends BaseActivity {
         tv_get_money_of_now = findViewById(R.id.tv_get_money_of_now);
         tv_should_money = findViewById(R.id.tv_should_money);
         edt_content = findViewById(R.id.edt_content);
+        edt_door_ticket = findViewById(R.id.edt_door_ticket);
+        tv_cut_money_of_store = findViewById(R.id.tv_cut_money_of_store);
+        tv_cut_money_of_promotion = findViewById(R.id.tv_cut_money_of_promotion);
+        tv_get_ticket = findViewById(R.id.tv_get_ticket);
     }
 
     @Override
@@ -381,4 +439,14 @@ public class SalesActivity extends BaseActivity {
     }
 
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode==2&&resultCode==2){
+            addressId = ((AddressDatasBean)data.getSerializableExtra("address")).getAddressId();
+            tv_name.setText(((AddressDatasBean)data.getSerializableExtra("address")).getShipPerson());
+            tv_phone.setText(((AddressDatasBean)data.getSerializableExtra("address")).getShipMobile());
+            tv_details.setText(((AddressDatasBean)data.getSerializableExtra("address")).getShipAddress());
+        }
+    }
 }
