@@ -1,5 +1,6 @@
 package com.youzheng.zhejiang.robertmoog.Home.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -8,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
 import com.youzheng.zhejiang.robertmoog.Home.adapter.CouponAdapter;
@@ -26,7 +28,7 @@ public class CouponActivity extends BaseActivity {
     private TabLayout tabLayout ;
     private RecyclerView recyclerView ;
     CouponAdapter addapter ;
-
+    TextView tv_add ;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -90,5 +92,23 @@ public class CouponActivity extends BaseActivity {
         recyclerView.setAdapter(addapter);
         recyclerView.addItemDecoration(new RecycleViewDivider(mContext, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
         addapter.setData(useCouponList,CouponActivity.this,"1");
+        tv_add = findViewById(R.id.tv_add);
+
+        tv_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (CouponListBean bean :useCouponList){
+                    if (bean.isClick()){
+                        if (bean.getAssetId()!=null){
+                            Intent intent = new Intent();
+                            intent.putExtra("assetId",bean.getAssetId());
+                            intent.putExtra("payValue",bean.getPayValue());
+                            setResult(3,intent);
+                        }
+                    }
+                }
+                finish();
+            }
+        });
     }
 }

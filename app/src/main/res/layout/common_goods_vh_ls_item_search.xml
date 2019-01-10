@@ -139,14 +139,19 @@
                         android:layout_height="match_parent" />
 
                     <EditText
+                        android:textColor="@color/text_main"
+                        android:enabled="false"
                         android:id="@+id/edt_num"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:background="@null"
                         android:text="1"
-                        android:paddingLeft="@dimen/space_8"
-                        android:paddingRight="@dimen/space_8"
+                        android:inputType="number"
+                        android:paddingLeft="@dimen/space_12"
+                        android:paddingRight="@dimen/space_12"
+                        android:paddingTop="@dimen/space_1"
+                        android:paddingBottom="@dimen/space_1"
                         />
 
                     <View
@@ -158,9 +163,10 @@
                         android:id="@+id/tv_add"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/space_6"
-                        android:paddingLeft="@dimen/space_8"
-                        android:paddingRight="@dimen/space_8"
+                        android:paddingTop="@dimen/space_1"
+                        android:paddingBottom="@dimen/space_1"
+                        android:paddingLeft="@dimen/space_12"
+                        android:paddingRight="@dimen/space_12"
                         android:text="+"
                         android:textSize="@dimen/text_size_17"
                         />
@@ -201,6 +207,8 @@
 
 
             <ImageView
+                android:paddingBottom="@dimen/space_7"
+                android:paddingTop="@dimen/space_7"
                 android:paddingLeft="@dimen/space_30"
                 android:id="@+id/iv_show"
                 android:layout_centerVertical="true"

@@ -11,9 +11,11 @@ import android.widget.TextView;
 import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
 import com.youzheng.zhejiang.robertmoog.Home.HomeFragment;
 import com.youzheng.zhejiang.robertmoog.Model.Home.Customer;
+import com.youzheng.zhejiang.robertmoog.Model.Home.ShopPersonalListBean;
 import com.youzheng.zhejiang.robertmoog.Model.login.RegisterBean;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.utils.CommonAdapter;
+import com.youzheng.zhejiang.robertmoog.utils.QRcode.android.CaptureActivity;
 import com.youzheng.zhejiang.robertmoog.utils.ViewHolder;
 
 import java.util.ArrayList;
@@ -43,13 +45,30 @@ public class RegisterSuccessActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position){
                     case 3 :
-                        startActivity(new Intent(mContext,LocationManageActivity.class));
+                        if (registerBean!=null){
+                            Intent intent = new Intent(mContext,LocationManageActivity.class);
+                            intent.putExtra("customerId",registerBean.getCustomerId());
+                            startActivity(intent);
+                        }
+
+                        if (customer!=null){
+                            Intent intent = new Intent(mContext,LocationManageActivity.class);
+                            intent.putExtra("customerId",customer.getCustomerId());
+                            startActivity(intent);
+                        }
                         break;
 
                     case 4 :
                         if (registerBean!=null){
                             Intent intent = new Intent(mContext,AttentionGoodsActivity.class);
                             intent.putExtra("registerBean",registerBean);
+                            startActivity(intent);
+                        }
+                        if (customer!=null){
+                            Intent intent = new Intent(mContext,AttentionGoodsActivity.class);
+                            ShopPersonalListBean listBean = new ShopPersonalListBean();
+                            listBean.setCustomerId(""+customer.getCustomerId());
+                            intent.putExtra("label",listBean);
                             startActivity(intent);
                         }
 
@@ -63,6 +82,26 @@ public class RegisterSuccessActivity extends BaseActivity {
                             intent.putExtra("customerId",registerBean.getCustomerId());
                         }
                         startActivity(intent);
+                        break;
+                    case 0 :
+                        Intent intent1 = new Intent(mContext, CaptureActivity.class);
+                        if (customer!=null){
+                            intent1.putExtra("customerId",customer.getCustomerId());
+                        }else {
+                            intent1.putExtra("customerId",registerBean.getCustomerId());
+                        }
+                        startActivity(intent1);
+                        break;
+
+                    case 2 :
+                        Intent intent2 = new Intent(mContext,ClientAccountActivity.class);
+                        if (customer!=null){
+                            intent2.putExtra("customerId",customer.getCustomerId());
+                        }else {
+                            intent2.putExtra("customerId",registerBean.getCustomerId());
+                        }
+                        startActivity(intent2);
+                        break;
                 }
             }
         });

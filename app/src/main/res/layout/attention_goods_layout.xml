@@ -8,12 +8,12 @@
 
     <include layout="@layout/title_bar"/>
 
-    <RelativeLayout
+    <LinearLayout
         android:padding="@dimen/space_15"
         android:paddingBottom="@dimen/space_10"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
         android:background="@color/bg_background_white"
         >
 
@@ -28,6 +28,7 @@
             />
 
         <TextView
+            android:layout_marginTop="@dimen/space_10"
             android:id="@+id/tv_update_intent"
             android:drawablePadding="@dimen/space_10"
             android:textColor="@color/text_blue"
@@ -35,15 +36,15 @@
             android:text="@string/xiugai_note"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
             android:drawableLeft="@mipmap/group_75_2"
             />
 
 
-    </RelativeLayout>
+    </LinearLayout>
 
     <ListView
+        android:layout_marginTop="@dimen/space_10"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/ls"

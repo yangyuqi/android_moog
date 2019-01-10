@@ -112,9 +112,10 @@
                             android:id="@+id/tv_reduce"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:padding="@dimen/space_6"
-                            android:paddingLeft="@dimen/space_8"
-                            android:paddingRight="@dimen/space_8"
+                            android:paddingTop="1dp"
+                            android:paddingBottom="@dimen/space_1"
+                            android:paddingLeft="@dimen/space_12"
+                            android:paddingRight="@dimen/space_12"
                             android:text="—"
                             android:textSize="@dimen/text_size_17"
                             />
@@ -124,6 +125,9 @@
                             android:layout_height="match_parent" />
 
                         <EditText
+                            android:textColor="@color/text_main"
+                            android:enabled="false"
+                            android:inputType="number"
                             android:id="@+id/edt_num"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
@@ -143,9 +147,10 @@
                             android:id="@+id/tv_add"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:padding="@dimen/space_6"
-                            android:paddingLeft="@dimen/space_8"
-                            android:paddingRight="@dimen/space_8"
+                            android:paddingTop="1dp"
+                            android:paddingBottom="@dimen/space_1"
+                            android:paddingLeft="@dimen/space_12"
+                            android:paddingRight="@dimen/space_12"
                             android:text="+"
                             android:textSize="@dimen/text_size_17"
                             />

@@ -29,7 +29,7 @@
 
         <TextView
             android:singleLine="true"
-            android:text="就将计就计"
+            android:text=""
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tv_name"
@@ -39,7 +39,7 @@
 
 
         <TextView
-            android:text="和飒飒的"
+            android:text=""
             android:layout_alignParentBottom="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

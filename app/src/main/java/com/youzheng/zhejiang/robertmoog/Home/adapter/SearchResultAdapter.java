@@ -86,13 +86,6 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     }
                 });
 
-                ((CommonGoodsViewHolder) holder).hsv.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        return true;
-                    }
-                });
-
             }else if (type.equals("2")){
                 ((CommonGoodsViewHolder) holder).tv_confirm.setVisibility(View.GONE);
                 ((CommonGoodsViewHolder) holder).ll_num.setVisibility(View.VISIBLE);
@@ -107,6 +100,33 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 ((CommonGoodsViewHolder) holder).ll_num.setVisibility(View.GONE);
                 ((CommonGoodsViewHolder) holder).tv_confirm.setVisibility(View.GONE);
             }
+
+            if (type.equals("1")||type.equals("3")){
+                ((CommonGoodsViewHolder) holder).hsv.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        return true;
+                    }
+                });
+            }
+
+            ((CommonGoodsViewHolder) holder).tv_add.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                        objects.get(position).setNum(objects.get(position).getNum()+1) ;
+                        notifyDataSetChanged();
+                }
+            });
+
+            ((CommonGoodsViewHolder) holder).tv_reduce.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (objects.get(position).getNum()>1){
+                        objects.get(position).setNum(objects.get(position).getNum()-1) ;
+                        notifyDataSetChanged();
+                    }
+                }
+            });
 
         }else if (holder instanceof CommonGoodsTypeViewHolder){
             LinearLayout view = ((CommonGoodsTypeViewHolder) holder).ll_width;
@@ -166,12 +186,6 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         ((BaseActivity)context).finish();
                     }
                 });
-                ((CommonGoodsTypeViewHolder) holder).hsv.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        return true;
-                    }
-                });
             }else if (type.equals("2")){
                 ((CommonGoodsTypeViewHolder) holder).tv_get_num.setVisibility(View.GONE);
                 ((CommonGoodsTypeViewHolder) holder).tv_confirm.setVisibility(View.GONE);
@@ -186,6 +200,33 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 ((CommonGoodsTypeViewHolder) holder).ll_num.setVisibility(View.GONE);
                 ((CommonGoodsTypeViewHolder) holder).tv_confirm.setVisibility(View.GONE);
             }
+
+            if (type.equals("1")||type.equals("3")){
+                ((CommonGoodsTypeViewHolder) holder).hsv.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        return true;
+                    }
+                });
+            }
+
+            ((CommonGoodsTypeViewHolder) holder).tv_add.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    objects.get(position).setNum(objects.get(position).getNum()+1) ;
+                    notifyDataSetChanged();
+                }
+            });
+
+            ((CommonGoodsTypeViewHolder) holder).tv_reduce.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (objects.get(position).getNum()>1){
+                        objects.get(position).setNum(objects.get(position).getNum()-1) ;
+                        notifyDataSetChanged();
+                    }
+                }
+            });
         }
     }
 
@@ -212,7 +253,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public class CommonGoodsViewHolder extends RecyclerView.ViewHolder{
 
-        TextView tv_name ,tv_desc ,tv_price ,tv_confirm ,tv_get_num;
+        TextView tv_name ,tv_desc ,tv_price ,tv_confirm ,tv_get_num ,tv_add ,tv_reduce;
         ImageView iv_icon ;
         RelativeLayout rl_width ;
         HorizontalScrollView hsv;
@@ -230,12 +271,14 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             ll_num = itemView.findViewById(R.id.ll_num);
             tv_get_num = itemView.findViewById(R.id.tv_get_num);
             edt_num = itemView.findViewById(R.id.edt_num);
+            tv_reduce = itemView.findViewById(R.id.tv_reduce);
+            tv_add = itemView.findViewById(R.id.tv_add);
         }
     }
 
     public class CommonGoodsTypeViewHolder extends RecyclerView.ViewHolder{
 
-        TextView tv_name ,tv_confirm , tv_desc ,tv_price ,tv_golden ,tv_activity ,tv_get_num;
+        TextView tv_name ,tv_confirm , tv_desc ,tv_price ,tv_golden ,tv_activity ,tv_get_num ,tv_add ,tv_reduce;
         NoScrollListView ls ;
         View rl_activity ,ll_num;
         ImageView iv_show ,iv_icon ;
@@ -259,6 +302,8 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             ll_num = itemView.findViewById(R.id.ll_num);
             tv_get_num = itemView.findViewById(R.id.tv_get_num);
             edt_num = itemView.findViewById(R.id.edt_num);
+            tv_reduce = itemView.findViewById(R.id.tv_reduce);
+            tv_add = itemView.findViewById(R.id.tv_add);
         }
     }
 }

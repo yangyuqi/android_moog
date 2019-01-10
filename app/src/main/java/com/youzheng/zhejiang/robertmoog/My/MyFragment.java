@@ -44,6 +44,7 @@ public class MyFragment extends BaseFragment implements BaseFragment.ReloadInter
     }
 
     private void initView(View mView) {
+        mView.findViewById(R.id.btnBack).setVisibility(View.GONE);
         tv_shop_name = mView.findViewById(R.id.tv_shop_name);
         tv_role = mView.findViewById(R.id.tv_role);
         tv_loginOut = mView.findViewById(R.id.tv_loginOut);

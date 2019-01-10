@@ -6,6 +6,8 @@ public class CouponListBeanDetail implements Serializable{
     private String shopId ;
     private String shopName ;
 
+
+
     public String getShopId() {
         return shopId;
     }

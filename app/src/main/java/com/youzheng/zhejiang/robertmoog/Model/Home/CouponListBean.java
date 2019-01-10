@@ -15,6 +15,25 @@ public class CouponListBean implements Serializable{
     private String assetId ;
     private List<CouponListBeanDetail> shopList = new ArrayList<>();
 
+    private boolean isExpress ;//是否展开
+    private boolean isClick ;//是否选中
+
+    public boolean isClick() {
+        return isClick;
+    }
+
+    public void setClick(boolean click) {
+        isClick = click;
+    }
+
+    public boolean isExpress() {
+        return isExpress;
+    }
+
+    public void setExpress(boolean express) {
+        isExpress = express;
+    }
+
     public String getCouponType() {
         return couponType;
     }

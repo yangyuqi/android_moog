@@ -64,6 +64,8 @@ public class AttentionGoodsActivity extends BaseActivity {
         initView();
         bean = (ShopPersonalListBean) getIntent().getSerializableExtra("label");
         registerBean = (RegisterBean) getIntent().getSerializableExtra("registerBean");
+
+
         EventBus.getDefault().register(this);
         initClick();
     }
@@ -92,7 +94,7 @@ public class AttentionGoodsActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 RxPermissions permissions = new RxPermissions(AttentionGoodsActivity.this);
-                permissions.request(Manifest.permission.CAMERA,Manifest.permission.VIBRATE).subscribe(new Action1<Boolean>() {
+                permissions.request(Manifest.permission.CAMERA,Manifest.permission.VIBRATE,Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe(new Action1<Boolean>() {
                     @Override
                     public void call(Boolean aBoolean) {
                         if (aBoolean){
@@ -100,8 +102,10 @@ public class AttentionGoodsActivity extends BaseActivity {
                             intent.putExtra("type","");
                             if (bean!=null) {
                                 intent.putExtra("customerId",bean.getCustomerId());
-                            }else {
-                                intent.putExtra("customerId",registerBean.getCustomerId());
+                            }
+
+                            if (registerBean!=null){
+                                intent.putExtra("customerId",""+registerBean.getCustomerId());
                             }
                             startActivity(intent);
                         }

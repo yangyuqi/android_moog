@@ -62,7 +62,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/text_main"
-                android:textSize="14sp"
+                android:textSize="13sp"
                 android:text="嘎嘎嘎"
                 />
 
@@ -74,7 +74,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/text_drak_black"
-                android:textSize="14sp"
+                android:textSize="13sp"
                 android:text="嘎嘎嘎"
                 />
 
@@ -83,15 +83,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/text_main"
-                android:textSize="14sp"
+                android:textSize="13sp"
                 android:text="详细信息"
                 />
 
 
-            <CheckBox
-                android:button="@null"
-                android:background="@drawable/checkbox_selector"
+            <ImageView
+                android:paddingRight="@dimen/space_5"
+                android:paddingTop="@dimen/space_6"
+                android:paddingLeft="@dimen/space_20"
+                android:id="@+id/iv_show"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/group_24_3"
+
+                />
+
+            <ImageView
                 android:id="@+id/cb"
+                android:src="@mipmap/group_24_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -100,6 +112,51 @@
         </RelativeLayout>
         
     </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/space_divider_1"
+            android:background="@color/bg_all"/>
+
+     <TextView
+         android:visibility="gone"
+         android:background="@color/bg_background_white"
+         android:id="@+id/tv_together"
+         android:textSize="@dimen/text_size_14"
+         android:textColor="@color/text_main"
+         android:paddingBottom="@dimen/space_10"
+         android:paddingTop="@dimen/space_5"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:paddingLeft="@dimen/space_15"
+         />
+
+        <TextView
+            android:background="@color/bg_background_white"
+            android:id="@+id/tv_show"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/space_15"
+            android:textSize="@dimen/text_size_14"
+            android:textColor="@color/colorPrimaryDark"
+            android:text="活动门店"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/space_5"
+            android:background="@color/bg_background_white"/>
+
+     <com.youzheng.zhejiang.robertmoog.utils.View.NoScrollListView
+         android:id="@+id/ls"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:background="@color/bg_background_white"
+         android:paddingLeft="@dimen/space_15"
+         android:dividerHeight="@dimen/space_5"
+         android:divider="@color/bg_background_white"
+         ></com.youzheng.zhejiang.robertmoog.utils.View.NoScrollListView>
 
     </LinearLayout>
 

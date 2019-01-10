@@ -1,5 +1,6 @@
 package com.youzheng.zhejiang.robertmoog.Home.activity;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,6 +9,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.tbruyelle.rxpermissions.RxPermissions;
 import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
@@ -22,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import okhttp3.Request;
+import rx.functions.Action1;
 
 public class ClientViewActivity extends BaseActivity {
 
@@ -70,12 +73,22 @@ public class ClientViewActivity extends BaseActivity {
 
                     @Override
                     public void onResponse(String response) {
-                        BaseModel baseModel = gson.fromJson(response,BaseModel.class);
+                       final BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                         if (baseModel.getCode()== PublicUtils.code){
-                            Intent intent = new Intent(mContext, CaptureActivity.class);
-                            CustomerBean customerBean = gson.fromJson(gson.toJson(baseModel.getDatas()),CustomerBean.class);
-                            intent.putExtra("customerId",customerBean.getCustomer().getCustomerId());
-                            startActivity(intent);
+
+                            RxPermissions permissions = new RxPermissions(ClientViewActivity.this);
+                            permissions.request(Manifest.permission.CAMERA,Manifest.permission.VIBRATE ,Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe(new Action1<Boolean>() {
+                                @Override
+                                public void call(Boolean aBoolean) {
+                                    if (aBoolean){
+                                        Intent intent = new Intent(mContext, CaptureActivity.class);
+                                        CustomerBean customerBean = gson.fromJson(gson.toJson(baseModel.getDatas()),CustomerBean.class);
+                                        intent.putExtra("customerId",customerBean.getCustomer().getCustomerId());
+                                        startActivity(intent);
+                                    }
+                                }
+                            });
+
                         }
                     }
                 });

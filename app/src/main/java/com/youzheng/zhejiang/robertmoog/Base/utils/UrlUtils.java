@@ -89,8 +89,8 @@ public class UrlUtils {
 
 
     public static String ORDERLIST_LIST_DETAIL = BASE_URL+"/v1/app/shop/getComboInfo";
-
-
-
-
+    public static String GET_CITY = BASE_URL+"/v1/app/customer/getCity";
+    public static String DOSTRICT_LIST = BASE_URL+"/v1/app/customer/getDistrict";
+    public static String GET_STREET = BASE_URL+"/v1/app/customer/getStreet";
+    public static String CLIENT_ACCOUNT = BASE_URL+"/v1/app/customer/couponList";
 }

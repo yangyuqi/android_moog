@@ -23,6 +23,7 @@
             />
 
         <EditText
+            android:hint="填写收货人"
             android:background="@null"
             android:gravity="end"
             android:id="@+id/edt_name"
@@ -55,6 +56,8 @@
             />
 
         <EditText
+            android:hint="填写手机号"
+            android:inputType="number"
             android:background="@null"
             android:gravity="end"
             android:id="@+id/edt_phone"
@@ -86,7 +89,8 @@
             android:text="省份"
             />
 
-        <EditText
+        <TextView
+            android:hint="选择省份"
             android:id="@+id/edt_provice"
             android:background="@null"
             android:gravity="end"
@@ -117,7 +121,8 @@
             android:text="城市"
             />
 
-        <EditText
+        <TextView
+            android:hint="选择城市"
             android:id="@+id/edt_city"
             android:background="@null"
             android:gravity="end"
@@ -149,8 +154,42 @@
             android:text="县／区"
             />
 
-        <EditText
+        <TextView
+            android:hint="选择 县／区"
             android:id="@+id/edt_town"
+            android:background="@null"
+            android:gravity="end"
+            android:layout_alignParentRight="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/space_15"
+            android:textSize="@dimen/text_size_15"
+            android:textColor="@color/text_main"
+            android:text=""
+            />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_marginTop="@dimen/space_divider_2"
+        android:background="@color/bg_background_white"
+        android:layout_width="match_parent"
+        android:layout_height="56dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/space_15"
+            android:textSize="@dimen/text_size_15"
+            android:textColor="@color/text_main"
+            android:text="街道"
+            />
+
+        <TextView
+            android:hint="选择街道"
+            android:id="@+id/edt_street"
             android:background="@null"
             android:gravity="end"
             android:layout_alignParentRight="true"
@@ -182,6 +221,7 @@
             />
 
         <EditText
+            android:hint="填写详细地址"
             android:id="@+id/edt_address"
             android:background="@null"
             android:gravity="end"

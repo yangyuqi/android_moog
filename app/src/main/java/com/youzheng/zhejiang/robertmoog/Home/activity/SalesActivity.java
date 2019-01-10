@@ -61,10 +61,10 @@ public class SalesActivity extends BaseActivity {
     TextView tv_confrim ;
     Map<String,Object> map = new HashMap<>();
     private OptionsPickerView pvCustomTime;
-    TextView tv_name ,tv_phone ,tv_details ,tv_get_state , tv_dispatching_type ,tv_get_money_type ,tv_get_money_of_now ,tv_should_money ,edt_content ,tv_cut_money_of_store,tv_cut_money_of_promotion ,tv_get_ticket;
+    TextView tv_name ,tv_phone ,tv_details ,tv_get_state ,tv_cut_money_of_juan, tv_dispatching_type ,tv_get_money_type ,tv_get_money_of_now ,tv_should_money ,edt_content ,tv_cut_money_of_store,tv_cut_money_of_promotion ,tv_get_ticket ,tv_all_count;
     String PickUpStatus ,ShoppingMethod ,paymentMethod;
     Switch sv_life ,sv_present ;
-    private String payAmount  ;
+    private String payAmount ,assetId ;
     EditText edt_door_ticket ;
 
     private ArrayList<CouponListBean> useCouponList  = new ArrayList<>();
@@ -281,6 +281,7 @@ public class SalesActivity extends BaseActivity {
         map.put("paymentMethod", paymentMethod);
         map.put("shoppingMethod", ShoppingMethod);
         if (data.size() > 0) {
+            int allCount = 0 ;
             List<OrderProductDatasBean> orderProductDatasBeans = new ArrayList<>();
             List<OrderSetMealDatasBean> orderSetMealDatasBeans = new ArrayList<>();
             for (ScanDatasBean scanDatasBean : data) {
@@ -317,6 +318,8 @@ public class SalesActivity extends BaseActivity {
                     intent.putExtra("OrderGoodsId",String.valueOf(goodsId.getId()));
                     startActivity(intent);
                     finish();
+                }else {
+                    showToast(baseModel.getMsg());
                 }
             }
         });
@@ -335,24 +338,32 @@ public class SalesActivity extends BaseActivity {
         if (addressId!=null){
             map.put("addressId",addressId);
         }
+        if (assetId!=null){
+            map.put("assetId",assetId);
+        }
+
         if (data.size()>0){
+            int allCount = 0 ;
             List<OrderProductDatasBean> orderProductDatasBeans = new ArrayList<>();
             List<OrderSetMealDatasBean> orderSetMealDatasBeans = new ArrayList<>();
             for (ScanDatasBean scanDatasBean :data){
                 if (!scanDatasBean.isSetMeal()) {
                     OrderProductDatasBean datasBean = new OrderProductDatasBean();
                     datasBean.setNum("" + scanDatasBean.getNum());
+                    allCount = allCount+scanDatasBean.getNum();
                     datasBean.setProductId(scanDatasBean.getId());
                     orderProductDatasBeans.add(datasBean);
                 }else {
                     OrderSetMealDatasBean mealDatasBean = new OrderSetMealDatasBean();
                     mealDatasBean.setSetMealId(scanDatasBean.getId());
-                    mealDatasBean.setNum(""+scanDatasBean.getNum());
+                    mealDatasBean.setNum("" + scanDatasBean.getNum());
+                    allCount = allCount+scanDatasBean.getNum();
                     orderSetMealDatasBeans.add(mealDatasBean);
                 }
             }
             map.put("orderProductDatas",orderProductDatasBeans);
             map.put("orderSetMealDatas",orderSetMealDatasBeans);
+            tv_all_count.setText(""+allCount);
         }
         OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.SALES_GOODS + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
@@ -369,6 +380,7 @@ public class SalesActivity extends BaseActivity {
                     tv_get_money_of_now.setText("¥"+payAmount);
                     tv_should_money.setText("¥"+saleData.getSaleData().getAmountPayable());
                     tv_cut_money_of_promotion.setText("¥"+saleData.getSaleData().getOrderDerate());
+                    tv_cut_money_of_juan.setText("¥"+saleData.getSaleData().getCouponDerate());
                     notUseCouponList = saleData.getSaleData().getNotUseCouponList();
                     useCouponList = saleData.getSaleData().getUseCouponList();
                     if (saleData.getSaleData().getAddressId()==null){
@@ -432,6 +444,8 @@ public class SalesActivity extends BaseActivity {
         tv_cut_money_of_store = findViewById(R.id.tv_cut_money_of_store);
         tv_cut_money_of_promotion = findViewById(R.id.tv_cut_money_of_promotion);
         tv_get_ticket = findViewById(R.id.tv_get_ticket);
+        tv_cut_money_of_juan = findViewById(R.id.tv_cut_money_of_juan);
+        tv_all_count =findViewById(R.id.tv_all_count);
     }
 
     @Override
@@ -449,5 +463,10 @@ public class SalesActivity extends BaseActivity {
             tv_phone.setText(((AddressDatasBean)data.getSerializableExtra("address")).getShipMobile());
             tv_details.setText(((AddressDatasBean)data.getSerializableExtra("address")).getShipAddress());
         }
+
+        if (requestCode==3&&resultCode==3){
+            assetId = data.getStringExtra("assetId");
+        }
+        initData();
     }
 }
