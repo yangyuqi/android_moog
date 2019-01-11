@@ -98,5 +98,7 @@ public class UrlUtils {
 
     public static String RETURN_ORDERLIST_LIST_DETAIL= BASE_URL+"/v1/app/customer/returnOrderDetail";
     public static String CHOOSE_GOODS = BASE_URL+"/v1/app/customer/selectReturnProduct";
+
     public static String FORGET_PASSWORD = BASE_URL+"/v1/app/user/forgetPassword";
+
 }

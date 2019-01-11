@@ -89,7 +89,7 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
 
     private int page=1;
     private int pageSize=10;
-    private int customerId;
+    private String customerId;
     private String orderCode="";
     private String timeQuantum="";
     private Boolean isCustomer=false;
@@ -104,6 +104,8 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_list);
+          isCustomer=getIntent().getBooleanExtra("identifion",false);
+          customerId=getIntent().getStringExtra("customerId");
         initView();
         setListener();
         initGetDate();

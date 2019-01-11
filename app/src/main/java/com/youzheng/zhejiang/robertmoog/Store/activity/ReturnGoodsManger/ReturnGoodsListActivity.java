@@ -192,7 +192,6 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
         rv_list.setColorSchemeResources(R.color.colorPrimary);
 
 
-
         adapter=new ReturnGoodsListAdapter(list,this);
         rv_list.setAdapter(adapter);
 

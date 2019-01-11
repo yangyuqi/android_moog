@@ -14,6 +14,8 @@ import com.youzheng.zhejiang.robertmoog.Model.Home.Customer;
 import com.youzheng.zhejiang.robertmoog.Model.Home.ShopPersonalListBean;
 import com.youzheng.zhejiang.robertmoog.Model.login.RegisterBean;
 import com.youzheng.zhejiang.robertmoog.R;
+import com.youzheng.zhejiang.robertmoog.Store.activity.OrderListActivity;
+import com.youzheng.zhejiang.robertmoog.Store.bean.OrderList;
 import com.youzheng.zhejiang.robertmoog.utils.CommonAdapter;
 import com.youzheng.zhejiang.robertmoog.utils.QRcode.android.CaptureActivity;
 import com.youzheng.zhejiang.robertmoog.utils.ViewHolder;
@@ -101,6 +103,23 @@ public class RegisterSuccessActivity extends BaseActivity {
                             intent2.putExtra("customerId",registerBean.getCustomerId());
                         }
                         startActivity(intent2);
+                        break;
+
+                    case 5:
+                        Intent intent5 = new Intent(mContext,OrderListActivity.class);
+                        intent5.putExtra("customerId",customer.getCustomerId());
+                        intent5.putExtra("identifion",true);
+                        startActivity(intent5);
+                        break;
+
+                    case 6:
+
+
+                        break;
+
+
+                    case 7:
+
                         break;
                 }
             }
