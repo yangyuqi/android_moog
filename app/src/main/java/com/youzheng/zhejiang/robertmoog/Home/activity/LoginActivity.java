@@ -29,7 +29,7 @@ import okhttp3.Request;
 
 public class LoginActivity extends BaseActivity {
 
-    private EditText edt_phone ,edt_password ;
+    private EditText edt_phone ,edt_password ,edt_code ;
     Button btn_send_code ;
     private MyCountDownLoginTimer timer ;
     String type ;
@@ -77,6 +77,7 @@ public class LoginActivity extends BaseActivity {
         edt_password = (EditText) findViewById(R.id.edt_password);
         btn_send_code = findViewById(R.id.btn_send_code);
         timer = new MyCountDownLoginTimer(btn_send_code,60000,1000);
+        edt_code = findViewById(R.id.edt_code);
 
         findViewById(R.id.tv_login).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,12 +86,22 @@ public class LoginActivity extends BaseActivity {
                     showToast(getString(R.string.phone_not_null));
                     return;
                 }
-                if (edt_password.getText().toString().equals("")){
-                    showToast(getString(R.string.pwd_not_null));
-                    return;
+                if (type!=null) {
+                    if (edt_password.getText().toString().equals("")) {
+                        showToast(getString(R.string.pwd_not_null));
+                        return;
+                    }
+                }else {
+                    if (edt_code.getText().toString().equals("")){
+                        showToast("验证码不能为空");
+                        return;
+                    }
                 }
-
-                initLogin();
+                if (type!=null) {
+                    initLogin(edt_password.getText().toString(),type); //code 密码 验证码
+                }else {
+                    initLogin(edt_code.getText().toString(),type);
+                }
             }
         });
 
@@ -104,7 +115,7 @@ public class LoginActivity extends BaseActivity {
                 timer.start();
                 Map<String,Object> map = new HashMap<>();
                 map.put("phone",edt_phone.getText().toString());
-                timer.start();
+
                 OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.SEND_CODE, new OkHttpClientManager.StringCallback() {
                     @Override
                     public void onFailure(Request request, IOException e) {
@@ -122,8 +133,17 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
-    private void initLogin() {
-       OkHttpClientManager.getAsyn(UrlUtils.LOGIN+"?grant_type=password&username="+edt_phone.getText().toString()+"&password="+ PublicUtils.getSHA256StrJava(edt_password.getText().toString())+"&client_id=app&client_secret=appSecret", new OkHttpClientManager.StringCallback() {
+    private void initLogin(String code ,String type) {
+        String name , password ;
+        if (type!=null){
+            name = edt_phone.getText().toString() ;
+            password =  PublicUtils.getSHA256StrJava(code);
+        }else {
+            name = edt_phone.getText().toString()+"_"+code;
+            password = code ;
+        }
+
+       OkHttpClientManager.getAsyn(UrlUtils.LOGIN+"?grant_type=password&username="+name+"&password="+ password+"&client_id=app&client_secret=appSecret", new OkHttpClientManager.StringCallback() {
            @Override
            public void onFailure(Request request, IOException e) {
 
