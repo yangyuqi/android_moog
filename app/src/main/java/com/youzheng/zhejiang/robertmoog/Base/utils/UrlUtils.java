@@ -88,7 +88,7 @@ public class UrlUtils {
     public static String ADD_INTENTION_GOODS = BASE_URL+"/v1/app/customer/addIntentProduct";
 
 
-    public static String ORDERLIST_LIST_DETAIL = BASE_URL+"/v1/app/shop/getComboInfo";
+    public static String ORDERLIST_LIST_DETAIL = BASE_URL+"/v1/app/customer/orderDetail";
     public static String GET_CITY = BASE_URL+"/v1/app/customer/getCity";
     public static String DOSTRICT_LIST = BASE_URL+"/v1/app/customer/getDistrict";
     public static String GET_STREET = BASE_URL+"/v1/app/customer/getStreet";
@@ -98,4 +98,5 @@ public class UrlUtils {
 
     public static String RETURN_ORDERLIST_LIST_DETAIL= BASE_URL+"/v1/app/customer/returnOrderDetail";
     public static String CHOOSE_GOODS = BASE_URL+"/v1/app/customer/selectReturnProduct";
+    public static String FORGET_PASSWORD = BASE_URL+"/v1/app/user/forgetPassword";
 }
