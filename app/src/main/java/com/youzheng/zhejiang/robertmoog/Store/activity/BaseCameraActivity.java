@@ -16,6 +16,8 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
+import android.view.View;
+
 import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.UCropActivity;
 import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
@@ -35,6 +37,8 @@ import java.util.List;
 import cn.finalteam.galleryfinal.FunctionConfig;
 import cn.finalteam.galleryfinal.GalleryFinal;
 import cn.finalteam.galleryfinal.model.PhotoInfo;
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
 
 public class BaseCameraActivity extends BaseActivity {
 
@@ -48,7 +52,7 @@ public class BaseCameraActivity extends BaseActivity {
 
     protected List<PhotoInfo> mPhotoInfos = new ArrayList<>();
     /**
-     * 是否需要拍照后裁剪
+     * 是否需要拍照后裁剪sssss
      */
     protected boolean isTailor = false;
 
@@ -123,7 +127,7 @@ public class BaseCameraActivity extends BaseActivity {
                     Uri uri = FileProvider.getUriForFile(this, "huizhi_buff_com.buff.fileprovider", file);
                     //添加权限
                     intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
+                    intent.putExtra("return-data", false);
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
                     startActivityForResult(intent, TAKE_PHOTO_WITH_DATA);
 
@@ -131,6 +135,7 @@ public class BaseCameraActivity extends BaseActivity {
                     Intent getImageByCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     file = new File(saveDir, "MT" + (t.format(new Date())) + ".jpg");
                     getImageByCamera.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+                    getImageByCamera.putExtra("return-data", false);
                     startActivityForResult(getImageByCamera, TAKE_PHOTO_WITH_DATA);
                 }
             } else {
@@ -314,8 +319,6 @@ public class BaseCameraActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-//        LogUtil.i(resultCode +"");
-//        LogUtil.i(requestCode + "");
         //裁剪成功后的uri
         if (requestCode == UCrop.REQUEST_CROP) {
             final Uri resultUri = UCrop.getOutput(data);
@@ -332,25 +335,25 @@ public class BaseCameraActivity extends BaseActivity {
                     return;
                 }
 
-                String picturePath1 = file.getPath();
+                String picturePath1 = file.getAbsolutePath();
 
                 Log.i("person", picturePath1);
                 try {
 
                     Bitmap bm = Bimp.revitionImageSize(picturePath1);
-                    degree = readPictureDegree(picturePath1);
-                    Bitmap bm1 = rotaingImageView(degree, bm);
-                    Uri uri1 =bitmap2Uri(bm1, this);
+                    setHeadIvEvenSendMine(bm,picturePath1);
+//                    degree = readPictureDegree(picturePath1);
+//                    Bitmap bm1 = rotaingImageView(degree, bm);
+//                    Uri uri1 =bitmap2Uri(bm1, this);
 
                     //拍照后需要裁剪走
                     if (isTailor){
-                        startUcrop(uri1);
+//                        startUcrop(uri1);
                     }else {
-                        Bitmap bm12 = Bimp.revitionImageSize(picturePath1);
-                        setHeadIvEvenSendMine(bm12 ,picturePath1);
+//                        setHeadIvEvenSendMine(bm1,picturePath1);
                     }
 
-                    Bimp.drr.clear();
+                    //Bimp.drr.clear();
 
 
                 } catch (Exception e) {
@@ -459,6 +462,7 @@ public class BaseCameraActivity extends BaseActivity {
         }
 
     }
+
 
 
     @Override

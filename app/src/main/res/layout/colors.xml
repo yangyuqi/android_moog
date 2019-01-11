@@ -34,7 +34,6 @@
     <color name="react">#ffffff</color>
     <color name="scanLineColor">#ffffff</color>
     <color name="defaultColor">#ffffff</color>
-
-    <color name="transparent">#00000000</color>
+    <color name="transparent">#00000000</color>//透明色sss
 
 </resources>

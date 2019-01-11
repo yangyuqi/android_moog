@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
+import com.youzheng.zhejiang.robertmoog.Base.utils.MyConstant;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.ProfessionalCustomerPagerAdapter;
 import com.youzheng.zhejiang.robertmoog.Store.fragment.CustomerOrderFragment;
@@ -22,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 专业客户订单界面
+ * 专业客户订单界面ssss
  */
 public class ProfessionalCustomerOrderActivity extends BaseActivity implements View.OnClickListener {
 
@@ -60,14 +61,27 @@ public class ProfessionalCustomerOrderActivity extends BaseActivity implements V
     }
 
     private void initPager() {
-        list.add(new CustomerOrderFragment());
-        list.add(new CustomerOrderFragment());
+        //专业客户订单
+        CustomerOrderFragment onefragment=new CustomerOrderFragment();
+        Bundle upcomingBundle = new Bundle();
+        upcomingBundle.putString(MyConstant.LIST_TYPE ,"MAJOR");
+        onefragment.setArguments(upcomingBundle);
+
+        //推荐客户订单
+        CustomerOrderFragment twofragment=new CustomerOrderFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(MyConstant.LIST_TYPE ,"GROOM");
+        twofragment.setArguments(bundle);
+
+
+        list.add(onefragment);
+        list.add(twofragment);
 
 
         FragmentManager fm = getSupportFragmentManager();
         pagerAdapter = new ProfessionalCustomerPagerAdapter(fm, list);
         pager.setAdapter(pagerAdapter);
-        pager.setOffscreenPageLimit(2);
+        pager.setOffscreenPageLimit(1);
 
         tab.setupWithViewPager(pager);
         //默认选中

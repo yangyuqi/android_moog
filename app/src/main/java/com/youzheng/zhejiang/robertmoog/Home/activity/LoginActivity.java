@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
@@ -17,15 +18,21 @@ import com.youzheng.zhejiang.robertmoog.Model.login.UserConfigDataBean;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.utils.QRcode.android.CaptureActivity;
 import com.youzheng.zhejiang.robertmoog.utils.SharedPreferencesUtils;
+import com.youzheng.zhejiang.robertmoog.utils.View.MyCountDownLoginTimer;
+import com.youzheng.zhejiang.robertmoog.utils.View.MyCountDownTimer;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 import okhttp3.Request;
 
 public class LoginActivity extends BaseActivity {
 
     private EditText edt_phone ,edt_password ;
+    Button btn_send_code ;
+    private MyCountDownLoginTimer timer ;
+    String type ;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,6 +45,7 @@ public class LoginActivity extends BaseActivity {
         findViewById(R.id.tv_login_by_code).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                type = null;
                 changeLayout(null);
             }
         });
@@ -45,14 +53,16 @@ public class LoginActivity extends BaseActivity {
         findViewById(R.id.iv_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                changeLayout("");
+                type="1";
+                changeLayout(type);
             }
         });
 
         findViewById(R.id.tv_login_by_pwd).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                changeLayout("");
+                type="2";
+                changeLayout(type);
             }
         });
 
@@ -65,6 +75,8 @@ public class LoginActivity extends BaseActivity {
 
         edt_phone = (EditText) findViewById(R.id.edt_phone);
         edt_password = (EditText) findViewById(R.id.edt_password);
+        btn_send_code = findViewById(R.id.btn_send_code);
+        timer = new MyCountDownLoginTimer(btn_send_code,60000,1000);
 
         findViewById(R.id.tv_login).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,6 +91,33 @@ public class LoginActivity extends BaseActivity {
                 }
 
                 initLogin();
+            }
+        });
+
+        btn_send_code.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (edt_phone.getText().toString().equals("")){
+                    showToast(getString(R.string.phone_not_null));
+                    return;
+                }
+                timer.start();
+                Map<String,Object> map = new HashMap<>();
+                map.put("phone",edt_phone.getText().toString());
+                timer.start();
+                OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.SEND_CODE, new OkHttpClientManager.StringCallback() {
+                    @Override
+                    public void onFailure(Request request, IOException e) {
+
+                    }
+
+                    @Override
+                    public void onResponse(String response) {
+                        BaseModel baseModel = gson.fromJson(response,BaseModel.class);
+                        if (baseModel.getCode()== PublicUtils.code){
+                        }
+                    }
+                });
             }
         });
     }

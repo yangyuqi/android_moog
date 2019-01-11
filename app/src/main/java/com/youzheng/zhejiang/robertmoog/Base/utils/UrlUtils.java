@@ -93,4 +93,9 @@ public class UrlUtils {
     public static String DOSTRICT_LIST = BASE_URL+"/v1/app/customer/getDistrict";
     public static String GET_STREET = BASE_URL+"/v1/app/customer/getStreet";
     public static String CLIENT_ACCOUNT = BASE_URL+"/v1/app/customer/couponList";
+
+    public static String RETURN_ORDERLIST_LIST= BASE_URL+"/v1/app/customer/returnOrderList";
+
+    public static String RETURN_ORDERLIST_LIST_DETAIL= BASE_URL+"/v1/app/customer/returnOrderDetail";
+    public static String CHOOSE_GOODS = BASE_URL+"/v1/app/customer/selectReturnProduct";
 }

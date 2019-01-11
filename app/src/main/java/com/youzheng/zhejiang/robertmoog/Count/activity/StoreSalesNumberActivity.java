@@ -43,7 +43,7 @@ import java.util.List;
 import okhttp3.Request;
 
 /**
- * 门店销量界面
+ * 门店销量界面 ssssss
  */
 public class StoreSalesNumberActivity extends BaseActivity implements View.OnClickListener {
 
@@ -97,7 +97,7 @@ public class StoreSalesNumberActivity extends BaseActivity implements View.OnCli
         setContentView(R.layout.activity_store_sales_number);
         initView();
         initTimer();
-        setListener();
+        //setListener();
     }
 
     private void setListener() {
@@ -157,6 +157,8 @@ public class StoreSalesNumberActivity extends BaseActivity implements View.OnCli
         pr_list.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
+        pr_list.setPullRefreshEnable(false);
+        pr_list.setPushRefreshEnable(false);
 
     }
 

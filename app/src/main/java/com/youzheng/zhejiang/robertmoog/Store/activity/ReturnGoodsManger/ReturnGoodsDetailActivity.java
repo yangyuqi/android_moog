@@ -3,18 +3,34 @@ package com.youzheng.zhejiang.robertmoog.Store.activity.ReturnGoodsManger;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
+import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
+import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
+import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
+import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.ReturnGoodsDetailAdapter;
+import com.youzheng.zhejiang.robertmoog.Store.bean.OrderlistDetail;
+import com.youzheng.zhejiang.robertmoog.Store.bean.ReturnGoodsDetail;
+import com.youzheng.zhejiang.robertmoog.Store.view.RecycleViewDivider;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import okhttp3.Request;
+
+/**
+ * 退货订单详情
+ */
 public class ReturnGoodsDetailActivity extends BaseActivity implements View.OnClickListener {
 
     private ImageView btnBack;
@@ -59,17 +75,19 @@ public class ReturnGoodsDetailActivity extends BaseActivity implements View.OnCl
     private TextView tv_really_cut_money;
     /**  */
     private TextView tv_cut_reason;
-    private List<String> list = new ArrayList<>();
+    private List<ReturnGoodsDetail.ReturnItemBean.ProductListBean> list = new ArrayList<>();
     private ReturnGoodsDetailAdapter adapter;
     /**
      * 吾问无为谓吾问无为谓
      */
     private TextView tv_reason_content;
+    private int regoodsid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_return_goods_detail);
+        regoodsid=getIntent().getIntExtra("returnGoodsId",0);
         initView();
     }
 
@@ -97,7 +115,10 @@ public class ReturnGoodsDetailActivity extends BaseActivity implements View.OnCl
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rv_list.setLayoutManager(layoutManager);
-
+        rv_list.addItemDecoration(new RecycleViewDivider(this, LinearLayoutManager.VERTICAL, 15, getResources().getColor(R.color.bg_all)));
+        adapter = new ReturnGoodsDetailAdapter(list, this);
+        rv_list.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
 
 
     }
@@ -105,20 +126,90 @@ public class ReturnGoodsDetailActivity extends BaseActivity implements View.OnCl
     @Override
     protected void onResume() {
         super.onResume();
-        initData();
+        initData(regoodsid);
 
     }
 
-    private void initData() {
-        list.add("退货单详情");
-        list.add("退货单详情");
-        list.add("退货单详情");
-        list.add("退货单详情");
+    private void initData(int returnID) {
 
-        adapter = new ReturnGoodsDetailAdapter(list, this);
-        rv_list.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
 
+        HashMap<String,Object> map=new HashMap<>();
+        map.put("id",returnID);
+
+        OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.RETURN_ORDERLIST_LIST_DETAIL + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(String response) {
+                Log.e("订单详情",response);
+                BaseModel baseModel = gson.fromJson(response,BaseModel.class);
+                if (baseModel.getCode()==PublicUtils.code){
+                    ReturnGoodsDetail returnGoodsDetail = gson.fromJson(gson.toJson(baseModel.getDatas()),ReturnGoodsDetail.class);
+                    setData(returnGoodsDetail);
+                }
+            }
+        });
+
+
+
+
+
+    }
+
+    private void setData(ReturnGoodsDetail returnGoodsDetail) {
+
+        if (returnGoodsDetail==null) return;;
+        if (returnGoodsDetail.getReturnItem()==null) return;
+        if (returnGoodsDetail.getReturnItem().getProductList()==null) return;
+
+        if (!TextUtils.isEmpty(returnGoodsDetail.getReturnItem().getCode())){
+            tv_new_return_num.setText(returnGoodsDetail.getReturnItem().getCode());
+        }
+
+
+        if (!TextUtils.isEmpty(returnGoodsDetail.getReturnItem().getOrderCode())){
+            tv_old_order_num.setText(returnGoodsDetail.getReturnItem().getOrderCode());
+        }
+
+
+        if (!TextUtils.isEmpty(returnGoodsDetail.getReturnItem().getUserName())){
+            if (!TextUtils.isEmpty(returnGoodsDetail.getReturnItem().getBusinessRole())){
+                tv_maker.setText(returnGoodsDetail.getReturnItem().getUserName()+returnGoodsDetail.getReturnItem().getBusinessRole());
+            }
+        }
+
+
+
+        if (!TextUtils.isEmpty(returnGoodsDetail.getReturnItem().getCustCode())){
+            tv_customer.setText(returnGoodsDetail.getReturnItem().getCustCode());
+        }
+
+        if (!TextUtils.isEmpty(returnGoodsDetail.getReturnItem().getProductCount())){
+            tv_goods_number.setText(returnGoodsDetail.getReturnItem().getProductCount());
+        }
+
+
+        if (!TextUtils.isEmpty(returnGoodsDetail.getReturnItem().getRefundAmount())){
+            tv_should_cut_money.setText(getString(R.string.label_money)+returnGoodsDetail.getReturnItem().getRefundAmount());
+        }
+
+        if (!TextUtils.isEmpty(returnGoodsDetail.getReturnItem().getActualRefundAmount())){
+            tv_really_cut_money.setText(getString(R.string.label_money)+returnGoodsDetail.getReturnItem().getActualRefundAmount());
+        }
+
+        if (!TextUtils.isEmpty(returnGoodsDetail.getReturnItem().getReason())){
+            tv_cut_reason.setText(returnGoodsDetail.getReturnItem().getReason());
+        }
+
+        List<ReturnGoodsDetail.ReturnItemBean.ProductListBean> beanList=returnGoodsDetail.getReturnItem().getProductList();
+
+        if (beanList.size()!=0){
+            list.addAll(beanList);
+            adapter.setRefreshUI(beanList);
+        }
 
     }
 

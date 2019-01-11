@@ -7,21 +7,31 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.youzheng.zhejiang.robertmoog.Model.Home.EnumsDatasBeanDatas;
 import com.youzheng.zhejiang.robertmoog.R;
 
 import java.util.List;
 
+/**
+ *ss
+ */
 public class ReturnGoodsTimeAdapter extends BaseAdapter {
-    private List<String> list;
+    private List<EnumsDatasBeanDatas> list;
     private Context context;
     private LayoutInflater layoutInflater;
     private int selectItem =0;
 
-    public ReturnGoodsTimeAdapter(List<String> list, Context context) {
+    public ReturnGoodsTimeAdapter(List<EnumsDatasBeanDatas> list, Context context) {
         this.list = list;
         this.context = context;
         layoutInflater=LayoutInflater.from(context);
     }
+
+    public void setUI(List<EnumsDatasBeanDatas> list){
+        this.list = list;
+        notifyDataSetChanged();
+    }
+
 
     @Override
     public int getCount() {
@@ -55,7 +65,7 @@ public class ReturnGoodsTimeAdapter extends BaseAdapter {
             viewHolder= (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.tv_time.setText(list.get(position));
+        viewHolder.tv_time.setText(list.get(position).getDes());
 
         if (selectItem==position){
             viewHolder.tv_time.setSelected(true);

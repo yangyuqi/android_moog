@@ -1,6 +1,7 @@
 package com.youzheng.zhejiang.robertmoog.Store.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,14 +10,19 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.youzheng.zhejiang.robertmoog.R;
+import com.youzheng.zhejiang.robertmoog.Store.activity.ReturnGoods.ChooseReturnGoodsActivity;
+import com.youzheng.zhejiang.robertmoog.Store.activity.StoreOrderlistDetailActivity;
+import com.youzheng.zhejiang.robertmoog.Store.bean.NewOrderListBean;
 import com.youzheng.zhejiang.robertmoog.Store.bean.OrderList;
 import com.youzheng.zhejiang.robertmoog.Store.listener.OnRecyclerViewAdapterItemClickListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ChooseGoodsListAdapter extends RecyclerView.Adapter {
-    private List<OrderList> list;
+    private List<NewOrderListBean.OrderListBean> list;
     private List<String> piclist;
     private Context context;
     private LayoutInflater layoutInflater;
@@ -28,17 +34,21 @@ public class ChooseGoodsListAdapter extends RecyclerView.Adapter {
         this.mOnItemClickListener = mOnItemClickListener;
     }
 
-    public ChooseGoodsListAdapter(List<OrderList> list, List<String> piclist, Context context) {
+    public ChooseGoodsListAdapter(List<NewOrderListBean.OrderListBean> list, Context context) {
         this.list = list;
-        this.piclist=piclist;
         this.context = context;
         layoutInflater = LayoutInflater.from(context);
     }
 
+    public void setUI(List<NewOrderListBean.OrderListBean> list){
+        this.list = list;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemViewType(int position) {
-        OrderList orderList = list.get(position);
-        if (orderList.type == 0) {
+        NewOrderListBean.OrderListBean orderList = list.get(position);
+        if (orderList.getProductNum() ==1) {
             return TYPE_ONE_IMAGE;
         } else {
             return TYPE_MORE_IMAGE;
@@ -69,28 +79,89 @@ public class ChooseGoodsListAdapter extends RecyclerView.Adapter {
         }
     }
 
-    private void setMoreImageData(MoreImageHolder holder,int position) {
+    private void setMoreImageData(MoreImageHolder holder, final int position) {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         holder.mRvListPic.setLayoutManager(linearLayoutManager);
         MoreGoodsAdapter moreGoodsAdapter=new MoreGoodsAdapter(piclist,context);
         holder.mRvListPic.setAdapter(moreGoodsAdapter);
         moreGoodsAdapter.notifyDataSetChanged();
-//        holder.mTvDate.setText(list.get(position).getText());
-//        holder.mTvOrderNum.setText(list.get(position).getText());
-//        holder.mTvCount.setText(list.get(position).getText());
-//        holder.mTvMoney.setText(list.get(position).getText());
+
+        piclist=new ArrayList<>();
+        if (list.size() != 0) {
+            for (NewOrderListBean.OrderListBean.OrderItemInfosBean itemInfosBean : list.get(position).getOrderItemInfos()) {
+                piclist.add(itemInfosBean.getPhoto());
+            }
+        }
+
+        moreGoodsAdapter.setPic(piclist);
+        NewOrderListBean.OrderListBean beans = list.get(position);
+        holder.mTvDate.setText(beans.getCreateDate());
+        holder.mTvOrderNum.setText(beans.getOrderCode());
+        holder.mTvCount.setText("共" + beans.getProductNum() + "件商品");
+        holder.mTvMoney.setText(context.getString(R.string.label_money)+beans.getPayAmount());
+
+        holder.tv_return_all.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(context,ChooseReturnGoodsActivity.class);
+                intent.putExtra("returnGoodsId",list.get(position).getId());
+                intent.putExtra("isAll",true);
+                context.startActivity(intent);
+            }
+        });
+
+        holder.tv_return_partial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(context,ChooseReturnGoodsActivity.class);
+                intent.putExtra("returnGoodsId",list.get(position).getId());
+                intent.putExtra("isAll",false);
+                context.startActivity(intent);
+            }
+        });
 
     }
 
-    private void setOneImageData(OneImageHolder holder,int position) {
-        holder.tv_date.setText(list.get(position).getText());
-        holder.tv_order_num.setText(list.get(position).getText());
-        holder.iv_goods.setImageResource(list.get(position).getPic());
-        holder.tv_goods_number.setText(list.get(position).getText());
-        //holder.tv_goods_content.setText(list.get(position).getText());
-        holder.tv_count.setText(list.get(position).getText());
-        holder.tv_money.setText(list.get(position).getText());
+    private void setOneImageData(OneImageHolder holder, final int position) {
+        NewOrderListBean.OrderListBean beans = list.get(position);
+        holder.tv_date.setText(beans.getCreateDate());
+        holder.tv_order_num.setText(beans.getOrderCode());
+        holder.tv_count.setText("共" + beans.getProductNum() + "件商品");
+        holder.tv_money.setText(context.getString(R.string.label_money)+beans.getPayAmount());
+
+        if (list.size() != 0) {
+            for (NewOrderListBean.OrderListBean.OrderItemInfosBean itemInfosBean : list.get(position).getOrderItemInfos()) {
+                Glide.with(context).load(itemInfosBean.getPhoto()).error(R.mipmap.group_9_1).into(holder.iv_goods);
+                holder.tv_goods_number.setText(itemInfosBean.getCode());
+                holder.tv_goods_content.setText(itemInfosBean.getName());
+            }
+
+        }
+
+        holder.tv_return_all.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(context,ChooseReturnGoodsActivity.class);
+                intent.putExtra("returnGoodsId",list.get(position).getId());
+                intent.putExtra("isAll",true);
+                context.startActivity(intent);
+            }
+        });
+
+
+        holder.tv_return_partial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(context,ChooseReturnGoodsActivity.class);
+                intent.putExtra("returnGoodsId",list.get(position).getId());
+                intent.putExtra("isAll",false);
+                context.startActivity(intent);
+            }
+        });
+
+
+
     }
 
     @Override

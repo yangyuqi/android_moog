@@ -11,12 +11,16 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.bean.GoodsList;
+import com.youzheng.zhejiang.robertmoog.Store.bean.ReturnGoodsDetail;
 import com.youzheng.zhejiang.robertmoog.Store.listener.OnRecyclerViewAdapterItemClickListener;
 
 import java.util.List;
 
+/**
+ *ss
+ */
 public class ReturnGoodsDetailAdapter extends RecyclerView.Adapter<ReturnGoodsDetailAdapter.GoodsHolder> {
-    private List<String> list;
+    private List<ReturnGoodsDetail.ReturnItemBean.ProductListBean> list;
     private Context context;
     private LayoutInflater layoutInflater;
     private OnRecyclerViewAdapterItemClickListener mOnItemClickListener;
@@ -25,13 +29,13 @@ public class ReturnGoodsDetailAdapter extends RecyclerView.Adapter<ReturnGoodsDe
         this.mOnItemClickListener = mOnItemClickListener;
     }
 
-    public ReturnGoodsDetailAdapter(List<String> list, Context context) {
+    public ReturnGoodsDetailAdapter(List<ReturnGoodsDetail.ReturnItemBean.ProductListBean> list, Context context) {
         this.list = list;
         this.context = context;
         layoutInflater=LayoutInflater.from(context);
     }
 
-    public void  setRefreshUI(List<String> list){
+    public void  setRefreshUI(List<ReturnGoodsDetail.ReturnItemBean.ProductListBean> list){
         this.list=list;
         notifyDataSetChanged();
 
@@ -75,7 +79,13 @@ public class ReturnGoodsDetailAdapter extends RecyclerView.Adapter<ReturnGoodsDe
 
     @Override
     public void onBindViewHolder(GoodsHolder holder, int position) {
-       holder.tv_goods_code.setText(list.get(position));
+        ReturnGoodsDetail.ReturnItemBean.ProductListBean bean=list.get(position);
+        Glide.with(context).load(bean.getPhoto()).error(R.mipmap.group_9_1).into(holder.iv_goods);
+        holder.tv_goods_code.setText(bean.getSku());
+
+        holder.tv_goods_content.setText(bean.getName());
+        holder.tv_money.setText(context.getString(R.string.label_money)+bean.getPrice());
+        holder.tv_number.setText(bean.getCount()+"");
 
     }
 

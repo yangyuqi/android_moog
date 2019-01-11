@@ -42,11 +42,11 @@ public class StoreOrderlistDetailActivity extends BaseActivity implements View.O
     private ImageView iv_next;
     private RelativeLayout layout_header;
     /**
-     * 2016/01/19 09:19:04
+     * 2016/01/19 09:19:04ssss
      */
     private TextView tv_time;
     /**
-     * 987656201801020002
+     * 987656201801020002sss
      */
     private TextView tv_num;
     /**
@@ -251,7 +251,7 @@ public class StoreOrderlistDetailActivity extends BaseActivity implements View.O
 
         LinearLayoutManager manager2 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rv_list_more.setLayoutManager(manager2);
-        rv_list_more.setAdapter(oneOrderDetailAdapter);
+        rv_list_more.setAdapter(moreOrderDetailAdapter);
         rv_list_more.addItemDecoration(new RecycleViewDivider(StoreOrderlistDetailActivity.this, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
 
 

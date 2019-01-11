@@ -49,7 +49,7 @@ import java.util.List;
 import okhttp3.Request;
 
 /**
- * 订单列表界面
+ * 订单列表界面ss
  */
 public class OrderListActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener, OnRecyclerViewAdapterItemClickListener, TextWatcher {
 
@@ -74,7 +74,6 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
     private PullLoadMoreRecyclerView rv_list;
     private OrderListAdapter adapter;
     private List<NewOrderListBean.OrderListBean> list = new ArrayList<>();
-    private List<String> piclist = new ArrayList<>();
     private GridView gv_time;
     /**
      * 重置
@@ -96,8 +95,9 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
     private Boolean isCustomer=false;
     private int who;
     private String edit;
+    private String type="ALL";//订单类型（ALL:全部，GROOM:推荐订单，MAJOR:专业）默认是全部
 
-    private List<NewOrderListBean.OrderListBean.OrderItemInfosBean> itemlist=new ArrayList<>();
+
 
 
     @Override
@@ -152,14 +152,14 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
             public void onRefresh() {
                 page=1;
                 list.clear();
-                initData(page,pageSize,orderCode,timeQuantum,isCustomer);
+                initData(page,pageSize,orderCode,timeQuantum,isCustomer,type);
 
             }
 
             @Override
             public void onLoadMore() {
                 page++;
-                initData(page,pageSize,orderCode,timeQuantum,isCustomer);
+                initData(page,pageSize,orderCode,timeQuantum,isCustomer,type);
             }
         });
 
@@ -221,16 +221,20 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
-        initData(page,pageSize,orderCode,timeQuantum,isCustomer);
+        initData(page,pageSize,orderCode,timeQuantum,isCustomer,type);
     }
 
-    private void initData(int page, int pageSize, String orderCode,String timeQuantum,Boolean isCustomer) {
+    private void initData(int page, int pageSize, String orderCode,String timeQuantum,Boolean isCustomer,String type) {
         HashMap<String,Object> map=new HashMap<>();
         map.put("pageNum",page);
         map.put("pageSize",pageSize);
         map.put("orderCode",orderCode);
         map.put("timeQuantum",timeQuantum);
         map.put("identifion",isCustomer);
+        if (isCustomer==true){
+            map.put("customerId",customerId);
+        }
+        map.put("type",type);//订单类型（ALL:全部，GROOM:推荐订单，MAJOR:专业）默认是全部
 
         OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.ORDERLIST_LIST + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
@@ -282,7 +286,7 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
                 }else {
                     orderCode=edit;
                     list.clear();
-                    initData(page,pageSize,orderCode,timeQuantum,isCustomer);
+                    initData(page,pageSize,orderCode,timeQuantum,isCustomer,type);
                 }
                 break;
             case R.id.tv_time:
@@ -299,7 +303,7 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
                 break;
 
             case R.id.tv_confirm:
-                initData(page,pageSize,orderCode,timeQuantum,isCustomer);
+                initData(page,pageSize,orderCode,timeQuantum,isCustomer,type);
                 drawer_layout.closeDrawer(GravityCompat.END);
                 goodsTimeAdapter.setSelectItem(who);
                 timeQuantum=strlist.get(who).getId();
@@ -337,7 +341,7 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
                if (tv_search.length()==0){
                    list.clear();
                    orderCode="";
-                   initData(page,pageSize,orderCode,timeQuantum,isCustomer);
+                   initData(page,pageSize,orderCode,timeQuantum,isCustomer,type);
                }
     }
 

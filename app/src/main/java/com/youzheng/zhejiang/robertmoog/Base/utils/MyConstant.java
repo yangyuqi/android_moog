@@ -7,5 +7,5 @@ public class MyConstant {
     public static final int PHOTO_CODE = 11;
     public static final String PRINT_GLANCE_OVER_LIST = "print_glance_over_list";
     public static final String PRINT_GLANCE_OVER_POS = " print_glance_over_pos";
-
+    public static final String LIST_TYPE = "list_type";
 }

@@ -109,7 +109,7 @@ public class SingleOptionsPicker<T> {
     public static void openOptionsPicker(Activity activity, final List<String> list, final TextView textView) {
         String select = textView.getText().toString();
         new SingleOptionsPicker(activity, select, list,
-                new SingleOptionsPicker.OnPickerOptionsClickListener() {
+                new OnPickerOptionsClickListener() {
                     @Override
                     public void onOptionsSelect(int options1, int options2, int options3, View view) {
 //                        if (type == 1) {

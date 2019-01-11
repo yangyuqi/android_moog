@@ -1,6 +1,7 @@
 package com.youzheng.zhejiang.robertmoog.Store.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.youzheng.zhejiang.robertmoog.R;
+import com.youzheng.zhejiang.robertmoog.Store.activity.StoreOrderlistDetailActivity;
 import com.youzheng.zhejiang.robertmoog.Store.bean.NewOrderListBean;
 import com.youzheng.zhejiang.robertmoog.Store.bean.OrderList;
 import com.youzheng.zhejiang.robertmoog.Store.listener.OnRecyclerViewAdapterItemClickListener;
@@ -18,6 +20,9 @@ import com.youzheng.zhejiang.robertmoog.Store.listener.OnRecyclerViewAdapterItem
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *sss
+ */
 public class OrderListAdapter extends RecyclerView.Adapter {
     private List<NewOrderListBean.OrderListBean> list;
     private List<String> piclist;
@@ -102,7 +107,7 @@ public class OrderListAdapter extends RecyclerView.Adapter {
         }
     }
 
-    private void setMoreImageData(MoreImageHolder holder, int position) {
+    private void setMoreImageData(MoreImageHolder holder, final int position) {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         holder.mRvListPic.setLayoutManager(linearLayoutManager);
@@ -123,6 +128,15 @@ public class OrderListAdapter extends RecyclerView.Adapter {
         holder.mTvOrderNum.setText(beans.getOrderCode());
         holder.mTvCount.setText("共" + beans.getProductNum() + "件商品");
         holder.mTvMoney.setText(context.getString(R.string.label_money)+beans.getPayAmount());
+
+        holder.mRvListPic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(context,StoreOrderlistDetailActivity.class);
+                intent.putExtra("OrderGoodsId",list.get(position).getId());
+                context.startActivity(intent);
+            }
+        });
 
     }
 

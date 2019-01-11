@@ -7,6 +7,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,21 +21,36 @@ import android.widget.TextView;
 
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import com.youzheng.zhejiang.robertmoog.Base.BaseFragment;
+import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
+import com.youzheng.zhejiang.robertmoog.Base.utils.MyConstant;
+import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
+import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
+import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
+import com.youzheng.zhejiang.robertmoog.Model.Home.EnumsDatas;
+import com.youzheng.zhejiang.robertmoog.Model.Home.EnumsDatasBean;
+import com.youzheng.zhejiang.robertmoog.Model.Home.EnumsDatasBeanDatas;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.activity.ProfessionalOrderDetailActivity;
+import com.youzheng.zhejiang.robertmoog.Store.activity.StoreOrderlistDetailActivity;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.GoodsTimeAdapter;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.ProfessionalCustomerOrderListAdapter;
+import com.youzheng.zhejiang.robertmoog.Store.bean.NewOrderListBean;
 import com.youzheng.zhejiang.robertmoog.Store.bean.OrderList;
 import com.youzheng.zhejiang.robertmoog.Store.listener.OnRecyclerViewAdapterItemClickListener;
 import com.youzheng.zhejiang.robertmoog.Store.view.RecycleViewDivider;
+import com.youzheng.zhejiang.robertmoog.utils.SharedPreferencesUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-public class CustomerOrderFragment extends BaseFragment implements View.OnClickListener, AdapterView.OnItemClickListener {
+import okhttp3.Request;
+
+public class CustomerOrderFragment extends BaseFragment implements View.OnClickListener, AdapterView.OnItemClickListener, OnRecyclerViewAdapterItemClickListener {
     private View view;
     /**
-     * 搜索订单编号
+     * 搜索订单编号sssssss
      */
     private EditText tv_search;
     private ImageView iv_search;
@@ -53,20 +70,64 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
      */
     private TextView tv_confirm;
     private DrawerLayout drawer_layout;
-    private List<OrderList> list = new ArrayList<>();
+    private List<NewOrderListBean.OrderListBean> list = new ArrayList<>();
     private List<String> piclist = new ArrayList<>();
     private ProfessionalCustomerOrderListAdapter adapter;
     private GoodsTimeAdapter goodsTimeAdapter;
-    private List<String> strlist = new ArrayList<>();
+    private List<EnumsDatasBeanDatas> strlist = new ArrayList<>();
+    private String type="";
+    private int page=1;
+    private int pageSize=10;
+    private int customerId;
+    private String orderCode="";
+    private String timeQuantum="";
+    private Boolean isCustomer=false;
+    private int who;
+    private String edit;
+    private String token;
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.layout_customer_order, null);
-
+        Bundle arguments = getArguments();
+        if (arguments != null){
+            type = (String) arguments.get(MyConstant.LIST_TYPE);
+        }
+         token = (String) SharedPreferencesUtils.getParam(mContext, PublicUtils.access_token,"");
         initView();
+        initGetDate();
+        setListener();
         return view;
+    }
+
+    private void setListener() {
+        rv_list.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
+            @Override
+            public void onRefresh() {
+                page=1;
+                list.clear();
+                initData(page,pageSize,orderCode,timeQuantum,isCustomer,type);
+
+            }
+
+            @Override
+            public void onLoadMore() {
+                page++;
+                initData(page,pageSize,orderCode,timeQuantum,isCustomer,type);
+            }
+        });
+
+
+
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initData(page,pageSize,orderCode,timeQuantum,isCustomer,type);
     }
 
     private void initView() {
@@ -85,10 +146,7 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
         tv_again.setOnClickListener(this);
         tv_confirm.setOnClickListener(this);
         gv_time.setOnItemClickListener(this);
-        initData();
-    }
 
-    private void initData() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rv_list.addItemDecoration(new RecycleViewDivider(
@@ -96,50 +154,106 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
         rv_list.setLinearLayout();
         rv_list.setColorSchemeResources(R.color.colorPrimary);
 
-        OrderList orderList = new OrderList();
-        orderList.setType(0);
-        orderList.setPic(R.mipmap.ic_launcher);
-        orderList.setText("摩恩");
-        list.add(orderList);
-
-        OrderList orderList1 = new OrderList();
-        orderList1.setType(1);
-        orderList.setText("摩恩");
-        orderList1.setPic(R.mipmap.ic_launcher);
-        list.add(orderList1);
-
-//        piclist.add(R.mipmap.ic_launcher);
-//        piclist.add(R.mipmap.ic_launcher);
-//        piclist.add(R.mipmap.ic_launcher);
-
-        adapter = new ProfessionalCustomerOrderListAdapter(list, piclist, getActivity());
+        adapter = new ProfessionalCustomerOrderListAdapter(list, getActivity());
         rv_list.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-        adapter.setOnItemClickListener(new OnRecyclerViewAdapterItemClickListener() {
+
+
+        goodsTimeAdapter=new GoodsTimeAdapter(strlist,getActivity());
+        gv_time.setAdapter(goodsTimeAdapter);
+        goodsTimeAdapter.notifyDataSetChanged();
+
+        adapter.setOnItemClickListener(this);
+
+    }
+
+    private void initGetDate() {
+        OkHttpClientManager.postAsynJson(gson.toJson(new HashMap<>()), UrlUtils.LIST_DATA+"?access_token="+token, new OkHttpClientManager.StringCallback() {
             @Override
-            public void onItemClick(View view, int position) {
-                startActivity(new Intent(getActivity(),ProfessionalOrderDetailActivity.class));
+            public void onFailure(Request request, IOException e) {
+
             }
 
             @Override
-            public void onItemLongClick(View view, int position) {
+            public void onResponse(String response) {
+                Log.e("获取时间枚举",response);
+                BaseModel baseModel = gson.fromJson(response,BaseModel.class);
+                if (baseModel.getCode()==PublicUtils.code){
+                    EnumsDatas enumsDatas = gson.fromJson(gson.toJson(baseModel.getDatas()),EnumsDatas.class);
+                    if (enumsDatas.getEnums().size()>0){
+                        for (final EnumsDatasBean bean : enumsDatas.getEnums()){
+                            if (bean.getClassName().equals("TimeQuantum")){//  TimeQuantum
+//                                final List<String> date = new ArrayList<String>();
+                                List<EnumsDatasBeanDatas> list1=new ArrayList<>();
+                                for (int i = 0; i < bean.getDatas().size(); i++) {
+                                    list1.add(bean.getDatas().get(i));
+                                }
+                                strlist=list1;
+                            }
+                        }
 
+                        goodsTimeAdapter.setUI(strlist);
+
+
+
+                    }
+
+                }
             }
         });
 
+    }
 
-//        strlist.add("全部");
-//        strlist.add("一到三个月");
-//        strlist.add("一到三个月");
-//        strlist.add("一到三个月");
-//        strlist.add("一到三个月");
-//        strlist.add("一到三个月");
+    private void initData(int page, int pageSize, String orderCode,String timeQuantum,Boolean isCustomer,String type) {
+        HashMap<String,Object> map=new HashMap<>();
+        map.put("pageNum",page);
+        map.put("pageSize",pageSize);
+        map.put("orderCode",orderCode);
+        map.put("timeQuantum",timeQuantum);
+        map.put("identifion",isCustomer);
+        if (isCustomer==true){
+            map.put("customerId",customerId);
+        }
+        map.put("type",type);//订单类型（ALL:全部，GROOM:推荐订单，MAJOR:专业）默认是全部
 
-//        goodsTimeAdapter=new GoodsTimeAdapter(strlist,getActivity());
-//        gv_time.setAdapter(goodsTimeAdapter);
-//        goodsTimeAdapter.notifyDataSetChanged();
 
 
+        OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.ORDERLIST_LIST + "?access_token=" + token, new OkHttpClientManager.StringCallback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+                rv_list.setPullLoadMoreCompleted();
+            }
+
+            @Override
+            public void onResponse(String response) {
+                Log.e("专业订单列表",response);
+                rv_list.setPullLoadMoreCompleted();
+                BaseModel baseModel = gson.fromJson(response,BaseModel.class);
+                if (baseModel.getCode()==PublicUtils.code){
+                    NewOrderListBean listBean = gson.fromJson(gson.toJson(baseModel.getDatas()),NewOrderListBean.class);
+                    setData(listBean);
+
+                }
+            }
+
+        });
+
+    }
+
+
+    private void setData(NewOrderListBean listBean) {
+        if (listBean==null) return;
+        if (listBean.getOrderList()==null) return;
+
+        List<NewOrderListBean.OrderListBean> orderListBeans=listBean.getOrderList();
+
+        if (orderListBeans.size()!=0){
+            list.addAll(orderListBeans);
+            adapter.setUI(list);
+        }else {
+            showToast(getString(R.string.load_list_erron));
+        }
+        rv_list.setPullLoadMoreCompleted();
     }
 
     @Override
@@ -148,13 +262,28 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
             default:
                 break;
             case R.id.iv_search:
+                edit=tv_search.getText().toString();
+                //tv_search.setText("D1548784201901070011");
+                if (TextUtils.isEmpty(edit)){
+                    showToast("请输入订单编号");
+                }else {
+                    orderCode=edit;
+                    list.clear();
+                    initData(page,pageSize,orderCode,timeQuantum,isCustomer,type);
+                }
                 break;
             case R.id.tv_time:
                 drawer_layout.openDrawer(GravityCompat.END);
                 break;
             case R.id.tv_again:
+                goodsTimeAdapter.setSelectItem(0);
+                timeQuantum=strlist.get(0).getId();
                 break;
             case R.id.tv_confirm:
+                initData(page,pageSize,orderCode,timeQuantum,isCustomer,type);
+                drawer_layout.closeDrawer(GravityCompat.END);
+                goodsTimeAdapter.setSelectItem(who);
+                timeQuantum=strlist.get(who).getId();
                 break;
         }
     }
@@ -162,5 +291,19 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         goodsTimeAdapter.setSelectItem(position);
+        timeQuantum=strlist.get(position).getId();
+        who=position;
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        Intent intent=new Intent(getActivity(),ProfessionalOrderDetailActivity.class);
+        intent.putExtra("ProfessionalId",list.get(position).getId());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onItemLongClick(View view, int position) {
+
     }
 }

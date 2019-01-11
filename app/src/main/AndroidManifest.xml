@@ -212,6 +212,10 @@
 
         <activity android:name=".Home.activity.ClientAccountActivity"
             android:screenOrientation="portrait" />
+
+        <activity android:name=".Store.activity.ReturnGoods.ChooseReturnGoodsActivity" />
+        <activity android:name=".Store.activity.ReturnGoods.ReturnGoodsCounterActivity"></activity>
+
     </application>
 
 </manifest>

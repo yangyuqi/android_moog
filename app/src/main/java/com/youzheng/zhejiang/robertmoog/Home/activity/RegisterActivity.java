@@ -111,7 +111,6 @@ public class RegisterActivity  extends BaseActivity {
                     public void onResponse(String response) {
                         BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                         if (baseModel.getCode()== PublicUtils.code){
-
                         }
                     }
                 });

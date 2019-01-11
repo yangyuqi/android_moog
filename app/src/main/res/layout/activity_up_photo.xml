@@ -4,23 +4,68 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bg_background_white"
     android:orientation="vertical"
-    android:background="@color/bg_all"
     tools:context=".Store.activity.UpPhotoActivity">
 
     <include layout="@layout/title_bar" />
 
-    <GridView
-        android:scrollbars="none"
-        android:id="@+id/gv_photo"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        android:layout_marginRight="36dp"
-        android:layout_marginLeft="36dp"
-        android:paddingBottom="25dp"
-        android:verticalSpacing="5dp"
-        android:horizontalSpacing="5dp"
-        android:numColumns="3"></GridView>
+        android:layout_height="match_parent">
+
+        <GridView
+            android:id="@+id/gv_photo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="36dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginRight="36dp"
+            android:horizontalSpacing="5dp"
+            android:numColumns="3"
+            android:paddingBottom="25dp"
+
+            android:scrollbars="none"
+            android:verticalSpacing="5dp"
+            android:visibility="visible"></GridView>
+
+
+        <LinearLayout
+            android:id="@+id/lin_show"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@color/transparent"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:padding="9dp">
+
+            <com.wang.avi.AVLoadingIndicatorView
+                android:id="@+id/avi"
+                style="@style/AVLoadingIndicatorView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                app:indicatorColor="@color/colorPrimary"
+                app:indicatorName="BallSpinFadeLoaderIndicator" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="上传图片中..."
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimary"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+
+    </FrameLayout>
+
+
+
 
 </LinearLayout>

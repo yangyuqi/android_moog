@@ -30,6 +30,7 @@ import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.AddphotoAdapter;
 import com.youzheng.zhejiang.robertmoog.Store.bean.SampleOutPic;
 import com.youzheng.zhejiang.robertmoog.Store.listener.OnRecyclerViewAdapterItemClickListener;
+import com.youzheng.zhejiang.robertmoog.Store.utils.AndroidScheduler;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,6 +47,9 @@ import rx.schedulers.Schedulers;
 import top.zibin.luban.Luban;
 import top.zibin.luban.OnCompressListener;
 
+/**
+ * 上传图片界面sss
+ */
 public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickListener, OnRecyclerViewAdapterItemClickListener {
 
     private ImageView btnBack;
@@ -56,7 +60,7 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
     private ImageView iv_next;
     private RelativeLayout layout_header;
     private GridView gv_photo;
-    private List<String> list=new ArrayList<>();
+    private List<String> list = new ArrayList<>();
     private AddphotoAdapter adapter;
     private String path;
     private LinearLayout inflate;
@@ -73,25 +77,25 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
      * 取消
      */
     private TextView tv_cancel;
-    private List<String> addlist=new ArrayList<>();
-    private   List<File> fileList=new ArrayList<>();
+    private List<String> addlist = new ArrayList<>();
+    private List<File> fileList = new ArrayList<>();
     private String response;
+    private LinearLayout lin_show;
 
 
-
-    private Handler handler=new Handler(){
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch (msg.what){
+            switch (msg.what) {
                 case 1:
-                    BaseModel baseModel = gson.fromJson(response,BaseModel.class);
-                    if (baseModel.getCode()==PublicUtils.code){
+                    BaseModel baseModel = gson.fromJson(response, BaseModel.class);
+                    if (baseModel.getCode() == PublicUtils.code) {
                         showToast("图片上传成功");
                         finish();
                     }
 
-                   break;
+                    break;
 
                 case 2:
                     showToast("图片上传失败");
@@ -109,7 +113,6 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
     }
 
 
-
     private void initView() {
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
@@ -122,40 +125,38 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
         gv_photo = (GridView) findViewById(R.id.gv_photo);
         textHeadNext.setOnClickListener(this);
 
-        path=getIntent().getStringExtra("picturePath");
+        path = getIntent().getStringExtra("picturePath");
         list.add(path);
-        Log.e("ppp",path+"");
-        adapter=new AddphotoAdapter(list,this);
+        Log.e("ppp", path + "");
+        adapter = new AddphotoAdapter(list, this);
         gv_photo.setAdapter(adapter);
         adapter.notifyDataSetChanged();
         adapter.setOnItemClickListener(this);
+        lin_show = findViewById(R.id.lin_show);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                LuBan(path);
+            }
+        }).start();
+
+        Log.e("集合路径", path);
+
 
     }
 
     @Override
-    protected void setHeadIvEvenSendMine(Bitmap bm, String picturePath) {
+    protected void setHeadIvEvenSendMine(Bitmap bm, final String picturePath) {
         super.setHeadIvEvenSendMine(bm, picturePath);
         list.add(picturePath);
-        Log.e("www",picturePath+"");
-        Log.e("2131",list.size()+"");
-
-
-
-        if (list.size()!=0){
-            for (int i = 0; i <list.size() ; i++) {
-                path=list.get(i);
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        LuBan(path);
-                    }
-                }).start();
-
-                Log.e("集合路径",path);
-
-
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                LuBan(picturePath);
             }
-        }
+        }).start();
+        Log.e("www", picturePath + "");
+        Log.e("2131", list.size() + "");
 
     }
 
@@ -165,7 +166,6 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
         adapter.notifyDataSetChanged();
 
     }
-
 
 
     @Override
@@ -190,7 +190,7 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
                 dialog.dismiss();
                 break;
             case R.id.tv_cancel:
-                if (dialog.isShowing()){
+                if (dialog.isShowing()) {
                     dialog.dismiss();
                 }
                 break;
@@ -198,8 +198,7 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
     }
 
 
-
-    private void LuBan(String picpath){
+    private void LuBan(String picpath) {
         Luban.with(this)
                 .load(picpath)                                   // 传人要压缩的图片列表
                 .ignoreBy(100)                                  // 忽略不压缩图片的大小
@@ -208,10 +207,14 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
                     @Override
                     public void onStart() {
                         // TODO 压缩开始前调用，可以在方法内启动 loading UI
+//                        lin_show.setVisibility(View.VISIBLE);
+                        Log.e("213", "正在压缩");
                     }
 
                     @Override
                     public void onSuccess(File file) {
+                        Log.e("213", "压缩完成");
+//                        lin_show.setVisibility(View.GONE);
                         // TODO 压缩成功后调用，返回压缩后的图片文件
                         fileList.add(file);
                     }
@@ -224,31 +227,33 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
 
     }
 
-    private void upPic(List<File> pic){
-        OkHttpClientManager.getInstance().sendMultipart(UrlUtils.UPLOAD_FILE + "?access_token=" + access_token,new HashMap<String, Object>(),"posters",pic)
+    private void upPic(List<File> pic) {
+        lin_show.setVisibility(View.VISIBLE);
+        OkHttpClientManager.getInstance().sendMultipart(UrlUtils.UPLOAD_FILE + "?access_token=" + access_token, new HashMap<String, Object>(), "posters", pic)
+                .observeOn(AndroidScheduler.mainThread())
                 .subscribeOn(Schedulers.newThread())
                 .subscribe(new Subscriber<String>() {
                     @Override
                     public void onCompleted() {
-
+                        lin_show.setVisibility(View.GONE);
                     }
 
                     @Override
                     public void onError(Throwable throwable) {
-                        Log.e("图片上传失败",throwable.getMessage());
-                        Message message=new Message();
-                        message.what=2;
-                        handler.sendMessage(message);
+                        Log.e("图片上传失败", throwable.getMessage());
+//                        showToast("图片上传失败");
+                        lin_show.setVisibility(View.GONE);
                     }
 
                     @Override
                     public void onNext(String s) {
-                        Log.e("图片上传成功",s);
-                        response=s;
-                        Message message=new Message();
-                        message.what=1;
-                        handler.sendMessage(message);
-
+                        Log.e("图片上传成功", s);
+                        lin_show.setVisibility(View.GONE);
+                        BaseModel baseModel = gson.fromJson(s, BaseModel.class);
+                        if (baseModel.getCode() == PublicUtils.code) {
+                            showToast("图片上传成功");
+                            finish();
+                        }
                     }
                 });
     }
@@ -261,8 +266,8 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
         dialogBuilder.show();
         dialogBuilder.setContentView(dialogView);
 
-        TextView tv_no=dialogView.findViewById(R.id.tv_no);
-        TextView tv_ok=dialogView.findViewById(R.id.tv_ok);
+        TextView tv_no = dialogView.findViewById(R.id.tv_no);
+        TextView tv_ok = dialogView.findViewById(R.id.tv_ok);
 
         tv_no.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -274,8 +279,12 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
         tv_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               upPic(fileList);
-               showToast("正在上传图片，请稍候！");
+                if (fileList.size()==list.size()){
+                    upPic(fileList);
+                }else {
+                    showToast("图片没有压缩完成");
+                }
+                //showToast("正在上传图片，请稍候！");
                 dialogBuilder.dismiss();
             }
         });

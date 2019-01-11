@@ -468,7 +468,11 @@ public class OkHttpClientManager
                 RequestBuilder.post(requestBody);
                 Request request = RequestBuilder.build();
                 Log.e("图片网址 ",request+"");
-                mOkHttpClient.newCall(request).enqueue(new Callback() {
+                OkHttpClient client = new OkHttpClient.Builder()
+                        .connectTimeout(200, TimeUnit.SECONDS)//设置连接超时时间
+                        .readTimeout(200, TimeUnit.SECONDS)//设置读取超时时间
+                        .build();
+                client.newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
                         subscriber.onError(e);
