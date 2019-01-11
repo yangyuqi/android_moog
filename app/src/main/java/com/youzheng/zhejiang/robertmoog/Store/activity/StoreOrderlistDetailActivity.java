@@ -187,11 +187,6 @@ public class StoreOrderlistDetailActivity extends BaseActivity implements View.O
     private String returnOrderStatus;
 
 
-
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

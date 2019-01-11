@@ -1,7 +1,9 @@
 package com.youzheng.zhejiang.robertmoog.Store.activity.ReturnGoods;
 
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,8 +20,12 @@ import com.youzheng.zhejiang.robertmoog.Model.Home.EnumsDatas;
 import com.youzheng.zhejiang.robertmoog.Model.Home.EnumsDatasBean;
 import com.youzheng.zhejiang.robertmoog.Model.Home.EnumsDatasBeanDatas;
 import com.youzheng.zhejiang.robertmoog.R;
+import com.youzheng.zhejiang.robertmoog.Store.adapter.ChooseGoodsListAdapter;
+import com.youzheng.zhejiang.robertmoog.Store.adapter.ReturnGoodsCounterAdapter;
 import com.youzheng.zhejiang.robertmoog.Store.bean.ChooseGoodsRequest;
 import com.youzheng.zhejiang.robertmoog.Store.bean.NewOrderListBean;
+import com.youzheng.zhejiang.robertmoog.Store.bean.ReturnGoodsCounter;
+import com.youzheng.zhejiang.robertmoog.Store.view.RecycleViewDivider;
 import com.youzheng.zhejiang.robertmoog.Store.view.SingleOptionsPicker;
 
 import java.io.IOException;
@@ -87,15 +93,19 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
     private List<String> returns=new ArrayList<>();
     private List<String> reason=new ArrayList<>();
 
+
+    private List<ReturnGoodsCounter.ReturnOrderInfoBean.ProductListBean> list=new ArrayList<>();
+    private ReturnGoodsCounterAdapter adapter;
+
     private int returnId;
-    private Boolean isall;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_return_goods_counter);
-        returnId=getIntent().getIntExtra("returnGoodsId",0);
-        isall=getIntent().getBooleanExtra("isAll",false);
+        //returnId=getIntent().getIntExtra("returnGoodsId",0);
+
         initView();
         initGetDate();
     }
@@ -108,10 +118,9 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
 
     }
 
-    private void initData(int id,Boolean isAll){
+    private void initData(int id){
         HashMap<String,Object> map=new HashMap<>();
         map.put("id",id);
-        map.put("isAll",isAll);
         ChooseGoodsRequest.OrderProductListBean chooseGoodsRequest=new ChooseGoodsRequest.OrderProductListBean();
         chooseGoodsRequest.setCount("");
         chooseGoodsRequest.setOrderItemProductId("");
@@ -125,24 +134,34 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
 
             @Override
             public void onResponse(String response) {
-                Log.e("门店客户列表",response);
+                Log.e("退货柜台",response);
                 BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                 if (baseModel.getCode()==PublicUtils.code){
-                    NewOrderListBean listBean = gson.fromJson(gson.toJson(baseModel.getDatas()),NewOrderListBean.class);
-                    setData(listBean);
+                    ReturnGoodsCounter counter = gson.fromJson(gson.toJson(baseModel.getDatas()),ReturnGoodsCounter.class);
+                    setData(counter);
                 }
             }
         });
-
-
-
-
-
     }
 
-    private void setData(NewOrderListBean listBean) {
+    private void setData(ReturnGoodsCounter counter) {
+          if (counter==null) return;
+          if (counter.getReturnOrderInfo()==null) return;
+          List<ReturnGoodsCounter.ReturnOrderInfoBean.ProductListBean> beans=counter.getReturnOrderInfo().getProductList();
+          if (beans.size()!=0){
+              list.addAll(beans);
+              adapter.setUI(beans);
+          }
 
+          if (counter.getReturnOrderInfo().getReturnCount()!=0){
+              tv_goods_number.setText(counter.getReturnOrderInfo().getReturnCount()+"");
+          }else {
+              tv_goods_number.setText("0");
+          }
 
+          if (!TextUtils.isEmpty(counter.getReturnOrderInfo().getRefundAmount())){
+              tv_should_cut_money.setText(getString(R.string.label_money)+counter.getReturnOrderInfo().getRefundAmount());
+          }
 
 
 
@@ -232,6 +251,16 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
         tv_really_cut_money = (TextView) findViewById(R.id.tv_really_cut_money);
         tv_confirm_return = (TextView) findViewById(R.id.tv_confirm_return);
         tv_confirm_return.setOnClickListener(this);
+
+        LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        rv_list_one.setLayoutManager(manager);
+        rv_list_one.setAdapter(adapter);
+        rv_list_one.addItemDecoration(new com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider(ReturnGoodsCounterActivity.this, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
+
+
+        adapter=new ReturnGoodsCounterAdapter(list,this);
+        rv_list_one.setAdapter(adapter);
+
     }
 
     @Override
