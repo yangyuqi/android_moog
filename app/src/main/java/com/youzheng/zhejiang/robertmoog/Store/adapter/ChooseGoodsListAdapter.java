@@ -61,11 +61,15 @@ public class ChooseGoodsListAdapter extends RecyclerView.Adapter {
             View view = layoutInflater.inflate(R.layout.item_choose_orderlist, parent,false);
             final OneImageHolder oneImageHolder=new OneImageHolder(view);
 
+
+
             return oneImageHolder;
         } else {
             View view = layoutInflater.inflate(R.layout.item_choose_order_style, parent,false);
             final MoreImageHolder moreImageHolder=new MoreImageHolder(view);
-            
+
+
+
             return moreImageHolder;
         }
     }
@@ -101,11 +105,14 @@ public class ChooseGoodsListAdapter extends RecyclerView.Adapter {
         holder.mTvCount.setText("共" + beans.getProductNum() + "件商品");
         holder.mTvMoney.setText(context.getString(R.string.label_money)+beans.getPayAmount());
 
+
+        final int positions = holder.getLayoutPosition();
+
         holder.tv_return_all.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(context,ChooseReturnGoodsActivity.class);
-                intent.putExtra("returnGoodsId",list.get(position).getId());
+                intent.putExtra("returnGoodsId",list.get(positions).getId());
                 intent.putExtra("isAll",true);
                 context.startActivity(intent);
             }
@@ -115,11 +122,12 @@ public class ChooseGoodsListAdapter extends RecyclerView.Adapter {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(context,ChooseReturnGoodsActivity.class);
-                intent.putExtra("returnGoodsId",list.get(position).getId());
+                intent.putExtra("returnGoodsId",list.get(positions).getId());
                 intent.putExtra("isAll",false);
                 context.startActivity(intent);
             }
         });
+
 
     }
 
@@ -138,6 +146,8 @@ public class ChooseGoodsListAdapter extends RecyclerView.Adapter {
             }
 
         }
+
+//        final int positions = holder.getLayoutPosition();
 
         holder.tv_return_all.setOnClickListener(new View.OnClickListener() {
             @Override

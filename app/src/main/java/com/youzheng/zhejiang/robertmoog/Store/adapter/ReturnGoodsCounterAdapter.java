@@ -3,6 +3,8 @@ package com.youzheng.zhejiang.robertmoog.Store.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,15 +13,21 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.youzheng.zhejiang.robertmoog.R;
+import com.youzheng.zhejiang.robertmoog.Store.activity.ReturnGoods.ReturnGoodsCounterActivity;
+import com.youzheng.zhejiang.robertmoog.Store.bean.ConfirmReturnRequest;
 import com.youzheng.zhejiang.robertmoog.Store.bean.OrderlistDetail;
 import com.youzheng.zhejiang.robertmoog.Store.bean.ReturnGoodsCounter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ReturnGoodsCounterAdapter extends RecyclerView.Adapter<ReturnGoodsCounterAdapter.OneHolder> {
     private List<ReturnGoodsCounter.ReturnOrderInfoBean.ProductListBean> list;
     private LayoutInflater layoutInflater;
     private Context context;
+    public static int money_num;
+    private List<ConfirmReturnRequest.ReshippedGoodsDataListBean> request=new ArrayList<>();
+
 
     public ReturnGoodsCounterAdapter(List<ReturnGoodsCounter.ReturnOrderInfoBean.ProductListBean> list, Context context) {
         this.list = list;
@@ -41,8 +49,8 @@ public class ReturnGoodsCounterAdapter extends RecyclerView.Adapter<ReturnGoodsC
     }
 
     @Override
-    public void onBindViewHolder(@NonNull OneHolder oneHolder, int position) {
-        ReturnGoodsCounter.ReturnOrderInfoBean.ProductListBean bean=list.get(position);
+    public void onBindViewHolder(@NonNull final OneHolder oneHolder, int position) {
+        final ReturnGoodsCounter.ReturnOrderInfoBean.ProductListBean bean=list.get(position);
         Glide.with(context).load(bean.getPhoto()).error(R.mipmap.group_9_1).into(oneHolder.iv_goods);
         oneHolder.tv_goods_code.setText(bean.getSku());
         oneHolder.tv_goods_content.setText(bean.getName());
@@ -60,7 +68,32 @@ public class ReturnGoodsCounterAdapter extends RecyclerView.Adapter<ReturnGoodsC
             oneHolder.tv_area.setVisibility(View.GONE);
 
         }
+
+        oneHolder.et_money.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                   String money=oneHolder.et_money.getText().toString();
+                   bean.setMoney(Integer.parseInt(money));
+                   for (ReturnGoodsCounter.ReturnOrderInfoBean.ProductListBean productListBean:list){
+                       money_num+=productListBean.getMoney()*productListBean.getCount();
+                   }
+                ReturnGoodsCounterActivity.tv_really_cut_money.setText(context.getString(R.string.label_money)+money_num+"");
+            }
+        });
+
+
     }
+
 
     @Override
     public int getItemCount() {

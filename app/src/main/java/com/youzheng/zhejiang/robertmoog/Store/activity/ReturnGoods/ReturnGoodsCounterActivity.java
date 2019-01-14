@@ -1,5 +1,6 @@
 package com.youzheng.zhejiang.robertmoog.Store.activity.ReturnGoods;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,8 +24,10 @@ import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.ChooseGoodsListAdapter;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.ReturnGoodsCounterAdapter;
 import com.youzheng.zhejiang.robertmoog.Store.bean.ChooseGoodsRequest;
+import com.youzheng.zhejiang.robertmoog.Store.bean.ConfirmReturnRequest;
 import com.youzheng.zhejiang.robertmoog.Store.bean.NewOrderListBean;
 import com.youzheng.zhejiang.robertmoog.Store.bean.ReturnGoodsCounter;
+import com.youzheng.zhejiang.robertmoog.Store.bean.ReturnGoodsSuccess;
 import com.youzheng.zhejiang.robertmoog.Store.view.RecycleViewDivider;
 import com.youzheng.zhejiang.robertmoog.Store.view.SingleOptionsPicker;
 
@@ -78,7 +81,7 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
      */
     private TextView tv_dispatching;
     /**  */
-    private TextView tv_really_cut_money;
+    public static TextView tv_really_cut_money;
     /**
      * 确认退货
      */
@@ -97,15 +100,24 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
     private List<ReturnGoodsCounter.ReturnOrderInfoBean.ProductListBean> list=new ArrayList<>();
     private ReturnGoodsCounterAdapter adapter;
 
-    private int returnId;
+    private String returnId;
+    private boolean isall;
+    private List<ChooseGoodsRequest.OrderProductListBean> requests=new ArrayList<>();
+    private String pick_state;
+    private String paymentMethod;
+    private String reasons;
+    private String refundAmount;
+    private String orderID;
+    private List<ConfirmReturnRequest.ReshippedGoodsDataListBean> request=new ArrayList<>();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_return_goods_counter);
-        //returnId=getIntent().getIntExtra("returnGoodsId",0);
-
+        returnId=getIntent().getStringExtra("orderID");
+        isall=getIntent().getBooleanExtra("is_all",false);
+        requests= (List<ChooseGoodsRequest.OrderProductListBean>) getIntent().getSerializableExtra("request");
         initView();
         initGetDate();
     }
@@ -113,20 +125,18 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
     @Override
     protected void onResume() {
         super.onResume();
-
-
-
+        initData(returnId);
     }
 
-    private void initData(int id){
+    private void initData(String id){
         HashMap<String,Object> map=new HashMap<>();
         map.put("id",id);
-        ChooseGoodsRequest.OrderProductListBean chooseGoodsRequest=new ChooseGoodsRequest.OrderProductListBean();
-        chooseGoodsRequest.setCount("");
-        chooseGoodsRequest.setOrderItemProductId("");
-        map.put("orderProductList",chooseGoodsRequest);
+//        ChooseGoodsRequest.OrderProductListBean chooseGoodsRequest=new ChooseGoodsRequest.OrderProductListBean();
+//        chooseGoodsRequest.setCount("");
+//        chooseGoodsRequest.setOrderItemProductId("");
+        map.put("orderProductList",requests);
 
-        OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.CHOOSE_GOODS + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
+        OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.RETURN_COUNTER + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
             public void onFailure(Request request, IOException e) {
 
@@ -152,7 +162,7 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
               list.addAll(beans);
               adapter.setUI(beans);
           }
-
+            orderID=counter.getReturnOrderInfo().getId();
           if (counter.getReturnOrderInfo().getReturnCount()!=0){
               tv_goods_number.setText(counter.getReturnOrderInfo().getReturnCount()+"");
           }else {
@@ -161,6 +171,7 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
 
           if (!TextUtils.isEmpty(counter.getReturnOrderInfo().getRefundAmount())){
               tv_should_cut_money.setText(getString(R.string.label_money)+counter.getReturnOrderInfo().getRefundAmount());
+              refundAmount=counter.getReturnOrderInfo().getRefundAmount();
           }
 
 
@@ -207,7 +218,7 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
 
 
                         for (final EnumsDatasBean bean : enumsDatas.getEnums()){
-                            if (bean.getClassName().equals("RefundMethod")){//  TimeQuantum
+                            if (bean.getClassName().equals("ReturnReason")){//  TimeQuantum
 //                                final List<String> date = new ArrayList<String>();
                                 List<EnumsDatasBeanDatas> list3=new ArrayList<>();
                                 for (int i = 0; i < bean.getDatas().size(); i++) {
@@ -272,17 +283,98 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
                 finish();
                 break;
             case R.id.lin_get_goods:
-                SingleOptionsPicker.openOptionsPicker(this, type, tv_get_state);
+                //SingleOptionsPicker.tv_choose_degree.setText("提货状态");
+                SingleOptionsPicker.openOptionsPicker(this, type, tv_get_state,"提货状态");
                 break;
             case R.id.lin_return_type:
-                SingleOptionsPicker.openOptionsPicker(this, returns, tv_return_type);
+               // SingleOptionsPicker.tv_choose_degree.setText("退款方式");
+                SingleOptionsPicker.openOptionsPicker(this, returns, tv_return_type,"退款方式");
                 break;
             case R.id.lin_return_reason:
-                SingleOptionsPicker.openOptionsPicker(this, reason, tv_return_reason);
+                //SingleOptionsPicker.tv_choose_degree.setText("退货理由");
+                SingleOptionsPicker.openOptionsPicker(this, reason, tv_return_reason,"退货理由");
                 break;
             case R.id.tv_confirm_return:
-
+                confirmReturn();
                 break;
         }
+    }
+
+    private void confirmReturn() {
+
+        if (tv_return_type.equals("银行卡")){
+            paymentMethod="BANK_CARD";
+        }else if (tv_return_type.equals("微信")){
+            paymentMethod="WECHAT";
+        }else if (tv_return_type.equals("支付宝")){
+            paymentMethod="ALIPAY";
+        }else if (tv_return_type.equals("现金")){
+            paymentMethod="CASH";
+        }else if (tv_return_type.equals("商场收款")){
+            paymentMethod="MARKET";
+        }else if (tv_return_type.equals("其他")){
+            paymentMethod="OTHER";
+        }
+
+        if (tv_get_state.equals("全部已提")){
+            pick_state="ALL_LIFT";
+        }else if (tv_get_state.equals("部分已提")){
+            pick_state="LIMIT_LIFT";
+        }else if (tv_get_state.equals("未提")){
+            pick_state="NO_LIFT";
+        }
+
+        if (tv_return_reason.equals("质量问题")){
+            reasons="QUALITY_PROBLEM";
+        }else if (tv_return_reason.equals("品牌问题")){
+            reasons="BRAND_PROBLEM";
+        }else if (tv_return_reason.equals("价格问题")){
+            reasons="PRICE_PROBLEM";
+        }else if (tv_return_reason.equals("其他")){
+            reasons="OTHER";
+        }
+        HashMap<String,Object> map=new HashMap<>();
+        map.put("pickUpStatus",pick_state);
+        map.put("paymentMethod",paymentMethod);
+        map.put("reason",reasons);
+        map.put("refundAmount",refundAmount);
+        map.put("actualRefundAmount",ReturnGoodsCounterAdapter.money_num);
+        map.put("id",orderID);
+
+        if (list.size()!=0){
+            for (ReturnGoodsCounter.ReturnOrderInfoBean.ProductListBean bean1:list){
+                ConfirmReturnRequest.ReshippedGoodsDataListBean requestBean=new ConfirmReturnRequest.ReshippedGoodsDataListBean();
+                requestBean.setActualRefundAmount(bean1.getOrderItemProductId());
+                requestBean.setCount(bean1.getCount()+"");
+                requestBean.setRefundAmount(bean1.getRefundAmount());
+                requestBean.setActualRefundAmount(bean1.getMoney()+"");
+                request.add(requestBean);
+            }
+        }
+        map.put("reshippedGoodsDataList",request);
+        OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.CONFIRM_RETURN + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(String response) {
+                Log.e("退货柜台",response);
+                BaseModel baseModel = gson.fromJson(response,BaseModel.class);
+                if (baseModel.getCode()==PublicUtils.code){
+                    ReturnGoodsSuccess success = gson.fromJson(gson.toJson(baseModel.getDatas()),ReturnGoodsSuccess.class);
+                    toSuccess(success);
+                }else {
+                    showToast("退货失败");
+                }
+            }
+        });
+    }
+
+    private void toSuccess(ReturnGoodsSuccess success) {
+        Intent intent=new Intent(this,ReturnGoodsSuccessActivity.class);
+        intent.putExtra("returnid",success.getId());
+        startActivity(intent);
     }
 }

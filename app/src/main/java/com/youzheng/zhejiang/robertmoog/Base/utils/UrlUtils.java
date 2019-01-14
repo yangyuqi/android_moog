@@ -101,4 +101,10 @@ public class UrlUtils {
 
     public static String FORGET_PASSWORD = BASE_URL+"/v1/app/user/forgetPassword";
 
+    public static String RETURN_COUNTER = BASE_URL+"/v1/app/customer/ReturnProduct";
+
+    public static String CONFIRM_RETURN = BASE_URL+"/v1/app/customer/saveReturnOrder";
+
+
+
 }

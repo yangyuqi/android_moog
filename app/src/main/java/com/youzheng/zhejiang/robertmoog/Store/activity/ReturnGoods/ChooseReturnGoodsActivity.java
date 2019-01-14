@@ -1,5 +1,6 @@
 package com.youzheng.zhejiang.robertmoog.Store.activity.ReturnGoods;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,10 +26,12 @@ import com.youzheng.zhejiang.robertmoog.Store.adapter.OneOrderDetailAdapter;
 import com.youzheng.zhejiang.robertmoog.Store.bean.ChooseGoodsDetail;
 import com.youzheng.zhejiang.robertmoog.Store.bean.ChooseGoodsRequest;
 import com.youzheng.zhejiang.robertmoog.Store.bean.ChooseReturnGoodsDetail;
+import com.youzheng.zhejiang.robertmoog.Store.bean.CommitRequest;
 import com.youzheng.zhejiang.robertmoog.Store.bean.CustomerList;
 import com.youzheng.zhejiang.robertmoog.Store.bean.OrderlistDetail;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -80,13 +83,15 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
     private List<ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean> morelist=new ArrayList<>();
 
     private boolean isall;
-    private int id;
+    private String id;
+    private List<ChooseGoodsRequest.OrderProductListBean> requests=new ArrayList<>();
+    private String orderid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_return_goods);
-        id=getIntent().getIntExtra("returnGoodsId",0);
+        id=getIntent().getStringExtra("returnGoodsId");
         isall=getIntent().getBooleanExtra("isAll",false);
         initView();
     }
@@ -119,7 +124,7 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
         LinearLayoutManager manager2 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rv_list_more.setLayoutManager(manager2);
         rv_list_more.setAdapter(moreChooseReturnGoodsAdapter);
-        rv_list_more.addItemDecoration(new RecycleViewDivider(ChooseReturnGoodsActivity.this, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
+        //rv_list_more.addItemDecoration(new RecycleViewDivider(ChooseReturnGoodsActivity.this, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
 
 
 
@@ -137,18 +142,21 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
     @Override
     protected void onResume() {
         super.onResume();
+        requests.clear();
         initData(id,isall);
     }
 
-    private void initData(int id, boolean isAll){
+    private void initData(String id, boolean isAll){
         HashMap<String,Object> map=new HashMap<>();
         map.put("id",id);
         map.put("isAll",isAll);
 
+        List<ChooseGoodsRequest.OrderProductListBean> beanList=new ArrayList<>();
         ChooseGoodsRequest.OrderProductListBean bean=new ChooseGoodsRequest.OrderProductListBean();
         bean.setCount("");
         bean.setOrderItemProductId("");
-        map.put("orderProductList",bean);
+        beanList.add(bean);
+        map.put("orderProductList",beanList);
 
 
         OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.CHOOSE_GOODS + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
@@ -173,6 +181,13 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
     private void setData(ChooseReturnGoodsDetail chooseReturnGoodsDetail) {
           if (chooseReturnGoodsDetail.getReturnOrderInfo()==null) return;
         ChooseReturnGoodsDetail.ReturnOrderInfoBean infoBean=chooseReturnGoodsDetail.getReturnOrderInfo();
+
+        orderid=infoBean.getId();
+
+        if (!TextUtils.isEmpty(infoBean.getCreateDate())){
+            tv_time.setText(infoBean.getCreateDate());
+        }
+
           if (!TextUtils.isEmpty(infoBean.getCode())){
               tv_num.setText(infoBean.getCode());
           }
@@ -194,6 +209,8 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
         if (one.size()!=0){
             onelist.addAll(one);
             oneOrderDetailAdapter.setUI(one);
+            requests.clear();
+
         }else {
             rv_list_one.setVisibility(View.GONE);
         }
@@ -204,12 +221,18 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
         if (more.size()!=0){
             morelist.addAll(more);
             moreChooseReturnGoodsAdapter.setUI(more);
+//            requests.addAll(moreChooseReturnGoodsAdapter.getRequests());
+            Log.e("sada",requests+"");
         }else {
             rv_list_more.setVisibility(View.GONE);
         }
 
 
     }
+
+//    public void setRequest(List<ChooseGoodsRequest.OrderProductListBean> request){
+//        this.requests=request;
+//    }
 
     @Override
     public void onClick(View v) {
@@ -220,7 +243,27 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
                 finish();
                 break;
             case R.id.tv_confirm:
+                if (morelist.size()!=0){
+                    requests.addAll(moreChooseReturnGoodsAdapter.getRequests());
+                }
+
+                if (onelist.size()!=0){
+                    for (ChooseReturnGoodsDetail.ReturnOrderInfoBean.ProductListBean oneBean:onelist){
+                        ChooseGoodsRequest.OrderProductListBean request=new ChooseGoodsRequest.OrderProductListBean();
+                        request.setCount(oneBean.getNum());
+                        request.setOrderItemProductId(oneBean.getOrderItemProductId());
+                        requests.add(request);
+                    }
+                }
+
+                Log.e("11231",requests.size()+"");
+                Intent intent=new Intent(this,ReturnGoodsCounterActivity.class);
+                intent.putExtra("request", (Serializable) requests);
+                intent.putExtra("is_all",isall);
+                intent.putExtra("orderID",orderid);
+                startActivity(intent);
                 break;
         }
     }
-}
+    }
+

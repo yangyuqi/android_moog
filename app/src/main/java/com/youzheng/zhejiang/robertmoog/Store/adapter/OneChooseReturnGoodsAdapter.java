@@ -8,12 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.bean.ChooseReturnGoodsDetail;
 import com.youzheng.zhejiang.robertmoog.Store.bean.OrderlistDetail;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,12 +25,14 @@ public class OneChooseReturnGoodsAdapter extends RecyclerView.Adapter<OneChooseR
     private List<ChooseReturnGoodsDetail.ReturnOrderInfoBean.ProductListBean> list;
     private LayoutInflater layoutInflater;
     private Context context;
-
+    private List<TextView> textlist;
+    private int addnumber;
 
     public OneChooseReturnGoodsAdapter(List<ChooseReturnGoodsDetail.ReturnOrderInfoBean.ProductListBean> list, Context context) {
         this.list = list;
         this.context = context;
         layoutInflater=LayoutInflater.from(context);
+        textlist=new ArrayList<>();
     }
 
     public void setUI(List<ChooseReturnGoodsDetail.ReturnOrderInfoBean.ProductListBean> list){
@@ -46,7 +50,7 @@ public class OneChooseReturnGoodsAdapter extends RecyclerView.Adapter<OneChooseR
 
     @Override
     public void onBindViewHolder(@NonNull final OneHolder oneHolder, int position) {
-        ChooseReturnGoodsDetail.ReturnOrderInfoBean.ProductListBean bean=list.get(position);
+        final ChooseReturnGoodsDetail.ReturnOrderInfoBean.ProductListBean bean=list.get(position);
         Glide.with(context).load(bean.getPhoto()).error(R.mipmap.group_9_1).into(oneHolder.iv_goods);
         oneHolder.tv_goods_code.setText(bean.getSku());
         oneHolder.tv_goods_content.setText(bean.getName());
@@ -64,30 +68,39 @@ public class OneChooseReturnGoodsAdapter extends RecyclerView.Adapter<OneChooseR
         }
         oneHolder.tv_number.setText("1");//默认为1
         final String num=oneHolder.tv_number.getText().toString();
+        addnumber= Integer.parseInt(num);
+        bean.setNum(addnumber+"");
 
         oneHolder.tv_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int addnumber= Integer.parseInt(num+1);
+                if (addnumber==bean.getCount()){
+                    Toast.makeText(context,"商品数量不能超过可退商品数量",Toast.LENGTH_SHORT).show();
+                }else {
+                    addnumber++;
+                }
+
 
                 oneHolder.tv_number.setText(addnumber+"");
+                bean.setNum(addnumber+"");
             }
         });
 
-        final String num1=oneHolder.tv_number.getText().toString();
 
         oneHolder.tv_cut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int number= Integer.parseInt(num1);
-                int cutnum=number-1;
-
-                oneHolder.tv_number.setText(cutnum+"");
+                if (addnumber==0){
+                    Toast.makeText(context,"商品数量不能小于0",Toast.LENGTH_SHORT).show();
+                }else {
+                    addnumber--;
+                }
+                oneHolder.tv_number.setText(addnumber+"");
+                bean.setNum(addnumber+"");
             }
         });
-
-
     }
+
 
     @Override
     public int getItemCount() {

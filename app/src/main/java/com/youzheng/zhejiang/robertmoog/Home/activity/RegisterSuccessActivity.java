@@ -15,6 +15,9 @@ import com.youzheng.zhejiang.robertmoog.Model.Home.ShopPersonalListBean;
 import com.youzheng.zhejiang.robertmoog.Model.login.RegisterBean;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.activity.OrderListActivity;
+import com.youzheng.zhejiang.robertmoog.Store.activity.ReturnGoods.ChooseOrderListActivity;
+import com.youzheng.zhejiang.robertmoog.Store.activity.ReturnGoods.ChooseReturnGoodsActivity;
+import com.youzheng.zhejiang.robertmoog.Store.activity.ReturnGoodsManger.ReturnGoodsListActivity;
 import com.youzheng.zhejiang.robertmoog.Store.bean.OrderList;
 import com.youzheng.zhejiang.robertmoog.utils.CommonAdapter;
 import com.youzheng.zhejiang.robertmoog.utils.QRcode.android.CaptureActivity;
@@ -113,12 +116,20 @@ public class RegisterSuccessActivity extends BaseActivity {
                         break;
 
                     case 6:
-
+                        Intent intent6 = new Intent(mContext,ChooseOrderListActivity.class);
+                        intent6.putExtra("customerId",customer.getCustomerId());
+                        intent6.putExtra("identifion",true);
+                        startActivity(intent6);
 
                         break;
 
 
                     case 7:
+
+                        Intent intent7 = new Intent(mContext,ReturnGoodsListActivity.class);
+                        intent7.putExtra("customerId",customer.getCustomerId());
+                        intent7.putExtra("identifion",true);
+                        startActivity(intent7);
 
                         break;
                 }

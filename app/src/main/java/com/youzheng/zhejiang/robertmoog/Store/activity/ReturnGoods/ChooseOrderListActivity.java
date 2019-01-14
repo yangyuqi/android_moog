@@ -45,7 +45,7 @@ public class ChooseOrderListActivity extends BaseActivity implements View.OnClic
 
     private int page=1;
     private int pageSize=10;
-    private int customerId;
+    private String customerId;
     private String orderCode="";
     private String timeQuantum="";
     private Boolean isCustomer=false;
@@ -58,6 +58,8 @@ public class ChooseOrderListActivity extends BaseActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_order_list);
+        isCustomer=getIntent().getBooleanExtra("identifion",false);
+        customerId=getIntent().getStringExtra("customerId");
         initView();
         setListener();
     }

@@ -3,6 +3,8 @@ package com.youzheng.zhejiang.robertmoog.Store.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.youzheng.zhejiang.robertmoog.R;
+import com.youzheng.zhejiang.robertmoog.Store.bean.ChooseGoodsRequest;
 import com.youzheng.zhejiang.robertmoog.Store.bean.ChooseReturnGoodsDetail;
 import com.youzheng.zhejiang.robertmoog.Store.bean.OrderlistDetail;
 import com.youzheng.zhejiang.robertmoog.Store.bean.ReturnGoodsDetail;
@@ -27,6 +30,8 @@ public class MoreChooseReturnGoodsAdapter extends RecyclerView.Adapter<MoreChoos
     private LayoutInflater layoutInflater;
     private Context context;
     private SmallChooseReturnGoodsAdapter adapter;
+    public static List<ChooseGoodsRequest.OrderProductListBean> requests=new ArrayList<>();
+    private List<ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean.ProductListBeanX> productListBeanList;
    // private List<OrderlistDetail.OrderItemDataBean.OrderSetMealListBean.ProductListBean> smalllist;
 
     public MoreChooseReturnGoodsAdapter(List<ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean> list,
@@ -38,6 +43,7 @@ public class MoreChooseReturnGoodsAdapter extends RecyclerView.Adapter<MoreChoos
 
     public void setUI(List<ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean> list) {
         this.list = list;
+        requests.clear();
         notifyDataSetChanged();
     }
 
@@ -61,7 +67,7 @@ public class MoreChooseReturnGoodsAdapter extends RecyclerView.Adapter<MoreChoos
         moreHolder.iv_isShow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                List<ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean.ProductListBeanX> productListBeanList = new ArrayList<>();
+                 productListBeanList = new ArrayList<>();
                 if (list.size() > 0) {
                     if (list.get(position).isIsexpress()) {
                         productListBeanList.clear();
@@ -78,8 +84,28 @@ public class MoreChooseReturnGoodsAdapter extends RecyclerView.Adapter<MoreChoos
                 moreHolder.listView.setAdapter(adapter);
 
                 adapter.setRefreshUI(productListBeanList);
+
+//                for (ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean.ProductListBeanX beanX:productListBeanList){
+//                    ChooseGoodsRequest.OrderProductListBean request=new ChooseGoodsRequest.OrderProductListBean();
+//                    request.setCount(beanX.getNum());
+//                    request.setOrderItemProductId(beanX.getOrderItemProductId());
+//                    requests.add(request);
+//                }
+
+
             }
         });
+    }
+
+    public List<ChooseGoodsRequest.OrderProductListBean> getRequests(){
+        for (ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean.ProductListBeanX beanX:productListBeanList){
+            ChooseGoodsRequest.OrderProductListBean request=new ChooseGoodsRequest.OrderProductListBean();
+            request.setCount(beanX.getNum());
+            request.setOrderItemProductId(beanX.getOrderItemProductId());
+            requests.add(request);
+        }
+
+        return requests;
     }
 
     @Override

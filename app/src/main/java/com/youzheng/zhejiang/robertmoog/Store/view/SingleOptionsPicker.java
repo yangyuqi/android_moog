@@ -27,6 +27,7 @@ public class SingleOptionsPicker<T> {
     private List<List<List<T>>> options3Items;
     //默认选中的位置
     private int options1, options2, options3;
+    public static TextView tv_choose_degree;
 
     /**
      *普通条件选择项方法
@@ -91,6 +92,7 @@ public class SingleOptionsPicker<T> {
                 .setLayoutRes(R.layout.item_picker_options, new CustomListener() {//自定义布局
                     @Override
                     public void customLayout(View v) {
+                         tv_choose_degree=v.findViewById(R.id.tv_choose_degree);
                         final TextView tvSubmit = v.findViewById(R.id.tv_confirm);
                         tvSubmit.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -106,8 +108,8 @@ public class SingleOptionsPicker<T> {
         return pvOptions;
     }
 
-    public static void openOptionsPicker(Activity activity, final List<String> list, final TextView textView) {
-        String select = textView.getText().toString();
+    public static void openOptionsPicker(Activity activity, final List<String> list, final TextView textView, final String title) {
+         String select = textView.getText().toString();
         new SingleOptionsPicker(activity, select, list,
                 new OnPickerOptionsClickListener() {
                     @Override
@@ -121,9 +123,11 @@ public class SingleOptionsPicker<T> {
 //                            textView.setText(options1 + 30 + "KG");
 //                        }
                         textView.setText(list.get(options1));
+
+
                     }
                 }).show();
-
+        tv_choose_degree.setText(title);
     }
 
     /**

@@ -38,6 +38,15 @@ public class ChooseReturnGoodsDetail {
             private String businessRole;
             private List<ProductListBean> productList;
             private List<SetMealListBean> setMealList;
+            private String createDate;
+
+            public String getCreateDate() {
+                return createDate;
+            }
+
+            public void setCreateDate(String createDate) {
+                this.createDate = createDate;
+            }
 
             public String getId() {
                 return id;
@@ -115,6 +124,15 @@ public class ChooseReturnGoodsDetail {
                 private String orderItemProductId;
                 private String square;
                 private boolean isSpecial;
+                private String num;
+
+                public String getNum() {
+                    return num;
+                }
+
+                public void setNum(String num) {
+                    this.num = num;
+                }
 
                 public String getName() {
                     return name;
@@ -271,6 +289,15 @@ public class ChooseReturnGoodsDetail {
                     private String photo;
                     private int count;
                     private String orderItemProductId;
+                    private String num;
+
+                    public String getNum() {
+                        return num;
+                    }
+
+                    public void setNum(String num) {
+                        this.num = num;
+                    }
 
                     public String getName() {
                         return name;

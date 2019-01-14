@@ -93,7 +93,8 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
                 list.clear();
                 list.add("工长");
                 list.add("设计师");
-                SingleOptionsPicker.openOptionsPicker(this, list, tv_degree);
+                //SingleOptionsPicker.tv_choose_degree.setText("选择身份");
+                SingleOptionsPicker.openOptionsPicker(this, list, tv_degree,"选择身份");
                 break;
             case R.id.tv_add:
                 phone=edt_phone.getText().toString().trim();

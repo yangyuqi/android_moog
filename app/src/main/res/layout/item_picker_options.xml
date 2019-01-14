@@ -28,6 +28,7 @@
             android:layout_weight="1"
             android:text="@string/choose_degree"
             android:textSize="17sp"
+            android:visibility="visible"
             android:gravity="center"
             android:textColor="@color/text_drak_black"
             android:layout_gravity="center_vertical"
