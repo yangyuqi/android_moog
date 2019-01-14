@@ -3,7 +3,10 @@ package com.youzheng.zhejiang.robertmoog.Home.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,10 +25,13 @@ import com.youzheng.zhejiang.robertmoog.Model.Home.ProductListBean;
 import com.youzheng.zhejiang.robertmoog.Model.Home.ScanDatasBean;
 import com.youzheng.zhejiang.robertmoog.Model.TestBean;
 import com.youzheng.zhejiang.robertmoog.R;
+import com.youzheng.zhejiang.robertmoog.utils.View.AddPriceDialog;
+import com.youzheng.zhejiang.robertmoog.utils.View.InPutCodeDialog;
 import com.youzheng.zhejiang.robertmoog.utils.View.NoScrollListView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import de.greenrobot.event.EventBus;
 
@@ -33,12 +39,12 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private int ITEM_TITLE = 1;
     private int ITEM_CONTENT = 2;
-    private List<ScanDatasBean> objects;
+    private ArrayList<ScanDatasBean> objects;
     private Context context ;
     private int widWidth ;
     private String type = "";//1表示搜索2.表示扫一扫3.表示卖货 4.表示意向商品
 
-    public void setDate(List<ScanDatasBean> objects , Context context ,String type ,int widWidth) {
+    public void setDate(ArrayList<ScanDatasBean> objects , Context context ,String type ,int widWidth) {
         this.objects = objects;
         this.context = context ;
         notifyDataSetChanged();
@@ -90,12 +96,52 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 ((CommonGoodsViewHolder) holder).tv_confirm.setVisibility(View.GONE);
                 ((CommonGoodsViewHolder) holder).ll_num.setVisibility(View.VISIBLE);
                 ((CommonGoodsViewHolder) holder).tv_get_num.setVisibility(View.GONE);
-                ((CommonGoodsViewHolder) holder).edt_num.setText(""+objects.get(position).getNum());
+                if (objects.get(position).isSpecial()) {
+                    ((CommonGoodsViewHolder) holder).tv_specail.setVisibility(View.VISIBLE);
+                    ((CommonGoodsViewHolder) holder).tv_specail.setText(""+objects.get(position).getSquare() + objects.get(position).getSquare__suffix());
+                    ((CommonGoodsViewHolder) holder).edt_num.setText(""+objects.get(position).getSquare_num());
+                }else {
+                    ((CommonGoodsViewHolder) holder).edt_num.setText(""+objects.get(position).getNum());
+                }
             }else if (type.equals("3")){
                 ((CommonGoodsViewHolder) holder).tv_confirm.setVisibility(View.GONE);
-                ((CommonGoodsViewHolder) holder).ll_num.setVisibility(View.GONE);
                 ((CommonGoodsViewHolder) holder).tv_get_num.setVisibility(View.VISIBLE);
-                ((CommonGoodsViewHolder) holder).tv_get_num.setText(context.getResources().getString(R.string.label_X)+objects.get(position).getNum());
+                if (objects.get(position).isSpecial()){
+                    ((CommonGoodsViewHolder) holder).ll_no_code.setVisibility(View.VISIBLE);
+                    ((CommonGoodsViewHolder) holder).ll_has_code.setVisibility(View.VISIBLE);
+                    ((CommonGoodsViewHolder) holder).ll_num.setVisibility(View.VISIBLE);
+                    ((CommonGoodsViewHolder) holder).edt_num.setText(""+objects.get(position).getNum());
+                    ((CommonGoodsViewHolder) holder).tv_specail.setVisibility(View.VISIBLE);
+                    ((CommonGoodsViewHolder) holder).tv_specail.setText(""+objects.get(position).getSquare()+objects.get(position).getSquare__suffix());
+                    if (objects.get(position).getCodePU()==null){
+                        ((CommonGoodsViewHolder) holder).tv_add_code.setVisibility(View.VISIBLE);
+                        ((CommonGoodsViewHolder) holder).tv_pu_code.setVisibility(View.GONE);
+                    }else {
+                        ((CommonGoodsViewHolder) holder).tv_pu_code.setText(objects.get(position).getCodePU__suffix()+objects.get(position).getCodePU());
+                        ((CommonGoodsViewHolder) holder).tv_pu_code.getPaint().setFlags(Paint. UNDERLINE_TEXT_FLAG );
+                        ((CommonGoodsViewHolder) holder).tv_pu_code.setVisibility(View.VISIBLE);
+                        ((CommonGoodsViewHolder) holder).tv_add_code.setVisibility(View.GONE);
+                    }
+
+                    if (objects.get(position).getAddPrice()==null){
+                        ((CommonGoodsViewHolder) holder).tv_add_price.setVisibility(View.VISIBLE);
+                        ((CommonGoodsViewHolder) holder).tv_zengxiang.setVisibility(View.GONE);
+                    }else {
+                        ((CommonGoodsViewHolder) holder).tv_zengxiang.setText(objects.get(position).getAddPrice__suffix()+ objects.get(position).getAddPrice());
+                        ((CommonGoodsViewHolder) holder).tv_zengxiang.getPaint().setFlags(Paint. UNDERLINE_TEXT_FLAG );
+                        ((CommonGoodsViewHolder) holder).tv_zengxiang.setVisibility(View.VISIBLE);
+                        ((CommonGoodsViewHolder) holder).tv_add_price.setVisibility(View.GONE);
+                    }
+
+                    ((CommonGoodsViewHolder) holder).tv_zengxiang.setOnClickListener(new AddPriceListener(context,objects.get(position)));
+                    ((CommonGoodsViewHolder) holder).tv_add_price.setOnClickListener(new AddPriceListener(context,objects.get(position)));
+                    ((CommonGoodsViewHolder) holder).tv_pu_code.setOnClickListener(new InPutCodeListener(context, objects.get(position)));
+                    ((CommonGoodsViewHolder) holder).tv_add_code.setOnClickListener(new InPutCodeListener(context,objects.get(position)));
+                }else {
+                    ((CommonGoodsViewHolder) holder).tv_specail.setVisibility(View.GONE);
+                    ((CommonGoodsViewHolder) holder).ll_num.setVisibility(View.GONE);
+                    ((CommonGoodsViewHolder) holder).tv_get_num.setText(context.getResources().getString(R.string.label_X)+objects.get(position).getNum());
+                }
             }else if (type.equals("4")){
                 ((CommonGoodsViewHolder) holder).ll_num.setVisibility(View.GONE);
                 ((CommonGoodsViewHolder) holder).tv_confirm.setVisibility(View.GONE);
@@ -113,7 +159,17 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             ((CommonGoodsViewHolder) holder).tv_add.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                        objects.get(position).setNum(objects.get(position).getNum()+1) ;
+                        if (objects.get(position).isSpecial()) {
+                            if (type.equals("2")) {
+                                objects.get(position).setSquare(objects.get(position).getSquare() + 0.001);
+                                objects.get(position).setSquare_num(objects.get(position).getSquare_num() + 1);
+                            }else if (type.equals("3")){
+                                objects.get(position).setNum(objects.get(position).getNum() + 1);
+                                EventBus.getDefault().post(objects);
+                            }
+                        }else {
+                            objects.get(position).setNum(objects.get(position).getNum() + 1);
+                        }
                         notifyDataSetChanged();
                 }
             });
@@ -121,10 +177,22 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             ((CommonGoodsViewHolder) holder).tv_reduce.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (objects.get(position).getNum()>1){
-                        objects.get(position).setNum(objects.get(position).getNum()-1) ;
+                        if (objects.get(position).isSpecial()) {
+                            if (type.equals("2")) {
+                                if (objects.get(position).getSquare() > 0.001) {
+                                    objects.get(position).setSquare(objects.get(position).getSquare() - 0.001);
+                                    objects.get(position).setSquare_num(objects.get(position).getSquare_num() - 1);
+                                }
+                            }else if (type.equals("3")){
+                                if (objects.get(position).getNum()>1){
+                                    objects.get(position).setNum(objects.get(position).getNum() - 1);
+                                    EventBus.getDefault().post(objects);
+                                }
+                            }
+                        }else if (objects.get(position).getNum()>1){
+                            objects.get(position).setNum(objects.get(position).getNum() - 1);
+                        }
                         notifyDataSetChanged();
-                    }
                 }
             });
 
@@ -253,11 +321,12 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public class CommonGoodsViewHolder extends RecyclerView.ViewHolder{
 
-        TextView tv_name ,tv_desc ,tv_price ,tv_confirm ,tv_get_num ,tv_add ,tv_reduce;
+        TextView tv_name ,tv_desc ,tv_price ,tv_confirm ,tv_get_num ,tv_add ,tv_reduce ,tv_specail
+                ,tv_pu_code ,tv_zengxiang ,tv_add_code ,tv_add_price;
         ImageView iv_icon ;
         RelativeLayout rl_width ;
         HorizontalScrollView hsv;
-        View ll_num ;
+        View ll_num , ll_no_code ,ll_has_code;
         EditText edt_num ;
         public CommonGoodsViewHolder(View itemView) {
             super(itemView);
@@ -273,6 +342,13 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             edt_num = itemView.findViewById(R.id.edt_num);
             tv_reduce = itemView.findViewById(R.id.tv_reduce);
             tv_add = itemView.findViewById(R.id.tv_add);
+            tv_specail = itemView.findViewById(R.id.tv_specail);
+            tv_pu_code = itemView.findViewById(R.id.tv_pu_code);
+            tv_zengxiang = itemView.findViewById(R.id.tv_zengxiang);
+            tv_add_code = itemView.findViewById(R.id.tv_add_code);
+            tv_add_price = itemView.findViewById(R.id.tv_add_price);
+            ll_no_code = itemView.findViewById(R.id.ll_no_code);
+            ll_has_code = itemView.findViewById(R.id.ll_has_code);
         }
     }
 
@@ -304,6 +380,40 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             edt_num = itemView.findViewById(R.id.edt_num);
             tv_reduce = itemView.findViewById(R.id.tv_reduce);
             tv_add = itemView.findViewById(R.id.tv_add);
+        }
+    }
+
+    public class AddPriceListener implements View.OnClickListener{
+
+        ScanDatasBean bean ;
+        Context context ;
+        AddPriceDialog priceDialog ;
+        public AddPriceListener(Context context ,ScanDatasBean bean){
+            this.bean = bean ;
+            this.context = context;
+             priceDialog = new AddPriceDialog(context,bean ,SearchResultAdapter.this ,objects);
+        }
+
+        @Override
+        public void onClick(View v) {
+            priceDialog.show();
+        }
+    }
+
+    public class InPutCodeListener implements View.OnClickListener{
+
+        ScanDatasBean bean ;
+        Context context ;
+        InPutCodeDialog priceDialog ;
+        public InPutCodeListener(Context context ,ScanDatasBean bean){
+            this.bean = bean ;
+            this.context = context;
+            priceDialog = new InPutCodeDialog(context,bean ,SearchResultAdapter.this ,objects);
+        }
+
+        @Override
+        public void onClick(View v) {
+            priceDialog.show();
         }
     }
 }

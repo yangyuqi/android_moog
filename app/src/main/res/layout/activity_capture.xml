@@ -20,22 +20,22 @@
         android:layout_height="match_parent" />
 
 
-    <LinearLayout
+    <RelativeLayout
+        android:layout_marginTop="-70dp"
         android:id="@+id/largeLabel"
         android:layout_width="match_parent"
-        android:layout_height="260dp"
+        android:layout_height="320dp"
         android:orientation="vertical">
 
         <!-- 扫描取景框 -->
         <com.youzheng.zhejiang.robertmoog.utils.QRcode.view.ViewfinderView
-            android:layout_marginTop="-60dp"
             android:id="@+id/viewfinder_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
         />
 
 
-    </LinearLayout>
+    </RelativeLayout>
 
         <RelativeLayout
             android:layout_below="@+id/largeLabel"

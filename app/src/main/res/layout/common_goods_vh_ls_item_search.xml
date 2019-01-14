@@ -92,7 +92,6 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
-                    android:layout_marginRight="15dp"
                     android:textColor="@color/text_blue"
                     android:textSize="@dimen/text_size_15"
                     android:text="选定"
@@ -105,7 +104,6 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
-                    android:layout_marginRight="15dp"
                     android:textColor="@color/text_drak_black"
                     android:textSize="@dimen/text_size_15"
                     android:text="选定"
@@ -116,7 +114,6 @@
                     android:id="@+id/ll_num"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
-                    android:layout_marginRight="15dp"
                     android:background="@drawable/bg_order"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -178,7 +175,7 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:paddingRight="@dimen/space_15"
+            android:layout_marginRight="@dimen/space_5"
             android:paddingLeft="@dimen/space_15"
             android:background="@color/bg_background_white"
             android:layout_width="match_parent"
@@ -227,9 +224,10 @@
             android:background="@drawable/bg_order"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/space_10"
+            android:layout_marginBottom="@dimen/space_10"
+            android:layout_marginTop="@dimen/space_10"
             android:layout_marginLeft="@dimen/space_25"
-            android:layout_marginRight="@dimen/space_25"
+            android:layout_marginRight="@dimen/space_5"
             >
 
             <TextView

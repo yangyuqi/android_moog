@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -48,6 +49,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.greenrobot.event.EventBus;
+import de.greenrobot.event.Subscribe;
 import okhttp3.Request;
 
 public class SalesActivity extends BaseActivity {
@@ -80,6 +82,7 @@ public class SalesActivity extends BaseActivity {
         DisplayMetrics outMetrics = new DisplayMetrics();
         manager.getDefaultDisplay().getMetrics(outMetrics);
         widWidth = outMetrics.widthPixels;
+        EventBus.getDefault().register(this);
         initView();
 
         initClick();
@@ -289,6 +292,11 @@ public class SalesActivity extends BaseActivity {
                     OrderProductDatasBean datasBean = new OrderProductDatasBean();
                     datasBean.setNum("" + scanDatasBean.getNum());
                     datasBean.setProductId(scanDatasBean.getId());
+                    if (scanDatasBean.isSpecial()){
+                        datasBean.setCodePU(scanDatasBean.getCodePU());
+                        datasBean.setAddPrice(scanDatasBean.getAddPrice());
+                        datasBean.setSquare(String.valueOf(scanDatasBean.getSquare()));
+                    }
                     orderProductDatasBeans.add(datasBean);
                 } else {
                     OrderSetMealDatasBean mealDatasBean = new OrderSetMealDatasBean();
@@ -352,6 +360,11 @@ public class SalesActivity extends BaseActivity {
                     datasBean.setNum("" + scanDatasBean.getNum());
                     allCount = allCount+scanDatasBean.getNum();
                     datasBean.setProductId(scanDatasBean.getId());
+                    if (scanDatasBean.isSpecial()){
+                        datasBean.setCodePU(scanDatasBean.getCodePU());
+                        datasBean.setAddPrice(scanDatasBean.getAddPrice());
+                        datasBean.setSquare(String.valueOf(scanDatasBean.getSquare()));
+                    }
                     orderProductDatasBeans.add(datasBean);
                 }else {
                     OrderSetMealDatasBean mealDatasBean = new OrderSetMealDatasBean();
@@ -451,6 +464,7 @@ public class SalesActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
 
@@ -468,5 +482,14 @@ public class SalesActivity extends BaseActivity {
             assetId = data.getStringExtra("assetId");
         }
         initData();
+    }
+
+    @Subscribe
+    public void onEvent(ArrayList<ScanDatasBean> beanArrayList){
+        if (beanArrayList!=null){
+            Log.e("sssssssss",gson.toJson(beanArrayList));
+            data = beanArrayList;
+            initData();
+        }
     }
 }

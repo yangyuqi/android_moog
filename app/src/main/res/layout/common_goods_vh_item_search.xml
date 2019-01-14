@@ -10,19 +10,27 @@
         android:overScrollMode="never"
         android:scrollbars="none"
         android:layout_width="match_parent"
-        android:layout_height="105dp">
+        android:layout_height="wrap_content">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
             >
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
             <RelativeLayout
+                android:paddingBottom="@dimen/space_15"
+                android:paddingTop="@dimen/space_15"
                 android:paddingRight="@dimen/space_20"
                 android:id="@+id/rl_width"
                 android:background="@color/bg_background_white"
                 android:layout_width="wrap_content"
-                android:layout_height="105dp">
+                android:layout_height="wrap_content">
 
                 <ImageView
                     android:id="@+id/iv_icon"
@@ -48,6 +56,17 @@
                         android:textColor="@color/text_drak_black"
                         android:textSize="@dimen/text_size_16"
                         android:text="ywqeqw"
+                        />
+
+                    <TextView
+                        android:layout_alignParentRight="true"
+                        android:id="@+id/tv_specail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_drak_black"
+                        android:textSize="@dimen/text_size_16"
+                        android:text=""
+                        android:visibility="gone"
                         />
 
                     <TextView
@@ -77,7 +96,6 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentRight="true"
-                        android:layout_marginRight="15dp"
                         android:textColor="@color/text_blue"
                         android:textSize="@dimen/text_size_15"
                         android:text="选定"
@@ -90,10 +108,9 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentRight="true"
-                        android:layout_marginRight="15dp"
                         android:textColor="@color/text_drak_black"
                         android:textSize="@dimen/text_size_15"
-                        android:text="选定"
+                        android:text=""
                         />
 
                     <LinearLayout
@@ -101,7 +118,6 @@
                         android:id="@+id/ll_num"
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentRight="true"
-                        android:layout_marginRight="15dp"
                         android:background="@drawable/bg_order"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -161,6 +177,106 @@
 
 
             </RelativeLayout>
+
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/space_divider_2"
+                        android:background="@color/bg_all"/>
+
+                    <LinearLayout
+                        android:layout_marginTop="@dimen/space_10"
+                        android:visibility="gone"
+                        android:layout_marginLeft="@dimen/space_15"
+                        android:layout_marginBottom="@dimen/space_10"
+                        android:layout_alignParentBottom="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:id="@+id/ll_has_code"
+                        >
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            >
+
+                            <TextView
+                                android:id="@+id/tv_zengxiang"
+                                android:autoLink="all"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/colorPrimaryDark"
+                                android:text="增项加价 :"
+                                android:textSize="@dimen/text_size_14"
+                                />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_marginTop="@dimen/space_3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            >
+
+                            <TextView
+                                android:id="@+id/tv_pu_code"
+                                android:autoLink="all"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/colorPrimaryDark"
+                                android:text="PU单号 :"
+                                android:textSize="@dimen/text_size_14"
+                                />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_marginTop="@dimen/space_10"
+                        android:id="@+id/ll_no_code"
+                        android:visibility="gone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/space_25"
+                        android:layout_marginBottom="@dimen/space_10"
+                        android:orientation="horizontal"
+                        >
+
+                        <TextView
+                            android:id="@+id/tv_add_price"
+                            android:background="@drawable/bg_special_color"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:gravity="center"
+                            android:text="增项加价"
+                            android:layout_width="85dp"
+                            android:layout_height="@dimen/space_26" />
+
+                        <TextView
+                            android:id="@+id/tv_add_code"
+                            android:background="@drawable/bg_special_color"
+                            android:layout_marginLeft="@dimen/space_10"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:gravity="center"
+                            android:text="PU单号"
+                            android:layout_width="85dp"
+                            android:layout_height="@dimen/space_26" />
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"

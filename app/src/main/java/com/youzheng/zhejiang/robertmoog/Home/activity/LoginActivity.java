@@ -32,7 +32,7 @@ public class LoginActivity extends BaseActivity {
     private EditText edt_phone ,edt_password ,edt_code ;
     Button btn_send_code ;
     private MyCountDownLoginTimer timer ;
-    String type ;
+    String type ="2" ;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -136,7 +136,7 @@ public class LoginActivity extends BaseActivity {
     private void initLogin(String code ,String type) {
         String name , password ;
         if (type!=null){
-            name = edt_phone.getText().toString() ;
+            name = edt_phone.getText().toString();
             password =  PublicUtils.getSHA256StrJava(code);
         }else {
             name = edt_phone.getText().toString()+"_"+code;

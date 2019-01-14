@@ -30,6 +30,58 @@ public class ScanDatasBean implements Serializable{
     private boolean isSpecial;
     private int num = 1;//添加数量
 
+    private String addPrice ;//特殊单品
+    private double square =0.001;//特殊单品
+    private String codePU ;//特殊单品
+    private String square__suffix="平方";
+    private int square_num = 1 ;
+    private String addPrice__suffix="增项加价 : ¥ ";
+    private String codePU__suffix = "PU单号 : " ;
+
+    public int getSquare_num() {
+        return square_num;
+    }
+
+    public void setSquare_num(int square_num) {
+        this.square_num = square_num;
+    }
+
+    public String getSquare__suffix() {
+        return square__suffix;
+    }
+
+    public String getAddPrice__suffix() {
+        return addPrice__suffix;
+    }
+
+    public String getCodePU__suffix() {
+        return codePU__suffix;
+    }
+
+    public String getAddPrice() {
+        return addPrice;
+    }
+
+    public void setAddPrice(String addPrice) {
+        this.addPrice = addPrice;
+    }
+
+    public double getSquare() {
+        return square;
+    }
+
+    public void setSquare(double square) {
+        this.square = square;
+    }
+
+    public String getCodePU() {
+        return codePU;
+    }
+
+    public void setCodePU(String codePU) {
+        this.codePU = codePU;
+    }
+
     public int getNum() {
         return num;
     }

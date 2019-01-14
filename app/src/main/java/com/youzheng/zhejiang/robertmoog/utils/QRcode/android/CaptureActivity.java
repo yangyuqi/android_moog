@@ -125,7 +125,6 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
             window.setStatusBarColor(Color.BLACK);
         }
 
-        EventBus.getDefault().register(this);
 
         /*先获取配置信息*/
         try {
@@ -220,6 +219,7 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
                             Intent intent = new Intent(CaptureActivity.this, SalesActivity.class);
                             intent.putExtra("customerId", customerId);
                             intent.putExtra("data", datasBeanList);
+                            Log.e("ssssssssss",gson.toJson(datasBeanList));
                             startActivity(intent);
                         }else {
                             addIntention();
@@ -357,7 +357,6 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
     protected void onDestroy() {
         inactivityTimer.shutdown();
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -471,27 +470,4 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
 
 
 
-    @Subscribe
-    public void onEvent(ScanDatasBean scanDatasBean){
-        if (scanDatasBean!=null){
-            if (datasBeanList.size()>0) {
-                for (int i = 0 ;i<datasBeanList.size();i++) {
-                    ScanDatasBean datasBean = datasBeanList.get(i);
-                    if (scanDatasBean.getId().equals(datasBean.getId())) {
-                        datasBean.setNum(datasBean.getNum() + 1);
-                        datasBeanList.set(i,datasBean);
-                    } else {
-                        datasBeanList.add(scanDatasBean);
-                    }
-                }
-            }else {
-                datasBeanList.add(scanDatasBean);
-            }
-            if (type==null) {
-                addapter.setDate(datasBeanList, mContext, "2", widWidth);
-            }else {
-                addapter.setDate(datasBeanList,mContext,"4",widWidth);
-            }
-        }
-    }
 }
