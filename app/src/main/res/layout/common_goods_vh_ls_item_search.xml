@@ -136,8 +136,8 @@
                         android:layout_height="match_parent" />
 
                     <EditText
+                        android:maxLength="10"
                         android:textColor="@color/text_main"
-                        android:enabled="false"
                         android:id="@+id/edt_num"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -187,7 +187,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:text="hhhhhhhhhhhhhhh"
+                android:text=""
                 android:textSize="@dimen/text_size_16"
                 android:id="@+id/tv_golden"
                 />

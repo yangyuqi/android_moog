@@ -5,8 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.SpannableString;
+import android.text.TextWatcher;
 import android.text.style.UnderlineSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
@@ -174,6 +178,46 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 }
             });
 
+            ((CommonGoodsViewHolder) holder).edt_num.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (s.toString().equals("")){
+                        ((CommonGoodsViewHolder) holder).edt_num.setText("1");
+                        return;
+                    }
+                    if (Integer.parseInt(s.toString().trim())<1){
+                        return;
+                    }
+                    if (s.toString().startsWith("0")){
+                        ((CommonGoodsViewHolder) holder).edt_num.setText(s.toString().substring(1));
+                        return;
+                    }
+
+                    if (objects.get(position).isSpecial()){
+                        if (type.equals("2")) {
+                            objects.get(position).setSquare(Integer.parseInt(s.toString())*0.001);
+                            objects.get(position).setSquare_num(Integer.parseInt(s.toString()));
+                            ((CommonGoodsViewHolder) holder).tv_specail.setText(Integer.parseInt(s.toString())*0.001+objects.get(position).getSquare__suffix());
+                        }else if (type.equals("3")){
+                            objects.get(position).setNum(Integer.parseInt(s.toString()));
+                            EventBus.getDefault().post(objects);
+                        }
+                    }else {
+                        objects.get(position).setNum(Integer.parseInt(s.toString()));
+                    }
+                }
+            });
+
             ((CommonGoodsViewHolder) holder).tv_reduce.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -293,6 +337,34 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         objects.get(position).setNum(objects.get(position).getNum()-1) ;
                         notifyDataSetChanged();
                     }
+                }
+            });
+
+            ((CommonGoodsTypeViewHolder) holder).edt_num.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (s.toString().equals("")){
+                        ((CommonGoodsTypeViewHolder) holder).edt_num.setText("1");
+                        return;
+                    }
+                    if (Integer.parseInt(s.toString().trim())<1){
+                        return;
+                    }
+                    if (s.toString().startsWith("0")){
+                        ((CommonGoodsTypeViewHolder) holder).edt_num.setText(s.toString().substring(1));
+                        return;
+                    }
+                    objects.get(position).setNum(Integer.parseInt(s.toString()));
                 }
             });
         }

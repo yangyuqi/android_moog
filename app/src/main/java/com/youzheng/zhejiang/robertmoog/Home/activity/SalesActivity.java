@@ -40,6 +40,7 @@ import com.youzheng.zhejiang.robertmoog.Model.Home.ScanDatasBean;
 import com.youzheng.zhejiang.robertmoog.R;
 
 import com.youzheng.zhejiang.robertmoog.Store.activity.StoreOrderlistDetailActivity;
+import com.youzheng.zhejiang.robertmoog.utils.View.RemindDialog;
 
 
 import java.io.IOException;
@@ -92,7 +93,26 @@ public class SalesActivity extends BaseActivity {
         tv_confrim.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                orderConfirm();
+                if (PickUpStatus == null) {
+                    showToast("选择提货方式");
+                    return;
+                }
+                if (ShoppingMethod == null) {
+                    showToast("选择配送方式");
+                    return;
+                }
+                if (paymentMethod == null) {
+                    showToast("选择收款方式");
+                    return;
+                }
+
+                RemindDialog dialog = new RemindDialog(mContext, new RemindDialog.onSuccessClick() {
+                    @Override
+                    public void onSuccess() {
+                        orderConfirm();
+                    }
+                });
+                dialog.show();
             }
         });
         findViewById(R.id.rl_address).setOnClickListener(new View.OnClickListener() {
@@ -264,18 +284,6 @@ public class SalesActivity extends BaseActivity {
     }
 
     private void orderConfirm() {
-        if (PickUpStatus == null) {
-            showToast("选择提货方式");
-            return;
-        }
-        if (ShoppingMethod == null) {
-            showToast("选择配送方式");
-            return;
-        }
-        if (paymentMethod == null) {
-            showToast("选择收款方式");
-            return;
-        }
         Map<String, Object> map = new HashMap<>();
         map.put("isFreeGift", sv_present.isChecked());
         map.put("isMoen", sv_life.isChecked());
@@ -487,7 +495,6 @@ public class SalesActivity extends BaseActivity {
     @Subscribe
     public void onEvent(ArrayList<ScanDatasBean> beanArrayList){
         if (beanArrayList!=null){
-            Log.e("sssssssss",gson.toJson(beanArrayList));
             data = beanArrayList;
             initData();
         }
