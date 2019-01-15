@@ -295,42 +295,52 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
                 SingleOptionsPicker.openOptionsPicker(this, reason, tv_return_reason,"退货理由");
                 break;
             case R.id.tv_confirm_return:
-                confirmReturn();
+                if (tv_get_state.getText().equals("请选择")){
+                    showToast("请选择提货方式");
+                }else if (tv_return_type.getText().equals("请选择")){
+                    showToast("请选择退款方式");
+                }else if (tv_return_type.getText().equals("请选择")){
+                    showToast("请选择退货原因");
+                }else if (TextUtils.isEmpty(tv_really_cut_money.getText())){
+                    showToast("请填写实退金额");
+                }else {
+                    confirmReturn();
+                }
                 break;
         }
     }
 
     private void confirmReturn() {
 
-        if (tv_return_type.equals("银行卡")){
+        if (tv_return_type.getText().equals("银行卡")){
             paymentMethod="BANK_CARD";
-        }else if (tv_return_type.equals("微信")){
+        }else if (tv_return_type.getText().equals("微信")){
             paymentMethod="WECHAT";
-        }else if (tv_return_type.equals("支付宝")){
+        }else if (tv_return_type.getText().equals("支付宝")){
             paymentMethod="ALIPAY";
-        }else if (tv_return_type.equals("现金")){
+        }else if (tv_return_type.getText().equals("现金")){
             paymentMethod="CASH";
-        }else if (tv_return_type.equals("商场收款")){
+        }else if (tv_return_type.getText().equals("商场收款")){
             paymentMethod="MARKET";
-        }else if (tv_return_type.equals("其他")){
+        }else if (tv_return_type.getText().equals("其他")){
             paymentMethod="OTHER";
         }
 
-        if (tv_get_state.equals("全部已提")){
+        if (tv_get_state.getText().equals("全部已提")){
             pick_state="ALL_LIFT";
-        }else if (tv_get_state.equals("部分已提")){
+        }else if (tv_get_state.getText().equals("部分已提")){
             pick_state="LIMIT_LIFT";
-        }else if (tv_get_state.equals("未提")){
+        }else if (tv_get_state.getText().equals("未提")){
             pick_state="NO_LIFT";
         }
 
-        if (tv_return_reason.equals("质量问题")){
+        if (tv_return_reason.getText().equals("质量问题")){
             reasons="QUALITY_PROBLEM";
-        }else if (tv_return_reason.equals("品牌问题")){
+        }else if (tv_return_reason.getText().equals("品牌问题")){
             reasons="BRAND_PROBLEM";
-        }else if (tv_return_reason.equals("价格问题")){
+        }else if (tv_return_reason.getText().equals("价格问题")){
             reasons="PRICE_PROBLEM";
-        }else if (tv_return_reason.equals("其他")){
+        }else if (tv_return_reason.getText().equals("其他")){
             reasons="OTHER";
         }
         HashMap<String,Object> map=new HashMap<>();
@@ -338,13 +348,13 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
         map.put("paymentMethod",paymentMethod);
         map.put("reason",reasons);
         map.put("refundAmount",refundAmount);
-        map.put("actualRefundAmount",ReturnGoodsCounterAdapter.money_num);
+        map.put("actualRefundAmount",ReturnGoodsCounterAdapter.totals+"");
         map.put("id",orderID);
 
         if (list.size()!=0){
             for (ReturnGoodsCounter.ReturnOrderInfoBean.ProductListBean bean1:list){
                 ConfirmReturnRequest.ReshippedGoodsDataListBean requestBean=new ConfirmReturnRequest.ReshippedGoodsDataListBean();
-                requestBean.setActualRefundAmount(bean1.getOrderItemProductId());
+                requestBean.setOrderItemProductId(bean1.getOrderItemProductId());
                 requestBean.setCount(bean1.getCount()+"");
                 requestBean.setRefundAmount(bean1.getRefundAmount());
                 requestBean.setActualRefundAmount(bean1.getMoney()+"");
@@ -376,5 +386,6 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
         Intent intent=new Intent(this,ReturnGoodsSuccessActivity.class);
         intent.putExtra("returnid",success.getId());
         startActivity(intent);
+        finish();
     }
 }

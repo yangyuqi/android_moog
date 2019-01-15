@@ -94,6 +94,8 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
         id=getIntent().getStringExtra("returnGoodsId");
         isall=getIntent().getBooleanExtra("isAll",false);
         initView();
+        requests.clear();
+        initData(id,isall);
     }
 
     private void initView() {
@@ -124,7 +126,7 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
         LinearLayoutManager manager2 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rv_list_more.setLayoutManager(manager2);
         rv_list_more.setAdapter(moreChooseReturnGoodsAdapter);
-        //rv_list_more.addItemDecoration(new RecycleViewDivider(ChooseReturnGoodsActivity.this, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
+        rv_list_more.addItemDecoration(new RecycleViewDivider(ChooseReturnGoodsActivity.this, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
 
 
 
@@ -142,8 +144,7 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
     @Override
     protected void onResume() {
         super.onResume();
-        requests.clear();
-        initData(id,isall);
+
     }
 
     private void initData(String id, boolean isAll){
@@ -210,7 +211,6 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
             onelist.addAll(one);
             oneOrderDetailAdapter.setUI(one);
             requests.clear();
-
         }else {
             rv_list_one.setVisibility(View.GONE);
         }
@@ -243,11 +243,13 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
                 finish();
                 break;
             case R.id.tv_confirm:
+
                 if (morelist.size()!=0){
                     requests.addAll(moreChooseReturnGoodsAdapter.getRequests());
                 }
 
                 if (onelist.size()!=0){
+                    requests.clear();
                     for (ChooseReturnGoodsDetail.ReturnOrderInfoBean.ProductListBean oneBean:onelist){
                         ChooseGoodsRequest.OrderProductListBean request=new ChooseGoodsRequest.OrderProductListBean();
                         request.setCount(oneBean.getNum());
@@ -262,6 +264,7 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
                 intent.putExtra("is_all",isall);
                 intent.putExtra("orderID",orderid);
                 startActivity(intent);
+                finish();
                 break;
         }
     }
