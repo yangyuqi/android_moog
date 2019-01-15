@@ -161,7 +161,7 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
             }
 
             pager.setAdapter(adapter);
-            pager.setOffscreenPageLimit(listDataBeans.size() - 1);
+            //pager.setOffscreenPageLimit(listDataBeans.size() - 1);
 
             tab.setupWithViewPager(pager);
             //默认选中
