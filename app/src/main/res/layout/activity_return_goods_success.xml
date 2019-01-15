@@ -18,12 +18,14 @@
 
 
         <ImageView
+            android:id="@+id/iv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/group_55_1"
             />
 
         <TextView
+            android:id="@+id/tv_success"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="退货完成!"
@@ -66,12 +68,14 @@
 
 
             <ImageView
+                android:id="@+id/iv_pic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/group_55_2"
                 />
 
             <TextView
+                android:id="@+id/tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="退货单详情"
