@@ -139,6 +139,7 @@
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:background="@color/bg_background_white"
+        android:divider="@null"
         android:layout_height="wrap_content"></com.youzheng.zhejiang.robertmoog.Store.view.MyListView>
 
 

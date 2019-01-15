@@ -4,10 +4,13 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,9 +28,13 @@ public class ReturnGoodsCounterAdapter extends RecyclerView.Adapter<ReturnGoodsC
     private List<ReturnGoodsCounter.ReturnOrderInfoBean.ProductListBean> list;
     private LayoutInflater layoutInflater;
     private Context context;
-    public static int money_num;
+    public static int money_num=0;
     private List<ConfirmReturnRequest.ReshippedGoodsDataListBean> request=new ArrayList<>();
-
+    private String money;
+    private int  all;
+    private List<Integer> money_all=new ArrayList<>();
+    public static int totals=0;
+    private List<EditText> textList=new ArrayList<>();
 
     public ReturnGoodsCounterAdapter(List<ReturnGoodsCounter.ReturnOrderInfoBean.ProductListBean> list, Context context) {
         this.list = list;
@@ -37,6 +44,7 @@ public class ReturnGoodsCounterAdapter extends RecyclerView.Adapter<ReturnGoodsC
 
     public void setUI(List<ReturnGoodsCounter.ReturnOrderInfoBean.ProductListBean> list){
         this.list = list;
+        money_all.clear();
         notifyDataSetChanged();
     }
 
@@ -68,6 +76,12 @@ public class ReturnGoodsCounterAdapter extends RecyclerView.Adapter<ReturnGoodsC
             oneHolder.tv_area.setVisibility(View.GONE);
 
         }
+        //ReturnGoodsCounterActivity.tv_really_cut_money.setText("");
+
+//        bean.setMoney(bean.getMoney());
+        oneHolder.et_money.setTag(position);
+        textList.add((EditText) oneHolder.et_money);
+
 
         oneHolder.et_money.addTextChangedListener(new TextWatcher() {
             @Override
@@ -77,21 +91,74 @@ public class ReturnGoodsCounterAdapter extends RecyclerView.Adapter<ReturnGoodsC
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                  if (money.length()==0){
+//                      money_all.clear();
+//                      totals=0;
+//                      all=0;
+//                      ReturnGoodsCounterActivity.tv_really_cut_money.setText("");
+//                  }
 
+
+//                   for (ReturnGoodsCounter.ReturnOrderInfoBean.ProductListBean productListBean:list){
+//                       money_num+=productListBean.getMoney()*productListBean.getCount();
+//                   }
+
+
+              //  notifyDataSetChanged();
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                   String money=oneHolder.et_money.getText().toString();
-                   bean.setMoney(Integer.parseInt(money));
-                   for (ReturnGoodsCounter.ReturnOrderInfoBean.ProductListBean productListBean:list){
-                       money_num+=productListBean.getMoney()*productListBean.getCount();
-                   }
-                ReturnGoodsCounterActivity.tv_really_cut_money.setText(context.getString(R.string.label_money)+money_num+"");
+                money_all.clear();
+                totals=0;
+                //money=oneHolder.et_money.getText().toString().trim();
+                Log.e("111",money+"内容");
+
+                     for (EditText text:textList){
+                         money=text.getText().toString().trim();
+                         if (money.length()!=0){
+                             // int pos= (int) text.getTag();
+
+                             int num_mon= Integer.parseInt(money);
+                             int count=bean.getCount();
+                             int alls=num_mon*count;
+
+                             Log.e("111",alls+"总和");
+
+                             money_all.add(alls);
+
+                             for (int i = 0; i <money_all.size() ; i++) {
+                                 all=money_all.get(i);
+                                 Log.e("111",all+"集合");
+
+                             }
+                             totals=all+totals;
+                             Log.e("111",totals+"计算总和");
+                             ReturnGoodsCounterActivity.tv_really_cut_money.setText(context.getString(R.string.label_money)+totals+"");
+
+                         }else {
+                             money_all.clear();
+                             totals=0;
+                             all=0;
+                             ReturnGoodsCounterActivity.tv_really_cut_money.setText("");
+                         }
+                     }
+
+
+                    //String money=oneHolder.et_money.getText().toString().trim();
+
+
             }
         });
 
 
+    }
+
+
+
+    public List<EditText> getEdList(){
+
+        return textList;
     }
 
 
