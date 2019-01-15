@@ -56,7 +56,8 @@ public class UnqualifiedAdapter extends BaseAdapter {
         }else {
             viewHolder= (ViewHolder) convertView.getTag();
         }
-        Glide.with(context).load(list.get(position).getImageImgUrl()).into(viewHolder.iv_photo);
+        UnqualifiedContent.PatrolShopProblemDetailBean.QuestionImagesBean bean=list.get(position);
+        Glide.with(context).load(bean.getImageImgUrl()).error(R.mipmap.group_9_1).into(viewHolder.iv_photo);
         return convertView;
     }
     class ViewHolder{

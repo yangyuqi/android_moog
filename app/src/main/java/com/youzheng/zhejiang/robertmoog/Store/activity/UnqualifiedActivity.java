@@ -75,6 +75,12 @@ public class UnqualifiedActivity extends BaseActivity implements View.OnClickLis
         adapter=new UnqualifiedAdapter(list,this);
         gv_pic.setAdapter(adapter);
 
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         initData();
     }
 
