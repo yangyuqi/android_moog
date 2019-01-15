@@ -26,7 +26,7 @@ public class ReturnGoodsSuccessActivity extends BaseActivity implements View.OnC
     private ImageView iv_next;
     private RelativeLayout layout_header;
     private LinearLayout lin_to_detail;
-    private int id;
+    private String id;
     private ImageView iv_title;
     /**
      * 退货完成!
@@ -43,7 +43,7 @@ public class ReturnGoodsSuccessActivity extends BaseActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_return_goods_success);
-        id = getIntent().getIntExtra("returnid", 0);
+        id = getIntent().getStringExtra("returnid");
         type=getIntent().getStringExtra("type");
         initView();
     }
@@ -68,9 +68,6 @@ public class ReturnGoodsSuccessActivity extends BaseActivity implements View.OnC
             tv_success.setText("退货完成!");
             iv_pic.setImageResource(R.mipmap.group_55_2);
             tv_name.setText("退货单详情");
-
-
-
         }else if (type.equals("2")){
             textHeadTitle.setText("订单完成");
             iv_title.setImageResource(R.mipmap.group_153_1);

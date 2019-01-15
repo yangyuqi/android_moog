@@ -81,13 +81,13 @@ public class ReturnGoodsDetailActivity extends BaseActivity implements View.OnCl
      * 吾问无为谓吾问无为谓
      */
     private TextView tv_reason_content;
-    private int regoodsid;
+    private String regoodsid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_return_goods_detail);
-        regoodsid=getIntent().getIntExtra("returnGoodsId",0);
+        regoodsid=getIntent().getStringExtra("returnGoodsId");
         initView();
     }
 
@@ -126,7 +126,7 @@ public class ReturnGoodsDetailActivity extends BaseActivity implements View.OnCl
     @Override
     protected void onResume() {
         super.onResume();
-        initData(regoodsid);
+        initData(Integer.parseInt(regoodsid));
 
     }
 
@@ -161,7 +161,7 @@ public class ReturnGoodsDetailActivity extends BaseActivity implements View.OnCl
 
     private void setData(ReturnGoodsDetail returnGoodsDetail) {
 
-        if (returnGoodsDetail==null) return;;
+        if (returnGoodsDetail==null) return;
         if (returnGoodsDetail.getReturnItem()==null) return;
         if (returnGoodsDetail.getReturnItem().getProductList()==null) return;
 
