@@ -393,7 +393,7 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
 
     private void toSuccess(ReturnGoodsSuccess success) {
         Intent intent=new Intent(this,ReturnGoodsSuccessActivity.class);
-        intent.putExtra("returnid",success.getId());
+        intent.putExtra("returnid",success.getId()+"");
         intent.putExtra("type","1");
         startActivity(intent);
         finish();
