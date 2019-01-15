@@ -74,7 +74,7 @@ public class ReturnGoodsSuccessActivity extends BaseActivity implements View.OnC
         }else if (type.equals("2")){
             textHeadTitle.setText("订单完成");
             iv_title.setImageResource(R.mipmap.group_153_1);
-            tv_success.setText("退货完成!");
+            tv_success.setText("订单完成!");
             iv_pic.setImageResource(R.mipmap.group_153_2);
             tv_name.setText("订单详情");
         }
