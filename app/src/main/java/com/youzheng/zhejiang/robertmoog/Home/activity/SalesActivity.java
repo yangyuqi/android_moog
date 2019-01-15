@@ -39,6 +39,7 @@ import com.youzheng.zhejiang.robertmoog.Model.Home.SaleDataBean;
 import com.youzheng.zhejiang.robertmoog.Model.Home.ScanDatasBean;
 import com.youzheng.zhejiang.robertmoog.R;
 
+import com.youzheng.zhejiang.robertmoog.Store.activity.ReturnGoods.ReturnGoodsSuccessActivity;
 import com.youzheng.zhejiang.robertmoog.Store.activity.StoreOrderlistDetailActivity;
 import com.youzheng.zhejiang.robertmoog.utils.View.RemindDialog;
 
@@ -330,8 +331,9 @@ public class SalesActivity extends BaseActivity {
                 BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                 if (baseModel.getCode()==PublicUtils.code){
                     OrderGoodsId goodsId = gson.fromJson(gson.toJson(baseModel.getDatas()),OrderGoodsId.class);
-                    Intent intent = new Intent(mContext, StoreOrderlistDetailActivity.class);
-                    intent.putExtra("OrderGoodsId",String.valueOf(goodsId.getId()));
+                    Intent intent = new Intent(mContext, ReturnGoodsSuccessActivity.class);
+                    intent.putExtra("returnid",String.valueOf(goodsId.getId()));
+                    intent.putExtra("type","2");//卖货柜台
                     startActivity(intent);
                     finish();
                 }else {
