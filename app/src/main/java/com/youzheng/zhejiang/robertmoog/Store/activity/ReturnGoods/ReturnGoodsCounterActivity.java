@@ -156,6 +156,8 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
                 if (baseModel.getCode()==PublicUtils.code){
                     ReturnGoodsCounter counter = gson.fromJson(gson.toJson(baseModel.getDatas()),ReturnGoodsCounter.class);
                     setData(counter);
+                }else {
+                    showToast(baseModel.getMsg());
                 }
             }
         });

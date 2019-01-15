@@ -243,28 +243,40 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
                 finish();
                 break;
             case R.id.tv_confirm:
-
+                requests.clear();
                 if (morelist.size()!=0){
-                    requests.addAll(moreChooseReturnGoodsAdapter.getRequests());
+                    if (MoreChooseReturnGoodsAdapter.productListBeanList.size()!=0){
+                        requests.addAll(moreChooseReturnGoodsAdapter.getRequests());
+
+                        Intent intent=new Intent(this,ReturnGoodsCounterActivity.class);
+                        intent.putExtra("request", (Serializable) requests);
+                        intent.putExtra("is_all",isall);
+                        intent.putExtra("orderID",orderid);
+                        startActivity(intent);
+                        finish();
+                    }else {
+                        showToast("请选择商品数量");
+                    }
                 }
 
                 if (onelist.size()!=0){
-                    requests.clear();
+
                     for (ChooseReturnGoodsDetail.ReturnOrderInfoBean.ProductListBean oneBean:onelist){
                         ChooseGoodsRequest.OrderProductListBean request=new ChooseGoodsRequest.OrderProductListBean();
                         request.setCount(oneBean.getNum());
                         request.setOrderItemProductId(oneBean.getOrderItemProductId());
                         requests.add(request);
                     }
+                    Intent intent=new Intent(this,ReturnGoodsCounterActivity.class);
+                    intent.putExtra("request", (Serializable) requests);
+                    intent.putExtra("is_all",isall);
+                    intent.putExtra("orderID",orderid);
+                    startActivity(intent);
+                    finish();
                 }
 
                 Log.e("11231",requests.size()+"");
-                Intent intent=new Intent(this,ReturnGoodsCounterActivity.class);
-                intent.putExtra("request", (Serializable) requests);
-                intent.putExtra("is_all",isall);
-                intent.putExtra("orderID",orderid);
-                startActivity(intent);
-                finish();
+
                 break;
         }
     }

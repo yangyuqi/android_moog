@@ -82,8 +82,11 @@ public class SmallChooseReturnGoodsAdapter extends BaseAdapter {
         viewHolder.tv_money.setText(context.getString(R.string.label_money) + bean.getRefundAmount());
         viewHolder.tv_return_number.setText(bean.getCount() + "");
 
-        viewHolder.tv_number.setText("1");//默认是1
-
+        if (bean.getCount()==0){
+            viewHolder.tv_number.setText("0");
+        }else {
+            viewHolder.tv_number.setText("1");//默认为1
+        }
         final String num=viewHolder.tv_number.getText().toString();
         addnumber= Integer.parseInt(num);
         bean.setNum(addnumber+"");

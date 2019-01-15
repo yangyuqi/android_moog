@@ -31,7 +31,8 @@ public class MoreChooseReturnGoodsAdapter extends RecyclerView.Adapter<MoreChoos
     private Context context;
     private SmallChooseReturnGoodsAdapter adapter;
     public static List<ChooseGoodsRequest.OrderProductListBean> requests=new ArrayList<>();
-    private List<ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean.ProductListBeanX> productListBeanList;
+    public static List<ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean.ProductListBeanX> productListBeanList;
+    public  static boolean isShow=false;
    // private List<OrderlistDetail.OrderItemDataBean.OrderSetMealListBean.ProductListBean> smalllist;
 
     public MoreChooseReturnGoodsAdapter(List<ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean> list,
@@ -39,6 +40,7 @@ public class MoreChooseReturnGoodsAdapter extends RecyclerView.Adapter<MoreChoos
         this.list = list;
         this.context = context;
         layoutInflater = LayoutInflater.from(context);
+        productListBeanList = new ArrayList<>();
     }
 
     public void setUI(List<ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean> list) {
@@ -67,7 +69,7 @@ public class MoreChooseReturnGoodsAdapter extends RecyclerView.Adapter<MoreChoos
         moreHolder.iv_isShow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                 productListBeanList = new ArrayList<>();
+
                 if (list.size() > 0) {
                     if (list.get(position).isIsexpress()) {
                         productListBeanList.clear();
