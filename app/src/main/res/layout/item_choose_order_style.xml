@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:paddingLeft="15dp"
-            android:text="2016/01/19 09:19:04"
+            android:text=""
             android:textColor="@color/text_main"
             android:textSize="13sp"
             android:textStyle="bold" />
@@ -40,7 +40,7 @@
                 android:id="@+id/tv_order_num"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="987656201801020002"
+                android:text=""
                 android:textColor="@color/text_main"
                 android:textSize="13sp"
                 android:textStyle="bold" />
@@ -81,7 +81,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
-                android:text="共1件商品"
+                android:text=""
                 android:textColor="@color/text_main"
                 android:textSize="13sp" />
 
@@ -97,7 +97,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="15dp"
-                android:text="￥1314"
+                android:text=""
                 android:textColor="@color/text_golden2"
                 android:textSize="13sp"
                 android:textStyle="bold" />

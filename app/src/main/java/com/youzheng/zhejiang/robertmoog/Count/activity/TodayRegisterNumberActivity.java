@@ -54,7 +54,7 @@ public class TodayRegisterNumberActivity extends BaseActivity implements View.On
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
-        textHeadTitle.setText("今日客户注册数");
+        textHeadTitle.setText(getString(R.string.today_register_number));
         textHeadNext = (TextView) findViewById(R.id.textHeadNext);
         iv_next = (ImageView) findViewById(R.id.iv_next);
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);
@@ -94,6 +94,8 @@ public class TodayRegisterNumberActivity extends BaseActivity implements View.On
                 if (baseModel.getCode()==PublicUtils.code){
                     TodayRegisterList registerList = gson.fromJson(gson.toJson(baseModel.getDatas()),TodayRegisterList.class);
                     setData(registerList);
+                }else {
+                    showToast(baseModel.getMsg());
                 }
             }
         });

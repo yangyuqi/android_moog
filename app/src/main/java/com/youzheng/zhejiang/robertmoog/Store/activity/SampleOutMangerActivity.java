@@ -87,7 +87,7 @@ public class SampleOutMangerActivity extends BaseCameraActivity implements View.
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
-        textHeadTitle.setText("出样发布");
+        textHeadTitle.setText(getString(R.string.sample_out_commit));
         textHeadNext = (TextView) findViewById(R.id.textHeadNext);
         iv_next = (ImageView) findViewById(R.id.iv_next);
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);

@@ -95,7 +95,7 @@ public class ReturnGoodsDetailActivity extends BaseActivity implements View.OnCl
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
-        textHeadTitle.setText("退货单详情");
+        textHeadTitle.setText(getString(R.string.return_goods_detail));
         textHeadNext = (TextView) findViewById(R.id.textHeadNext);
         iv_next = (ImageView) findViewById(R.id.iv_next);
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);
@@ -144,11 +144,13 @@ public class ReturnGoodsDetailActivity extends BaseActivity implements View.OnCl
 
             @Override
             public void onResponse(String response) {
-                Log.e("订单详情",response);
+                Log.e("退货单详情",response);
                 BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                 if (baseModel.getCode()==PublicUtils.code){
                     ReturnGoodsDetail returnGoodsDetail = gson.fromJson(gson.toJson(baseModel.getDatas()),ReturnGoodsDetail.class);
                     setData(returnGoodsDetail);
+                }else {
+                    showToast(baseModel.getMsg());
                 }
             }
         });

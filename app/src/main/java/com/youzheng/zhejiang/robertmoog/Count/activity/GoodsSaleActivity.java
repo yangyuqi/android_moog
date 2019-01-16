@@ -105,7 +105,7 @@ public class GoodsSaleActivity extends BaseActivity implements View.OnClickListe
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
-        textHeadTitle.setText("商品销售数量");
+        textHeadTitle.setText(getString(R.string.goods_sale_number));
         textHeadNext = (TextView) findViewById(R.id.textHeadNext);
         iv_next = (ImageView) findViewById(R.id.iv_next);
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);
@@ -161,6 +161,8 @@ public class GoodsSaleActivity extends BaseActivity implements View.OnClickListe
                 if (baseModel.getCode()==PublicUtils.code){
                     GoodsSale goodsSale = gson.fromJson(gson.toJson(baseModel.getDatas()),GoodsSale.class);
                     setData(goodsSale);
+                }else {
+                    showToast(baseModel.getMsg());
                 }
             }
         });
@@ -180,7 +182,7 @@ public class GoodsSaleActivity extends BaseActivity implements View.OnClickListe
         }else {
             showToast(getString(R.string.load_list_erron));
         }
-        pr_list.setPullLoadMoreCompleted();
+
 
     }
 

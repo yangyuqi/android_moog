@@ -97,7 +97,7 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
         btnBack = (ImageView) findViewById(R.id.btnBack);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
         textHeadNext = (TextView) findViewById(R.id.textHeadNext);
-        textHeadTitle.setText("商品列表");
+        textHeadTitle.setText(getString(R.string.goods_list));
         iv_next = (ImageView) findViewById(R.id.iv_next);
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);
         tv_search = (EditText) findViewById(R.id.tv_search);
@@ -134,6 +134,8 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
                 if (baseModel.getCode() == PublicUtils.code) {
                     GoodsType goodsType = gson.fromJson(gson.toJson(baseModel.getDatas()), GoodsType.class);
                     setData(goodsType);
+                }else {
+                    showToast(baseModel.getMsg());
                 }
             }
         });
@@ -217,6 +219,8 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
                     if (baseModel.getCode()==PublicUtils.code){
                         GoodsList goodsList = gson.fromJson(gson.toJson(baseModel.getDatas()),GoodsList.class);
                         setSearchData(goodsList);
+                    }else {
+                        showToast(baseModel.getMsg());
                     }
                 }
             });

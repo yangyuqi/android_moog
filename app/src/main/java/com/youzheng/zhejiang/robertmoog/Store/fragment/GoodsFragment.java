@@ -102,7 +102,7 @@ public class GoodsFragment extends BaseFragment {
             showToast(getString(R.string.load_list_erron));
         }
 
-        pr_goods.setPullLoadMoreCompleted();
+
 
     }
 

@@ -133,7 +133,7 @@ public class StoreSalesNumberActivity extends BaseActivity implements View.OnCli
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
-        textHeadTitle.setText("门店销量");
+        textHeadTitle.setText(getString(R.string.store_sale));
         textHeadNext = (TextView) findViewById(R.id.textHeadNext);
         iv_next = (ImageView) findViewById(R.id.iv_next);
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);
@@ -182,6 +182,8 @@ public class StoreSalesNumberActivity extends BaseActivity implements View.OnCli
                 if (baseModel.getCode()==PublicUtils.code){
                     ShopSale shopSale = gson.fromJson(gson.toJson(baseModel.getDatas()),ShopSale.class);
                     setData(shopSale);
+                }else {
+                    showToast(baseModel.getMsg());
                 }
 
             }
@@ -214,7 +216,7 @@ public class StoreSalesNumberActivity extends BaseActivity implements View.OnCli
             showToast(getString(R.string.load_list_erron));
         }
 
-        pr_list.setPullLoadMoreCompleted();
+
     }
 
     @Override

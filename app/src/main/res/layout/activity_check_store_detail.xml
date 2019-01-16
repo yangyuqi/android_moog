@@ -44,7 +44,7 @@
             android:id="@+id/tv_result_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="整体合规，但需要注意展厅整洁问题"
+            android:text=""
             android:textSize="13sp"
             android:paddingLeft="5dp"
             android:textColor="@color/text_main"/>

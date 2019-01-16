@@ -62,7 +62,7 @@ public class UnqualifiedActivity extends BaseActivity implements View.OnClickLis
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
-        textHeadTitle.setText("不合格原因");
+        textHeadTitle.setText(getString(R.string.not_good_reason));
         textHeadNext = (TextView) findViewById(R.id.textHeadNext);
         iv_next = (ImageView) findViewById(R.id.iv_next);
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);
@@ -102,6 +102,8 @@ public class UnqualifiedActivity extends BaseActivity implements View.OnClickLis
                 if (baseModel.getCode()==PublicUtils.code){
                     UnqualifiedContent unqualifiedContent = gson.fromJson(gson.toJson(baseModel.getDatas()),UnqualifiedContent.class);
                     setData(unqualifiedContent);
+                }else {
+                    showToast(baseModel.getMsg());
                 }
             }
 

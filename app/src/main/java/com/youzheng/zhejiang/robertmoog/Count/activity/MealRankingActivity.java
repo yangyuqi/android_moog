@@ -126,7 +126,7 @@ public class MealRankingActivity extends BaseActivity implements View.OnClickLis
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
-        textHeadTitle.setText("套餐排名");
+        textHeadTitle.setText(getString(R.string.meal_ranking));
         textHeadNext = (TextView) findViewById(R.id.textHeadNext);
         iv_next = (ImageView) findViewById(R.id.iv_next);
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);
@@ -187,6 +187,8 @@ public class MealRankingActivity extends BaseActivity implements View.OnClickLis
                 if (baseModel.getCode()==PublicUtils.code){
                     MealRankingList mealRankingList = gson.fromJson(gson.toJson(baseModel.getDatas()),MealRankingList.class);
                     setData(mealRankingList);
+                }else {
+                    showToast(baseModel.getMsg());
                 }
             }
         });
@@ -204,7 +206,7 @@ public class MealRankingActivity extends BaseActivity implements View.OnClickLis
         }else {
             showToast(getString(R.string.load_list_erron));
         }
-        pr_list.setPullLoadMoreCompleted();
+
 
     }
 

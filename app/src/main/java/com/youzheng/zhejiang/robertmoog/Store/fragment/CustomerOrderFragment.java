@@ -97,8 +97,10 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
         }
          token = (String) SharedPreferencesUtils.getParam(mContext, PublicUtils.access_token,"");
         initView();
+        initData(page,pageSize,orderCode,timeQuantum,isCustomer,type);
         initGetDate();
         setListener();
+
         return view;
     }
 
@@ -127,7 +129,7 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
     @Override
     public void onResume() {
         super.onResume();
-        initData(page,pageSize,orderCode,timeQuantum,isCustomer,type);
+
     }
 
     private void initView() {
@@ -156,12 +158,11 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
 
         adapter = new ProfessionalCustomerOrderListAdapter(list, getActivity());
         rv_list.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
 
 
         goodsTimeAdapter=new GoodsTimeAdapter(strlist,getActivity());
         gv_time.setAdapter(goodsTimeAdapter);
-        goodsTimeAdapter.notifyDataSetChanged();
+
 
         adapter.setOnItemClickListener(this);
 
@@ -233,6 +234,8 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
                     NewOrderListBean listBean = gson.fromJson(gson.toJson(baseModel.getDatas()),NewOrderListBean.class);
                     setData(listBean);
 
+                }else {
+                    showToast(baseModel.getMsg());
                 }
             }
 
@@ -253,7 +256,7 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
         }else {
             showToast(getString(R.string.load_list_erron));
         }
-        rv_list.setPullLoadMoreCompleted();
+
     }
 
     @Override
@@ -265,7 +268,7 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
                 edit=tv_search.getText().toString();
                 //tv_search.setText("D1548784201901070011");
                 if (TextUtils.isEmpty(edit)){
-                    showToast("请输入订单编号");
+                    showToast(getString(R.string.please_write_order_number));
                 }else {
                     orderCode=edit;
                     list.clear();

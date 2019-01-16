@@ -109,7 +109,7 @@ public class TodaySingleGoodsSalesBestDetailActivity extends BaseActivity implem
         pr_list.setPullRefreshEnable(false);
 
         // TODO: 2019/1/2 标题判断
-        textHeadTitle.setText("今日单品销量排行");
+        textHeadTitle.setText(getString(R.string.today_single_sale_ranking));
         adapter=new TodaySingeleGoodSalesBestDetailAdapter(list,this);
         pr_list.setAdapter(adapter);
         adapter.notifyDataSetChanged();
@@ -138,6 +138,8 @@ public class TodaySingleGoodsSalesBestDetailActivity extends BaseActivity implem
                 if (baseModel.getCode()==PublicUtils.code){
                     GoodsSale goodsSale = gson.fromJson(gson.toJson(baseModel.getDatas()),GoodsSale.class);
                     setData(goodsSale);
+                }else {
+                    showToast(baseModel.getMsg());
                 }
             }
         });
@@ -156,7 +158,7 @@ public class TodaySingleGoodsSalesBestDetailActivity extends BaseActivity implem
         }else {
             showToast(getString(R.string.load_list_erron));
         }
-        pr_list.setPullLoadMoreCompleted();
+
 
     }
     @Override

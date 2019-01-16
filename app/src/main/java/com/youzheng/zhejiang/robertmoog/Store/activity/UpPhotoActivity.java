@@ -253,6 +253,8 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
                         if (baseModel.getCode() == PublicUtils.code) {
                             showToast("图片上传成功");
                             finish();
+                        }else {
+                            showToast(baseModel.getMsg());
                         }
                     }
                 });
@@ -282,7 +284,7 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
                 if (fileList.size()==list.size()){
                     upPic(fileList);
                 }else {
-                    showToast("图片没有压缩完成");
+                    showToast(getString(R.string.pic_not_finish_yas));
                 }
                 //showToast("正在上传图片，请稍候！");
                 dialogBuilder.dismiss();

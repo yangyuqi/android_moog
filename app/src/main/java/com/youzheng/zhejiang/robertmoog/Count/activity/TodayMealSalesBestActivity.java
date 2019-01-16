@@ -91,7 +91,7 @@ public class TodayMealSalesBestActivity extends BaseActivity implements View.OnC
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
-        textHeadTitle.setText("今日套餐销量排行");
+        textHeadTitle.setText(getString(R.string.today_meal_ranking));
         textHeadNext = (TextView) findViewById(R.id.textHeadNext);
         iv_next = (ImageView) findViewById(R.id.iv_next);
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);
@@ -133,6 +133,8 @@ public class TodayMealSalesBestActivity extends BaseActivity implements View.OnC
                 if (baseModel.getCode()==PublicUtils.code){
                     MealRankingList mealRankingList = gson.fromJson(gson.toJson(baseModel.getDatas()),MealRankingList.class);
                     setData(mealRankingList);
+                }else {
+                    showToast(baseModel.getMsg());
                 }
             }
         });

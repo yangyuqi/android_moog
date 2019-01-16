@@ -66,7 +66,7 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
         textHeadNext = (TextView) findViewById(R.id.textHeadNext);
-        textHeadTitle.setText("添加专业客户");
+        textHeadTitle.setText(getString(R.string.add_professional_customer));
         iv_next = (ImageView) findViewById(R.id.iv_next);
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);
         edt_phone = (EditText) findViewById(R.id.edt_phone);
@@ -91,24 +91,24 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
                 break;
             case R.id.lin_degree:
                 list.clear();
-                list.add("工长");
-                list.add("设计师");
+                list.add(getString(R.string.gong_zhang));
+                list.add(getString(R.string.desinger));
                 //SingleOptionsPicker.tv_choose_degree.setText("选择身份");
-                SingleOptionsPicker.openOptionsPicker(this, list, tv_degree,"选择身份");
+                SingleOptionsPicker.openOptionsPicker(this, list, tv_degree,getString(R.string.choose_rule));
                 break;
             case R.id.tv_add:
                 phone=edt_phone.getText().toString().trim();
                 name=edt_name.getText().toString().trim();
                 if (phone.equals("")){
-                    showToast("手机号未填写");
+                    showToast(getString(R.string.no_phone));
                 }else if (name.equals("")){
-                    showToast("姓名未填写");
-                }else if (tv_degree.getText().toString().equals("请选择身份")||tv_degree.getText().toString().equals("")){
-                    showToast("未选择身份");
+                    showToast(getString(R.string.no_name));
+                }else if (tv_degree.getText().toString().equals(getString(R.string.please_choose_rule))||tv_degree.getText().toString().equals("")){
+                    showToast(getString(R.string.have_no_rule));
                 }else {
-                    if (tv_degree.getText().toString().equals("工长")){
+                    if (tv_degree.getText().toString().equals(getString(R.string.gong_zhang))){
                         id="FOREMAN";
-                    }else if (tv_degree.getText().toString().equals("设计师")){
+                    }else if (tv_degree.getText().toString().equals(getString(R.string.desinger))){
                         id="DESIGNER";
                     }
                     addProfessionalCustomer(phone,name,id);

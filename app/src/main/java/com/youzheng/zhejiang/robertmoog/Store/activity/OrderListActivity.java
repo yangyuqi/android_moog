@@ -173,7 +173,7 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
     private void initView() {
         btnBack = (ImageView) findViewById(R.id.btnBack);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
-        textHeadTitle.setText("订单列表");
+        textHeadTitle.setText(getString(R.string.order_list));
         textHeadNext = (TextView) findViewById(R.id.textHeadNext);
         iv_next = (ImageView) findViewById(R.id.iv_next);
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);
@@ -253,6 +253,8 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
                     NewOrderListBean listBean = gson.fromJson(gson.toJson(baseModel.getDatas()),NewOrderListBean.class);
                     setData(listBean);
 
+                }else {
+                    showToast(baseModel.getMsg());
                 }
             }
 
@@ -272,7 +274,7 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
         }else {
             showToast(getString(R.string.load_list_erron));
         }
-        rv_list.setPullLoadMoreCompleted();
+
     }
 
     @Override
@@ -284,7 +286,7 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
                 edit=tv_search.getText().toString();
                //tv_search.setText("D1548784201901070011");
                 if (TextUtils.isEmpty(edit)){
-                    showToast("请输入订单编号");
+                    showToast(getString(R.string.please_write_order_number));
                 }else {
                     orderCode=edit;
                     list.clear();

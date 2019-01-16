@@ -485,9 +485,9 @@ public class ProfessionalOrderDetailActivity extends BaseActivity implements Vie
 
 
         if (orderlistDetail.getOrderItemData().isIsFreeGift()==true){
-            tv_or_send.setText("有赠送礼品");
+            tv_or_send.setText(getString(R.string.have_award));
         }else {
-            tv_or_send.setText("无赠送礼品");
+            tv_or_send.setText(getString(R.string.no_award));
         }
 
         if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getPickUpStatus())){

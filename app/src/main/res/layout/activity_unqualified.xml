@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:textSize="13sp"
             android:textColor="@color/text_main"
-            android:text="我我我我我我"
+            android:text=""
             android:paddingLeft="10dp"
             android:paddingRight="10dp"/>
 
@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:textSize="13sp"
             android:textColor="@color/text_main"
-            android:text="我我我我我我"
+            android:text=""
             android:paddingLeft="35dp"
             android:paddingRight="10dp"
             android:paddingBottom="26dp"/>

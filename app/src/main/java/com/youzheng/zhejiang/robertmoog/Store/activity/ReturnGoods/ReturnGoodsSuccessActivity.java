@@ -63,17 +63,17 @@ public class ReturnGoodsSuccessActivity extends BaseActivity implements View.OnC
         iv_pic = (ImageView) findViewById(R.id.iv_pic);
         tv_name = (TextView) findViewById(R.id.tv_name);
         if (type.equals("1")){
-            textHeadTitle.setText("退货完成");
+            textHeadTitle.setText(getString(R.string.return_success));
             iv_title.setImageResource(R.mipmap.group_55_1);
-            tv_success.setText("退货完成!");
+            tv_success.setText(getString(R.string.return_finish));
             iv_pic.setImageResource(R.mipmap.group_55_2);
-            tv_name.setText("退货单详情");
+            tv_name.setText(getString(R.string.return_goods_detail));
         }else if (type.equals("2")){
-            textHeadTitle.setText("订单完成");
+            textHeadTitle.setText(getString(R.string.order_finish));
             iv_title.setImageResource(R.mipmap.group_153_1);
-            tv_success.setText("订单完成!");
+            tv_success.setText(getString(R.string.order_finished));
             iv_pic.setImageResource(R.mipmap.group_153_2);
-            tv_name.setText("订单详情");
+            tv_name.setText(getString(R.string.order_detail));
         }
     }
 
@@ -86,12 +86,12 @@ public class ReturnGoodsSuccessActivity extends BaseActivity implements View.OnC
                 finish();
                 break;
             case R.id.lin_to_detail:
-                if (tv_name.getText().equals("退货单详情")){
+                if (tv_name.getText().equals(getString(R.string.return_goods_detail))){
                     Intent intent = new Intent(this, ReturnGoodsDetailActivity.class);
                     intent.putExtra("returnGoodsId", id);
                     startActivity(intent);
                     finish();
-                }else if (tv_name.getText().equals("订单详情")){
+                }else if (tv_name.getText().equals(getString(R.string.order_detail))){
                     Intent intent = new Intent(this, StoreOrderlistDetailActivity.class);
                     intent.putExtra("OrderGoodsId", id);
                     startActivity(intent);
