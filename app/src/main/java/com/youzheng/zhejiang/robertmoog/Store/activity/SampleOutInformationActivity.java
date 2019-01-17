@@ -59,8 +59,8 @@ public class SampleOutInformationActivity extends BaseActivity implements View.O
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
         textHeadNext = (TextView) findViewById(R.id.textHeadNext);
-        textHeadTitle.setText("出样信息");
-        textHeadNext.setText("编辑");
+        textHeadTitle.setText(getString(R.string.sample_out_information));
+        textHeadNext.setText(getString(R.string.edit));
         textHeadNext.setOnClickListener(this);
         iv_next = (ImageView) findViewById(R.id.iv_next);
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);
@@ -94,6 +94,8 @@ public class SampleOutInformationActivity extends BaseActivity implements View.O
                 if (baseModel.getCode()==PublicUtils.code){
                     SampleOutList sampleOutList = gson.fromJson(gson.toJson(baseModel.getDatas()),SampleOutList.class);
                     setData(sampleOutList);
+                }else {
+                    showToast(baseModel.getMsg());
                 }
             }
         });
@@ -106,12 +108,12 @@ public class SampleOutInformationActivity extends BaseActivity implements View.O
         List<SampleOutList.SampleResDataBean.SampleSingleDataListBean> beans=sampleOutList.getSampleResData().getSampleSingleDataList();
         if (beans.size()!=0){
             for (int i = 0; i <beans.size() ; i++) {
-                if (beans.get(i).getSampleType().equals("出样信息")){
+                if (beans.get(i).getSampleType().equals(getString(R.string.sample_out_information))){
                     list.add(beans.get(i));
                     adapter=new SampleOutAdapter(list,this);
                     lv_information.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
-                }else if (beans.get(i).getSampleType().equals("试水台信息")){
+                }else if (beans.get(i).getSampleType().equals(getString(R.string.try_water_information))){
                     list2.add(beans.get(i));
                     out2Adapter= new SampleOutAdapter(list2,this);
                     lv_rain_information.setAdapter(out2Adapter);
@@ -134,15 +136,15 @@ public class SampleOutInformationActivity extends BaseActivity implements View.O
                 finish();
                 break;
             case R.id.textHeadNext:
-                if (textHeadNext.getText().equals("编辑")){
+                if (textHeadNext.getText().equals(getString(R.string.edit))){
                     adapter.setAppear(true);
                     out2Adapter.setAppear(true);
-                    textHeadNext.setText("取消");
+                    textHeadNext.setText(getString(R.string.cancel));
                     tv_commit.setVisibility(View.VISIBLE);
                 }else {
                     adapter.setAppear(false);
                     out2Adapter.setAppear(false);
-                    textHeadNext.setText("编辑");
+                    textHeadNext.setText(getString(R.string.edit));
                     tv_commit.setVisibility(View.GONE);
                 }
                 break;
@@ -216,7 +218,7 @@ public class SampleOutInformationActivity extends BaseActivity implements View.O
                     Log.e("门店客户列表",response);
                     BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                     if (baseModel.getCode()==PublicUtils.code){
-                        showToast(baseModel.getMsg());
+                        showToast(getString(R.string.commit_success));
                         finish();
                     }
                 }

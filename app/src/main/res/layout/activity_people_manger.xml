@@ -37,7 +37,7 @@
                     android:id="@+id/tv_store_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="摩恩十里河店"
+                    android:text=""
                     android:textSize="13sp"
                     android:gravity="center_vertical"
                     android:paddingLeft="10dp"

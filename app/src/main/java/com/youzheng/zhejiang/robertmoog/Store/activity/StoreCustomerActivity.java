@@ -98,7 +98,7 @@ public class StoreCustomerActivity extends BaseActivity implements View.OnClickL
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
-        textHeadTitle.setText("门店客户");
+        textHeadTitle.setText(getString(R.string.store_customer));
         textHeadNext = (TextView) findViewById(R.id.textHeadNext);
         iv_next = (ImageView) findViewById(R.id.iv_next);
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);
@@ -141,6 +141,8 @@ public class StoreCustomerActivity extends BaseActivity implements View.OnClickL
                 if (baseModel.getCode()==PublicUtils.code){
                     CustomerList customerList = gson.fromJson(gson.toJson(baseModel.getDatas()),CustomerList.class);
                     setData(customerList);
+                }else {
+                    showToast(baseModel.getMsg());
                 }
             }
         });
@@ -164,7 +166,7 @@ public class StoreCustomerActivity extends BaseActivity implements View.OnClickL
             showToast(getString(R.string.load_list_erron));
         }
 
-        lv_list.setPullLoadMoreCompleted();
+
    }
 
     @Override

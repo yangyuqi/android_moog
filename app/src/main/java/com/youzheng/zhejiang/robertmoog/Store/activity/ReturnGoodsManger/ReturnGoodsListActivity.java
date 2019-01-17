@@ -155,6 +155,8 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
 
                     }
 
+                }else {
+                    showToast(baseModel.getMsg());
                 }
             }
         });
@@ -166,7 +168,7 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
-        textHeadTitle.setText("退货单列表");
+        textHeadTitle.setText(getString(R.string.return_goods_list));
         textHeadNext = (TextView) findViewById(R.id.textHeadNext);
         iv_next = (ImageView) findViewById(R.id.iv_next);
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);
@@ -241,6 +243,8 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
                     ReturnGoodsList returnGoodsList = gson.fromJson(gson.toJson(baseModel.getDatas()),ReturnGoodsList.class);
                     setData(returnGoodsList);
 
+                }else {
+                    showToast(baseModel.getMsg());
                 }
             }
 
@@ -259,7 +263,7 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
             showToast(getString(R.string.load_list_erron));
         }
 
-        rv_list.setPullLoadMoreCompleted();
+
 
     }
 
@@ -278,7 +282,7 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
                 edit=tv_search.getText().toString();
                 //tv_search.setText("D1548784201901070011");
                 if (TextUtils.isEmpty(edit)){
-                    showToast("请输入退货单编号");
+                    showToast(getString(R.string.please_write_return_number));
                 }else {
                     orderCode=edit;
                     list.clear();
@@ -304,7 +308,7 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
     @Override
     public void onItemClick(View view, int position) {
         Intent intent=new Intent(this,ReturnGoodsDetailActivity.class);
-        intent.putExtra("returnGoodsId",list.get(position).getId());
+        intent.putExtra("returnGoodsId",list.get(position).getId()+"");
         startActivity(intent);
     }
 

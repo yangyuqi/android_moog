@@ -93,7 +93,7 @@ public class ChooseOrderListActivity extends BaseActivity implements View.OnClic
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
         textHeadNext = (TextView) findViewById(R.id.textHeadNext);
-        textHeadTitle.setText("选择订单");
+        textHeadTitle.setText(getString(R.string.choose_order));
         iv_next = (ImageView) findViewById(R.id.iv_next);
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);
         pr_list = (PullLoadMoreRecyclerView) findViewById(R.id.pr_list);
@@ -136,6 +136,8 @@ public class ChooseOrderListActivity extends BaseActivity implements View.OnClic
                     NewOrderListBean listBean = gson.fromJson(gson.toJson(baseModel.getDatas()),NewOrderListBean.class);
                     setData(listBean);
 
+                }else {
+                    showToast(baseModel.getMsg());
                 }
             }
 
@@ -156,7 +158,7 @@ public class ChooseOrderListActivity extends BaseActivity implements View.OnClic
         }else {
             showToast(getString(R.string.load_list_erron));
         }
-        pr_list.setPullLoadMoreCompleted();
+
     }
 
 

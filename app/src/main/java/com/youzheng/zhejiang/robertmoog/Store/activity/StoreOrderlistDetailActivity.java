@@ -199,7 +199,7 @@ public class StoreOrderlistDetailActivity extends BaseActivity implements View.O
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
-        textHeadTitle.setText("订单详情");
+        textHeadTitle.setText(getString(R.string.order_detail));
         textHeadNext = (TextView) findViewById(R.id.textHeadNext);
         iv_next = (ImageView) findViewById(R.id.iv_next);
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);
@@ -285,6 +285,8 @@ public class StoreOrderlistDetailActivity extends BaseActivity implements View.O
                 if (baseModel.getCode()==PublicUtils.code){
                     OrderlistDetail orderlistDetail = gson.fromJson(gson.toJson(baseModel.getDatas()),OrderlistDetail.class);
                     setData(orderlistDetail);
+                }else {
+                    showToast(baseModel.getMsg());
                 }
             }
         });
@@ -363,9 +365,9 @@ public class StoreOrderlistDetailActivity extends BaseActivity implements View.O
 
 
         if (orderlistDetail.getOrderItemData().isIsFreeGift()==true){
-            tv_or_send.setText("有赠送礼品");
+            tv_or_send.setText(getString(R.string.have_award));
         }else {
-            tv_or_send.setText("无赠送礼品");
+            tv_or_send.setText(getString(R.string.no_award));
         }
 
         if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getPickUpStatus())){
@@ -422,7 +424,7 @@ public class StoreOrderlistDetailActivity extends BaseActivity implements View.O
             comment=orderlistDetail.getOrderItemData().getComment();
             tv_content.setText(comment);
         }else {
-            tv_content.setText("无");
+            tv_content.setText(getString(R.string.have_no));
         }
 
 

@@ -71,13 +71,13 @@ public class ProfessionalCustomerActivity extends BaseActivity implements View.O
             @Override
             public void onRefresh() {
                page=1;
-               list.clear();
                initData(page,pageSize);
             }
 
             @Override
             public void onLoadMore() {
               page++;
+              list.clear();
               initData(page,pageSize);
             }
         });
@@ -87,7 +87,7 @@ public class ProfessionalCustomerActivity extends BaseActivity implements View.O
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
-        textHeadTitle.setText("专业客户");
+        textHeadTitle.setText(getString(R.string.profess_customer));
         textHeadNext = (TextView) findViewById(R.id.textHeadNext);
         textHeadNext.setVisibility(View.GONE);
         iv_next = (ImageView) findViewById(R.id.iv_next);
@@ -97,10 +97,7 @@ public class ProfessionalCustomerActivity extends BaseActivity implements View.O
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);
         tv_number = (TextView) findViewById(R.id.tv_number);
         lv_list = (PullLoadMoreRecyclerView) findViewById(R.id.lv_list);
-        initData(page,pageSize);
-    }
 
-    private void initData(int page,int pageSize) {
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         lv_list.setLinearLayout();
@@ -113,6 +110,12 @@ public class ProfessionalCustomerActivity extends BaseActivity implements View.O
         lv_list.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
+
+    }
+
+    private void initData(int page,int pageSize) {
+
+
         HashMap<String,Object> map=new HashMap<>();
         map.put("pageNum",page);
         map.put("pageSize",pageSize);
@@ -120,16 +123,20 @@ public class ProfessionalCustomerActivity extends BaseActivity implements View.O
         OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.PROFESSIONAL_CUSTOMER_LIST + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
             public void onFailure(Request request, IOException e) {
+                lv_list.setPullLoadMoreCompleted();
 
             }
 
             @Override
             public void onResponse(String response) {
                 Log.e("专业客户列表",response);
+                lv_list.setPullLoadMoreCompleted();
                 BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                 if (baseModel.getCode()==PublicUtils.code){
                     ProfessionalCustomerList professionalCustomerList = gson.fromJson(gson.toJson(baseModel.getDatas()),ProfessionalCustomerList.class);
                     setData(professionalCustomerList);
+                }else {
+                    showToast(baseModel.getMsg());
                 }
             }
 
@@ -146,14 +153,13 @@ public class ProfessionalCustomerActivity extends BaseActivity implements View.O
 
           List<ProfessionalCustomerList.SpecialtyCustomerListBean> beanList=professionalCustomerList.getSpecialtyCustomerList();
           if (beanList.size()!=0){
-
               list.addAll(beanList);
               adapter.setListRefreshUi(beanList);
           }else {
               showToast(getString(R.string.load_list_erron));
           }
 
-          lv_list.setPullLoadMoreCompleted();
+
 
     }
 

@@ -102,6 +102,8 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
                 if (baseModel.getCode()==PublicUtils.code){
                     GoodsListDetail goodsListDetail = gson.fromJson(gson.toJson(baseModel.getDatas()),GoodsListDetail.class);
                     setData(goodsListDetail);
+                }else {
+                    showToast(baseModel.getMsg());
                 }
             }
         });
@@ -123,22 +125,22 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
                 tv_goods_content.setText(productDdetailBean.getName());
             }
             if (productDdetailBean.getPrice()!=null||!productDdetailBean.getPrice().equals("")){
-                tv_goods_money.setText("￥"+productDdetailBean.getPrice());
+                tv_goods_money.setText(getString(R.string.label_money)+productDdetailBean.getPrice());
             }
             if (productDdetailBean.getFirstCategory()!=null||!productDdetailBean.getFirstCategory().equals("")){
-                tv_type.setText("品类 "+productDdetailBean.getFirstCategory());
+                tv_type.setText(getString(R.string.goods_type)+productDdetailBean.getFirstCategory());
             }
             if (productDdetailBean.getSeries()!=null||!productDdetailBean.getSeries().equals("")){
-                tv_series.setText("系列 "+productDdetailBean.getSeries());
+                tv_series.setText(getString(R.string.series)+productDdetailBean.getSeries());
             }
             if (productDdetailBean.getSpecification()!=null||!productDdetailBean.getSpecification().equals("")){
-                tv_spec.setText("规格 "+productDdetailBean.getSpecification());
+                tv_spec.setText(getString(R.string.spec)+productDdetailBean.getSpecification());
             }
             if (productDdetailBean.getPackUnit()!=null||!productDdetailBean.getPackUnit().equals("")){
-                tv_marketing_unit.setText("销售单位 "+productDdetailBean.getPackUnit());
+                tv_marketing_unit.setText(getString(R.string.marketing_unit)+productDdetailBean.getPackUnit());
             }
             if (productDdetailBean.getRetailPrice()!=null||!productDdetailBean.getRetailPrice().equals("")){
-                tv_value_of_moen.setText("摩恩PR00售价 "+"￥"+productDdetailBean.getRetailPrice());
+                tv_value_of_moen.setText(getString(R.string.price_of_moen)+getString(R.string.label_money)+productDdetailBean.getRetailPrice());
             }
             if (productDdetailBean.getList().size()!=0){
                 piclist=  productDdetailBean.getList();
@@ -153,7 +155,7 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
         textHeadNext = (TextView) findViewById(R.id.textHeadNext);
-        textHeadTitle.setText("商品详情");
+        textHeadTitle.setText(getString(R.string.goods_detail));
         iv_next = (ImageView) findViewById(R.id.iv_next);
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);
         pagerView = (RollPagerView) findViewById(R.id.pagerView);

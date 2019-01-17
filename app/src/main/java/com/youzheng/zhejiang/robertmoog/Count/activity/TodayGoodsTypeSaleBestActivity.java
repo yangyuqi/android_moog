@@ -84,7 +84,7 @@ public class TodayGoodsTypeSaleBestActivity extends BaseActivity implements View
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
-        textHeadTitle.setText("今日品类销量排行");
+        textHeadTitle.setText(getString(R.string.today_type_ranking));
         textHeadNext = (TextView) findViewById(R.id.textHeadNext);
         iv_next = (ImageView) findViewById(R.id.iv_next);
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);
@@ -131,6 +131,8 @@ public class TodayGoodsTypeSaleBestActivity extends BaseActivity implements View
                 if (baseModel.getCode()==PublicUtils.code){
                     GoodsTypeRankingList goodsTypeRankingList = gson.fromJson(gson.toJson(baseModel.getDatas()),GoodsTypeRankingList.class);
                     setData(goodsTypeRankingList);
+                }else {
+                    showToast(baseModel.getMsg());
                 }
             }
         });
@@ -146,7 +148,7 @@ public class TodayGoodsTypeSaleBestActivity extends BaseActivity implements View
         }else {
             showToast(getString(R.string.load_list_erron));
         }
-        pr_list.setPullLoadMoreCompleted();
+
     }
     @Override
     public void onClick(View v) {

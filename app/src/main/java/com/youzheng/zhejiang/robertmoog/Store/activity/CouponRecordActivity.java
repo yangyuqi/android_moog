@@ -91,7 +91,7 @@ public class CouponRecordActivity extends BaseActivity implements View.OnClickLi
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
-        textHeadTitle.setText("优惠券使用记录");
+        textHeadTitle.setText(getString(R.string.coupon_use_record));
         textHeadNext = (TextView) findViewById(R.id.textHeadNext);
         iv_next = (ImageView) findViewById(R.id.iv_next);
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);
@@ -134,6 +134,8 @@ public class CouponRecordActivity extends BaseActivity implements View.OnClickLi
                 if (baseModel.getCode()==PublicUtils.code){
                     CouponRecord couponRecord = gson.fromJson(gson.toJson(baseModel.getDatas()),CouponRecord.class);
                     setData(couponRecord);
+                }else {
+                    showToast(baseModel.getMsg());
                 }
             }
         });
@@ -159,7 +161,7 @@ public class CouponRecordActivity extends BaseActivity implements View.OnClickLi
             showToast(getString(R.string.load_list_erron));
         }
 
-        lv_list.setPullLoadMoreCompleted();
+
     }
 
     @Override

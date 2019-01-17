@@ -240,6 +240,8 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
 
                     }
 
+                }else {
+                    showToast(baseModel.getMsg());
                 }
             }
         });
@@ -250,7 +252,7 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
-        textHeadTitle.setText("退货柜台");
+        textHeadTitle.setText(getString(R.string.return_counter));
         textHeadNext = (TextView) findViewById(R.id.textHeadNext);
         iv_next = (ImageView) findViewById(R.id.iv_next);
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);
@@ -293,25 +295,25 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
                 break;
             case R.id.lin_get_goods:
                 //SingleOptionsPicker.tv_choose_degree.setText("提货状态");
-                SingleOptionsPicker.openOptionsPicker(this, type, tv_get_state,"提货状态");
+                SingleOptionsPicker.openOptionsPicker(this, type, tv_get_state,getString(R.string.get_goods_state));
                 break;
             case R.id.lin_return_type:
                // SingleOptionsPicker.tv_choose_degree.setText("退款方式");
-                SingleOptionsPicker.openOptionsPicker(this, returns, tv_return_type,"退款方式");
+                SingleOptionsPicker.openOptionsPicker(this, returns, tv_return_type,getString(R.string.return_goods_type));
                 break;
             case R.id.lin_return_reason:
                 //SingleOptionsPicker.tv_choose_degree.setText("退货理由");
-                SingleOptionsPicker.openOptionsPicker(this, reason, tv_return_reason,"退货理由");
+                SingleOptionsPicker.openOptionsPicker(this, reason, tv_return_reason,getString(R.string.return_reason));
                 break;
             case R.id.tv_confirm_return:
-                if (tv_get_state.getText().equals("请选择")){
-                    showToast("请选择提货方式");
-                }else if (tv_return_type.getText().equals("请选择")){
-                    showToast("请选择退款方式");
-                }else if (tv_return_type.getText().equals("请选择")){
-                    showToast("请选择退货原因");
+                if (tv_get_state.getText().equals(getString(R.string.please_choose))){
+                    showToast(getString(R.string.please_choose_get_type));
+                }else if (tv_return_type.getText().equals(getString(R.string.please_choose))){
+                    showToast(getString(R.string.please_choose_return_type));
+                }else if (tv_return_type.getText().equals(getString(R.string.please_choose))){
+                    showToast(getString(R.string.please_choose_return_reason));
                 }else if (TextUtils.isEmpty(tv_really_cut_money.getText())){
-                    showToast("请填写实退金额");
+                    showToast(getString(R.string.please_write_really_money));
                 }else {
                     showStopDialog();
                 }
@@ -321,35 +323,35 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
 
     private void confirmReturn() {
 
-        if (tv_return_type.getText().equals("银行卡")){
+        if (tv_return_type.getText().equals(getString(R.string.bank_card))){
             paymentMethod="BANK_CARD";
-        }else if (tv_return_type.getText().equals("微信")){
+        }else if (tv_return_type.getText().equals(getString(R.string.we_chat))){
             paymentMethod="WECHAT";
-        }else if (tv_return_type.getText().equals("支付宝")){
+        }else if (tv_return_type.getText().equals(getString(R.string.alipay))){
             paymentMethod="ALIPAY";
-        }else if (tv_return_type.getText().equals("现金")){
+        }else if (tv_return_type.getText().equals(getString(R.string.cash))){
             paymentMethod="CASH";
-        }else if (tv_return_type.getText().equals("商场收款")){
+        }else if (tv_return_type.getText().equals(getString(R.string.market_get))){
             paymentMethod="MARKET";
-        }else if (tv_return_type.getText().equals("其他")){
+        }else if (tv_return_type.getText().equals(getString(R.string.other))){
             paymentMethod="OTHER";
         }
 
-        if (tv_get_state.getText().equals("全部已提")){
+        if (tv_get_state.getText().equals(getString(R.string.all_lift))){
             pick_state="ALL_LIFT";
-        }else if (tv_get_state.getText().equals("部分已提")){
+        }else if (tv_get_state.getText().equals(getString(R.string.limit_lift))){
             pick_state="LIMIT_LIFT";
-        }else if (tv_get_state.getText().equals("未提")){
+        }else if (tv_get_state.getText().equals(getString(R.string.no_lift))){
             pick_state="NO_LIFT";
         }
 
-        if (tv_return_reason.getText().equals("质量问题")){
+        if (tv_return_reason.getText().equals(getString(R.string.quality_problem))){
             reasons="QUALITY_PROBLEM";
-        }else if (tv_return_reason.getText().equals("品牌问题")){
+        }else if (tv_return_reason.getText().equals(getString(R.string.brand_problem))){
             reasons="BRAND_PROBLEM";
-        }else if (tv_return_reason.getText().equals("价格问题")){
+        }else if (tv_return_reason.getText().equals(getString(R.string.price_problem))){
             reasons="PRICE_PROBLEM";
-        }else if (tv_return_reason.getText().equals("其他")){
+        }else if (tv_return_reason.getText().equals(getString(R.string.other))){
             reasons="OTHER";
         }
         HashMap<String,Object> map=new HashMap<>();
@@ -385,7 +387,7 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
                     ReturnGoodsSuccess success = gson.fromJson(gson.toJson(baseModel.getDatas()),ReturnGoodsSuccess.class);
                     toSuccess(success);
                 }else {
-                    showToast("退货失败");
+                    showToast(getString(R.string.return_failure));
                 }
             }
         });

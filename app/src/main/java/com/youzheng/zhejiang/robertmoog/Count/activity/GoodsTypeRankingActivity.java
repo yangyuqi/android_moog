@@ -136,7 +136,7 @@ public class GoodsTypeRankingActivity extends BaseActivity implements View.OnCli
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
-        textHeadTitle.setText("商品品类排名");
+        textHeadTitle.setText(getString(R.string.goods_type_ranking));
         textHeadNext = (TextView) findViewById(R.id.textHeadNext);
         iv_next = (ImageView) findViewById(R.id.iv_next);
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);
@@ -164,10 +164,10 @@ public class GoodsTypeRankingActivity extends BaseActivity implements View.OnCli
         adapter.setOnItemClickListener(new OnRecyclerViewAdapterItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                if (tv_rule.getText().toString().equals("销售数量")){
-                    type="数量";
+                if (tv_rule.getText().toString().equals(getString(R.string.sale_number))){
+                    type="COUNT";
                 }else {
-                    type="金额";
+                    type="PRICE";
                 }
                 Intent intent=new Intent(GoodsTypeRankingActivity.this,GoodsTypeRankingDetailActivity.class);
                 intent.putExtra("type",type);
@@ -207,6 +207,8 @@ public class GoodsTypeRankingActivity extends BaseActivity implements View.OnCli
                 if (baseModel.getCode()==PublicUtils.code){
                     GoodsTypeRankingList goodsTypeRankingList = gson.fromJson(gson.toJson(baseModel.getDatas()),GoodsTypeRankingList.class);
                     setData(goodsTypeRankingList);
+                }else {
+                    showToast(baseModel.getMsg());
                 }
             }
         });
@@ -227,7 +229,7 @@ public class GoodsTypeRankingActivity extends BaseActivity implements View.OnCli
         }else {
             showToast(getString(R.string.load_list_erron));
         }
-        pr_list.setPullLoadMoreCompleted();
+
     }
 
     @Override

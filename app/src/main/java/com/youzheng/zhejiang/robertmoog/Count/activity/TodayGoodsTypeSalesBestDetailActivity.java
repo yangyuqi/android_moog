@@ -107,7 +107,7 @@ public class TodayGoodsTypeSalesBestDetailActivity extends BaseActivity implemen
         pr_list.setPullRefreshEnable(false);
 
         // TODO: 2019/1/2 标题判断
-        textHeadTitle.setText("商品销售数量");
+        textHeadTitle.setText(getString(R.string.goods_sale_number));
         adapter=new TodayGoodsTypeSalesBestDetailAdapter(list,this);
         pr_list.setAdapter(adapter);
         adapter.notifyDataSetChanged();
@@ -145,6 +145,8 @@ public class TodayGoodsTypeSalesBestDetailActivity extends BaseActivity implemen
                 if (baseModel.getCode()==PublicUtils.code){
                     GoodsTypeDetail goodsTypeDetail = gson.fromJson(gson.toJson(baseModel.getDatas()),GoodsTypeDetail.class);
                     setData(goodsTypeDetail);
+                }else {
+                    showToast(baseModel.getMsg());
                 }
             }
         });
@@ -163,7 +165,7 @@ public class TodayGoodsTypeSalesBestDetailActivity extends BaseActivity implemen
         }else {
             showToast(getString(R.string.load_list_erron));
         }
-        pr_list.setPullLoadMoreCompleted();
+
 
     }
 

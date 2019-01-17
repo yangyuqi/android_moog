@@ -136,7 +136,7 @@ public class StoreSaleInsideActivity extends BaseActivity implements View.OnClic
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
-        textHeadTitle.setText("门店销量");
+        textHeadTitle.setText(getString(R.string.store_sale));
         textHeadNext = (TextView) findViewById(R.id.textHeadNext);
         iv_next = (ImageView) findViewById(R.id.iv_next);
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);
@@ -185,6 +185,8 @@ public class StoreSaleInsideActivity extends BaseActivity implements View.OnClic
                 if (baseModel.getCode()==PublicUtils.code){
                     ShopSaleDetail shopSaleDetail = gson.fromJson(gson.toJson(baseModel.getDatas()),ShopSaleDetail.class);
                     setData(shopSaleDetail);
+                }else {
+                    showToast(baseModel.getMsg());
                 }
             }
         });
@@ -216,7 +218,7 @@ public class StoreSaleInsideActivity extends BaseActivity implements View.OnClic
         }else {
             showToast(getString(R.string.load_list_erron));
         }
-        pr_list.setPullLoadMoreCompleted();
+
     }
 
     @Override

@@ -58,7 +58,7 @@ public class CheckStoreDetailActivity extends BaseActivity implements View.OnCli
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
-        textHeadTitle.setText("巡店结果");
+        textHeadTitle.setText(getString(R.string.check_result));
         textHeadNext = (TextView) findViewById(R.id.textHeadNext);
         iv_next = (ImageView) findViewById(R.id.iv_next);
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);
@@ -91,6 +91,8 @@ public class CheckStoreDetailActivity extends BaseActivity implements View.OnCli
                 if (baseModel.getCode()==PublicUtils.code){
                     CheckStoreDetail checkStoreDetail = gson.fromJson(gson.toJson(baseModel.getDatas()),CheckStoreDetail.class);
                     setData(checkStoreDetail);
+                }else {
+                    showToast(baseModel.getMsg());
                 }
             }
 
@@ -104,7 +106,7 @@ public class CheckStoreDetailActivity extends BaseActivity implements View.OnCli
         if (!checkStoreDetail.getRemarks().equals("")||checkStoreDetail.getRemarks()==null){
             tv_result_content.setText(checkStoreDetail.getRemarks());
         }else {
-            tv_result_content.setText("无");
+            tv_result_content.setText(getString(R.string.have_no));
         }
 
         List<CheckStoreDetail.PatrolShopDetailBean> beanList=checkStoreDetail.getPatrolShopDetail();

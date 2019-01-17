@@ -102,7 +102,7 @@ public class CheckResultActivity extends BaseActivity implements View.OnClickLis
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
-        textHeadTitle.setText("巡店结果");
+        textHeadTitle.setText(getString(R.string.check_result));
         textHeadNext = (TextView) findViewById(R.id.textHeadNext);
         iv_next = (ImageView) findViewById(R.id.iv_next);
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);
@@ -138,6 +138,8 @@ public class CheckResultActivity extends BaseActivity implements View.OnClickLis
                 if (baseModel.getCode()==PublicUtils.code){
                     CheckStoreList checkStoreList = gson.fromJson(gson.toJson(baseModel.getDatas()),CheckStoreList.class);
                     setData(checkStoreList);
+                }else {
+                    showToast(baseModel.getMsg());
                 }
             }
         });
@@ -171,7 +173,7 @@ public class CheckResultActivity extends BaseActivity implements View.OnClickLis
             list.clear();
             showToast(getString(R.string.load_list_erron));
         }
-        pr_list.setPullLoadMoreCompleted();
+
     }
 
     @Override

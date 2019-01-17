@@ -73,7 +73,7 @@ public class AddStaffActivity extends BaseActivity implements View.OnClickListen
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
-        textHeadTitle.setText("添加导购账号");
+        textHeadTitle.setText(getString(R.string.add_staff_account));
         textHeadNext = (TextView) findViewById(R.id.textHeadNext);
         iv_next = (ImageView) findViewById(R.id.iv_next);
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);
@@ -99,9 +99,9 @@ public class AddStaffActivity extends BaseActivity implements View.OnClickListen
                  name=mEtName.getText().toString().trim();
 
                  if (TextUtils.isEmpty(phone)){
-                     showToast("手机号未填写");
+                     showToast(getString(R.string.no_phone));
                  }else if (TextUtils.isEmpty(name)){
-                     showToast("姓名未填写");
+                     showToast(getString(R.string.no_name));
                  }else {
 
                      addStaff(name,phone);

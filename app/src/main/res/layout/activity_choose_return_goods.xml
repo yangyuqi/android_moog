@@ -37,7 +37,7 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="15dp"
                     android:paddingTop="10dp"
-                    android:text="2016/01/19 09:19:04ssss"
+                    android:text=""
                     android:textColor="@color/text_main"
                     android:textSize="13sp"
                     android:textStyle="bold" />
@@ -65,7 +65,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:paddingLeft="5dp"
-                        android:text="9876562018010200021111"
+                        android:text=""
                         android:textColor="@color/text_main"
                         android:textSize="13sp"
                         android:textStyle="bold" />
@@ -125,7 +125,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:paddingLeft="5dp"
-                        android:text="李白(导购)"
+                        android:text=""
                         android:textColor="@color/text_main"
                         android:textSize="13sp" />
 
@@ -152,7 +152,7 @@
                             android:paddingLeft="5dp"
                             android:paddingRight="15dp"
                             android:singleLine="true"
-                            android:text="187 0000 0009"
+                            android:text=""
                             android:textColor="@color/text_main"
                             android:textSize="13sp"
                             android:textStyle="bold" />

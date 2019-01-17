@@ -103,7 +103,7 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
         textHeadNext = (TextView) findViewById(R.id.textHeadNext);
-        textHeadTitle.setText("选择商品");
+        textHeadTitle.setText(getString(R.string.choose_goods));
         iv_next = (ImageView) findViewById(R.id.iv_next);
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);
         tv_time = (TextView) findViewById(R.id.tv_time);
@@ -152,12 +152,12 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
         map.put("id",id);
         map.put("isAll",isAll);
 
-        List<ChooseGoodsRequest.OrderProductListBean> beanList=new ArrayList<>();
-        ChooseGoodsRequest.OrderProductListBean bean=new ChooseGoodsRequest.OrderProductListBean();
-        bean.setCount("");
-        bean.setOrderItemProductId("");
-        beanList.add(bean);
-        map.put("orderProductList",beanList);
+//        List<ChooseGoodsRequest.OrderProductListBean> beanList=new ArrayList<>();
+//        ChooseGoodsRequest.OrderProductListBean bean=new ChooseGoodsRequest.OrderProductListBean();
+//        bean.setCount("");
+//        bean.setOrderItemProductId("");
+//        beanList.add(bean);
+//        map.put("orderProductList",beanList);
 
 
         OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.CHOOSE_GOODS + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
@@ -172,6 +172,8 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
                 if (baseModel.getCode()==PublicUtils.code){
                     ChooseReturnGoodsDetail chooseReturnGoodsDetail = gson.fromJson(gson.toJson(baseModel.getDatas()),ChooseReturnGoodsDetail.class);
                     setData(chooseReturnGoodsDetail);
+                }else {
+                    showToast(baseModel.getMsg());
                 }
             }
         });
@@ -255,7 +257,7 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
                         startActivity(intent);
                         finish();
                     }else {
-                        showToast("请选择商品数量");
+                        showToast(getString(R.string.please_choose_goods_number));
                     }
                 }
 

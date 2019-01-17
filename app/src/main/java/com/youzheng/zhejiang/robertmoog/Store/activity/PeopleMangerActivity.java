@@ -89,7 +89,7 @@ public class PeopleMangerActivity extends BaseActivity implements View.OnClickLi
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
-        textHeadTitle.setText("门店管理");
+        textHeadTitle.setText(getString(R.string.store_manger));
         textHeadNext = (TextView) findViewById(R.id.textHeadNext);
         iv_next = (ImageView) findViewById(R.id.iv_next);
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);
@@ -212,6 +212,8 @@ public class PeopleMangerActivity extends BaseActivity implements View.OnClickLi
                 if (baseModel.getCode()==PublicUtils.code){
                     PeopleMangerList peopleMangerList = gson.fromJson(gson.toJson(baseModel.getDatas()),PeopleMangerList.class);
                     setData(peopleMangerList);
+                }else {
+                    showToast(baseModel.getMsg());
                 }
             }
 
@@ -231,7 +233,7 @@ public class PeopleMangerActivity extends BaseActivity implements View.OnClickLi
         }else {
             showToast(getString(R.string.load_list_erron));
         }
-        lv_list.setPullLoadMoreCompleted();
+
 
 
     }

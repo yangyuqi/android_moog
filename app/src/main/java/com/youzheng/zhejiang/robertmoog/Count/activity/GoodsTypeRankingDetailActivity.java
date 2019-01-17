@@ -77,13 +77,13 @@ public class GoodsTypeRankingDetailActivity extends BaseActivity implements View
             public void onRefresh() {
                 page=1;
                 list.clear();
-                initData(page,pageSize,isDay,startstr,endstr,categoryId);
+                initData(page,pageSize,isDay,startstr,endstr,categoryId,type);
             }
 
             @Override
             public void onLoadMore() {
                 page++;
-                initData(page,pageSize,isDay,startstr,endstr,categoryId);
+                initData(page,pageSize,isDay,startstr,endstr,categoryId,type);
             }
         });
 
@@ -110,12 +110,12 @@ public class GoodsTypeRankingDetailActivity extends BaseActivity implements View
         pr_list.setPullRefreshEnable(false);
 
         // TODO: 2019/1/2 标题判断
-        if (type.equals("数量")){
-            textHeadTitle.setText("商品销售数量");
-            tv_rule.setText("销售数量");
+        if (type.equals("COUNT")){
+            textHeadTitle.setText(getString(R.string.goods_sale_number));
+            tv_rule.setText(getString(R.string.sale_number));
         }else {
-            textHeadTitle.setText("商品销售金额");
-            tv_rule.setText("销售金额");
+            textHeadTitle.setText(getString(R.string.goods_sale_money));
+            tv_rule.setText(getString(R.string.sale_money));
         }
 
 
@@ -128,10 +128,10 @@ public class GoodsTypeRankingDetailActivity extends BaseActivity implements View
     @Override
     protected void onResume() {
         super.onResume();
-        initData(page,pageSize,isDay,startstr,endstr,categoryId);
+        initData(page,pageSize,isDay,startstr,endstr,categoryId,type);
     }
 
-    private void initData(int page, int pageSize, boolean isDay, String startDate, String endDate, int categoryId) {
+    private void initData(int page, int pageSize, boolean isDay, String startDate, String endDate, int categoryId,String rule) {
         HashMap<String,Object> map=new HashMap<>();
         map.put("pageNum",page);
         map.put("pageSize",pageSize);
@@ -139,6 +139,7 @@ public class GoodsTypeRankingDetailActivity extends BaseActivity implements View
         map.put("startDate",startDate);
         map.put("endDate",endDate);
         map.put("categoryId",categoryId);
+        map.put("rule",rule);
 
         OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.GOODS_TYPE_RANKING_DETAIL + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
@@ -154,6 +155,8 @@ public class GoodsTypeRankingDetailActivity extends BaseActivity implements View
                 if (baseModel.getCode()==PublicUtils.code){
                     GoodsTypeDetail goodsTypeDetail = gson.fromJson(gson.toJson(baseModel.getDatas()),GoodsTypeDetail.class);
                     setData(goodsTypeDetail);
+                }else {
+                    showToast(baseModel.getMsg());
                 }
             }
         });
@@ -169,7 +172,7 @@ public class GoodsTypeRankingDetailActivity extends BaseActivity implements View
         }else {
             showToast(getString(R.string.load_list_erron));
         }
-        pr_list.setPullLoadMoreCompleted();
+
 
     }
 
