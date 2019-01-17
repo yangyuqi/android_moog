@@ -1,12 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@color/bg_background_white"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <include layout="@layout/title_bar" />
+
+    <com.liaoinstan.springview.widget.SpringView
+        android:background="@color/bg_all"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:type="follow"
+        android:id="@+id/sv"
+        app:footer="@layout/default_footer"
+        app:header="@layout/default_header"
+        >
 
     <ListView
         android:scrollbars="none"
@@ -17,4 +27,5 @@
         android:id="@+id/ls"
         ></ListView>
 
+    </com.liaoinstan.springview.widget.SpringView>
 </LinearLayout>

@@ -53,6 +53,7 @@
         </RelativeLayout>
 
         <HorizontalScrollView
+            android:scrollbars="none"
             android:id="@+id/hsv"
             android:overScrollMode="never"
             android:layout_width="wrap_content"

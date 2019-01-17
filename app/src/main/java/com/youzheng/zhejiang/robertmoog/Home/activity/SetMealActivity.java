@@ -1,20 +1,29 @@
 package com.youzheng.zhejiang.robertmoog.Home.activity;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.liaoinstan.springview.widget.SpringView;
 import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
 import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
+import com.youzheng.zhejiang.robertmoog.Home.adapter.GoodsTitleAdapter2;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.Model.Home.HomeListDataBean;
 import com.youzheng.zhejiang.robertmoog.Model.Home.HomeListDataBeanBean;
@@ -22,6 +31,7 @@ import com.youzheng.zhejiang.robertmoog.Model.Home.MealMainDataBean;
 import com.youzheng.zhejiang.robertmoog.Model.Home.MealMainDataList;
 import com.youzheng.zhejiang.robertmoog.Model.Home.SetMealData;
 import com.youzheng.zhejiang.robertmoog.R;
+import com.youzheng.zhejiang.robertmoog.Store.adapter.GoodsTitleAdapter;
 import com.youzheng.zhejiang.robertmoog.utils.CommonAdapter;
 import com.youzheng.zhejiang.robertmoog.utils.ViewHolder;
 
@@ -39,14 +49,14 @@ public class SetMealActivity extends BaseActivity{
     TabLayout tab ;
     List<String> tab_str = new ArrayList<>();
     List<Integer> tab_id = new ArrayList<>();
-
+    SpringView springView ;
     CommonAdapter<HomeListDataBean> adapter ;
     List<HomeListDataBean> data = new ArrayList<>();
-
-    int pageNum = 1 ,pageSize = 20,typeId ;
-
+    private GridView mGvTitle;
+    int pageNum = 1 ,pageSize = 20,typeId ,totalPage ;
+    private GoodsTitleAdapter2 goodsTitleAdapter;
     EditText tv_search ;
-
+    private PopupWindow window;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,6 +114,24 @@ public class SetMealActivity extends BaseActivity{
 
             }
         });
+
+        springView.setListener(new SpringView.OnFreshListener() {
+            @Override
+            public void onRefresh() {
+                pageNum=1;
+                initData();
+            }
+
+            @Override
+            public void onLoadmore() {
+                if (totalPage>pageNum){
+                    pageNum++;
+                    initData();
+                }else {
+                    springView.onFinishFreshAndLoad();
+                }
+            }
+        });
     }
 
     private void initView() {
@@ -117,6 +145,7 @@ public class SetMealActivity extends BaseActivity{
         tab = findViewById(R.id.tab);
         tv_search = findViewById(R.id.tv_search);
         ls = findViewById(R.id.ls);
+        springView = findViewById(R.id.sv);
         adapter = new CommonAdapter<HomeListDataBean>(mContext,data,R.layout.set_meal_ls_item) {
             @Override
             public void convert(ViewHolder helper, final HomeListDataBean item) {
@@ -158,12 +187,13 @@ public class SetMealActivity extends BaseActivity{
         OkHttpClientManager.postAsynJson(gson.toJson(new HashMap<>()), UrlUtils.SET_MEAL_LIST + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
             public void onFailure(Request request, IOException e) {
-
+                springView.onFinishFreshAndLoad();
             }
 
             @Override
             public void onResponse(String response) {
                 BaseModel baseModel = gson.fromJson(response,BaseModel.class);
+                springView.onFinishFreshAndLoad();
                 if (baseModel.getCode()== PublicUtils.code){
                     MealMainDataList list = gson.fromJson(gson.toJson(baseModel.getDatas()),MealMainDataList.class);
                     if (list.getMealMainData().size()>0){
@@ -176,5 +206,37 @@ public class SetMealActivity extends BaseActivity{
                 }
             }
         });
+    }
+
+    private void showPopuWindow() {
+        View inflate = getLayoutInflater().inflate(R.layout.popuwindow_goods_title, null);
+        mGvTitle = (GridView) inflate.findViewById(R.id.gv_title);
+
+//        goodsTitleAdapter = new GoodsTitleAdapter2(stringList, this);
+        mGvTitle.setAdapter(goodsTitleAdapter);
+        goodsTitleAdapter.notifyDataSetChanged();
+
+        mGvTitle.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                goodsTitleAdapter.setSelectItem(position);
+                tab.getTabAt(position).select();
+                window.dismiss();
+            }
+        });
+        window = new PopupWindow(inflate, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, true);
+        window.setAnimationStyle(R.style.ActionDialogStyle);
+
+        window.setBackgroundDrawable(getDrawable());
+        window.setTouchable(true); // 设置popupwindow可点击
+        window.setOutsideTouchable(true); // 设置popupwindow外部可点击
+        window.showAsDropDown(tab);
+        window.update();
+    }
+
+    private Drawable getDrawable() {
+        ShapeDrawable bgdrawable = new ShapeDrawable(new OvalShape());
+        bgdrawable.getPaint().setColor(this.getResources().getColor(android.R.color.transparent));
+        return bgdrawable;
     }
 }

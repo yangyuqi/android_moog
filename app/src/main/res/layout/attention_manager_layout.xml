@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@color/bg_all"
     android:layout_width="match_parent"
@@ -84,11 +84,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <com.liaoinstan.springview.widget.SpringView
+            android:background="@color/bg_all"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:type="follow"
+            android:id="@+id/sv"
+            app:footer="@layout/default_footer"
+            app:header="@layout/default_header"
+            >
+
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/recycler_view"
         ></android.support.v7.widget.RecyclerView>
+
+        </com.liaoinstan.springview.widget.SpringView>
 
         <ListView
             android:layout_marginTop="@dimen/space_1"
