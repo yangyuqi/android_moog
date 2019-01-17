@@ -18,6 +18,8 @@ import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.bean.AddProfessionalCustomerRequest;
+import com.youzheng.zhejiang.robertmoog.Store.utils.ButtonUtils;
+import com.youzheng.zhejiang.robertmoog.Store.utils.SoftInputUtils;
 import com.youzheng.zhejiang.robertmoog.Store.view.SingleOptionsPicker;
 
 import java.io.IOException;
@@ -54,6 +56,7 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
     private TextView tv_add;
     private List<String> list=new ArrayList<>();
     private String phone,name,id;
+    private LinearLayout lin_show;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +78,7 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
         lin_degree.setOnClickListener(this);
         tv_add = (TextView) findViewById(R.id.tv_add);
         tv_degree= (TextView) findViewById(R.id.tv_degree);
+        lin_show=findViewById(R.id.lin_show);
         tv_add.setOnClickListener(this);
 
         edt_name.addTextChangedListener(this);
@@ -95,6 +99,7 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
                 list.add(getString(R.string.desinger));
                 //SingleOptionsPicker.tv_choose_degree.setText("选择身份");
                 SingleOptionsPicker.openOptionsPicker(this, list, tv_degree,getString(R.string.choose_rule));
+                SoftInputUtils.hideSoftInput(this);
                 break;
             case R.id.tv_add:
                 phone=edt_phone.getText().toString().trim();
@@ -111,13 +116,21 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
                     }else if (tv_degree.getText().toString().equals(getString(R.string.desinger))){
                         id="DESIGNER";
                     }
-                    addProfessionalCustomer(phone,name,id);
-                }
+
+                    if (!ButtonUtils.isFastDoubleClick(R.id.tv_add)) {
+                        //写你相关操作即可
+                        addProfessionalCustomer(phone,name,id);
+                    }else {
+                        showToast(getString(R.string.please_not_commit_more));
+                    }
+
+        }
                 break;
         }
     }
 
     private void  addProfessionalCustomer(String phone, String name,String id){
+        lin_show.setVisibility(View.VISIBLE);
         HashMap<String,Object> map=new HashMap<>();
         map.put("custCode",phone);
         map.put("custName",name);
@@ -128,12 +141,13 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
         OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.ADD_PROFESSIONAL_CUSTOMER + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
             public void onFailure(Request request, IOException e) {
-
+                lin_show.setVisibility(View.GONE);
             }
 
             @Override
             public void onResponse(String response) {
                 Log.e("添加专业客户",response);
+                lin_show.setVisibility(View.GONE);
                 BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                 if (baseModel!=null){
                     if (baseModel.getCode()==PublicUtils.code){

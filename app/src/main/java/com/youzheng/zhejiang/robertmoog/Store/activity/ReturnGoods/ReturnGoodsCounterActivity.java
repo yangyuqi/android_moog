@@ -388,6 +388,7 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
                     toSuccess(success);
                 }else {
                     showToast(getString(R.string.return_failure));
+                    request.clear();
                 }
             }
         });

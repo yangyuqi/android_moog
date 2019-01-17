@@ -66,8 +66,8 @@ public class TodayStoreSalesActivity extends BaseActivity implements View.OnClic
     private List<ShopSale.ShopDataBean> list=new ArrayList<>();
     private TodayStoreSaleAdapter adapter;
 
-    private int page=1;
-    private int pageSize=10;
+//    private int page=1;
+//    private int pageSize=10;
     private boolean isDay=true;
     private String starstDate="";
     private String endsDate="";
@@ -78,26 +78,26 @@ public class TodayStoreSalesActivity extends BaseActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_today_store_sales);
         initView();
-        setListener();
+        //setListener();
     }
 
-    private void setListener() {
-       pr_list.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
-           @Override
-           public void onRefresh() {
-               page=1;
-               list.clear();
-               initData(page,pageSize,isDay,starstDate,endsDate);
-           }
-
-           @Override
-           public void onLoadMore() {
-               page++;
-               initData(page,pageSize,isDay,starstDate,endsDate);
-           }
-       });
-
-    }
+//    private void setListener() {
+//       pr_list.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
+//           @Override
+//           public void onRefresh() {
+//               page=1;
+//               list.clear();
+//               initData(page,pageSize,isDay);
+//           }
+//
+//           @Override
+//           public void onLoadMore() {
+//               page++;
+//               initData(page,pageSize,isDay);
+//           }
+//       });
+//
+//    }
 
     private void initView() {
         btnBack = (ImageView) findViewById(R.id.btnBack);
@@ -131,13 +131,13 @@ public class TodayStoreSalesActivity extends BaseActivity implements View.OnClic
     @Override
     protected void onResume() {
         super.onResume();
-        initData(page,pageSize,isDay,starstDate,endsDate);
+        initData(isDay,starstDate,endsDate);
     }
 
-    private void initData(int page, int pageSize, boolean isDay, String startDate, String endDate) {
+    private void initData(boolean isDay,String startDate,String endDate) {
         HashMap<String,Object> map=new HashMap<>();
-        map.put("pageNum",page);
-        map.put("pageSize",pageSize);
+//        map.put("pageNum",page);
+//        map.put("pageSize",pageSize);
         map.put("isDay",isDay);
         map.put("startDate",startDate);
         map.put("endDate",endDate);

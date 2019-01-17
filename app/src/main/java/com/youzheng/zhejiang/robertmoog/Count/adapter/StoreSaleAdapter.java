@@ -58,13 +58,11 @@ public class StoreSaleAdapter extends RecyclerView.Adapter<StoreSaleAdapter.Sale
             @Override
             public void onClick(View v) {
                 String  role = (String) SharedPreferencesUtils.getParam(context,PublicUtils.role,"");
-                if (role.equals("SHOP_SELLER")){
-                    context.startActivity(new Intent(context,StoreSaleInsideActivity.class));
-                }else {
+
                     Intent intent=new Intent(context,StoreSaleInsideActivity.class);
                     intent.putExtra("shopPersonalId",bean.getShopPersonalId());
                     context.startActivity(intent);
-                }
+
 
             }
         });

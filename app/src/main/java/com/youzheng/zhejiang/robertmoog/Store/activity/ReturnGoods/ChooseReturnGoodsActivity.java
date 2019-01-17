@@ -249,7 +249,6 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
                 if (morelist.size()!=0){
                     if (MoreChooseReturnGoodsAdapter.productListBeanList.size()!=0){
                         requests.addAll(moreChooseReturnGoodsAdapter.getRequests());
-
                         Intent intent=new Intent(this,ReturnGoodsCounterActivity.class);
                         intent.putExtra("request", (Serializable) requests);
                         intent.putExtra("is_all",isall);

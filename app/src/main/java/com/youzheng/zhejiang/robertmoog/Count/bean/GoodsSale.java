@@ -68,7 +68,7 @@ public class GoodsSale {
              */
 
             private String sku;
-            private String count;
+            private long count;
             private String name;
 
             public String getSku() {
@@ -79,11 +79,11 @@ public class GoodsSale {
                 this.sku = sku;
             }
 
-            public String getCount() {
+            public long getCount() {
                 return count;
             }
 
-            public void setCount(String count) {
+            public void setCount(long count) {
                 this.count = count;
             }
 

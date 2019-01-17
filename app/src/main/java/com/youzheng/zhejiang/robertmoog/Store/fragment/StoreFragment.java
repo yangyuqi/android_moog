@@ -21,6 +21,7 @@ import com.youzheng.zhejiang.robertmoog.Store.activity.OrderListActivity;
 import com.youzheng.zhejiang.robertmoog.Store.activity.PeopleMangerActivity;
 import com.youzheng.zhejiang.robertmoog.Store.activity.ProfessionalCustomerActivity;
 import com.youzheng.zhejiang.robertmoog.Store.activity.ProfessionalCustomerOrderActivity;
+import com.youzheng.zhejiang.robertmoog.Store.activity.ReturnGoods.ReturnRecognitionActivity;
 import com.youzheng.zhejiang.robertmoog.Store.activity.ReturnGoodsManger.ReturnGoodsListActivity;
 import com.youzheng.zhejiang.robertmoog.Store.activity.SampleOutInformationActivity;
 import com.youzheng.zhejiang.robertmoog.Store.activity.SampleOutMangerActivity;
@@ -119,7 +120,7 @@ public class StoreFragment extends BaseFragment implements BaseFragment.ReloadIn
                         break;
 
                     case 9:
-                        startActivity(new Intent(getActivity(), ClientViewActivity.class));
+                        startActivity(new Intent(getActivity(), ReturnRecognitionActivity.class));
                         break;
 
                     case 10:

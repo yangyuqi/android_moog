@@ -3,7 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
+ <View
+     android:layout_width="match_parent"
+     android:layout_height="1dp"
+     android:background="@color/bg_all"/>
  <ListView
      android:id="@+id/lv_list"
      android:layout_width="match_parent"
@@ -11,5 +14,8 @@
      android:divider="@color/bg_all"
      android:dividerHeight="1dp"></ListView>
 
-
+ <View
+     android:layout_width="match_parent"
+     android:layout_height="1dp"
+     android:background="@color/bg_all"/>
 </LinearLayout>

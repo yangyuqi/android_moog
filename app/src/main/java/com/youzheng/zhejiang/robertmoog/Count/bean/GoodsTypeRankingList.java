@@ -67,7 +67,7 @@ public class GoodsTypeRankingList {
 
             private int id;
             private String categoryName;
-            private String count;
+            private long count;
 
             public int getId() {
                 return id;
@@ -85,11 +85,11 @@ public class GoodsTypeRankingList {
                 this.categoryName = categoryName;
             }
 
-            public String getCount() {
+            public long getCount() {
                 return count;
             }
 
-            public void setCount(String count) {
+            public void setCount(long count) {
                 this.count = count;
             }
         }

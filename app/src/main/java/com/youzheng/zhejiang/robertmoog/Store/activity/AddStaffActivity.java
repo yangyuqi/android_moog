@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -15,6 +16,7 @@ import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
 import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.R;
+import com.youzheng.zhejiang.robertmoog.Store.utils.ButtonUtils;
 
 import org.w3c.dom.Text;
 
@@ -61,6 +63,7 @@ public class AddStaffActivity extends BaseActivity implements View.OnClickListen
     private EditText mEtName;
 
     private String name,phone;
+    private LinearLayout lin_show;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +87,7 @@ public class AddStaffActivity extends BaseActivity implements View.OnClickListen
         tv_add.setOnClickListener(this);
         mTvName = (TextView) findViewById(R.id.tv_name);
         mEtName = (EditText) findViewById(R.id.et_name);
+        lin_show=findViewById(R.id.lin_show);
     }
 
     @Override
@@ -103,8 +107,12 @@ public class AddStaffActivity extends BaseActivity implements View.OnClickListen
                  }else if (TextUtils.isEmpty(name)){
                      showToast(getString(R.string.no_name));
                  }else {
+                     if (!ButtonUtils.isFastDoubleClick(R.id.tv_add)) {
+                         addStaff(name,phone);
+                     }else {
+                         showToast(getString(R.string.please_not_commit_more));
+                     }
 
-                     addStaff(name,phone);
 
                  }
                 break;
@@ -112,6 +120,7 @@ public class AddStaffActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void addStaff(String name,String phone){
+        lin_show.setVisibility(View.VISIBLE);
         HashMap<String,Object> map=new HashMap<>();
         map.put("phone",phone);
         map.put("name",name);
@@ -119,12 +128,13 @@ public class AddStaffActivity extends BaseActivity implements View.OnClickListen
         OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.ADD_SELLER + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
             public void onFailure(Request request, IOException e) {
-
+                lin_show.setVisibility(View.GONE);
             }
 
             @Override
             public void onResponse(String response) {
                 Log.e("添加导购",response);
+                lin_show.setVisibility(View.GONE);
                 BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                 if (baseModel!=null){
                     if (baseModel.getCode()==PublicUtils.code){

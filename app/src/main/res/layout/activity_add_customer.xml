@@ -10,137 +10,187 @@
 
     <include layout="@layout/title_bar" />
 
-    <LinearLayout
-        android:background="@color/bg_background_white"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:orientation="horizontal"
-        >
+        android:layout_height="match_parent">
 
-        <TextView
-            android:layout_marginLeft="@dimen/space_15"
-            android:textColor="@color/text_drak_black"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:textSize="@dimen/text_size_15"
-            android:text="@string/phone_number"
-            />
-
-        <EditText
-            android:id="@+id/edt_phone"
-            android:textSize="@dimen/text_size_15"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/space_15"
-            android:background="@null"
-            android:maxLength="11"
-            android:gravity="right|center_vertical"
-            android:paddingRight="35dp"
-            android:inputType="phone"
-            android:textColor="@color/text_drak_gray"
-            android:hint="请输入手机号码"
-            />
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <LinearLayout
+                android:background="@color/bg_background_white"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:orientation="horizontal"
+                >
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/bg_all"/>
+                <TextView
+                    android:layout_marginLeft="@dimen/space_15"
+                    android:textColor="@color/text_drak_black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="@dimen/text_size_15"
+                    android:text="@string/phone_number"
+                    />
 
-    <LinearLayout
-        android:background="@color/bg_background_white"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:orientation="horizontal"
-        >
+                <EditText
+                    android:id="@+id/edt_phone"
+                    android:textSize="@dimen/text_size_15"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/space_15"
+                    android:background="@null"
+                    android:maxLength="11"
+                    android:gravity="right|center_vertical"
+                    android:paddingRight="35dp"
+                    android:inputType="phone"
+                    android:textColor="@color/text_drak_gray"
+                    android:hint="请输入手机号码"
+                    />
 
-        <TextView
-            android:layout_marginLeft="@dimen/space_15"
-            android:textColor="@color/text_drak_black"
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/bg_all"/>
+
+            <LinearLayout
+                android:background="@color/bg_background_white"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:layout_marginLeft="@dimen/space_15"
+                    android:textColor="@color/text_drak_black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="@dimen/text_size_15"
+                    android:text="@string/name"
+                    />
+
+                <EditText
+                    android:id="@+id/edt_name"
+                    android:textSize="@dimen/text_size_15"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/space_15"
+                    android:background="@null"
+                    android:maxLength="11"
+                    android:gravity="right|center_vertical"
+                    android:paddingRight="35dp"
+                    android:textColor="@color/text_drak_gray"
+                    android:hint="请输入姓名"
+                    />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/bg_all"/>
+            <LinearLayout
+                android:id="@+id/lin_degree"
+                android:background="@drawable/layout_bg_select"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:layout_marginLeft="@dimen/space_15"
+                    android:textColor="@color/text_drak_black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="@dimen/text_size_15"
+                    android:text="@string/degree"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_degree"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="请选择身份"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="@color/text_drak_gray"
+                    android:textSize="@dimen/text_size_15"
+                    android:layout_marginRight="10dp"
+                    />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/group_9_4"
+                    android:layout_gravity="center_vertical"
+                    android:paddingRight="15dp"/>
+
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/bg_all"/>
+
+            <TextView
+                android:id="@+id/tv_add"
+                android:background="@color/text_blue"
+                android:layout_width="match_parent"
+                android:layout_height="43dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="54dp"
+                android:text="添加"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:textColor="@color/bg_background_white"
+                />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/lin_show"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:textSize="@dimen/text_size_15"
-            android:text="@string/name"
-            />
+            android:layout_centerInParent="true"
+            android:background="@color/transparent"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginBottom="80dp"
+            android:padding="9dp">
 
-        <EditText
-            android:id="@+id/edt_name"
-            android:textSize="@dimen/text_size_15"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/space_15"
-            android:background="@null"
-            android:maxLength="11"
-            android:gravity="right|center_vertical"
-            android:paddingRight="35dp"
-            android:textColor="@color/text_drak_gray"
-            android:hint="请输入姓名"
-            />
+            <com.wang.avi.AVLoadingIndicatorView
+                android:id="@+id/avi"
+                style="@style/AVLoadingIndicatorView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                app:indicatorColor="@color/colorPrimary"
+                app:indicatorName="BallSpinFadeLoaderIndicator" />
 
-    </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="上传图片中..."
+                android:textStyle="bold"
+                android:visibility="gone"
+                android:textColor="@color/colorPrimary"
+                android:textSize="15sp" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/bg_all"/>
-    <LinearLayout
-        android:id="@+id/lin_degree"
-        android:background="@drawable/layout_bg_select"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:orientation="horizontal"
-        >
+        </LinearLayout>
 
-        <TextView
-            android:layout_marginLeft="@dimen/space_15"
-            android:textColor="@color/text_drak_black"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical"
-            android:textSize="@dimen/text_size_15"
-            android:text="@string/degree"
-            />
 
-       <TextView
-           android:id="@+id/tv_degree"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:text="请选择身份"
-           android:layout_gravity="center_vertical"
-           android:textColor="@color/text_drak_gray"
-           android:textSize="@dimen/text_size_15"
-           android:layout_marginRight="10dp"
-           />
+    </FrameLayout>
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/group_9_4"
-            android:layout_gravity="center_vertical"
-            android:paddingRight="15dp"/>
 
-    </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/bg_all"/>
-
-    <TextView
-        android:id="@+id/tv_add"
-        android:background="@color/text_blue"
-        android:layout_width="match_parent"
-        android:layout_height="43dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:layout_marginTop="54dp"
-        android:text="添加"
-        android:textSize="16sp"
-        android:gravity="center"
-        android:textColor="@color/bg_background_white"
-        />
 
 </LinearLayout>

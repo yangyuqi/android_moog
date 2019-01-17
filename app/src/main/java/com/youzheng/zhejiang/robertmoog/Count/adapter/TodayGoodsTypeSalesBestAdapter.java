@@ -16,6 +16,7 @@ import com.youzheng.zhejiang.robertmoog.Count.activity.TodayGoodsTypeSalesBestDe
 import com.youzheng.zhejiang.robertmoog.Count.activity.TodaySingleGoodsSalesBestDetailActivity;
 import com.youzheng.zhejiang.robertmoog.Count.bean.GoodsTypeRankingList;
 import com.youzheng.zhejiang.robertmoog.R;
+import com.youzheng.zhejiang.robertmoog.Store.listener.OnRecyclerViewAdapterItemClickListener;
 
 import java.util.List;
 
@@ -23,6 +24,12 @@ public class TodayGoodsTypeSalesBestAdapter extends RecyclerView.Adapter<TodayGo
     private List<GoodsTypeRankingList.CategoryListBean> list;
     private Context context;
     private LayoutInflater layoutInflater;
+    private OnRecyclerViewAdapterItemClickListener mOnItemClickListener;
+
+    public void setOnItemClickListener(OnRecyclerViewAdapterItemClickListener mOnItemClickListener) {
+        this.mOnItemClickListener = mOnItemClickListener;
+    }
+
 
     public TodayGoodsTypeSalesBestAdapter(List<GoodsTypeRankingList.CategoryListBean> list, Context context) {
         this.list = list;
@@ -39,7 +46,22 @@ public class TodayGoodsTypeSalesBestAdapter extends RecyclerView.Adapter<TodayGo
     @Override
     public SaleHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int position) {
         View view=layoutInflater.inflate(R.layout.item_goods_type_ranking,viewGroup,false);
-        SaleHolder saleHolder=new SaleHolder(view);
+        final SaleHolder saleHolder=new SaleHolder(view);
+
+
+        saleHolder.tv_name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                int position = saleHolder.getLayoutPosition();
+                //设置监听
+                if (mOnItemClickListener != null) {
+                    mOnItemClickListener.onItemClick(view ,position );
+                }
+
+            }
+        });
+
         return saleHolder;
     }
 
@@ -50,17 +72,8 @@ public class TodayGoodsTypeSalesBestAdapter extends RecyclerView.Adapter<TodayGo
         saleHolder.tv_name.getPaint().setFlags(Paint. UNDERLINE_TEXT_FLAG ); //下划线
         saleHolder.tv_name.getPaint().setAntiAlias(true);//抗锯齿
 
-        saleHolder.tv_order_value.setText(bean.getCount());
-        final int goodid=bean.getId();
+        saleHolder.tv_order_value.setText(bean.getCount()+"");
 
-        saleHolder.tv_name.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(context,TodayGoodsTypeSalesBestDetailActivity.class);
-                intent.putExtra("todaygoodsId",goodid);
-                context.startActivity(intent);
-            }
-        });
 
 
     }

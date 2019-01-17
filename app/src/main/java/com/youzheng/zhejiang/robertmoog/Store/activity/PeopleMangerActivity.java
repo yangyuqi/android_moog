@@ -37,7 +37,8 @@ import java.util.List;
 
 import okhttp3.Request;
 
-/**|
+/**
+ * |
  * 员工管理界面
  */
 public class PeopleMangerActivity extends BaseActivity implements View.OnClickListener {
@@ -53,11 +54,11 @@ public class PeopleMangerActivity extends BaseActivity implements View.OnClickLi
     /**
      * 添加导购
      */
-    private TextView tv_add,tv_store_name;
-    private List<PeopleMangerList.ShopPersonalListBean> list=new ArrayList<>();
+    private TextView tv_add, tv_store_name;
+    private List<PeopleMangerList.ShopPersonalListBean> list = new ArrayList<>();
     private PeopleMangerAdapter adapter;
-    private int page=1;
-    private int pageSize=10;
+    private int page = 1;
+    private int pageSize = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,15 +72,15 @@ public class PeopleMangerActivity extends BaseActivity implements View.OnClickLi
         lv_list.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
             @Override
             public void onRefresh() {
-                page=1;
+                page = 1;
                 list.clear();
-                initData(page,pageSize);
+                initData(page, pageSize);
             }
 
             @Override
             public void onLoadMore() {
-                 page++;
-                 initData(page,pageSize);
+                page++;
+                initData(page, pageSize);
             }
         });
 
@@ -95,7 +96,7 @@ public class PeopleMangerActivity extends BaseActivity implements View.OnClickLi
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);
         lv_list = (PullLoadMoreRecyclerView) findViewById(R.id.lv_list);
         tv_add = (TextView) findViewById(R.id.tv_add);
-        tv_store_name=findViewById(R.id.tv_store_name);
+        tv_store_name = findViewById(R.id.tv_store_name);
         tv_add.setOnClickListener(this);
 
         lv_list.setLinearLayout();
@@ -103,7 +104,7 @@ public class PeopleMangerActivity extends BaseActivity implements View.OnClickLi
                 this, LinearLayoutManager.VERTICAL, 5, getResources().getColor(R.color.divider_color_item)));
         lv_list.setColorSchemeResources(R.color.colorPrimary);
 
-        adapter=new PeopleMangerAdapter(list,this);
+        adapter = new PeopleMangerAdapter(list, this);
         lv_list.setAdapter(adapter);
         adapter.setOnItemClickListener(new OnRecyclerViewAdapterItemClickListener() {
             @Override
@@ -126,21 +127,21 @@ public class PeopleMangerActivity extends BaseActivity implements View.OnClickLi
         dialogBuilder.show();
         dialogBuilder.setContentView(dialogView);
 
-        TextView tv_no=dialogView.findViewById(R.id.tv_no);
-        TextView tv_ok=dialogView.findViewById(R.id.tv_ok);
+        TextView tv_no = dialogView.findViewById(R.id.tv_no);
+        TextView tv_ok = dialogView.findViewById(R.id.tv_ok);
 
         tv_no.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              dialogBuilder.dismiss();
+                dialogBuilder.dismiss();
             }
         });
 
         tv_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                  stopPeople(id);
-                  dialogBuilder.dismiss();
+                stopPeople(id);
+                dialogBuilder.dismiss();
             }
         });
 
@@ -160,8 +161,8 @@ public class PeopleMangerActivity extends BaseActivity implements View.OnClickLi
 
     private void stopPeople(int id) {
 
-        HashMap<String,Object> map=new HashMap<>();
-        map.put("employeeId",id);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("employeeId", id);
 
         OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.STOP_SELLER + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
@@ -171,14 +172,18 @@ public class PeopleMangerActivity extends BaseActivity implements View.OnClickLi
 
             @Override
             public void onResponse(String response) {
-                Log.e("停用员工",response);
-                BaseModel baseModel = gson.fromJson(response,BaseModel.class);
-                if (baseModel.getCode()==PublicUtils.code){
-                       if (!baseModel.getMsg().equals("")){
-                           showToast(baseModel.getMsg());
-                       }
-                       initData(page,pageSize);
-                       lv_list.setRefreshing(true);
+                Log.e("停用员工", response);
+                BaseModel baseModel = gson.fromJson(response, BaseModel.class);
+                if (baseModel.getCode() == PublicUtils.code) {
+
+                    showToast(getString(R.string.stop_success));
+                    initData(page, pageSize);
+                    lv_list.setRefreshing(true);
+                } else {
+                    if (!baseModel.getMsg().equals("")) {
+                        showToast(baseModel.getMsg());
+                    }
+
                 }
             }
         });
@@ -188,15 +193,15 @@ public class PeopleMangerActivity extends BaseActivity implements View.OnClickLi
     @Override
     protected void onResume() {
         super.onResume();
-        initData(page,pageSize);
+        initData(page, pageSize);
     }
 
     private void initData(int page, int pageSize) {
 
 
-        HashMap<String,Object> map=new HashMap<>();
-        map.put("pageNum",page);
-        map.put("pageSize",pageSize);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("pageNum", page);
+        map.put("pageSize", pageSize);
 
         OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.PEOPLE_MAGER_LIST + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
@@ -206,13 +211,13 @@ public class PeopleMangerActivity extends BaseActivity implements View.OnClickLi
 
             @Override
             public void onResponse(String response) {
-                Log.e("门店管理列表",response);
+                Log.e("门店管理列表", response);
                 lv_list.setPullLoadMoreCompleted();
-                BaseModel baseModel = gson.fromJson(response,BaseModel.class);
-                if (baseModel.getCode()==PublicUtils.code){
-                    PeopleMangerList peopleMangerList = gson.fromJson(gson.toJson(baseModel.getDatas()),PeopleMangerList.class);
+                BaseModel baseModel = gson.fromJson(response, BaseModel.class);
+                if (baseModel.getCode() == PublicUtils.code) {
+                    PeopleMangerList peopleMangerList = gson.fromJson(gson.toJson(baseModel.getDatas()), PeopleMangerList.class);
                     setData(peopleMangerList);
-                }else {
+                } else {
                     showToast(baseModel.getMsg());
                 }
             }
@@ -222,18 +227,17 @@ public class PeopleMangerActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void setData(PeopleMangerList peopleMangerList) {
-        if (peopleMangerList.getShopPersonalList()==null) return;
-        if (!peopleMangerList.getShopName().equals("")){
+        if (peopleMangerList.getShopPersonalList() == null) return;
+        if (!peopleMangerList.getShopName().equals("")) {
             tv_store_name.setText(peopleMangerList.getShopName());
         }
-        List<PeopleMangerList.ShopPersonalListBean> listBeans=peopleMangerList.getShopPersonalList();
-        if (listBeans.size()!=0){
+        List<PeopleMangerList.ShopPersonalListBean> listBeans = peopleMangerList.getShopPersonalList();
+        if (listBeans.size() != 0) {
             list.addAll(listBeans);
             adapter.setUI(listBeans);
-        }else {
+        } else {
             showToast(getString(R.string.load_list_erron));
         }
-
 
 
     }
@@ -247,7 +251,7 @@ public class PeopleMangerActivity extends BaseActivity implements View.OnClickLi
                 finish();
                 break;
             case R.id.tv_add:
-                startActivity(new Intent(this,AddStaffActivity.class));
+                startActivity(new Intent(this, AddStaffActivity.class));
                 break;
         }
     }

@@ -1,5 +1,6 @@
 package com.youzheng.zhejiang.robertmoog.Count.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
@@ -18,6 +19,7 @@ import com.youzheng.zhejiang.robertmoog.Count.adapter.TodayGoodsTypeSalesBestAda
 import com.youzheng.zhejiang.robertmoog.Count.bean.GoodsTypeRankingList;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.R;
+import com.youzheng.zhejiang.robertmoog.Store.listener.OnRecyclerViewAdapterItemClickListener;
 import com.youzheng.zhejiang.robertmoog.Store.view.RecycleViewDivider;
 
 import java.io.IOException;
@@ -27,7 +29,7 @@ import java.util.List;
 
 import okhttp3.Request;
 
-public class TodayGoodsTypeSaleBestActivity extends BaseActivity implements View.OnClickListener {
+public class TodayGoodsTypeSaleBestActivity extends BaseActivity implements View.OnClickListener, OnRecyclerViewAdapterItemClickListener {
 
     private ImageView btnBack;
     /**  */
@@ -100,6 +102,8 @@ public class TodayGoodsTypeSaleBestActivity extends BaseActivity implements View
         pr_list.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
+        adapter.setOnItemClickListener(this);
+
     }
 
     @Override
@@ -159,5 +163,17 @@ public class TodayGoodsTypeSaleBestActivity extends BaseActivity implements View
                 finish();
                 break;
         }
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        Intent intent=new Intent(this,TodayGoodsTypeSalesBestDetailActivity.class);
+        intent.putExtra("todaygoodsId",list.get(position).getId());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onItemLongClick(View view, int position) {
+
     }
 }

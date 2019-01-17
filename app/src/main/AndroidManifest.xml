@@ -29,7 +29,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:launchMode="singleTask"></activity>
+            android:launchMode="singleTask" />
         <activity android:name=".Home.activity.WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -202,20 +202,19 @@
         <activity
             android:name=".Home.activity.SetMealActivity"
             android:screenOrientation="portrait" />
-
-        <activity android:name=".Home.activity.CouponActivity"
+        <activity
+            android:name=".Home.activity.CouponActivity"
             android:theme="@style/MyDialogStyleBottom" />
-        <activity android:name=".Store.activity.StoreOrderlistDetailActivity"></activity>
-
-        <activity android:name=".Home.activity.SetMealDetailsActivity"
+        <activity android:name=".Store.activity.StoreOrderlistDetailActivity" />
+        <activity
+            android:name=".Home.activity.SetMealDetailsActivity"
             android:screenOrientation="portrait" />
-
-        <activity android:name=".Home.activity.ClientAccountActivity"
+        <activity
+            android:name=".Home.activity.ClientAccountActivity"
             android:screenOrientation="portrait" />
-
         <activity android:name=".Store.activity.ReturnGoods.ChooseReturnGoodsActivity" />
-        <activity android:name=".Store.activity.ReturnGoods.ReturnGoodsCounterActivity"></activity>
-
+        <activity android:name=".Store.activity.ReturnGoods.ReturnGoodsCounterActivity" />
+        <activity android:name=".Store.activity.ReturnGoods.ReturnRecognitionActivity"></activity>
     </application>
 
 </manifest>

@@ -66,7 +66,7 @@ public class GoodsTypeRankingAdapter extends RecyclerView.Adapter<GoodsTypeRanki
         saleHolder.tv_name.getPaint().setFlags(Paint. UNDERLINE_TEXT_FLAG ); //下划线
         saleHolder.tv_name.getPaint().setAntiAlias(true);//抗锯齿
 
-        saleHolder.tv_order_value.setText(bean.getCount());
+        saleHolder.tv_order_value.setText(bean.getCount()+"");
 
 
     }

@@ -21,6 +21,7 @@ import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
 import com.youzheng.zhejiang.robertmoog.Count.activity.GoodsSaleActivity;
 import com.youzheng.zhejiang.robertmoog.Count.activity.GoodsTypeRankingActivity;
 import com.youzheng.zhejiang.robertmoog.Count.activity.MealRankingActivity;
+import com.youzheng.zhejiang.robertmoog.Count.activity.StoreSaleInsideActivity;
 import com.youzheng.zhejiang.robertmoog.Count.activity.StoreSalesNumberActivity;
 import com.youzheng.zhejiang.robertmoog.Count.activity.TodayGoodsTypeSaleBestActivity;
 import com.youzheng.zhejiang.robertmoog.Count.activity.TodayMealSalesBestActivity;
@@ -97,6 +98,7 @@ public class CountFragment extends BaseFragment implements BaseFragment.ReloadIn
      */
     private TextView tv_today_best_ranking;
     private String shopCount,setMealCount,categoryCount,singleProductCount,customerCount,productName,setMealInfo;
+    private String role;
 
     @Nullable
     @Override
@@ -206,6 +208,7 @@ public class CountFragment extends BaseFragment implements BaseFragment.ReloadIn
         tv_number = (TextView) mView.findViewById(R.id.tv_number);
         tv_sale_number = (TextView) mView.findViewById(R.id.tv_sale_number);
         tv_today_best_ranking = (TextView) mView.findViewById(R.id.tv_today_best_ranking);
+        role = (String) SharedPreferencesUtils.getParam(getActivity(), PublicUtils.role,"");
     }
 
     @Override
@@ -221,7 +224,12 @@ public class CountFragment extends BaseFragment implements BaseFragment.ReloadIn
                 break;
 
             case R.id.rv_store_number://门店销量
-                 startActivity(new Intent(getActivity(),StoreSalesNumberActivity.class));
+                if (role.equals("SHOP_SELLER")){
+                    startActivity(new Intent(getActivity(),StoreSaleInsideActivity.class));
+                }else {
+                    startActivity(new Intent(getActivity(),StoreSalesNumberActivity.class));
+                }
+
                 break;
             case R.id.rv_goods_number://商品销量
                 startActivity(new Intent(getActivity(),GoodsSaleActivity.class));

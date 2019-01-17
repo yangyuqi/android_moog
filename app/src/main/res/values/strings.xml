@@ -63,7 +63,6 @@
     <string name="null_sd">没有SD卡</string>
 
 
-
     <string name="return_counter">退货柜台</string>
     <string name="get_goods_state">提货状态</string>
     <string name="return_goods_type">退款方式</string>
@@ -144,4 +143,7 @@
     <string name="pic_not_finish_yas">图片没有压缩完成</string>
     <string name="code_is">验证码:</string>
     <string name="commit_success">提交成功</string>
+    <string name="customer_recognition">客户识别</string>
+    <string name="please_not_commit_more">请勿重复添加</string>
+    <string name="stop_success">停用成功</string>
 </resources>

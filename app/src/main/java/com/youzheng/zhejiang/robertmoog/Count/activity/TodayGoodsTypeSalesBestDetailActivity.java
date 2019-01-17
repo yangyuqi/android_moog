@@ -55,6 +55,7 @@ public class TodayGoodsTypeSalesBestDetailActivity extends BaseActivity implemen
     private String startstr="";
     private String endstr="";
     private int categoryId;
+    private String type="COUNT";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,13 +75,13 @@ public class TodayGoodsTypeSalesBestDetailActivity extends BaseActivity implemen
             public void onRefresh() {
                 page=1;
                 list.clear();
-                initData(page,pageSize,isDay,startstr,endstr,categoryId);
+                initData(page,pageSize,isDay,startstr,endstr,categoryId,type);
             }
 
             @Override
             public void onLoadMore() {
                 page++;
-                initData(page,pageSize,isDay,startstr,endstr,categoryId);
+                initData(page,pageSize,isDay,startstr,endstr,categoryId,type);
             }
         });
 
@@ -119,10 +120,10 @@ public class TodayGoodsTypeSalesBestDetailActivity extends BaseActivity implemen
     @Override
     protected void onResume() {
         super.onResume();
-        initData(page,pageSize,isDay,startstr,endstr,categoryId);
+        initData(page,pageSize,isDay,startstr,endstr,categoryId,type);
     }
 
-    private void initData(int page, int pageSize, boolean isDay, String startDate, String endDate, int categoryId) {
+    private void initData(int page, int pageSize, boolean isDay, String startDate, String endDate, int categoryId,String type) {
         HashMap<String,Object> map=new HashMap<>();
         map.put("pageNum",page);
         map.put("pageSize",pageSize);
@@ -130,6 +131,7 @@ public class TodayGoodsTypeSalesBestDetailActivity extends BaseActivity implemen
         map.put("startDate",startDate);
         map.put("endDate",endDate);
         map.put("categoryId",categoryId);
+        map.put("rule",type);
 
         OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.GOODS_TYPE_RANKING_DETAIL + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
