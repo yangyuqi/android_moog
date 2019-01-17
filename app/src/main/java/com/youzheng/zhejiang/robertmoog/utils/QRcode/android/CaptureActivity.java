@@ -39,6 +39,8 @@ import com.youzheng.zhejiang.robertmoog.Home.activity.SearchGoodsActivity;
 import com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider;
 import com.youzheng.zhejiang.robertmoog.Home.adapter.SearchResultAdapter;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
+import com.youzheng.zhejiang.robertmoog.Model.Home.CustomerData;
+import com.youzheng.zhejiang.robertmoog.Model.Home.IntentProductList;
 import com.youzheng.zhejiang.robertmoog.Model.Home.IntentProductsBeanAdd;
 import com.youzheng.zhejiang.robertmoog.Model.Home.OrderSetMealDatasBean;
 import com.youzheng.zhejiang.robertmoog.Model.Home.ProductListBean;
@@ -136,6 +138,9 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
 
         if (config == null) {
             config = new ZxingConfig();
+            config.setReactColor(R.color.color_air_blue);//设置扫描框四个角的颜色 默认为白色
+            config.setFrameLineColor(R.color.bg_background_white);//设置扫描框边框颜色 默认无色
+            config.setScanLineColor(R.color.color_air_blue);//设置扫描线的颜色 默认白色
         }
         getWindow().setSoftInputMode
                 (WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN|
@@ -219,7 +224,6 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
                             Intent intent = new Intent(CaptureActivity.this, SalesActivity.class);
                             intent.putExtra("customerId", customerId);
                             intent.putExtra("data", datasBeanList);
-                            Log.e("ssssssssss",gson.toJson(datasBeanList));
                             startActivity(intent);
                         }else {
                             addIntention();
@@ -232,6 +236,29 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
     }
 
     private void addIntention() {
+        Map<String,Object> map1 = new HashMap<>();
+        map1.put("id",customerId);
+        OkHttpClientManager.postAsynJson(gson.toJson(map1), UrlUtils.ATTENTION_GOODS_LIST + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(String response) {
+                BaseModel baseModel = gson.fromJson(response,BaseModel.class);
+                if (baseModel.getCode()== PublicUtils.code){
+                    final CustomerData intentDataBean = gson.fromJson(gson.toJson(baseModel.getDatas()),CustomerData.class);
+                    for (IntentProductList productList : intentDataBean.getCustomerIntentData().getIntentProductList()){
+                        String id = productList.getId();
+                        for (ScanDatasBean bean :datasBeanList){
+//                            if (id.equals(bean.getId()))
+                        }
+                    }
+                }
+            }
+        });
+
         Map<String,Object> map = new HashMap<>();
         map.put("customerId",customerId);
         ArrayList<IntentProductsBeanAdd> beanAdds = new ArrayList<>();
@@ -274,7 +301,7 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
         setResult(RESULT_OK, intent);
 //        this.finish();
         addData(rawResult.getText());
-        Toast.makeText(this,rawResult.getText(),Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this,rawResult.getText(),Toast.LENGTH_SHORT).show();
     }
 
 

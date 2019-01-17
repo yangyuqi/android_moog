@@ -1,13 +1,19 @@
 package com.youzheng.zhejiang.robertmoog.Base.request;
 
 
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 
+import com.google.gson.Gson;
 import com.youzheng.zhejiang.robertmoog.Base.utils.SSLSocketClient;
+import com.youzheng.zhejiang.robertmoog.Home.activity.LoginActivity;
+import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
+import com.youzheng.zhejiang.robertmoog.RMApp;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -347,6 +353,11 @@ public class OkHttpClientManager
                 if (callback != null)
                     try {
                         callback.onResponse(string);
+                        BaseModel baseModel = new Gson().fromJson(string,BaseModel.class);
+                        if (baseModel.getCode()==401){
+                            RMApp.mContext.startActivity(new Intent(RMApp.mContext, LoginActivity.class));
+                            Toast.makeText(RMApp.mContext,"登录失效,请重新登录",Toast.LENGTH_SHORT).show();
+                        }
                     }catch (Exception e){
 
                     }

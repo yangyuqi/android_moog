@@ -192,7 +192,8 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 @Override
                 public void afterTextChanged(Editable s) {
                     if (s.toString().equals("")){
-                        ((CommonGoodsViewHolder) holder).edt_num.setText("1");
+//                        ((CommonGoodsViewHolder) holder).edt_num.setText("1");
+                        objects.get(position).setNum(1);
                         return;
                     }
                     if (Integer.parseInt(s.toString().trim())<1){
@@ -354,7 +355,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 @Override
                 public void afterTextChanged(Editable s) {
                     if (s.toString().equals("")){
-                        ((CommonGoodsTypeViewHolder) holder).edt_num.setText("1");
+                        objects.get(position).setNum(1);
                         return;
                     }
                     if (Integer.parseInt(s.toString().trim())<1){

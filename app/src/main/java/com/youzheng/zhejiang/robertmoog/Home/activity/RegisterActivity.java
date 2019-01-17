@@ -77,7 +77,6 @@ public class RegisterActivity  extends BaseActivity {
                     @Override
                     public void onResponse(String response) {
                         BaseModel baseModel = gson.fromJson(response,BaseModel.class);
-                        showToast(baseModel.getMsg());
                         if (baseModel.getCode()==PublicUtils.code){
                             RegisterBean registerBean = gson.fromJson(gson.toJson(baseModel.getDatas()),RegisterBean.class);
                             Intent intent = new Intent(mContext,RegisterSuccessActivity.class);

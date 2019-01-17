@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.liaoinstan.springview.widget.SpringView;
 import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
@@ -35,6 +36,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.greenrobot.event.EventBus;
+import de.greenrobot.event.Subscribe;
 import okhttp3.Request;
 
 public class AttentionManagerActivity extends BaseActivity {
@@ -42,7 +45,7 @@ public class AttentionManagerActivity extends BaseActivity {
     private ShopPersonalListBean listBean ;
     private TabLayout tabLayout ;
     private String personalId ,phone;
-    private int pageNum = 1 ,pageSize=20;
+    private int pageNum = 1 ,pageSize=20 ,totalPage;
     Map<String,Object> map = new HashMap<>();
     RecyclerView recyclerView ;
     ListView ls ;
@@ -53,6 +56,7 @@ public class AttentionManagerActivity extends BaseActivity {
     CommonAdapter<ShopPersonalListBean> com_adapter ;
     List<ShopPersonalListBean> da_list = new ArrayList<>();
     ImageView iv_search ;
+    SpringView springView ;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,10 +66,17 @@ public class AttentionManagerActivity extends BaseActivity {
         DisplayMetrics outMetrics = new DisplayMetrics();
         manager.getDefaultDisplay().getMetrics(outMetrics);
         widWidth = outMetrics.widthPixels;
+        EventBus.getDefault().register(this);
         initView();
         initData();
 
         initClick();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     private void initClick() {
@@ -73,12 +84,12 @@ public class AttentionManagerActivity extends BaseActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 if (tab.getPosition()==0){
-                    recyclerView.setVisibility(View.VISIBLE);
+                    springView.setVisibility(View.VISIBLE);
                     ls.setVisibility(View.GONE);
                     findViewById(R.id.rl_search).setVisibility(View.VISIBLE);
                     initData();
                 }else if (tab.getPosition()==1){
-                    recyclerView.setVisibility(View.GONE);
+                    springView.setVisibility(View.GONE);
                     ls.setVisibility(View.VISIBLE);
                     findViewById(R.id.rl_search).setVisibility(View.GONE);
                     refreshData();
@@ -93,6 +104,24 @@ public class AttentionManagerActivity extends BaseActivity {
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
 
+            }
+        });
+
+        springView.setListener(new SpringView.OnFreshListener() {
+            @Override
+            public void onRefresh() {
+                pageNum=1 ;
+                initData();
+            }
+
+            @Override
+            public void onLoadmore() {
+                if (totalPage>pageNum){
+                    pageNum++;
+                    initData();
+                }else {
+                    springView.onFinishFreshAndLoad();
+                }
             }
         });
     }
@@ -128,15 +157,17 @@ public class AttentionManagerActivity extends BaseActivity {
         OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.CUSTOMER_INTENT + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
             public void onFailure(Request request, IOException e) {
-
+                springView.onFinishFreshAndLoad();
             }
 
             @Override
             public void onResponse(String response) {
+                springView.onFinishFreshAndLoad();
                 BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                 if (baseModel.getCode()==PublicUtils.code){
                     CustomerIntentDatas datas = gson.fromJson(gson.toJson(baseModel.getDatas()),CustomerIntentDatas.class);
                     if (datas.getCustomerIntentList().size()>0){
+                        totalPage = datas.getTotalPage();
                         List<CustomerIntentListBean> customerList = datas.getCustomerIntentList();
                         for (int  i = 0 ; i<customerList.size();i++){
                             if (customerList.get(i).getProductList().size()>0) {
@@ -175,6 +206,7 @@ public class AttentionManagerActivity extends BaseActivity {
         adapter = new CustomerGoodsAdapter(data,mContext ,widWidth);
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new RecycleViewDivider(mContext, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
+        springView = findViewById(R.id.sv);
         if (role.equals(PublicUtils.SHOP_SELLER)){
             tabLayout.setVisibility(View.VISIBLE);
         }else if (role.equals(PublicUtils.SHOP_LEADER)){
@@ -213,5 +245,12 @@ public class AttentionManagerActivity extends BaseActivity {
                 initData();
             }
         });
+    }
+
+    @Subscribe
+    public void onEvent(String refresh){
+        if (refresh.equals("refresh")){
+            initData();
+        }
     }
 }

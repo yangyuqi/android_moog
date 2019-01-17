@@ -249,7 +249,7 @@ public final class CameraManager {
 
             int screenResolutionX = screenResolution.x;
 
-            int width = (int) (screenResolutionX * 0.6);
+            int width = (int) (screenResolutionX * 0.43);
             int height = width;
 
 

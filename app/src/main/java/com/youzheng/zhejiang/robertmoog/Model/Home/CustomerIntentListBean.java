@@ -7,8 +7,17 @@ public class CustomerIntentListBean {
    private String id ;
    private String custCode ;
    private Integer productCount ;
+   private String remark ;
    private List<ProductListBean> productList = new ArrayList<>();
    private boolean isExpress = false ;
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 
     public boolean isExpress() {
         return isExpress;

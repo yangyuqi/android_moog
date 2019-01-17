@@ -89,6 +89,8 @@ public class ClientViewActivity extends BaseActivity {
                                 }
                             });
 
+                        }else {
+                            showToast(baseModel.getMsg());
                         }
                     }
                 });

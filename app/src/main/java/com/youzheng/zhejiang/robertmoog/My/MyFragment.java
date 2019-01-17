@@ -105,6 +105,7 @@ public class MyFragment extends BaseFragment implements BaseFragment.ReloadInter
                                     if (baseModel.getCode()==PublicUtils.code){
                                         SharedPreferencesUtils.clear(mContext);
                                         getActivity().finish();
+                                        startActivity(new Intent(mContext,LoginActivity.class));
                                     }else {
                                         showToast(baseModel.getMsg());
                                     }

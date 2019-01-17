@@ -1,6 +1,7 @@
 package com.youzheng.zhejiang.robertmoog;
 
 import android.app.Application;
+import android.content.Context;
 import android.graphics.Color;
 
 import com.tencent.bugly.crashreport.CrashReport;
@@ -14,10 +15,13 @@ import cn.finalteam.galleryfinal.ThemeConfig;
 
 public class RMApp extends Application {
 
+    public static  Context mContext ;
+
     @Override
     public void onCreate() {
         super.onCreate();
         initGallerFinal();
+        mContext = this;
 //        CrashReport.initCrashReport(getApplicationContext(), "175a6bc0e2", true);
     }
 

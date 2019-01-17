@@ -149,8 +149,10 @@ public class AttentionGoodsActivity extends BaseActivity {
                     tv_update_intent.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            RemarkDialog remarkDialog = new RemarkDialog(AttentionGoodsActivity.this,intentDataBean.getCustomerIntentData().getId(),intentDataBean.getCustomerIntentData().getRemark());
-                            remarkDialog.show();
+                            if (intentDataBean.getCustomerIntentData().getId()!=null) {
+                                RemarkDialog remarkDialog = new RemarkDialog(AttentionGoodsActivity.this, intentDataBean.getCustomerIntentData().getId(), intentDataBean.getCustomerIntentData().getRemark());
+                                remarkDialog.show();
+                            }
                         }
                     });
 

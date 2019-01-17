@@ -12,11 +12,13 @@ import android.graphics.Rect;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
 import com.google.zxing.ResultPoint;
+import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.utils.QRcode.bean.ZxingConfig;
 import com.youzheng.zhejiang.robertmoog.utils.QRcode.camera.CameraManager;
@@ -28,7 +30,7 @@ import java.util.List;
 public final class ViewfinderView extends View {
 
     /*界面刷新间隔时间*/
-    private static final long ANIMATION_DELAY = 80L;
+    private static final long ANIMATION_DELAY = 10L;
     private static final int CURRENT_POINT_OPACITY = 0xA0;
     private static final int MAX_RESULT_POINTS = 20;
     private static final int POINT_SIZE = 6;
@@ -168,6 +170,7 @@ public final class ViewfinderView extends View {
         }
         initAnimator();
 
+
         int width = canvas.getWidth();
         int height = canvas.getHeight();
 
@@ -258,15 +261,15 @@ public final class ViewfinderView extends View {
      * 绘制取景框边框
      *
      * @param canvas
-     * @param frame
+     * @param
      */
+
     private void drawFrameBounds(Canvas canvas, Rect frame) {
 
         /*扫描框的边框线*/
         if (frameLineColor != -1) {
             canvas.drawRect(frame, frameLinePaint);
         }
-
 
         /*四个角的长度和宽度*/
         int width = frame.width();

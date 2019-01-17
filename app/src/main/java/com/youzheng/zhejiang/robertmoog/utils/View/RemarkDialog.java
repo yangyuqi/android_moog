@@ -30,12 +30,12 @@ import okhttp3.Request;
 
 public class RemarkDialog extends Dialog implements View.OnClickListener{
 
-    AttentionGoodsActivity mcontext ;
+    Context mcontext ;
     private String id , remark ;
     EditText confrim_dialog_tv_content ;
     TextView tv_no ,tv_ok ;
     String token ;
-    public RemarkDialog(AttentionGoodsActivity context, String id, String remark){
+    public RemarkDialog(Context context, String id, String remark){
         super(context, R.style.DeleteDialogStyle);
         mcontext = context;
         token = (String) SharedPreferencesUtils.getParam(context, PublicUtils.access_token,"");

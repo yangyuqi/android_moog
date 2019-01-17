@@ -18,6 +18,7 @@ import com.google.gson.Gson;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
 import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
+import com.youzheng.zhejiang.robertmoog.Home.activity.AttentionGoodsActivity;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.Model.Home.CustomerIntentData;
 import com.youzheng.zhejiang.robertmoog.Model.Home.CustomerIntentListBean;
@@ -27,6 +28,7 @@ import com.youzheng.zhejiang.robertmoog.utils.SharedPreferencesUtils;
 import com.youzheng.zhejiang.robertmoog.utils.View.DeleteDialog;
 import com.youzheng.zhejiang.robertmoog.utils.View.DeleteDialogInterface;
 import com.youzheng.zhejiang.robertmoog.utils.View.NoScrollListView;
+import com.youzheng.zhejiang.robertmoog.utils.View.RemarkDialog;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -136,6 +138,16 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
                 ((CustomerIntentViewHolder) viewHolder).hsv.setVisibility(View.GONE);
             }
 
+            ((CustomerIntentViewHolder) viewHolder).iv_message.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (data.get(i).getId()!=null) {
+                        RemarkDialog remarkDialog = new RemarkDialog(context, data.get(i).getId(), data.get(i).getRemark());
+                        remarkDialog.show();
+                    }
+                }
+            });
+
             ((CustomerIntentViewHolder) viewHolder).iv_delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -213,7 +225,7 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         View rl_show ,main_right_drawer_layout;
         TextView tv_phone ,tv_time ,tv_name ,tv_desc ,tv_num;
-        ImageView iv_mesg , iv_delete ,iv_icon ,iv_show_more;
+        ImageView iv_message , iv_delete ,iv_icon ,iv_show_more;
         NoScrollListView ls ;
         LinearLayout ll_width ;
         HorizontalScrollView hsv ;
@@ -232,6 +244,7 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
             main_right_drawer_layout = itemView.findViewById(R.id.main_right_drawer_layout);
             hsv = itemView.findViewById(R.id.hsv);
             iv_show_more = itemView.findViewById(R.id.iv_show_more);
+            iv_message = itemView.findViewById(R.id.iv_message);
         }
     }
 }

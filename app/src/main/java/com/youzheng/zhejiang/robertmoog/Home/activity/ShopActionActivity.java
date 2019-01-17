@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.liaoinstan.springview.widget.SpringView;
 import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
@@ -32,8 +33,10 @@ public class ShopActionActivity extends BaseActivity {
 
     ListView ls ;
     private String promoType = "current";
-    int pageNum = 1 , pageSize =20 ;
+    int pageNum = 1 , pageSize =20 ,totalPage;
     private Integer customerId ;
+
+    SpringView springView ;
 
     CommonAdapter<GetPromoListBean> adapter ;
     private List<GetPromoListBean> data = new ArrayList<>();
@@ -61,16 +64,19 @@ public class ShopActionActivity extends BaseActivity {
         OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.ACTION_LIST + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
             public void onFailure(Request request, IOException e) {
-
+                springView.onFinishFreshAndLoad();
             }
 
             @Override
             public void onResponse(String response) {
+                springView.onFinishFreshAndLoad();
                 BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                 if (baseModel.getCode()== PublicUtils.code){
                     GetPromoListDatas getPromoListDatas = gson.fromJson(gson.toJson(baseModel.getDatas()),GetPromoListDatas.class);
+                    totalPage = getPromoListDatas.getTotalPage();
                     if (getPromoListDatas.getGetPromoList().size()>0){
-                        adapter.setData(getPromoListDatas.getGetPromoList());
+                        data.addAll(getPromoListDatas.getGetPromoList());
+                        adapter.setData(data);
                         adapter.notifyDataSetChanged();
                     }else {
                         adapter.setData(new ArrayList<GetPromoListBean>());
@@ -136,6 +142,25 @@ public class ShopActionActivity extends BaseActivity {
                 Intent intent = new Intent(mContext,ShopActionActivity.class);
                 intent.putExtra("promoType","history");
                 startActivity(intent);
+            }
+        });
+        springView = findViewById(R.id.sv);
+
+        springView.setListener(new SpringView.OnFreshListener() {
+            @Override
+            public void onRefresh() {
+                pageNum=1;
+                initData();
+            }
+
+            @Override
+            public void onLoadmore() {
+                if (totalPage>pageNum){
+                    pageNum++;
+                    initData();
+                }else {
+                    springView.onFinishFreshAndLoad();
+                }
             }
         });
     }
