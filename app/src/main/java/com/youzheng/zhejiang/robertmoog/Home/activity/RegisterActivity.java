@@ -28,6 +28,7 @@ import com.youzheng.zhejiang.robertmoog.Store.activity.PeopleMangerActivity;
 import com.youzheng.zhejiang.robertmoog.Store.bean.Code;
 import com.youzheng.zhejiang.robertmoog.Store.bean.UnqualifiedContent;
 import com.youzheng.zhejiang.robertmoog.utils.View.MyCountDownTimer;
+import com.youzheng.zhejiang.robertmoog.utils.View.NoteInfoDialog;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -143,7 +144,10 @@ public class RegisterActivity  extends BaseActivity {
                         BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                         if (baseModel.getCode()==PublicUtils.code){
                             ShopQRCodeBean qrCodeBean = gson.fromJson(gson.toJson(baseModel.getDatas()),ShopQRCodeBean.class);
-
+                            if (qrCodeBean.getShopQRCode()!=null){
+                                NoteInfoDialog infoDialog = new NoteInfoDialog(mContext,qrCodeBean.getShopQRCode());
+                                infoDialog.show();
+                            }
                         }
                     }
                 });

@@ -15,12 +15,14 @@ import com.youzheng.zhejiang.robertmoog.R;
 
 public class RemindDialog extends Dialog {
     Context mcontext ;
-    TextView tv_no ,tv_ok ;
+    TextView tv_no ,tv_ok ,confrim_dialog_tv_title ,confrim_dialog_tv_content;
     onSuccessClick click ;
-    public RemindDialog(@NonNull Context context ,onSuccessClick click) {
+    String type ; //1 提交订单 2.注册 3.退出
+    public RemindDialog(@NonNull Context context ,onSuccessClick click ,String type) {
         super(context ,R.style.DeleteDialogStyle);
         mcontext = context ;
         this.click = click ;
+        this.type = type;
     }
 
     @Override
@@ -42,6 +44,15 @@ public class RemindDialog extends Dialog {
                 dismiss();
             }
         });
+        confrim_dialog_tv_title = view.findViewById(R.id.confrim_dialog_tv_title);
+        confrim_dialog_tv_content = view.findViewById(R.id.confrim_dialog_tv_content);
+        if (type.equals("3")){
+            confrim_dialog_tv_content.setText("确认退出当前账号");
+        }
+        if (type.equals("2")){
+            confrim_dialog_tv_content.setText("用户还未注册，请确认是否注册？");
+        }
+
         tv_no.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

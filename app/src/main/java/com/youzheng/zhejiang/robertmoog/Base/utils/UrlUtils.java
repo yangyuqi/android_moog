@@ -44,8 +44,6 @@ public class UrlUtils {
     public static String UNQUALIFIED_DETAIL = BASE_URL+"/v1/app/shop/patrolShopProblemDetail";
 
 
-
-
     public static String ADDRESS_MANAGER = BASE_URL+"/v1/app/customer/customerAddress";
     public static String ADD_ADDRESS = BASE_URL+"/v1/app/customer/save/customerAddress";
     public static String SALES_GOODS = BASE_URL+"/v1/app/customer/sale";
@@ -105,6 +103,7 @@ public class UrlUtils {
 
     public static String CONFIRM_RETURN = BASE_URL+"/v1/app/customer/saveReturnOrder";
 
-
+    public static String ABOUT_APP = BASE_URL+"/v1/app/user/appInfo";
+    public static String CHANGE_PSW = BASE_URL+"/v1/app/user/changePassword";
 
 }

@@ -7,19 +7,24 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.youzheng.zhejiang.robertmoog.Base.BaseFragment;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
 import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
 import com.youzheng.zhejiang.robertmoog.Home.activity.LoginActivity;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
+import com.youzheng.zhejiang.robertmoog.Model.login.ShopQRCodeBean;
 import com.youzheng.zhejiang.robertmoog.Model.login.UserConfigDataBean;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.utils.SharedPreferencesUtils;
 import com.youzheng.zhejiang.robertmoog.utils.View.DeleteDialog;
 import com.youzheng.zhejiang.robertmoog.utils.View.DeleteDialogInterface;
+import com.youzheng.zhejiang.robertmoog.utils.View.NoteInfoDialog;
+import com.youzheng.zhejiang.robertmoog.utils.View.RemindDialog;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -33,6 +38,8 @@ public class MyFragment extends BaseFragment implements BaseFragment.ReloadInter
     TextView tv_shop_name ,tv_role ,tv_loginOut ,tv_about;
     public static String shopid;
 
+    ImageView iv_user_icon ;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -41,6 +48,34 @@ public class MyFragment extends BaseFragment implements BaseFragment.ReloadInter
         setReloadInterface(this);
         initView(mView);
         return mView;
+    }
+
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        initData();
+    }
+
+    private void initData() {
+        OkHttpClientManager.postAsynJson(gson.toJson(new HashMap<>()), UrlUtils.SHOP_SCVAN+"?access_token="+access_token, new OkHttpClientManager.StringCallback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(String response) {
+                BaseModel baseModel = gson.fromJson(response,BaseModel.class);
+                if (baseModel.getCode()==PublicUtils.code){
+                    ShopQRCodeBean qrCodeBean = gson.fromJson(gson.toJson(baseModel.getDatas()),ShopQRCodeBean.class);
+                    if (qrCodeBean.getShopQRCode()!=null){
+                        Glide.with(mContext).load(qrCodeBean.getShopQRCode()).error(R.mipmap.type_icon).into(iv_user_icon);
+                    }
+                }
+            }
+        });
+
     }
 
     private void initView(View mView) {
@@ -52,7 +87,14 @@ public class MyFragment extends BaseFragment implements BaseFragment.ReloadInter
         tv_about.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(),LoginActivity.class));
+                startActivity(new Intent(getActivity(),AboutAppActivity.class));
+            }
+        });
+        iv_user_icon = mView.findViewById(R.id.iv_user_icon);
+        mView.findViewById(R.id.tv_change_pwd).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(mContext,AlterPasswordActivity.class));
             }
         });
     }
@@ -88,15 +130,16 @@ public class MyFragment extends BaseFragment implements BaseFragment.ReloadInter
             tv_loginOut.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    DeleteDialog deleteDialog = new DeleteDialog(mContext, "提示", "是否退出登录", "确定");
-                    deleteDialog.show();
-                    deleteDialog.OnDeleteBtn(new DeleteDialogInterface() {
+
+                    RemindDialog dialog = new RemindDialog(mContext, new RemindDialog.onSuccessClick() {
                         @Override
-                        public void isDelete(boolean isdelete) {
+                        public void onSuccess() {
                             OkHttpClientManager.postAsynJson(gson.toJson(new HashMap<>()), UrlUtils.LOGIN_OUT + "?access_token=" + token, new OkHttpClientManager.StringCallback() {
                                 @Override
                                 public void onFailure(Request request, IOException e) {
-
+                                    SharedPreferencesUtils.clear(mContext);
+                                    getActivity().finish();
+                                    startActivity(new Intent(mContext,LoginActivity.class));
                                 }
 
                                 @Override
@@ -107,12 +150,18 @@ public class MyFragment extends BaseFragment implements BaseFragment.ReloadInter
                                         getActivity().finish();
                                         startActivity(new Intent(mContext,LoginActivity.class));
                                     }else {
+                                        SharedPreferencesUtils.clear(mContext);
+                                        getActivity().finish();
+                                        startActivity(new Intent(mContext,LoginActivity.class));
                                         showToast(baseModel.getMsg());
                                     }
                                 }
                             });
                         }
-                    });
+                    },"3");
+
+                    dialog.show();
+
                 }
             });
         }

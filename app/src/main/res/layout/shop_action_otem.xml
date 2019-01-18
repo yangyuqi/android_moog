@@ -6,6 +6,7 @@
     android:layout_height="match_parent">
 
     <RelativeLayout
+        android:id="@+id/tv_see_details"
         android:layout_marginRight="@dimen/space_16"
         android:layout_marginLeft="@dimen/space_16"
         android:layout_marginTop="@dimen/space_16"
@@ -127,7 +128,6 @@
             />
 
         <TextView
-            android:id="@+id/tv_see_details"
             android:layout_marginLeft="@dimen/space_15"
             android:layout_marginBottom="@dimen/space_15"
             android:layout_alignParentBottom="true"

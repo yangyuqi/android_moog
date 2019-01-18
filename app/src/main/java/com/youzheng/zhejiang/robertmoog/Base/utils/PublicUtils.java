@@ -9,6 +9,7 @@ import java.security.NoSuchAlgorithmException;
 public class PublicUtils {
 
     public static int code = 200 ;
+    public static int no_exist = 3002 ;
     public static String access_token = "access_token";
     public static String token_type = "token_type";
     public static String role = "role" ;

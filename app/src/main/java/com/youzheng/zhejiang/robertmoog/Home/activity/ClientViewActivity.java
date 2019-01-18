@@ -18,6 +18,7 @@ import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.Model.Home.CustomerBean;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.utils.QRcode.android.CaptureActivity;
+import com.youzheng.zhejiang.robertmoog.utils.View.RemindDialog;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -91,6 +92,15 @@ public class ClientViewActivity extends BaseActivity {
 
                         }else {
                             showToast(baseModel.getMsg());
+                            if (baseModel.getCode()==PublicUtils.no_exist){
+                                final RemindDialog dialog = new RemindDialog(mContext, new RemindDialog.onSuccessClick() {
+                                    @Override
+                                    public void onSuccess() {
+                                        startActivity(new Intent(mContext,RegisterActivity.class));
+                                    }
+                                },"2");
+                                dialog.show();
+                            }
                         }
                     }
                 });

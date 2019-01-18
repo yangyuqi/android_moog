@@ -30,7 +30,7 @@ public class ShopActionDetailsActivity extends BaseActivity {
     private int promoId ;
 
     private ListView ls ;
-    TextView tv_name ,tv_start_time ,tv_desc ;
+    TextView tv_name ,tv_start_time ,tv_desc ,tv_end_time;
     CommonAdapter<String> adapter ;
     List<String> data = new ArrayList<>();
 
@@ -58,7 +58,8 @@ public class ShopActionDetailsActivity extends BaseActivity {
                 if (baseModel.getCode()== PublicUtils.code){
                     PromoIdDetailsData promoIdDetails = gson.fromJson(gson.toJson(baseModel.getDatas()),PromoIdDetailsData.class);
                     tv_name.setText(promoIdDetails.getData().getPromoName());
-                    tv_start_time.setText(promoIdDetails.getData().getStartTime()+"-"+promoIdDetails.getData().getEndTime());
+                    tv_start_time.setText(promoIdDetails.getData().getStartTime());
+                    tv_end_time.setText(promoIdDetails.getData().getEndTime());
                     tv_desc.setText(promoIdDetails.getData().getActivityAbstract());
                     if (promoIdDetails.getData().getOrderPromo().size()>0){
                         adapter.setData(promoIdDetails.getData().getOrderPromo());
@@ -81,7 +82,7 @@ public class ShopActionDetailsActivity extends BaseActivity {
         tv_desc = findViewById(R.id.tv_desc);
         tv_start_time = findViewById(R.id.tv_start_time);
         tv_name = findViewById(R.id.tv_name);
-
+        tv_end_time = findViewById(R.id.tv_end_time);
         adapter = new CommonAdapter<String>(mContext,data,R.layout.shop_details_ls_item) {
             @Override
             public void convert(ViewHolder helper, String item) {

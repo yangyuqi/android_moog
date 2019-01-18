@@ -395,11 +395,11 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public class CommonGoodsViewHolder extends RecyclerView.ViewHolder{
 
         TextView tv_name ,tv_desc ,tv_price ,tv_confirm ,tv_get_num ,tv_add ,tv_reduce ,tv_specail
-                ,tv_pu_code ,tv_zengxiang ,tv_add_code ,tv_add_price;
+                ,tv_pu_code ,tv_zengxiang ,tv_add_code ,tv_add_price ;
         ImageView iv_icon ;
         RelativeLayout rl_width ;
         HorizontalScrollView hsv;
-        View ll_num , ll_no_code ,ll_has_code;
+        View ll_num , ll_no_code ,ll_has_code ;
         EditText edt_num ;
         public CommonGoodsViewHolder(View itemView) {
             super(itemView);

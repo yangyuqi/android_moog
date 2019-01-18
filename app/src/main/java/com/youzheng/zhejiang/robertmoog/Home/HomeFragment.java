@@ -34,6 +34,7 @@ import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.activity.GoodsManageActivity;
 import com.youzheng.zhejiang.robertmoog.utils.CommonAdapter;
 import com.youzheng.zhejiang.robertmoog.utils.SharedPreferencesUtils;
+import com.youzheng.zhejiang.robertmoog.utils.View.RemindDialog;
 import com.youzheng.zhejiang.robertmoog.utils.ViewHolder;
 
 import java.io.IOException;
@@ -126,6 +127,15 @@ public class HomeFragment extends BaseFragment  implements BaseFragment.ReloadIn
                             startActivity(intent);
                         }else {
                             showToast(baseModel.getMsg());
+                            if (baseModel.getCode()==PublicUtils.no_exist){
+                                final RemindDialog dialog = new RemindDialog(mContext, new RemindDialog.onSuccessClick() {
+                                    @Override
+                                    public void onSuccess() {
+                                        startActivity(new Intent(mContext,RegisterActivity.class));
+                                    }
+                                },"2");
+                                dialog.show();
+                            }
                         }
                     }
                 });

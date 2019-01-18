@@ -44,7 +44,7 @@ import java.util.Map;
 import okhttp3.Request;
 
 public class SetMealActivity extends BaseActivity{
-
+    private List<MealMainDataBean> MealMainData = new ArrayList<>();
     ListView ls ;
     TabLayout tab ;
     List<String> tab_str = new ArrayList<>();
@@ -76,11 +76,12 @@ public class SetMealActivity extends BaseActivity{
         OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.MEAL_USER_LIST+"?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
             public void onFailure(Request request, IOException e) {
-
+                springView.onFinishFreshAndLoad();
             }
 
             @Override
             public void onResponse(String response) {
+                springView.onFinishFreshAndLoad();
                 BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                 if (baseModel.getCode()==PublicUtils.code){
                     SetMealData setMealData = gson.fromJson(gson.toJson(baseModel.getDatas()),SetMealData.class);
@@ -119,17 +120,24 @@ public class SetMealActivity extends BaseActivity{
             @Override
             public void onRefresh() {
                 pageNum=1;
-                initData();
+                refreshData(typeId);
             }
 
             @Override
             public void onLoadmore() {
                 if (totalPage>pageNum){
                     pageNum++;
-                    initData();
+                    refreshData(typeId);
                 }else {
                     springView.onFinishFreshAndLoad();
                 }
+            }
+        });
+
+        findViewById(R.id.iv_more).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPopuWindow();
             }
         });
     }
@@ -187,16 +195,16 @@ public class SetMealActivity extends BaseActivity{
         OkHttpClientManager.postAsynJson(gson.toJson(new HashMap<>()), UrlUtils.SET_MEAL_LIST + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
             public void onFailure(Request request, IOException e) {
-                springView.onFinishFreshAndLoad();
             }
 
             @Override
             public void onResponse(String response) {
                 BaseModel baseModel = gson.fromJson(response,BaseModel.class);
-                springView.onFinishFreshAndLoad();
+
                 if (baseModel.getCode()== PublicUtils.code){
                     MealMainDataList list = gson.fromJson(gson.toJson(baseModel.getDatas()),MealMainDataList.class);
                     if (list.getMealMainData().size()>0){
+                        MealMainData = list.getMealMainData();
                         for (MealMainDataBean bean : list.getMealMainData()){
                             tab_str.add(bean.getName());
                             tab_id.add(bean.getId());
@@ -209,10 +217,10 @@ public class SetMealActivity extends BaseActivity{
     }
 
     private void showPopuWindow() {
-        View inflate = getLayoutInflater().inflate(R.layout.popuwindow_goods_title, null);
+        View inflate = getLayoutInflater().inflate(R.layout.pupwindow_goods_title2, null);
         mGvTitle = (GridView) inflate.findViewById(R.id.gv_title);
 
-//        goodsTitleAdapter = new GoodsTitleAdapter2(stringList, this);
+        goodsTitleAdapter = new GoodsTitleAdapter2(MealMainData, this);
         mGvTitle.setAdapter(goodsTitleAdapter);
         goodsTitleAdapter.notifyDataSetChanged();
 

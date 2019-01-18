@@ -17,6 +17,7 @@ public class SaleData {
     private ArrayList<CouponListBean> useCouponList ;
     private ArrayList<CouponListBean> notUseCouponList ;
 
+
     public String getAmountPayable() {
         return amountPayable;
     }

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.youzheng.zhejiang.robertmoog.Model.Home.MealMainDataBean;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.GoodsTitleAdapter;
 import com.youzheng.zhejiang.robertmoog.Store.bean.GoodsType;
@@ -14,18 +15,18 @@ import com.youzheng.zhejiang.robertmoog.Store.bean.GoodsType;
 import java.util.List;
 
 public class GoodsTitleAdapter2 extends BaseAdapter {
-    private List<GoodsType.ListDataBean> list;
+    private List<MealMainDataBean> list;
     private Context context;
     private LayoutInflater layoutInflater;
     private int selectItem =0;
 
-    public GoodsTitleAdapter2(List<GoodsType.ListDataBean> list, Context context) {
+    public GoodsTitleAdapter2(List<MealMainDataBean> list, Context context) {
         this.list = list;
         this.context = context;
         layoutInflater=LayoutInflater.from(context);
     }
 
-    public void refresgUI(List<GoodsType.ListDataBean> list){
+    public void refresgUI(List<MealMainDataBean> list){
         this.list=list;
         notifyDataSetChanged();
     }

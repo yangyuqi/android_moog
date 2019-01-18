@@ -64,6 +64,7 @@
         </RelativeLayout>
 
         <TextView
+            android:id="@+id/tv_change_pwd"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="@dimen/space_10"

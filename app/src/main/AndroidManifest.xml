@@ -215,6 +215,8 @@
         <activity android:name=".Store.activity.ReturnGoods.ChooseReturnGoodsActivity" />
         <activity android:name=".Store.activity.ReturnGoods.ReturnGoodsCounterActivity" />
         <activity android:name=".Store.activity.ReturnGoods.ReturnRecognitionActivity"></activity>
+        <activity android:name=".My.AboutAppActivity"/>
+        <activity android:name=".My.AlterPasswordActivity"/>
     </application>
 
 </manifest>
