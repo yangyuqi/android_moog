@@ -193,6 +193,7 @@ public class StoreOrderlistDetailActivity extends BaseActivity implements View.O
         setContentView(R.layout.activity_store_orderlist_detail);
         id=getIntent().getStringExtra("OrderGoodsId");
         initView();
+        initData(id);
     }
 
     private void initView() {
@@ -265,7 +266,7 @@ public class StoreOrderlistDetailActivity extends BaseActivity implements View.O
     @Override
     protected void onResume() {
         super.onResume();
-        initData(id);
+
     }
 
     private void initData(String id) {

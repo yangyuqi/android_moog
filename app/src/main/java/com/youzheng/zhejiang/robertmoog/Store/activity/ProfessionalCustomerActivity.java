@@ -71,13 +71,13 @@ public class ProfessionalCustomerActivity extends BaseActivity implements View.O
             @Override
             public void onRefresh() {
                page=1;
+               list.clear();
                initData(page,pageSize);
             }
 
             @Override
             public void onLoadMore() {
               page++;
-              list.clear();
               initData(page,pageSize);
             }
         });
@@ -108,7 +108,6 @@ public class ProfessionalCustomerActivity extends BaseActivity implements View.O
 
         adapter=new ProfessionalCustomerAdapter(list,this);
         lv_list.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
 
 
     }

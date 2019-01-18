@@ -60,7 +60,7 @@ public class MoreChooseReturnGoodsAdapter extends RecyclerView.Adapter<MoreChoos
     @Override
     public void onBindViewHolder(@NonNull final MoreHolder moreHolder, final int position) {
         ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean bean = list.get(position);
-        Glide.with(context).load(bean.getPhoto()).error(R.mipmap.group_9_1).into(moreHolder.iv_goods);
+        Glide.with(context).load(bean.getPhoto()).error(R.mipmap.type_icon).into(moreHolder.iv_goods);
         moreHolder.tv_goods_code.setText(bean.getCode());
         moreHolder.tv_goods_content.setText(bean.getComboName());
         moreHolder.tv_money.setText(context.getString(R.string.label_money) + bean.getRefundAmount());

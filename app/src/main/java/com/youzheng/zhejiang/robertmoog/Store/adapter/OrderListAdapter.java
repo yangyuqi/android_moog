@@ -149,7 +149,7 @@ public class OrderListAdapter extends RecyclerView.Adapter {
 
         if (list.size() != 0) {
             for (NewOrderListBean.OrderListBean.OrderItemInfosBean itemInfosBean : list.get(position).getOrderItemInfos()) {
-                Glide.with(context).load(itemInfosBean.getPhoto()).error(R.mipmap.group_9_1).into(holder.iv_goods);
+                Glide.with(context).load(itemInfosBean.getPhoto()).error(R.mipmap.type_icon).into(holder.iv_goods);
                 holder.tv_goods_number.setText(itemInfosBean.getCode());
                 holder.tv_goods_content.setText(itemInfosBean.getName());
             }

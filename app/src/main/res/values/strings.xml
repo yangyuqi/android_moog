@@ -146,4 +146,5 @@
     <string name="customer_recognition">客户识别</string>
     <string name="please_not_commit_more">请勿重复添加</string>
     <string name="stop_success">停用成功</string>
+    <string name="commit_failure">提交失败</string>
 </resources>

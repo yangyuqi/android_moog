@@ -37,7 +37,7 @@ public class MoreGoodsAdapter extends RecyclerView.Adapter<MoreGoodsAdapter.PicH
 
     @Override
     public void onBindViewHolder(PicHolder holder, int position) {
-        Glide.with(context).load(list.get(position)).error(R.mipmap.group_9_1).into(holder.iv_pic);
+        Glide.with(context).load(list.get(position)).error(R.mipmap.type_icon).into(holder.iv_pic);
     }
 
     @Override

@@ -42,7 +42,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:paddingLeft="15dp"
@@ -62,7 +62,7 @@
 
                 <TextView
                     android:id="@+id/tv_phone"
-                    android:layout_width="wrap_content"
+                    android:layout_width="110dp"
                     android:layout_height="wrap_content"
                     android:text=""
                     android:textSize="13sp"
@@ -88,7 +88,7 @@
 
                 <TextView
                     android:id="@+id/tv_name"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=""
                     android:singleLine="true"

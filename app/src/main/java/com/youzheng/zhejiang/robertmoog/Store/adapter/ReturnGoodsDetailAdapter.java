@@ -80,7 +80,7 @@ public class ReturnGoodsDetailAdapter extends RecyclerView.Adapter<ReturnGoodsDe
     @Override
     public void onBindViewHolder(GoodsHolder holder, int position) {
         ReturnGoodsDetail.ReturnItemBean.ProductListBean bean=list.get(position);
-        Glide.with(context).load(bean.getPhoto()).error(R.mipmap.group_9_1).into(holder.iv_goods);
+        Glide.with(context).load(bean.getPhoto()).error(R.mipmap.type_icon).into(holder.iv_goods);
         holder.tv_goods_code.setText(bean.getSku());
 
         holder.tv_goods_content.setText(bean.getName());

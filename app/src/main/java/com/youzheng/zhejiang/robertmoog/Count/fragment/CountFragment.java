@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.youzheng.zhejiang.robertmoog.Base.BaseFragment;
@@ -31,6 +32,7 @@ import com.youzheng.zhejiang.robertmoog.Count.activity.TodayStoreSalesActivity;
 import com.youzheng.zhejiang.robertmoog.Count.bean.CountAll;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.R;
+import com.youzheng.zhejiang.robertmoog.Store.utils.TextTypeUtil;
 import com.youzheng.zhejiang.robertmoog.utils.SharedPreferencesUtils;
 
 import java.io.IOException;
@@ -99,6 +101,7 @@ public class CountFragment extends BaseFragment implements BaseFragment.ReloadIn
     private TextView tv_today_best_ranking;
     private String shopCount,setMealCount,categoryCount,singleProductCount,customerCount,productName,setMealInfo;
     private String role;
+    private ScrollView sv_view;
 
     @Nullable
     @Override
@@ -113,6 +116,15 @@ public class CountFragment extends BaseFragment implements BaseFragment.ReloadIn
     @Override
     public void onResume() {
         super.onResume();
+        role = (String) SharedPreferencesUtils.getParam(getActivity(), PublicUtils.role,"");
+
+        if (role.equals("SHOP_SELLER")){
+            rv_ranking.setVisibility(View.GONE);
+            rv_sort_ranking_number.setVisibility(View.GONE);
+            sv_view.setVisibility(View.GONE);
+        }
+
+
         initData();
     }
 
@@ -181,9 +193,9 @@ public class CountFragment extends BaseFragment implements BaseFragment.ReloadIn
         state_layout_error = (LinearLayout) mView.findViewById(R.id.state_layout_error);
         state_layout_empty = (LinearLayout) mView.findViewById(R.id.state_layout_empty);
         activity_base_root = (LinearLayout) mView.findViewById(R.id.activity_base_root);
-        rv_store_number = (RelativeLayout) mView.findViewById(R.id.rv_sort_ranking_number);
+        rv_store_number = (RelativeLayout) mView.findViewById(R.id.rv_goods_number);
         rv_store_number.setOnClickListener(this);
-        rv_sort_ranking_number = (RelativeLayout) mView.findViewById(R.id.rv_goods_number);
+        rv_sort_ranking_number = (RelativeLayout) mView.findViewById(R.id.rv_sort_ranking_number);
         rv_sort_ranking_number.setOnClickListener(this);
         iv_icon = (ImageView) mView.findViewById(R.id.iv_icon);
         rv_ranking = (RelativeLayout) mView.findViewById(R.id.rv_ranking);
@@ -208,8 +220,15 @@ public class CountFragment extends BaseFragment implements BaseFragment.ReloadIn
         tv_number = (TextView) mView.findViewById(R.id.tv_number);
         tv_sale_number = (TextView) mView.findViewById(R.id.tv_sale_number);
         tv_today_best_ranking = (TextView) mView.findViewById(R.id.tv_today_best_ranking);
-        role = (String) SharedPreferencesUtils.getParam(getActivity(), PublicUtils.role,"");
+
+        sv_view=mView.findViewById(R.id.sv_view);
+
+
+
+
     }
+
+
 
     @Override
     public void reloadClickListener() {

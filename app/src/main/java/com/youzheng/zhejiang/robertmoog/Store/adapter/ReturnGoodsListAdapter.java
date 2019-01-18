@@ -150,7 +150,7 @@ public class ReturnGoodsListAdapter extends RecyclerView.Adapter {
 
         if (list.size()!=0){
             for (ReturnGoodsList.ReturnOrderListBean.ProductListBean productListBean:list.get(position).getProductList()){
-                Glide.with(context).load(productListBean.getPhoto()).error(R.mipmap.group_9_1).into(holder.iv_goods);
+                Glide.with(context).load(productListBean.getPhoto()).error(R.mipmap.type_icon).into(holder.iv_goods);
                 holder.tv_goods_number.setText(productListBean.getSku());
                 holder.tv_goods_content.setText(productListBean.getName());
             }
