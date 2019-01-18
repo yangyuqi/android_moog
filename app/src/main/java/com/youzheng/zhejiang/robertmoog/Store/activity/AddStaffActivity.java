@@ -107,11 +107,8 @@ public class AddStaffActivity extends BaseActivity implements View.OnClickListen
                  }else if (TextUtils.isEmpty(name)){
                      showToast(getString(R.string.no_name));
                  }else {
-                     if (!ButtonUtils.isFastDoubleClick(R.id.tv_add)) {
-                         addStaff(name,phone);
-                     }else {
-                         showToast(getString(R.string.please_not_commit_more));
-                     }
+                     addStaff(name,phone);
+
 
 
                  }
@@ -120,6 +117,7 @@ public class AddStaffActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void addStaff(String name,String phone){
+        tv_add.setClickable(false);
         lin_show.setVisibility(View.VISIBLE);
         HashMap<String,Object> map=new HashMap<>();
         map.put("phone",phone);
@@ -139,9 +137,11 @@ public class AddStaffActivity extends BaseActivity implements View.OnClickListen
                 if (baseModel!=null){
                     if (baseModel.getCode()==PublicUtils.code){
                         finish();
+                        tv_add.setClickable(true);
                     }else {
                         if (!baseModel.getMsg().equals("")){
                             showToast(baseModel.getMsg());
+                            tv_add.setClickable(true);
                         }
                     }
                 }

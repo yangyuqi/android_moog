@@ -116,13 +116,9 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
                     }else if (tv_degree.getText().toString().equals(getString(R.string.desinger))){
                         id="DESIGNER";
                     }
-
-                    if (!ButtonUtils.isFastDoubleClick(R.id.tv_add)) {
                         //写你相关操作即可
-                        addProfessionalCustomer(phone,name,id);
-                    }else {
-                        showToast(getString(R.string.please_not_commit_more));
-                    }
+                    addProfessionalCustomer(phone,name,id);
+
 
         }
                 break;
@@ -130,6 +126,8 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void  addProfessionalCustomer(String phone, String name,String id){
+        Log.e("走了几次啊","11111");
+        tv_add.setClickable(false);
         lin_show.setVisibility(View.VISIBLE);
         HashMap<String,Object> map=new HashMap<>();
         map.put("custCode",phone);
@@ -151,10 +149,12 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
                 BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                 if (baseModel!=null){
                     if (baseModel.getCode()==PublicUtils.code){
+                        tv_add.setClickable(true);
                         finish();
                     }else {
                         if (!baseModel.getMsg().equals("")){
                             showToast(baseModel.getMsg());
+                            tv_add.setClickable(true);
                         }
                     }
 

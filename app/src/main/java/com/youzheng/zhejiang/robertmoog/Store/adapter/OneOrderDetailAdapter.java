@@ -43,7 +43,7 @@ public class OneOrderDetailAdapter  extends RecyclerView.Adapter<OneOrderDetailA
     @Override
     public void onBindViewHolder(@NonNull OneHolder oneHolder, int position) {
         OrderlistDetail.OrderItemDataBean.OrderProductListBean bean=list.get(position);
-        Glide.with(context).load(bean.getPhoto()).error(R.mipmap.group_9_1).into(oneHolder.iv_goods);
+        Glide.with(context).load(bean.getPhoto()).error(R.mipmap.type_icon).into(oneHolder.iv_goods);
         oneHolder.tv_goods_code.setText(bean.getSku());
         oneHolder.tv_goods_content.setText(bean.getName());
         oneHolder.tv_money.setText(context.getString(R.string.label_money)+bean.getPrice());

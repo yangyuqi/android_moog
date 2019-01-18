@@ -9,6 +9,6 @@
         android:layout_width="98dp"
         android:layout_height="98dp"
         android:scaleType="centerCrop"
-        android:src="@mipmap/group_9_1"/>
+        android:src="@mipmap/type_icon"/>
 
 </LinearLayout>

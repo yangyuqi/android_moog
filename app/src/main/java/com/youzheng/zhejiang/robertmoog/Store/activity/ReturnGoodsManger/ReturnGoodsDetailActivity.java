@@ -89,6 +89,7 @@ public class ReturnGoodsDetailActivity extends BaseActivity implements View.OnCl
         setContentView(R.layout.activity_return_goods_detail);
         regoodsid=getIntent().getStringExtra("returnGoodsId");
         initView();
+        initData(Integer.parseInt(regoodsid));
     }
 
     private void initView() {
@@ -126,7 +127,7 @@ public class ReturnGoodsDetailActivity extends BaseActivity implements View.OnCl
     @Override
     protected void onResume() {
         super.onResume();
-        initData(Integer.parseInt(regoodsid));
+
 
     }
 

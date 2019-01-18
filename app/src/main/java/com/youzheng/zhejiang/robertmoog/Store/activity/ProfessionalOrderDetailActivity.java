@@ -316,6 +316,7 @@ public class ProfessionalOrderDetailActivity extends BaseActivity implements Vie
         setContentView(R.layout.activity_professional_order_detail);
         id=getIntent().getStringExtra("ProfessionalId");
         initView();
+        initData(id);
     }
 
     private void initView() {
@@ -387,7 +388,7 @@ public class ProfessionalOrderDetailActivity extends BaseActivity implements Vie
     @Override
     protected void onResume() {
         super.onResume();
-        initData(id);
+
     }
 
     private void initData(String id) {

@@ -64,7 +64,7 @@ public class SmallDetailAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         OrderlistDetail.OrderItemDataBean.OrderSetMealListBean.ProductListBean bean = list.get(position);
-        Glide.with(context).load(bean.getPhoto()).error(R.mipmap.group_9_1).into(viewHolder.iv_goods);
+        Glide.with(context).load(bean.getPhoto()).error(R.mipmap.type_icon).into(viewHolder.iv_goods);
         viewHolder.tv_goods_code.setText(bean.getSku());
         viewHolder.tv_goods_content.setText(bean.getName());
         viewHolder.tv_money.setText(context.getString(R.string.label_money) + bean.getPrice());

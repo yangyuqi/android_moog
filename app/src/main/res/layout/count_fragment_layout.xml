@@ -227,7 +227,10 @@
 
         </LinearLayout>
 
+
+
         <ScrollView
+            android:id="@+id/sv_view"
             android:layout_marginTop="@dimen/space_10"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -237,6 +240,23 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:text="当日门店经营总览"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/space_15"
+                    android:drawablePadding="@dimen/space_10"
+                    android:textColor="@color/text_main"
+                    android:textSize="@dimen/text_size_15"
+                    android:background="@color/bg_background_white"
+                    />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/bg_all"/>
 
                 <RelativeLayout
                     android:id="@+id/rv_today_store_number"

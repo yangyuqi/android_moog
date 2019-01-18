@@ -83,7 +83,7 @@ public class SampleOutAdapter extends BaseAdapter {
         if (isappear == true) {
             viewHolder.tv_number.setVisibility(View.GONE);
             viewHolder.et_number.setVisibility(View.VISIBLE);
-//            viewHolder.et_number.setText(bean.getSampleQuantity()+"");
+            viewHolder.et_number.setText(bean.getSampleQuantity()+"");
         } else {
             viewHolder.tv_number.setVisibility(View.VISIBLE);
             viewHolder.et_number.setVisibility(View.GONE);
