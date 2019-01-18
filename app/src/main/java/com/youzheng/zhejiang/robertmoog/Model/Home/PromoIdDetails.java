@@ -12,6 +12,15 @@ public class PromoIdDetails {
     private String type ;
     private String typeId ;
     private List<String> orderPromo = new ArrayList<>();
+    private List<ComboPromoBean> comboPromo = new ArrayList<>();
+
+    public List<ComboPromoBean> getComboPromo() {
+        return comboPromo;
+    }
+
+    public void setComboPromo(List<ComboPromoBean> comboPromo) {
+        this.comboPromo = comboPromo;
+    }
 
     public String getPromoId() {
         return promoId;

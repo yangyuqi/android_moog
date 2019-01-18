@@ -2,6 +2,8 @@ package com.youzheng.zhejiang.robertmoog.Home.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -10,11 +12,15 @@ import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
 import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
+import com.youzheng.zhejiang.robertmoog.Home.adapter.CustomerGoodsAdapter;
+import com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider;
+import com.youzheng.zhejiang.robertmoog.Home.adapter.ShopActionAdapter;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.Model.Home.PromoIdDetails;
 import com.youzheng.zhejiang.robertmoog.Model.Home.PromoIdDetailsData;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.utils.CommonAdapter;
+import com.youzheng.zhejiang.robertmoog.utils.View.NoScrollListView;
 import com.youzheng.zhejiang.robertmoog.utils.ViewHolder;
 
 import java.io.IOException;
@@ -29,10 +35,13 @@ public class ShopActionDetailsActivity extends BaseActivity {
 
     private int promoId ;
 
-    private ListView ls ;
+    private NoScrollListView ls ;
     TextView tv_name ,tv_start_time ,tv_desc ,tv_end_time;
     CommonAdapter<String> adapter ;
     List<String> data = new ArrayList<>();
+
+    RecyclerView recycler_view ;
+    ShopActionAdapter shop_adapter ;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,6 +74,13 @@ public class ShopActionDetailsActivity extends BaseActivity {
                         adapter.setData(promoIdDetails.getData().getOrderPromo());
                         adapter.notifyDataSetChanged();
                     }
+                    if (promoIdDetails.getData().getComboPromo().size()>0){
+                        LinearLayoutManager manager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
+                        recycler_view.setLayoutManager(manager);
+                        shop_adapter = new ShopActionAdapter(promoIdDetails.getData().getComboPromo(),mContext );
+                        recycler_view.setAdapter(shop_adapter);
+                        recycler_view.addItemDecoration(new RecycleViewDivider(mContext, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
+                    }
                 }
             }
         });
@@ -90,5 +106,9 @@ public class ShopActionDetailsActivity extends BaseActivity {
             }
         };
         ls.setAdapter(adapter);
+
+        recycler_view = findViewById(R.id.recycler_view);
+
+
     }
 }
