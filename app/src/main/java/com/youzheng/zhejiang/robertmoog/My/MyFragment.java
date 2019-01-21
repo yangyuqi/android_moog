@@ -37,7 +37,7 @@ public class MyFragment extends BaseFragment implements BaseFragment.ReloadInter
     View mView ;
     TextView tv_shop_name ,tv_role ,tv_loginOut ,tv_about;
     public static String shopid;
-
+     String token ;
     ImageView iv_user_icon ;
 
     @Nullable
@@ -46,6 +46,7 @@ public class MyFragment extends BaseFragment implements BaseFragment.ReloadInter
         mView = inflater.inflate(R.layout.my_fragment_layout,null);
         setUpView(mView);
         setReloadInterface(this);
+        token = (String) SharedPreferencesUtils.getParam(mContext, PublicUtils.access_token,"");
         initView(mView);
         return mView;
     }
@@ -58,7 +59,7 @@ public class MyFragment extends BaseFragment implements BaseFragment.ReloadInter
     }
 
     private void initData() {
-        OkHttpClientManager.postAsynJson(gson.toJson(new HashMap<>()), UrlUtils.SHOP_SCVAN+"?access_token="+access_token, new OkHttpClientManager.StringCallback() {
+        OkHttpClientManager.postAsynJson(gson.toJson(new HashMap<>()), UrlUtils.SHOP_SCVAN+"?access_token="+token, new OkHttpClientManager.StringCallback() {
             @Override
             public void onFailure(Request request, IOException e) {
 
@@ -102,7 +103,6 @@ public class MyFragment extends BaseFragment implements BaseFragment.ReloadInter
     @Override
     public void onResume() {
         super.onResume();
-        final String token = (String) SharedPreferencesUtils.getParam(mContext, PublicUtils.access_token,"");
         if (!token.equals("")){
             OkHttpClientManager.postAsynJson(gson.toJson(new HashMap<>()), UrlUtils.GET_USER_ONFO + "?access_token=" + token, new OkHttpClientManager.StringCallback() {
                 @Override
