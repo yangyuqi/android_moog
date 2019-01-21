@@ -21,29 +21,28 @@ import com.youzheng.zhejiang.robertmoog.Model.login.ShopQRCodeBean;
 import com.youzheng.zhejiang.robertmoog.Model.login.UserConfigDataBean;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.utils.SharedPreferencesUtils;
-import com.youzheng.zhejiang.robertmoog.utils.View.DeleteDialog;
-import com.youzheng.zhejiang.robertmoog.utils.View.DeleteDialogInterface;
-import com.youzheng.zhejiang.robertmoog.utils.View.NoteInfoDialog;
 import com.youzheng.zhejiang.robertmoog.utils.View.RemindDialog;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
 
 import okhttp3.Request;
 
-public class MyFragment extends BaseFragment implements BaseFragment.ReloadInterface{
+public class MyFragment extends BaseFragment implements BaseFragment.ReloadInterface {
 
-    View mView ;
-    TextView tv_shop_name ,tv_role ,tv_loginOut ,tv_about;
+    View mView;
+    TextView tv_shop_name, tv_role, tv_loginOut, tv_about;
     public static String shopid;
 
-    ImageView iv_user_icon ;
+    ImageView iv_user_icon;
+    private View view;
+    /**  */
+    private TextView textHeadTitle;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mView = inflater.inflate(R.layout.my_fragment_layout,null);
+        mView = inflater.inflate(R.layout.my_fragment_layout, null);
         setUpView(mView);
         setReloadInterface(this);
         initView(mView);
@@ -58,7 +57,7 @@ public class MyFragment extends BaseFragment implements BaseFragment.ReloadInter
     }
 
     private void initData() {
-        OkHttpClientManager.postAsynJson(gson.toJson(new HashMap<>()), UrlUtils.SHOP_SCVAN+"?access_token="+access_token, new OkHttpClientManager.StringCallback() {
+        OkHttpClientManager.postAsynJson(gson.toJson(new HashMap<>()), UrlUtils.SHOP_SCVAN + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
             public void onFailure(Request request, IOException e) {
 
@@ -66,10 +65,10 @@ public class MyFragment extends BaseFragment implements BaseFragment.ReloadInter
 
             @Override
             public void onResponse(String response) {
-                BaseModel baseModel = gson.fromJson(response,BaseModel.class);
-                if (baseModel.getCode()==PublicUtils.code){
-                    ShopQRCodeBean qrCodeBean = gson.fromJson(gson.toJson(baseModel.getDatas()),ShopQRCodeBean.class);
-                    if (qrCodeBean.getShopQRCode()!=null){
+                BaseModel baseModel = gson.fromJson(response, BaseModel.class);
+                if (baseModel.getCode() == PublicUtils.code) {
+                    ShopQRCodeBean qrCodeBean = gson.fromJson(gson.toJson(baseModel.getDatas()), ShopQRCodeBean.class);
+                    if (qrCodeBean.getShopQRCode() != null) {
                         Glide.with(mContext).load(qrCodeBean.getShopQRCode()).error(R.mipmap.type_icon).into(iv_user_icon);
                     }
                 }
@@ -83,27 +82,31 @@ public class MyFragment extends BaseFragment implements BaseFragment.ReloadInter
         tv_shop_name = mView.findViewById(R.id.tv_shop_name);
         tv_role = mView.findViewById(R.id.tv_role);
         tv_loginOut = mView.findViewById(R.id.tv_loginOut);
-        tv_about=mView.findViewById(R.id.tv_about);
+        tv_about = mView.findViewById(R.id.tv_about);
         tv_about.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(),AboutAppActivity.class));
+                startActivity(new Intent(getActivity(), AboutAppActivity.class));
             }
         });
         iv_user_icon = mView.findViewById(R.id.iv_user_icon);
         mView.findViewById(R.id.tv_change_pwd).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(mContext,AlterPasswordActivity.class));
+                startActivity(new Intent(mContext, AlterPasswordActivity.class));
             }
         });
+
+        textHeadTitle = (TextView) mView.findViewById(R.id.textHeadTitle);
+        String title= (String) SharedPreferencesUtils.getParam(getActivity(),PublicUtils.shop_title,"");
+        textHeadTitle.setText(title);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        final String token = (String) SharedPreferencesUtils.getParam(mContext, PublicUtils.access_token,"");
-        if (!token.equals("")){
+        final String token = (String) SharedPreferencesUtils.getParam(mContext, PublicUtils.access_token, "");
+        if (!token.equals("")) {
             OkHttpClientManager.postAsynJson(gson.toJson(new HashMap<>()), UrlUtils.GET_USER_ONFO + "?access_token=" + token, new OkHttpClientManager.StringCallback() {
                 @Override
                 public void onFailure(Request request, IOException e) {
@@ -112,15 +115,16 @@ public class MyFragment extends BaseFragment implements BaseFragment.ReloadInter
 
                 @Override
                 public void onResponse(String response) {
-                    BaseModel baseModel = gson.fromJson(response,BaseModel.class);
-                    if (baseModel.getCode()==PublicUtils.code){
-                        UserConfigDataBean dataBean = gson.fromJson(gson.toJson(baseModel.getDatas()),UserConfigDataBean.class);
-                        shopid=dataBean.getUserConfigData().getShopId();
-                        if (dataBean.getUserConfigData().getUserRole().equals("SHOP_SELLER")){
+                    BaseModel baseModel = gson.fromJson(response, BaseModel.class);
+                    if (baseModel.getCode() == PublicUtils.code) {
+                        UserConfigDataBean dataBean = gson.fromJson(gson.toJson(baseModel.getDatas()), UserConfigDataBean.class);
+                        shopid = dataBean.getUserConfigData().getShopId();
+                        if (dataBean.getUserConfigData().getUserRole().equals("SHOP_SELLER")) {
                             tv_role.setText(R.string.goods_guide);
-                        }else {
+                        } else {
                             tv_role.setText(R.string.goods_manager);
                         }
+
                         tv_shop_name.setText(dataBean.getUserConfigData().getShopName());
                     }
                 }
@@ -139,26 +143,26 @@ public class MyFragment extends BaseFragment implements BaseFragment.ReloadInter
                                 public void onFailure(Request request, IOException e) {
                                     SharedPreferencesUtils.clear(mContext);
                                     getActivity().finish();
-                                    startActivity(new Intent(mContext,LoginActivity.class));
+                                    startActivity(new Intent(mContext, LoginActivity.class));
                                 }
 
                                 @Override
                                 public void onResponse(String response) {
-                                    BaseModel baseModel = gson.fromJson(response,BaseModel.class);
-                                    if (baseModel.getCode()==PublicUtils.code){
+                                    BaseModel baseModel = gson.fromJson(response, BaseModel.class);
+                                    if (baseModel.getCode() == PublicUtils.code) {
                                         SharedPreferencesUtils.clear(mContext);
                                         getActivity().finish();
-                                        startActivity(new Intent(mContext,LoginActivity.class));
-                                    }else {
+                                        startActivity(new Intent(mContext, LoginActivity.class));
+                                    } else {
                                         SharedPreferencesUtils.clear(mContext);
                                         getActivity().finish();
-                                        startActivity(new Intent(mContext,LoginActivity.class));
+                                        startActivity(new Intent(mContext, LoginActivity.class));
                                         showToast(baseModel.getMsg());
                                     }
                                 }
                             });
                         }
-                    },"3");
+                    }, "3");
 
                     dialog.show();
 

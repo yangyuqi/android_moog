@@ -152,6 +152,7 @@
             android:layout_height="1dp"
             android:background="@color/bg_all"/>
         <LinearLayout
+            android:id="@+id/lin_second"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"

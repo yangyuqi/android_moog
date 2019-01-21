@@ -28,7 +28,6 @@ public class GoodsSearchAdapter extends BaseAdapter {
     public void  setRefreshUI(List<GoodsList.ProductListDetailDataBean> list){
         this.list=list;
         notifyDataSetChanged();
-
     }
     @Override
     public int getCount() {

@@ -128,19 +128,19 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
                 tv_goods_money.setText(getString(R.string.label_money)+productDdetailBean.getPrice());
             }
             if (productDdetailBean.getFirstCategory()!=null||!productDdetailBean.getFirstCategory().equals("")){
-                tv_type.setText(getString(R.string.goods_type)+productDdetailBean.getFirstCategory());
+                tv_type.setText(getString(R.string.goods_type)+"  "+productDdetailBean.getFirstCategory());
             }
             if (productDdetailBean.getSeries()!=null||!productDdetailBean.getSeries().equals("")){
-                tv_series.setText(getString(R.string.series)+productDdetailBean.getSeries());
+                tv_series.setText(getString(R.string.series)+"  "+productDdetailBean.getSeries());
             }
             if (productDdetailBean.getSpecification()!=null||!productDdetailBean.getSpecification().equals("")){
-                tv_spec.setText(getString(R.string.spec)+productDdetailBean.getSpecification());
+                tv_spec.setText(getString(R.string.spec)+"  "+productDdetailBean.getSpecification());
             }
             if (productDdetailBean.getPackUnit()!=null||!productDdetailBean.getPackUnit().equals("")){
-                tv_marketing_unit.setText(getString(R.string.marketing_unit)+productDdetailBean.getPackUnit());
+                tv_marketing_unit.setText(getString(R.string.marketing_unit)+"  "+productDdetailBean.getPackUnit());
             }
             if (productDdetailBean.getRetailPrice()!=null||!productDdetailBean.getRetailPrice().equals("")){
-                tv_value_of_moen.setText(getString(R.string.price_of_moen)+getString(R.string.label_money)+productDdetailBean.getRetailPrice());
+                tv_value_of_moen.setText(getString(R.string.price_of_moen)+"  "+getString(R.string.label_money)+productDdetailBean.getRetailPrice());
             }
             if (productDdetailBean.getList().size()!=0){
                 piclist=  productDdetailBean.getList();
@@ -201,7 +201,7 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
         @Override
         public View getView(ViewGroup container, final int position) {
             ImageView view = new ImageView(container.getContext());
-            Glide.with(GoodsDetailActivity.this).load(piclist.get(position)).into(view);
+            Glide.with(GoodsDetailActivity.this).load(piclist.get(position)).error(R.mipmap.type_icon).into(view);
             view.setScaleType(ImageView.ScaleType.CENTER_CROP);
             if (piclist.size()==1){
                 pagerView.setPlayDelay(0);

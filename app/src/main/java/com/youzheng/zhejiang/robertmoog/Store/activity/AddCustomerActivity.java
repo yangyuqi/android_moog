@@ -16,6 +16,9 @@ import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
 import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
+import com.youzheng.zhejiang.robertmoog.Model.Home.EnumsDatas;
+import com.youzheng.zhejiang.robertmoog.Model.Home.EnumsDatasBean;
+import com.youzheng.zhejiang.robertmoog.Model.Home.EnumsDatasBeanDatas;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.bean.AddProfessionalCustomerRequest;
 import com.youzheng.zhejiang.robertmoog.Store.utils.ButtonUtils;
@@ -62,6 +65,45 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_customer);
         initView();
+        initGetDate();
+    }
+
+
+    private void initGetDate() {
+        OkHttpClientManager.postAsynJson(gson.toJson(new HashMap<>()), UrlUtils.LIST_DATA+"?access_token="+access_token, new OkHttpClientManager.StringCallback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(String response) {
+                Log.e("获取时间枚举",response);
+                BaseModel baseModel = gson.fromJson(response,BaseModel.class);
+                if (baseModel.getCode()==PublicUtils.code){
+                    EnumsDatas enumsDatas = gson.fromJson(gson.toJson(baseModel.getDatas()),EnumsDatas.class);
+                    if (enumsDatas.getEnums().size()>0){
+                        for (final EnumsDatasBean bean : enumsDatas.getEnums()){
+                            if (bean.getClassName().equals("SpecialtyType")){//  TimeQuantum
+//                                final List<String> date = new ArrayList<String>();
+                                List<EnumsDatasBeanDatas> list1=new ArrayList<>();
+                                for (int i = 0; i < bean.getDatas().size(); i++) {
+                                    list1.add(bean.getDatas().get(i));
+                                    list.add(bean.getDatas().get(i).getDes());
+                                }
+
+                            }
+                        }
+
+
+
+
+                    }
+
+                }
+            }
+        });
+
     }
 
     private void initView() {
@@ -94,9 +136,9 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
                 finish();
                 break;
             case R.id.lin_degree:
-                list.clear();
-                list.add(getString(R.string.gong_zhang));
-                list.add(getString(R.string.desinger));
+//                list.clear();
+//                list.add(getString(R.string.gong_zhang));
+//                list.add(getString(R.string.desinger));
                 //SingleOptionsPicker.tv_choose_degree.setText("选择身份");
                 SingleOptionsPicker.openOptionsPicker(this, list, tv_degree,getString(R.string.choose_rule));
                 SoftInputUtils.hideSoftInput(this);
