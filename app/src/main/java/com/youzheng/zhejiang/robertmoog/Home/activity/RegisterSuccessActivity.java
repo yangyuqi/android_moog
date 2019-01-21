@@ -1,6 +1,5 @@
 package com.youzheng.zhejiang.robertmoog.Home.activity;
 
-import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,11 +8,9 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
 
-import com.tbruyelle.rxpermissions.RxPermissions;
 import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
 import com.youzheng.zhejiang.robertmoog.Home.HomeFragment;
 import com.youzheng.zhejiang.robertmoog.Model.Home.Customer;
-import com.youzheng.zhejiang.robertmoog.Model.Home.CustomerBean;
 import com.youzheng.zhejiang.robertmoog.Model.Home.ShopPersonalListBean;
 import com.youzheng.zhejiang.robertmoog.Model.login.RegisterBean;
 import com.youzheng.zhejiang.robertmoog.R;
@@ -28,8 +25,6 @@ import com.youzheng.zhejiang.robertmoog.utils.ViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import rx.functions.Action1;
 
 public class RegisterSuccessActivity extends BaseActivity {
 
@@ -94,21 +89,13 @@ public class RegisterSuccessActivity extends BaseActivity {
                         startActivity(intent);
                         break;
                     case 0 :
-                        RxPermissions permissions = new RxPermissions(RegisterSuccessActivity.this);
-                        permissions.request(Manifest.permission.CAMERA,Manifest.permission.VIBRATE ,Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe(new Action1<Boolean>() {
-                            @Override
-                            public void call(Boolean aBoolean) {
-                                if (aBoolean){
-                                    Intent intent1 = new Intent(mContext, CaptureActivity.class);
-                                    if (customer!=null){
-                                        intent1.putExtra("customerId",customer.getCustomerId());
-                                    }else {
-                                        intent1.putExtra("customerId",registerBean.getCustomerId());
-                                    }
-                                    startActivity(intent1);
-                                }
-                            }
-                        });
+                        Intent intent1 = new Intent(mContext, CaptureActivity.class);
+                        if (customer!=null){
+                            intent1.putExtra("customerId",customer.getCustomerId());
+                        }else {
+                            intent1.putExtra("customerId",registerBean.getCustomerId());
+                        }
+                        startActivity(intent1);
                         break;
 
                     case 2 :

@@ -30,8 +30,6 @@ import com.youzheng.zhejiang.robertmoog.Model.Home.ScanDatasBean;
 import com.youzheng.zhejiang.robertmoog.Model.TestBean;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.utils.View.AddPriceDialog;
-import com.youzheng.zhejiang.robertmoog.utils.View.DeleteDialog;
-import com.youzheng.zhejiang.robertmoog.utils.View.DeleteDialogInterface;
 import com.youzheng.zhejiang.robertmoog.utils.View.InPutCodeDialog;
 import com.youzheng.zhejiang.robertmoog.utils.View.NoScrollListView;
 
@@ -109,20 +107,6 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 }else {
                     ((CommonGoodsViewHolder) holder).edt_num.setText(""+objects.get(position).getNum());
                 }
-                ((CommonGoodsViewHolder) holder).main_right_drawer_layout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        DeleteDialog dialog = new DeleteDialog(context,"提示","是否删除此商品","确定");
-                        dialog.show();
-                        dialog.OnDeleteBtn(new DeleteDialogInterface() {
-                            @Override
-                            public void isDelete(boolean isdelete) {
-                                objects.remove(position);
-                                notifyDataSetChanged();
-                            }
-                        });
-                    }
-                });
             }else if (type.equals("3")){
                 ((CommonGoodsViewHolder) holder).tv_confirm.setVisibility(View.GONE);
                 ((CommonGoodsViewHolder) holder).tv_get_num.setVisibility(View.VISIBLE);
@@ -320,20 +304,6 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 ((CommonGoodsTypeViewHolder) holder).tv_confirm.setVisibility(View.GONE);
                 ((CommonGoodsTypeViewHolder) holder).ll_num.setVisibility(View.VISIBLE);
                 ((CommonGoodsTypeViewHolder) holder).edt_num.setText(""+objects.get(position).getNum());
-                ((CommonGoodsTypeViewHolder) holder).main_right_drawer_layout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        DeleteDialog dialog = new DeleteDialog(context,"提示","是否删除此商品","确定");
-                        dialog.show();
-                        dialog.OnDeleteBtn(new DeleteDialogInterface() {
-                            @Override
-                            public void isDelete(boolean isdelete) {
-                                objects.remove(position);
-                                notifyDataSetChanged();
-                            }
-                        });
-                    }
-                });
             }else if (type.equals("3")){
                 ((CommonGoodsTypeViewHolder) holder).tv_get_num.setVisibility(View.VISIBLE);
                 ((CommonGoodsTypeViewHolder) holder).tv_confirm.setVisibility(View.GONE);
@@ -427,7 +397,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         TextView tv_name ,tv_desc ,tv_price ,tv_confirm ,tv_get_num ,tv_add ,tv_reduce ,tv_specail
                 ,tv_pu_code ,tv_zengxiang ,tv_add_code ,tv_add_price ;
         ImageView iv_icon ;
-        RelativeLayout rl_width ,main_right_drawer_layout;
+        RelativeLayout rl_width ;
         HorizontalScrollView hsv;
         View ll_num , ll_no_code ,ll_has_code ;
         EditText edt_num ;
@@ -452,7 +422,6 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             tv_add_price = itemView.findViewById(R.id.tv_add_price);
             ll_no_code = itemView.findViewById(R.id.ll_no_code);
             ll_has_code = itemView.findViewById(R.id.ll_has_code);
-            main_right_drawer_layout = itemView.findViewById(R.id.main_right_drawer_layout);
         }
     }
 
@@ -460,7 +429,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         TextView tv_name ,tv_confirm , tv_desc ,tv_price ,tv_golden ,tv_activity ,tv_get_num ,tv_add ,tv_reduce;
         NoScrollListView ls ;
-        View rl_activity ,ll_num ,main_right_drawer_layout;
+        View rl_activity ,ll_num;
         ImageView iv_show ,iv_icon ;
         LinearLayout ll_width ;
         HorizontalScrollView hsv ;
@@ -484,7 +453,6 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             edt_num = itemView.findViewById(R.id.edt_num);
             tv_reduce = itemView.findViewById(R.id.tv_reduce);
             tv_add = itemView.findViewById(R.id.tv_add);
-            main_right_drawer_layout = itemView.findViewById(R.id.main_right_drawer_layout);
         }
     }
 
