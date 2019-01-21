@@ -117,6 +117,9 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
         search_list = (ListView) findViewById(R.id.search_list);
 
         search_list.setOnItemClickListener(this);
+
+        searchAdapter=new GoodsSearchAdapter(searchlist,this);
+        search_list.setAdapter(searchAdapter);
     }
 
     private void initData() {
@@ -178,6 +181,7 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
             default:
                 break;
             case R.id.iv_search:
+                searchlist.clear();
                 edit = tv_search.getText().toString().trim();
                 if (TextUtils.isEmpty(edit)) {
                     showToast(getString(R.string.please_write_sku));
@@ -203,7 +207,7 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
         map.put("pageSize",pageSize);
 //        map.put("sku",goodsName);
         map.put("sku",str);//测试用
-        map.put("firstCategoryId",0);
+//        map.put("firstCategoryId",0);
         String token = (String) SharedPreferencesUtils.getParam(mContext, PublicUtils.access_token,"");
         if (token!=null){
             OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.GOODS_LIST + "?access_token=" + token, new OkHttpClientManager.StringCallback() {
@@ -228,16 +232,14 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void setSearchData(GoodsList goodsList) {
-        searchAdapter=new GoodsSearchAdapter(searchlist,this);
-        search_list.setAdapter(searchAdapter);
         if (goodsList.getProductListDetailData()==null) return;
         List<GoodsList.ProductListDetailDataBean> productListDetailDataBeans=goodsList.getProductListDetailData();
-        searchlist=goodsList.getProductListDetailData();
+
         if (productListDetailDataBeans.size()!=0){
             searchlist.addAll(productListDetailDataBeans);
             searchAdapter.setRefreshUI(productListDetailDataBeans);
         }
-
+        //searchlist=goodsList.getProductListDetailData();
 
 
     }

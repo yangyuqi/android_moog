@@ -40,7 +40,8 @@ public class MoreChooseReturnGoodsAdapter extends RecyclerView.Adapter<MoreChoos
         this.list = list;
         this.context = context;
         layoutInflater = LayoutInflater.from(context);
-        productListBeanList = new ArrayList<>();
+
+
     }
 
     public void setUI(List<ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean> list) {
@@ -65,18 +66,20 @@ public class MoreChooseReturnGoodsAdapter extends RecyclerView.Adapter<MoreChoos
         moreHolder.tv_goods_content.setText(bean.getComboName());
         moreHolder.tv_money.setText(context.getString(R.string.label_money) + bean.getRefundAmount());
         moreHolder.tv_meal_name.setText(bean.getComboDescribe());
-
+        //productListBeanList = list.get(position).getProductList();
         moreHolder.iv_isShow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                productListBeanList=new ArrayList<>();
                 if (list.size() > 0) {
                     if (list.get(position).isIsexpress()) {
-                        productListBeanList.clear();
+                      productListBeanList.clear();
+//                        moreHolder.listView.setVisibility(View.GONE);
                         list.get(position).setIsexpress(false);
                         moreHolder.iv_isShow.setImageResource(R.mipmap.group_14_1);
                     } else {
                         productListBeanList = list.get(position).getProductList();
+//                        moreHolder.listView.setVisibility(View.VISIBLE);
                         list.get(position).setIsexpress(true);
                         moreHolder.iv_isShow.setImageResource(R.mipmap.group_12_3);
                     }
@@ -102,9 +105,14 @@ public class MoreChooseReturnGoodsAdapter extends RecyclerView.Adapter<MoreChoos
     public List<ChooseGoodsRequest.OrderProductListBean> getRequests(){
         for (ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean.ProductListBeanX beanX:productListBeanList){
             ChooseGoodsRequest.OrderProductListBean request=new ChooseGoodsRequest.OrderProductListBean();
-            request.setCount(beanX.getNum());
-            request.setOrderItemProductId(beanX.getOrderItemProductId());
-            requests.add(request);
+            if (!beanX.getNum().equals("0")){
+                if (productListBeanList.size()!=0){
+                    request.setCount(beanX.getNum());
+                    request.setOrderItemProductId(beanX.getOrderItemProductId());
+                    requests.add(request);
+                }
+
+            }
         }
 
         return requests;

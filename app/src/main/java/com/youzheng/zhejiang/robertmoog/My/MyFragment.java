@@ -40,6 +40,9 @@ public class MyFragment extends BaseFragment implements BaseFragment.ReloadInter
      String token ;
     ImageView iv_user_icon ;
 
+    /**  */
+    private TextView textHeadTitle;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -59,7 +62,7 @@ public class MyFragment extends BaseFragment implements BaseFragment.ReloadInter
     }
 
     private void initData() {
-        OkHttpClientManager.postAsynJson(gson.toJson(new HashMap<>()), UrlUtils.SHOP_SCVAN+"?access_token="+token, new OkHttpClientManager.StringCallback() {
+        OkHttpClientManager.postAsynJson(gson.toJson(new HashMap<>()), UrlUtils.SHOP_SCVAN+"?access_token="+access_token, new OkHttpClientManager.StringCallback() {
             @Override
             public void onFailure(Request request, IOException e) {
 
@@ -98,11 +101,16 @@ public class MyFragment extends BaseFragment implements BaseFragment.ReloadInter
                 startActivity(new Intent(mContext,AlterPasswordActivity.class));
             }
         });
+
+        textHeadTitle = (TextView) mView.findViewById(R.id.textHeadTitle);
+        String title= (String) SharedPreferencesUtils.getParam(getActivity(),PublicUtils.shop_title,"");
+        textHeadTitle.setText(title);
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        final String token = (String) SharedPreferencesUtils.getParam(mContext, PublicUtils.access_token,"");
         if (!token.equals("")){
             OkHttpClientManager.postAsynJson(gson.toJson(new HashMap<>()), UrlUtils.GET_USER_ONFO + "?access_token=" + token, new OkHttpClientManager.StringCallback() {
                 @Override

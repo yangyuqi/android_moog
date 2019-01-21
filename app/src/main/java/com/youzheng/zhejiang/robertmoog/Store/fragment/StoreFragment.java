@@ -10,10 +10,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.youzheng.zhejiang.robertmoog.Base.BaseFragment;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
-import com.youzheng.zhejiang.robertmoog.Home.activity.ClientViewActivity;
 import com.youzheng.zhejiang.robertmoog.Home.activity.LoginActivity;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.activity.CheckResultActivity;
@@ -44,6 +44,8 @@ public class StoreFragment extends BaseFragment implements BaseFragment.ReloadIn
     private View view;
     private ImageView btnBack;
     private String role;
+    /**  */
+    private TextView textHeadTitle;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,7 +56,7 @@ public class StoreFragment extends BaseFragment implements BaseFragment.ReloadIn
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.store_fragment_layout, null);
-        role = (String) SharedPreferencesUtils.getParam(getActivity(), PublicUtils.role,"");
+        role = (String) SharedPreferencesUtils.getParam(getActivity(), PublicUtils.role, "");
         initView();
         setUpView(mView);
         setReloadInterface(this);
@@ -67,14 +69,14 @@ public class StoreFragment extends BaseFragment implements BaseFragment.ReloadIn
         super.onResume();
 
         data.clear();
-        if (role.equals("SHOP_SELLER")){
+        if (role.equals("SHOP_SELLER")) {
             data.add(new HomeBean("门店客户", R.mipmap.group_7_1));
             data.add(new HomeBean("订单管理", R.mipmap.group_7_2));
             data.add(new HomeBean("商品管理", R.mipmap.group_7_3));
             data.add(new HomeBean("退货", R.mipmap.group_7_10));
             data.add(new HomeBean("退货单管理", R.mipmap.group_7_11));
 
-        }else {
+        } else {
             data.add(new HomeBean("门店客户", R.mipmap.group_7_1));
             data.add(new HomeBean("订单管理", R.mipmap.group_7_2));
             data.add(new HomeBean("商品管理", R.mipmap.group_7_3));
@@ -95,10 +97,6 @@ public class StoreFragment extends BaseFragment implements BaseFragment.ReloadIn
         gridView = mView.findViewById(R.id.gv);
 
 
-
-
-
-
         adapter = new CommonAdapter<HomeBean>(mContext, data, R.layout.home_ls_item) {
             @Override
             public void convert(ViewHolder helper, HomeBean item) {
@@ -114,62 +112,88 @@ public class StoreFragment extends BaseFragment implements BaseFragment.ReloadIn
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                switch (position) {
-                    case 0:
-                        startActivity(new Intent(getActivity(), StoreCustomerActivity.class));
-                        break;
+                if (role.equals("SHOP_SELLER")) {
+                    switch (position) {
+                        case 0:
+                            startActivity(new Intent(getActivity(), StoreCustomerActivity.class));
+                            break;
 
-                    case 1:
-                        startActivity(new Intent(getActivity(), OrderListActivity.class));
-                        break;
+                        case 1:
+                            startActivity(new Intent(getActivity(), OrderListActivity.class));
+                            break;
 
-                    case 2:
-                        startActivity(new Intent(getActivity(), GoodsManageActivity.class));
-                        break;
+                        case 2:
+                            startActivity(new Intent(getActivity(), GoodsManageActivity.class));
+                            break;
 
-                    case 3:
-                        startActivity(new Intent(getActivity(), ProfessionalCustomerActivity.class));
-                        break;
+                        case 3:
+                            startActivity(new Intent(getActivity(), ReturnRecognitionActivity.class));
+                            break;
 
-                    case 4:
-                        startActivity(new Intent(getActivity(), ProfessionalCustomerOrderActivity.class));
-                        break;
+                        case 4:
+                            startActivity(new Intent(getActivity(), ReturnGoodsListActivity.class));
+                            break;
+                    }
+                } else {
+                    switch (position) {
+                        case 0:
+                            startActivity(new Intent(getActivity(), StoreCustomerActivity.class));
+                            break;
 
-                    case 5:
-                        startActivity(new Intent(getActivity(), PeopleMangerActivity.class));
-                        break;
+                        case 1:
+                            startActivity(new Intent(getActivity(), OrderListActivity.class));
+                            break;
 
-                    case 6:
-                        startActivity(new Intent(getActivity(), SampleOutInformationActivity.class));
-                        break;
+                        case 2:
+                            startActivity(new Intent(getActivity(), GoodsManageActivity.class));
+                            break;
 
-                    case 7:
-                        startActivity(new Intent(getActivity(), SampleOutMangerActivity.class));
-                        break;
+                        case 3:
+                            startActivity(new Intent(getActivity(), ProfessionalCustomerActivity.class));
+                            break;
 
-                    case 8:
-                        startActivity(new Intent(getActivity(), CheckResultActivity.class));
-                        break;
+                        case 4:
+                            startActivity(new Intent(getActivity(), ProfessionalCustomerOrderActivity.class));
+                            break;
 
-                    case 9:
-                        startActivity(new Intent(getActivity(), ReturnRecognitionActivity.class));
-                        break;
+                        case 5:
+                            startActivity(new Intent(getActivity(), PeopleMangerActivity.class));
+                            break;
 
-                    case 10:
-                        startActivity(new Intent(getActivity(), ReturnGoodsListActivity.class));
-                        break;
-                    case 11:
-                        startActivity(new Intent(getActivity(), CouponRecordActivity.class));
-                        break;
+                        case 6:
+                            startActivity(new Intent(getActivity(), SampleOutInformationActivity.class));
+                            break;
+
+                        case 7:
+                            startActivity(new Intent(getActivity(), SampleOutMangerActivity.class));
+                            break;
+
+                        case 8:
+                            startActivity(new Intent(getActivity(), CheckResultActivity.class));
+                            break;
+
+                        case 9:
+                            startActivity(new Intent(getActivity(), ReturnRecognitionActivity.class));
+                            break;
+
+                        case 10:
+                            startActivity(new Intent(getActivity(), ReturnGoodsListActivity.class));
+                            break;
+                        case 11:
+                            startActivity(new Intent(getActivity(), CouponRecordActivity.class));
+                            break;
+                    }
                 }
+
             }
         });
         btnBack = (ImageView) mView.findViewById(R.id.btnBack);
         btnBack.setVisibility(View.GONE);
 
 
-
-
+        textHeadTitle = (TextView) mView.findViewById(R.id.textHeadTitle);
+        String title= (String) SharedPreferencesUtils.getParam(getActivity(),PublicUtils.shop_title,"");
+        textHeadTitle.setText(title);
     }
 
     @Override

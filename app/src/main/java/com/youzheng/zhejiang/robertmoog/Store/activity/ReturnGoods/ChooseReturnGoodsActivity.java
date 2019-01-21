@@ -246,28 +246,42 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
                 break;
             case R.id.tv_confirm:
                 requests.clear();
-                if (morelist.size()!=0){
-                    if (MoreChooseReturnGoodsAdapter.productListBeanList.size()!=0){
-                        requests.addAll(moreChooseReturnGoodsAdapter.getRequests());
-                        Intent intent=new Intent(this,ReturnGoodsCounterActivity.class);
-                        intent.putExtra("request", (Serializable) requests);
-                        intent.putExtra("is_all",isall);
-                        intent.putExtra("orderID",orderid);
-                        startActivity(intent);
-                        finish();
-                    }else {
-                        showToast(getString(R.string.please_choose_goods_number));
-                    }
-                }
 
                 if (onelist.size()!=0){
 
                     for (ChooseReturnGoodsDetail.ReturnOrderInfoBean.ProductListBean oneBean:onelist){
                         ChooseGoodsRequest.OrderProductListBean request=new ChooseGoodsRequest.OrderProductListBean();
-                        request.setCount(oneBean.getNum());
-                        request.setOrderItemProductId(oneBean.getOrderItemProductId());
-                        requests.add(request);
+                        if (!oneBean.getNum().equals("0")){
+                            request.setCount(oneBean.getNum());
+                            request.setOrderItemProductId(oneBean.getOrderItemProductId());
+                            requests.add(request);
+                        }
                     }
+                }
+
+                if (morelist.size()!=0){
+                    if (MoreChooseReturnGoodsAdapter.productListBeanList!=null){
+                        requests.addAll(moreChooseReturnGoodsAdapter.getRequests());
+//                        if (requests.size()==0){
+//                            Intent intent=new Intent(this,ReturnGoodsCounterActivity.class);
+//                            intent.putExtra("request", (Serializable) requests);
+//                            intent.putExtra("is_all",isall);
+//                            intent.putExtra("orderID",orderid);
+//                            startActivity(intent);
+//                            finish();
+//                        }else {
+//                            showToast("暂无可退商品");
+//                        }
+
+                    }else {
+                        showToast(getString(R.string.please_choose_goods_number));
+                    }
+                }
+
+
+                if (requests.size()==0){
+                    showToast("暂无可退商品");
+                }else {
                     Intent intent=new Intent(this,ReturnGoodsCounterActivity.class);
                     intent.putExtra("request", (Serializable) requests);
                     intent.putExtra("is_all",isall);
@@ -275,6 +289,7 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
                     startActivity(intent);
                     finish();
                 }
+
 
                 Log.e("11231",requests.size()+"");
 

@@ -30,6 +30,7 @@ import com.youzheng.zhejiang.robertmoog.Count.activity.TodayRegisterNumberActivi
 import com.youzheng.zhejiang.robertmoog.Count.activity.TodaySingleGoodsSalesBestDetailActivity;
 import com.youzheng.zhejiang.robertmoog.Count.activity.TodayStoreSalesActivity;
 import com.youzheng.zhejiang.robertmoog.Count.bean.CountAll;
+import com.youzheng.zhejiang.robertmoog.Home.activity.LoginActivity;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.utils.TextTypeUtil;
@@ -102,6 +103,7 @@ public class CountFragment extends BaseFragment implements BaseFragment.ReloadIn
     private String shopCount,setMealCount,categoryCount,singleProductCount,customerCount,productName,setMealInfo;
     private String role;
     private ScrollView sv_view;
+    private LinearLayout lin_second;
 
     @Nullable
     @Override
@@ -122,6 +124,7 @@ public class CountFragment extends BaseFragment implements BaseFragment.ReloadIn
             rv_ranking.setVisibility(View.GONE);
             rv_sort_ranking_number.setVisibility(View.GONE);
             sv_view.setVisibility(View.GONE);
+            lin_second.setVisibility(View.GONE);
         }
 
 
@@ -186,6 +189,8 @@ public class CountFragment extends BaseFragment implements BaseFragment.ReloadIn
         btnBack = (ImageView) mView.findViewById(R.id.btnBack);
         btnBack.setVisibility(View.GONE);
         textHeadTitle = (TextView) mView.findViewById(R.id.textHeadTitle);
+        String title= (String) SharedPreferencesUtils.getParam(getActivity(),PublicUtils.shop_title,"");
+        textHeadTitle.setText(title);
         textHeadNext = (TextView) mView.findViewById(R.id.textHeadNext);
         iv_next = (ImageView) mView.findViewById(R.id.iv_next);
         layout_header = (RelativeLayout) mView.findViewById(R.id.layout_header);
@@ -222,6 +227,7 @@ public class CountFragment extends BaseFragment implements BaseFragment.ReloadIn
         tv_today_best_ranking = (TextView) mView.findViewById(R.id.tv_today_best_ranking);
 
         sv_view=mView.findViewById(R.id.sv_view);
+        lin_second=mView.findViewById(R.id.lin_second);
 
 
 

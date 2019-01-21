@@ -109,6 +109,7 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
         initView();
         setListener();
         initGetDate();
+        initData(page,pageSize,orderCode,timeQuantum,isCustomer,type);
     }
 
     private void initGetDate() {
@@ -223,7 +224,7 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
-        initData(page,pageSize,orderCode,timeQuantum,isCustomer,type);
+
     }
 
     private void initData(int page, int pageSize, String orderCode,String timeQuantum,Boolean isCustomer,String type) {
