@@ -280,8 +280,9 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
                 BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                 if (baseModel.getCode()==PublicUtils.code){
                     finish();
+                }else {
+                    showToast(baseModel.getMsg());
                 }
-                showToast(baseModel.getMsg());
             }
         });
     }

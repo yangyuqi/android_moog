@@ -106,7 +106,33 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
                                 helper.getView(R.id.main_right_drawer_layout).setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
+                                        DeleteDialog dialog = new DeleteDialog(context,"提示","是否删除此意向商品","确定");
+                                        dialog.show();
+                                        dialog.OnDeleteBtn(new DeleteDialogInterface() {
+                                            @Override
+                                            public void isDelete(boolean isdelete) {
+                                                if (token.equals("")){
+                                                    return;
+                                                }
+                                                Map<String,Object> map = new HashMap<>();
+                                                map.put("id",data.get(i).getGoodsId());
+                                                OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.DELETE_GOODS + "?access_token=" + token, new OkHttpClientManager.StringCallback() {
+                                                    @Override
+                                                    public void onFailure(Request request, IOException e) {
 
+                                                    }
+
+                                                    @Override
+                                                    public void onResponse(String response) {
+                                                        BaseModel baseModel = gson.fromJson(response,BaseModel.class);
+                                                        if (baseModel.getCode()==PublicUtils.code){
+                                                            data.remove(i);
+                                                            notifyDataSetChanged();
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                        });
                                     }
                                 });
                             }
@@ -204,7 +230,11 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
                                 @Override
                                 public void onResponse(String response) {
-
+                                    BaseModel baseModel = gson.fromJson(response,BaseModel.class);
+                                    if (baseModel.getCode()==PublicUtils.code){
+                                        data.remove(i);
+                                        notifyDataSetChanged();
+                                    }
                                 }
                             });
                         }
