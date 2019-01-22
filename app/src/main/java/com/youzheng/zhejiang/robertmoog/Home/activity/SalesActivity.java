@@ -422,7 +422,7 @@ public class SalesActivity extends BaseActivity {
                         findViewById(R.id.rl_address).setVisibility(View.VISIBLE);
                         findViewById(R.id.ll_address).setVisibility(View.GONE);
                         tv_name.setText(saleData.getSaleData().getShipPerson());
-                        tv_phone.setText(saleData.getSaleData().getShipMobile());
+                        tv_phone.setText(PublicUtils.phoneNum(saleData.getSaleData().getShipMobile()));
                         tv_details.setText(""+saleData.getSaleData().getShipAddress());
                         addressId = saleData.getSaleData().getAddressId();
                     }

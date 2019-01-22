@@ -1,6 +1,7 @@
 package com.youzheng.zhejiang.robertmoog.Base.utils;
 
 import android.content.res.Resources;
+import android.text.TextUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -31,6 +32,25 @@ public class PublicUtils {
             e.printStackTrace();
         }
         return encodeStr;
+    }
+
+
+    public static String phoneNum(String phonenum){
+
+        if(!TextUtils.isEmpty(phonenum) && phonenum.length() > 6 ){
+            StringBuilder sb  =new StringBuilder();
+            for (int i = 0; i < phonenum.length(); i++) {
+                char c = phonenum.charAt(i);
+                if (i >= 3 && i <= 6) {
+                    sb.append('*');
+                } else {
+                    sb.append(c);
+                }
+            }
+
+            return sb.toString() ;
+        }
+        return "";
     }
 
     private static String byte2Hex(byte[] bytes) {
