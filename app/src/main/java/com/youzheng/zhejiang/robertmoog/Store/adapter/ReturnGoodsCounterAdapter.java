@@ -66,13 +66,14 @@ public class ReturnGoodsCounterAdapter extends RecyclerView.Adapter<ReturnGoodsC
         oneHolder.tv_money.setText(context.getString(R.string.label_money)+bean.getRefundAmount());
         oneHolder.tv_number.setText("X "+bean.getCount()+"");
 
-        oneHolder.tv_goods_code.setText(bean.getSku());
-
 
 
         if (bean.isIsSpecial()==true){
             oneHolder.tv_area.setVisibility(View.VISIBLE);
-            oneHolder.tv_area.setText(bean.getSquare());
+            if (bean.getSquare()!=0){
+                oneHolder.tv_area.setText(bean.getSquare()+"平方");
+            }
+
         }else {
             oneHolder.tv_area.setVisibility(View.GONE);
 
@@ -90,6 +91,7 @@ public class ReturnGoodsCounterAdapter extends RecyclerView.Adapter<ReturnGoodsC
             int num_mon= Integer.parseInt(mo);
             int count=bean.getCount();
             int alls=num_mon*count;
+            bean.setMoney(alls);
 
             Log.e("111",alls+"总和");
 
@@ -151,10 +153,14 @@ public class ReturnGoodsCounterAdapter extends RecyclerView.Adapter<ReturnGoodsC
 
                              if (num_mon>refund){
                                  Toast.makeText(context,"实退金额不能大于退货金额",Toast.LENGTH_SHORT).show();
-                                 ReturnGoodsCounterActivity.tv_really_cut_money.setText("");
+                                 oneHolder.et_money.setText(refund+"");
+                                 bean.setMoney(refund);
+                                 ReturnGoodsCounterActivity.tv_really_cut_money.setText(context.getString(R.string.label_money)+refund+"");
                              }else {
                                  int count=bean.getCount();
                                  int alls=num_mon*count;
+
+                                 bean.setMoney(alls);
 
                                  Log.e("111",alls+"总和");
 
@@ -175,6 +181,7 @@ public class ReturnGoodsCounterAdapter extends RecyclerView.Adapter<ReturnGoodsC
                              money_all.clear();
                              totals=0;
                              all=0;
+                             bean.setMoney(0);
                              ReturnGoodsCounterActivity.tv_really_cut_money.setText("");
                          }
                      }

@@ -92,7 +92,7 @@
     <string name="order_finished">订单完成!</string>
     <string name="order_detail">订单详情</string>
     <string name="have_award">有赠送礼品</string>
-    <string name="no_award">无赠送礼品</string>
+    <string name="no_award">未赠送礼品</string>
     <string name="have_no">无</string>
     <string name="goods_list">商品列表</string>
     <string name="goods_sale_number">商品销售数量</string>

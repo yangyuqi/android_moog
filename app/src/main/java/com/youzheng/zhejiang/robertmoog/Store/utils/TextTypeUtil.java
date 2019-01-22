@@ -18,7 +18,7 @@ public class TextTypeUtil {
 
     public static void setTextContent(TextView textView, Context context) {
         //将字体文件保存在assets/fonts/目录下，创建Typeface对象
-        Typeface typeface = Typeface.createFromAsset(context.getAssets(), "fonnts/lantinghei.ttf");
+        Typeface typeface = Typeface.createFromAsset(context.getAssets(), "fonnts/lantingheie.ttf");
         //使用字体成仿宋体
         textView.setTypeface(typeface);
 

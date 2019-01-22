@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.activity.ReturnGoods.ChooseReturnGoodsActivity;
+import com.youzheng.zhejiang.robertmoog.Store.activity.ReturnGoods.ReturnAllCounterActivity;
 import com.youzheng.zhejiang.robertmoog.Store.activity.StoreOrderlistDetailActivity;
 import com.youzheng.zhejiang.robertmoog.Store.bean.NewOrderListBean;
 import com.youzheng.zhejiang.robertmoog.Store.bean.OrderList;
@@ -111,8 +112,8 @@ public class ChooseGoodsListAdapter extends RecyclerView.Adapter {
         holder.tv_return_all.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(context,ChooseReturnGoodsActivity.class);
-                intent.putExtra("returnGoodsId",list.get(positions).getId());
+                Intent intent=new Intent(context,ReturnAllCounterActivity.class);
+                intent.putExtra("orderID",list.get(positions).getId());
                 intent.putExtra("isAll",true);
                 context.startActivity(intent);
             }
@@ -152,8 +153,8 @@ public class ChooseGoodsListAdapter extends RecyclerView.Adapter {
         holder.tv_return_all.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(context,ChooseReturnGoodsActivity.class);
-                intent.putExtra("returnGoodsId",list.get(position).getId());
+                Intent intent=new Intent(context,ReturnAllCounterActivity.class);
+                intent.putExtra("orderID",list.get(position).getId());
                 intent.putExtra("isAll",true);
                 context.startActivity(intent);
             }

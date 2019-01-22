@@ -297,7 +297,7 @@ public class ProfessionalOrderDetailActivity extends BaseActivity implements Vie
     private String paymentMethod;
     private String shoppingMethod;
 
-    private String productCount;
+    private int productCount;
     private String amountPayable;
     private String payAmount;
     private String couponDerate;
@@ -506,14 +506,14 @@ public class ProfessionalOrderDetailActivity extends BaseActivity implements Vie
             tv_get_money_type.setText(paymentMethod);
         }
 
-        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getProductCount())){
+        if(orderlistDetail.getOrderItemData().getProductCount()!=0){
             productCount=orderlistDetail.getOrderItemData().getProductCount();
-            tv_goods_num.setText(productCount);
+            tv_goods_num.setText(productCount+"");
         }
 
-        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getProductCount())){
-            productCount=orderlistDetail.getOrderItemData().getProductCount();
-            tv_goods_num.setText(productCount);
+        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getReturnOrderStatus())){
+            returnOrderStatus=orderlistDetail.getOrderItemData().getReturnOrderStatus();
+//            tv_goods_num.setText(productCount);
         }
 
         if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getAmountPayable())){

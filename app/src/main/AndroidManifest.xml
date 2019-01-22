@@ -214,9 +214,10 @@
             android:screenOrientation="portrait" />
         <activity android:name=".Store.activity.ReturnGoods.ChooseReturnGoodsActivity" />
         <activity android:name=".Store.activity.ReturnGoods.ReturnGoodsCounterActivity" />
-        <activity android:name=".Store.activity.ReturnGoods.ReturnRecognitionActivity"></activity>
-        <activity android:name=".My.AboutAppActivity"/>
-        <activity android:name=".My.AlterPasswordActivity"/>
+        <activity android:name=".Store.activity.ReturnGoods.ReturnRecognitionActivity" />
+        <activity android:name=".My.AboutAppActivity" />
+        <activity android:name=".My.AlterPasswordActivity" />
+        <activity android:name=".Store.activity.ReturnGoods.ReturnAllCounterActivity" />
     </application>
 
 </manifest>

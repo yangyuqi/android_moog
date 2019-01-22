@@ -51,13 +51,27 @@ public class OneOrderDetailAdapter  extends RecyclerView.Adapter<OneOrderDetailA
 
         oneHolder.tv_goods_code.setText(bean.getSku());
 
-        oneHolder.tv_state.setText("已退"+bean.getReturnCount()+""+"件");
-        oneHolder.tv_pu_code.setText(bean.getCodePu());
+
+        if (bean.getReturnCount()!=0){
+            oneHolder.tv_state.setText("已退"+bean.getReturnCount()+""+"件");
+        }else {
+            oneHolder.tv_state.setVisibility(View.GONE);
+        }
+
+
+       // oneHolder.tv_pu_code.setText(bean.getCodePu());
 
         if (bean.isIsSpecial()==true){
-            oneHolder.tv_area.setText(bean.getSquare());
-            oneHolder.tv_add_money.setText("增项加价"+R.string.label_money+bean.getAddPrice());
-            oneHolder.tv_pu_code.setText("PU单号:"+bean.getCodePu());
+            if (bean.getSquare()!=0){
+                oneHolder.tv_area.setText(bean.getSquare()+"平方");
+            }
+
+            if (!TextUtils.isEmpty(bean.getAddPrice())){
+                oneHolder.tv_add_money.setText("增项加价 "+context.getString(R.string.label_money)+bean.getAddPrice());
+            }
+          if (!TextUtils.isEmpty(bean.getCodePu())){
+              oneHolder.tv_pu_code.setText("PU单号: "+bean.getCodePu());
+          }
         }else {
             oneHolder.tv_area.setVisibility(View.GONE);
             oneHolder.tv_add_money.setVisibility(View.GONE);
@@ -92,6 +106,4 @@ public class OneOrderDetailAdapter  extends RecyclerView.Adapter<OneOrderDetailA
 
         }
     }
-
-
 }
