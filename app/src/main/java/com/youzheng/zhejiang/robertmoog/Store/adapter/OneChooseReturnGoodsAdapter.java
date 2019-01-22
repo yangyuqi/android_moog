@@ -61,7 +61,9 @@ public class OneChooseReturnGoodsAdapter extends RecyclerView.Adapter<OneChooseR
 
         if (bean.isIsSpecial()==true){
             oneHolder.tv_area.setVisibility(View.VISIBLE);
-            oneHolder.tv_area.setText(bean.getSquare());
+            if (bean.getSquare()!=0){
+                oneHolder.tv_area.setText(bean.getSquare()+"平方");
+            }
 
         }else {
             oneHolder.tv_area.setVisibility(View.GONE);

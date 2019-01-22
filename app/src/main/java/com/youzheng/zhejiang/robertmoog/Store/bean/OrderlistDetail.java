@@ -63,7 +63,7 @@ public class OrderlistDetail {
             private String pickUpStatus;
             private String paymentMethod;
             private String shoppingMethod;
-            private String productCount;
+            private int productCount;
             private String amountPayable;
             private String payAmount;
             private String couponDerate;
@@ -181,11 +181,11 @@ public class OrderlistDetail {
                 this.shoppingMethod = shoppingMethod;
             }
 
-            public String getProductCount() {
+            public int getProductCount() {
                 return productCount;
             }
 
-            public void setProductCount(String productCount) {
+            public void setProductCount(int productCount) {
                 this.productCount = productCount;
             }
 
@@ -306,7 +306,7 @@ public class OrderlistDetail {
                 private int count;
                 private String codePu;
                 private String addPrice;
-                private String square;
+                private int square;
                 private int returnCount;
                 private boolean isSpecial;
 
@@ -366,11 +366,11 @@ public class OrderlistDetail {
                     this.addPrice = addPrice;
                 }
 
-                public String getSquare() {
+                public int getSquare() {
                     return square;
                 }
 
-                public void setSquare(String square) {
+                public void setSquare(int square) {
                     this.square = square;
                 }
 

@@ -39,6 +39,24 @@ public class ChooseReturnGoodsDetail {
             private List<ProductListBean> productList;
             private List<SetMealListBean> setMealList;
             private String createDate;
+            private String refundAmount;
+            private int returnCount;
+
+            public int getReturnCount() {
+                return returnCount;
+            }
+
+            public void setReturnCount(int returnCount) {
+                this.returnCount = returnCount;
+            }
+
+            public String getRefundAmount() {
+                return refundAmount;
+            }
+
+            public void setRefundAmount(String refundAmount) {
+                this.refundAmount = refundAmount;
+            }
 
             public String getCreateDate() {
                 return createDate;
@@ -122,9 +140,18 @@ public class ChooseReturnGoodsDetail {
                 private String refundAmount;
                 private String photo;
                 private String orderItemProductId;
-                private String square;
+                private int square;
                 private boolean isSpecial;
                 private String num;
+                private int money;
+
+                public int getMoney() {
+                    return money;
+                }
+
+                public void setMoney(int money) {
+                    this.money = money;
+                }
 
                 public String getNum() {
                     return num;
@@ -182,11 +209,11 @@ public class ChooseReturnGoodsDetail {
                     this.orderItemProductId = orderItemProductId;
                 }
 
-                public String getSquare() {
+                public int getSquare() {
                     return square;
                 }
 
-                public void setSquare(String square) {
+                public void setSquare(int square) {
                     this.square = square;
                 }
 
@@ -290,6 +317,15 @@ public class ChooseReturnGoodsDetail {
                     private int count;
                     private String orderItemProductId;
                     private String num;
+                    private int money;
+
+                    public int getMoney() {
+                        return money;
+                    }
+
+                    public void setMoney(int money) {
+                        this.money = money;
+                    }
 
                     public String getNum() {
                         return num;

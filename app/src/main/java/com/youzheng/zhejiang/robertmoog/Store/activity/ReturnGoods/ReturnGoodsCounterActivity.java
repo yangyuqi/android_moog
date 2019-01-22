@@ -127,12 +127,13 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
         requests= (List<ChooseGoodsRequest.OrderProductListBean>) getIntent().getSerializableExtra("request");
         initView();
         initGetDate();
+        initData(returnId);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        initData(returnId);
+
     }
 
     private void initData(String id){
@@ -312,7 +313,7 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
                     showToast(getString(R.string.please_choose_return_type));
                 }else if (tv_return_type.getText().equals(getString(R.string.please_choose))){
                     showToast(getString(R.string.please_choose_return_reason));
-                }else if (TextUtils.isEmpty(tv_really_cut_money.getText())){
+                }else if (TextUtils.isEmpty(tv_really_cut_money.getText().toString())){
                     showToast(getString(R.string.please_write_really_money));
                 }else {
                     showStopDialog();
