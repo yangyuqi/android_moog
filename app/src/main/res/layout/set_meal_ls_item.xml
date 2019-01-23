@@ -132,7 +132,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/space_10"
-            android:paddingLeft="@dimen/space_15"
             ></com.youzheng.zhejiang.robertmoog.utils.View.NoScrollListView>
 
     </LinearLayout>

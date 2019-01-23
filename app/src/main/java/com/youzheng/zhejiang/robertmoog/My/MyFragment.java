@@ -129,7 +129,8 @@ public class MyFragment extends BaseFragment implements BaseFragment.ReloadInter
                         }else {
                             tv_role.setText(R.string.goods_manager);
                         }
-                        tv_shop_name.setText(dataBean.getUserConfigData().getShopName());
+                        String phone = (String) SharedPreferencesUtils.getParam(mContext,PublicUtils.shop_phone,"");
+                        tv_shop_name.setText(PublicUtils.phoneNum(phone));
                     }
                 }
 

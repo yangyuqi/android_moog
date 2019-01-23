@@ -14,8 +14,8 @@ public class SaleData {
     private String shipAddress ;
     private String addressId ;
     private String rules ;
-    private ArrayList<CouponListBean> useCouponList ;
-    private ArrayList<CouponListBean> notUseCouponList ;
+    private ArrayList<CouponListBean> useCouponList = new ArrayList<>();
+    private ArrayList<CouponListBean> notUseCouponList = new ArrayList<>();
 
 
     public String getAmountPayable() {

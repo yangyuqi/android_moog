@@ -15,6 +15,7 @@ public class PublicUtils {
     public static String token_type = "token_type";
     public static String role = "role" ;
     public static String shop_title = "shop_title" ;
+    public static String shop_phone = "shop_phone" ;
 
     public static String SHOP_SELLER ="SHOP_SELLER";
     public static String SHOP_LEADER = "SHOP_LEADER";//店主

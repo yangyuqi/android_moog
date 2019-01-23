@@ -164,14 +164,16 @@ public class RegisterSuccessActivity extends BaseActivity {
         customer = (Customer) getIntent().getSerializableExtra("customer");
         if (customer!=null){
             ((TextView)findViewById(R.id.textHeadTitle)).setText("识别成功");
-            ((TextView)findViewById(R.id.tv_type)).setText("会员识别成功");
-            tv_phone.setText("手机号码 : "+customer.getAccount());
+            ((TextView)findViewById(R.id.tv_type)).setText("识别成功");
+            String phone = customer.getAccount().substring(0,3)+" "+customer.getAccount().substring(3,7)+" "+customer.getAccount().substring(7,11);
+            tv_phone.setText("手机号码 : "+phone);
         }
         gv = (GridView) findViewById(R.id.gv);
         data.clear();
         registerBean = (RegisterBean) getIntent().getSerializableExtra("register");
         if (registerBean!=null){
-            tv_phone.setText(registerBean.getPhone());
+            String phone = registerBean.getPhone().substring(0,3)+" "+registerBean.getPhone().substring(3,7)+" "+registerBean.getPhone().substring(7,11);
+            tv_phone.setText(phone);
         }
         if (registerBean!=null) {
             data.add(new HomeBean("卖货", R.mipmap.group_34_2));

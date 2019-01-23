@@ -65,10 +65,10 @@ public class SalesActivity extends BaseActivity {
     TextView tv_confrim ;
     Map<String,Object> map = new HashMap<>();
     private OptionsPickerView pvCustomTime;
-    TextView tv_name ,tv_activity,tv_phone ,tv_details ,tv_get_state ,tv_cut_money_of_juan, tv_dispatching_type ,tv_get_money_type ,tv_get_money_of_now ,tv_should_money ,edt_content ,tv_cut_money_of_store,tv_cut_money_of_promotion ,tv_get_ticket ,tv_all_count;
+    TextView tv_name ,tv_activity,tv_phone ,tv_details ,tv_get_state ,tv_cut_money_of_juan, tv_dispatching_type ,tv_get_money_type ,tv_get_tivket,tv_get_money_of_now ,tv_should_money ,edt_content ,tv_cut_money_of_store,tv_cut_money_of_promotion ,tv_get_ticket ,tv_all_count;
     String PickUpStatus ,ShoppingMethod ,paymentMethod;
     Switch sv_life ,sv_present ;
-    private String payAmount ,assetId ;
+    private String payAmount ,assetId ,payValue ;
     EditText edt_door_ticket ;
     View rl_activity ;
 
@@ -410,8 +410,8 @@ public class SalesActivity extends BaseActivity {
                     payAmount = saleData.getSaleData().getPayAmount();
                     tv_get_money_of_now.setText("¥"+payAmount);
                     tv_should_money.setText("¥"+saleData.getSaleData().getAmountPayable());
-                    tv_cut_money_of_promotion.setText("¥"+saleData.getSaleData().getOrderDerate());
-                    tv_cut_money_of_juan.setText("¥"+saleData.getSaleData().getCouponDerate());
+                    tv_cut_money_of_promotion.setText("-¥"+saleData.getSaleData().getOrderDerate());
+                    tv_cut_money_of_juan.setText("-¥"+saleData.getSaleData().getCouponDerate());
                     tv_cut_money_of_store.setText("-¥"+saleData.getSaleData().getShopDerate());
                     notUseCouponList = saleData.getSaleData().getNotUseCouponList();
                     useCouponList = saleData.getSaleData().getUseCouponList();
@@ -430,10 +430,22 @@ public class SalesActivity extends BaseActivity {
                         findViewById(R.id.rl_activity).setVisibility(View.VISIBLE);
                         tv_activity.setText(saleData.getSaleData().getRules());
                     }
+                    if (saleData.getSaleData().getUseCouponList().size()>0){
+                        tv_get_tivket.setVisibility(View.VISIBLE);
+                        if (clickTicket==null) {
+                            tv_get_tivket.setText("" + saleData.getSaleData().getUseCouponList().size() + "张可用");
+                        }else {
+                            tv_get_tivket.setText("已选1张");
+                        }
+                    }else {
+                        tv_get_tivket.setVisibility(View.GONE);
+                    }
                 }
             }
         });
     }
+
+    private String clickTicket ;
 
     private void initView() {
         ((TextView)findViewById(R.id.textHeadTitle)).setText(R.string.seller_table);
@@ -485,6 +497,7 @@ public class SalesActivity extends BaseActivity {
         tv_all_count =findViewById(R.id.tv_all_count);
         rl_activity = findViewById(R.id.rl_activity);
         tv_activity = findViewById(R.id.tv_activity);
+        tv_get_tivket = findViewById(R.id.tv_get_tivket);
     }
 
     @Override
@@ -506,6 +519,9 @@ public class SalesActivity extends BaseActivity {
 
         if (requestCode==3&&resultCode==3){
             assetId = data.getStringExtra("assetId");
+            payValue = data.getStringExtra("payValue");
+//            tv_get_ticket.setText(payValue);
+            clickTicket = "";
         }
         initData();
     }

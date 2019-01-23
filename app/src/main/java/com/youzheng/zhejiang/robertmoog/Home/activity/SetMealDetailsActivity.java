@@ -71,8 +71,8 @@ public class SetMealDetailsActivity extends BaseActivity {
         commonAdapter = new CommonAdapter<ProductListData>(mContext,productListDataList,R.layout.goods_ls_item) {
             @Override
             public void convert(ViewHolder helper, ProductListData item) {
-                helper.setText(R.id.tv_name,item.getName());
-                helper.setText(R.id.tv_desc,item.getSkuId());
+                helper.setText(R.id.tv_name,item.getSkuId());
+                helper.setText(R.id.tv_desc,item.getName());
                 helper.setText(R.id.tv_price,"¥"+item.getPrice());
                 helper.setText(R.id.tv_confirm,"X"+item.getNum());
                 Glide.with(mContext).load(item.getImtUrl()).error(R.mipmap.type_icon).into((ImageView) helper.getView(R.id.iv_icon));
@@ -86,7 +86,7 @@ public class SetMealDetailsActivity extends BaseActivity {
     private void initData() {
         final Map<String,Object> map = new HashMap<>();
         map.put("id",comId);
-        OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.ORDERLIST_LIST_DETAIL + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
+        OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.NEW_TAOCAN_DETAILS + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
             public void onFailure(Request request, IOException e) {
 

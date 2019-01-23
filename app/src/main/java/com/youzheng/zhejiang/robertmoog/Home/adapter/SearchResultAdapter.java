@@ -395,7 +395,9 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         ((CommonGoodsTypeViewHolder) holder).edt_num.setText(s.toString().substring(1));
                         return;
                     }
-                    objects.get(position).setNum(Integer.parseInt(s.toString()));
+                    try {
+                        objects.get(position).setNum(Integer.parseInt(s.toString()));
+                    }catch (Exception e){}
                 }
             });
         }

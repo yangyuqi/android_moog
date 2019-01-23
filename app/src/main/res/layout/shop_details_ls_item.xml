@@ -11,8 +11,8 @@
         android:background="@drawable/bg_order"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/space_25"
-        android:layout_marginRight="@dimen/space_25"
+        android:layout_marginLeft="@dimen/space_15"
+        android:layout_marginRight="@dimen/space_15"
         >
 
         <TextView

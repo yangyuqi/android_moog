@@ -162,7 +162,7 @@ public class AttentionGoodsActivity extends BaseActivity {
     }
 
     private void initView() {
-        ((TextView)findViewById(R.id.textHeadTitle)).setText("意向商品");
+        ((TextView)findViewById(R.id.textHeadTitle)).setText("意向管理");
         findViewById(R.id.btnBack).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
