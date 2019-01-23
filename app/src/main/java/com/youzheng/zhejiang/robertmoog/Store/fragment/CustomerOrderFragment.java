@@ -300,8 +300,8 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
 
     @Override
     public void onItemClick(View view, int position) {
-        Intent intent=new Intent(getActivity(),ProfessionalOrderDetailActivity.class);
-        intent.putExtra("ProfessionalId",list.get(position).getId());
+        Intent intent=new Intent(getActivity(),StoreOrderlistDetailActivity.class);
+        intent.putExtra("OrderGoodsId",list.get(position).getId());
         startActivity(intent);
     }
 

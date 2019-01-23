@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:id="@+id/item"
     android:background="@color/bg_background_white"
     >
 
@@ -62,6 +63,7 @@
                 android:id="@+id/rv_list_pic"
                 android:layout_width="match_parent"
                 android:paddingLeft="15dp"
+
                 android:layout_height="88dp"></android.support.v7.widget.RecyclerView>
 
 

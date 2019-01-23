@@ -102,7 +102,7 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
         initView();
         setListener();
         initGetDate();
-
+        initData(page,pageSize,orderCode,timeQuantum,isCustomer);
     }
 
     private void setListener() {
@@ -213,7 +213,7 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
     @Override
     protected void onResume() {
         super.onResume();
-        initData(page,pageSize,orderCode,timeQuantum,isCustomer);
+
     }
 
     private void initData(int page, int pageSize, String orderCode, String timeQuantum, Boolean isCustomer) {

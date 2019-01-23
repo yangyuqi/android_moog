@@ -85,7 +85,7 @@ public class ReturnGoodsDetailAdapter extends RecyclerView.Adapter<ReturnGoodsDe
 
         holder.tv_goods_content.setText(bean.getName());
         holder.tv_money.setText(context.getString(R.string.label_money)+bean.getPrice());
-        holder.tv_number.setText(bean.getCount()+"");
+        holder.tv_number.setText("X"+bean.getCount()+"");
 
     }
 

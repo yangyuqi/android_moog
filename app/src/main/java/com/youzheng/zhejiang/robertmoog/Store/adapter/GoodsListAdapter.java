@@ -76,7 +76,7 @@ public class GoodsListAdapter extends RecyclerView.Adapter<GoodsListAdapter.Good
     @Override
     public void onBindViewHolder(GoodsHolder holder, int position) {
         GoodsList.ProductListDetailDataBean bean=list.get(position);
-        Glide.with(context).load(bean.getSmallImageUrl()).into(holder.iv_goods);
+        Glide.with(context).load(bean.getSmallImageUrl()).error(R.mipmap.type_icon).into(holder.iv_goods);
         holder.tv_goods_name.setText(bean.getSkuId());
         holder.tv_goods_content.setText(bean.getName());
         holder.tv_goods_money.setText("￥"+bean.getPrice());

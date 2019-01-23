@@ -40,7 +40,7 @@ public class CouponDetailAdapter extends RecyclerView.Adapter<CouponDetailAdapte
     public void onBindViewHolder(InsideHolder holder, int position) {
         CouponDetail.CouponUsageRecordDetailBean bean=list.get(position);
         holder.tv_date.setText(bean.getDate());
-        holder.tv_code.setText(bean.getOrderCode());
+        holder.tv_code.setText(context.getString(R.string.order_name)+bean.getOrderCode());
         holder.tv_cut_money.setText(context.getString(R.string.label_money)+bean.getMoney());
 
 

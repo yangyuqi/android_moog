@@ -92,6 +92,7 @@ public class ReturnGoodsCounterAdapter extends RecyclerView.Adapter<ReturnGoodsC
             int count=bean.getCount();
             int alls=num_mon*count;
             bean.setMoney(alls);
+            oneHolder.tv_item_total.setText(alls+"");
 
             Log.e("111",alls+"总和");
 
@@ -155,12 +156,14 @@ public class ReturnGoodsCounterAdapter extends RecyclerView.Adapter<ReturnGoodsC
                                  Toast.makeText(context,"实退金额不能大于退货金额",Toast.LENGTH_SHORT).show();
                                  oneHolder.et_money.setText(refund+"");
                                  bean.setMoney(refund);
+                                 oneHolder.tv_item_total.setText(refund+"");
                                  ReturnGoodsCounterActivity.tv_really_cut_money.setText(context.getString(R.string.label_money)+refund+"");
                              }else {
                                  int count=bean.getCount();
                                  int alls=num_mon*count;
 
                                  bean.setMoney(alls);
+                                 oneHolder.tv_item_total.setText(alls+"");
 
                                  Log.e("111",alls+"总和");
 
@@ -182,6 +185,7 @@ public class ReturnGoodsCounterAdapter extends RecyclerView.Adapter<ReturnGoodsC
                              totals=0;
                              all=0;
                              bean.setMoney(0);
+                             oneHolder.tv_item_total.setText("");
                              ReturnGoodsCounterActivity.tv_really_cut_money.setText("");
                          }
                      }
@@ -212,7 +216,7 @@ public class ReturnGoodsCounterAdapter extends RecyclerView.Adapter<ReturnGoodsC
     public class OneHolder  extends RecyclerView.ViewHolder{
         private ImageView iv_goods;
         private TextView tv_goods_code,tv_goods_content,
-                tv_money,tv_number,tv_area,et_money;
+                tv_money,tv_number,tv_area,et_money,tv_item_total;
 
 
         public OneHolder(@NonNull View itemView) {
@@ -225,6 +229,7 @@ public class ReturnGoodsCounterAdapter extends RecyclerView.Adapter<ReturnGoodsC
             tv_number=itemView.findViewById(R.id.tv_number);
             tv_area=itemView.findViewById(R.id.tv_area);
             et_money=itemView.findViewById(R.id.et_money);
+            tv_item_total=itemView.findViewById(R.id.tv_item_total);
 
 
 

@@ -67,7 +67,7 @@ public class GoodsFragment extends BaseFragment {
         map.put("pageNum",page);
         map.put("pageSize",pageSize);
 //        map.put("sku",goodsName);
-        map.put("sku","cs1003");//测试用
+        map.put("sku",sku);//测试用
         map.put("firstCategoryId",goodsId);
         String token = (String) SharedPreferencesUtils.getParam(mContext, PublicUtils.access_token,"");
         if (token!=null){
@@ -94,14 +94,14 @@ public class GoodsFragment extends BaseFragment {
     private void setData(GoodsList goodsList) {
         if (goodsList.getProductListDetailData()==null) return;
         List<GoodsList.ProductListDetailDataBean> productListDetailDataBeans=goodsList.getProductListDetailData();
-        list=goodsList.getProductListDetailData();
+
         if (productListDetailDataBeans.size()!=0){
             list.addAll(productListDetailDataBeans);
             adapter.setRefreshUI(productListDetailDataBeans);
         }else {
             showToast(getString(R.string.load_list_erron));
         }
-
+        //list=goodsList.getProductListDetailData();
 
 
     }

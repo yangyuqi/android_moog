@@ -15,7 +15,6 @@
         android:layout_height="45dp"
         android:gravity="center_vertical"
         android:paddingLeft="15dp"
-        android:visibility="gone"
         android:background="@color/bg_background_white"
         android:orientation="horizontal">
 
@@ -82,6 +81,7 @@
         android:id="@+id/lin_title"
         android:layout_width="match_parent"
         android:layout_height="45dp"
+        android:layout_marginTop="5dp"
         android:gravity="center_vertical"
         android:background="@color/bg_background_white"
         android:orientation="horizontal">
