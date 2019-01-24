@@ -2,6 +2,7 @@ package com.youzheng.zhejiang.robertmoog.Store.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,10 +11,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider;
 import com.youzheng.zhejiang.robertmoog.R;
+import com.youzheng.zhejiang.robertmoog.Store.activity.ReturnGoods.ChooseReturnGoodsActivity;
 import com.youzheng.zhejiang.robertmoog.Store.bean.ChooseGoodsRequest;
 import com.youzheng.zhejiang.robertmoog.Store.bean.ChooseReturnGoodsDetail;
 import com.youzheng.zhejiang.robertmoog.Store.bean.ConfirmReturnRequest;
+import com.youzheng.zhejiang.robertmoog.Store.listener.GetData;
 import com.youzheng.zhejiang.robertmoog.Store.view.MyListView;
 
 import java.util.ArrayList;
@@ -30,14 +34,15 @@ public class MoreReturnCounterAdapter extends RecyclerView.Adapter<MoreReturnCou
     public static List<ConfirmReturnRequest.ReshippedGoodsDataListBean> requests=new ArrayList<>();
     public static List<ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean.ProductListBeanX> productListBeanList;
     public  static boolean isShow=false;
+    GetData listener ;
    // private List<OrderlistDetail.OrderItemDataBean.OrderSetMealListBean.ProductListBean> smalllist;
 
     public MoreReturnCounterAdapter(List<ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean> list,
-                                    Context context) {
+                                    Context context, GetData listener) {
         this.list = list;
         this.context = context;
         layoutInflater = LayoutInflater.from(context);
-
+        this.listener = listener;
 
     }
 
@@ -50,7 +55,7 @@ public class MoreReturnCounterAdapter extends RecyclerView.Adapter<MoreReturnCou
     @NonNull
     @Override
     public MoreHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = layoutInflater.inflate(R.layout.item_choose_return_goods_more, viewGroup, false);
+        View view = layoutInflater.inflate(R.layout.item__return_goods_counter_more, viewGroup, false);
         MoreHolder oneHolder = new MoreHolder(view);
         return oneHolder;
     }
@@ -63,6 +68,24 @@ public class MoreReturnCounterAdapter extends RecyclerView.Adapter<MoreReturnCou
         moreHolder.tv_goods_content.setText(bean.getComboName());
         moreHolder.tv_money.setText(context.getString(R.string.label_money) + bean.getRefundAmount());
         moreHolder.tv_meal_name.setText(bean.getComboDescribe());
+
+
+        LinearLayoutManager manager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+        moreHolder.listView .setLayoutManager(manager);
+        moreHolder.listView .setAdapter(adapter);
+        moreHolder.listView .addItemDecoration(new RecycleViewDivider(context, LinearLayoutManager.VERTICAL, 10, context.getResources().getColor(R.color.bg_all)));
+
+
+        productListBeanList = list.get(position).getProductList();
+
+        list.get(position).setIsexpress(true);
+        moreHolder.iv_isShow.setImageResource(R.mipmap.group_12_3);
+
+        adapter = new SmallCounterAdapter(productListBeanList, context,listener);
+        moreHolder.listView.setAdapter(adapter);
+
+        adapter.setRefreshUI(productListBeanList);
+
         //productListBeanList = list.get(position).getProductList();
         moreHolder.iv_isShow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,7 +105,7 @@ public class MoreReturnCounterAdapter extends RecyclerView.Adapter<MoreReturnCou
                     }
                 }
 
-                adapter = new SmallCounterAdapter(productListBeanList, context);
+                adapter = new SmallCounterAdapter(productListBeanList, context,listener);
                 moreHolder.listView.setAdapter(adapter);
 
                 adapter.setRefreshUI(productListBeanList);
@@ -93,6 +116,7 @@ public class MoreReturnCounterAdapter extends RecyclerView.Adapter<MoreReturnCou
 //                    request.setOrderItemProductId(beanX.getOrderItemProductId());
 //                    requests.add(request);
 //                }
+
 
 
             }
@@ -121,7 +145,7 @@ public class MoreReturnCounterAdapter extends RecyclerView.Adapter<MoreReturnCou
         private ImageView iv_goods, iv_isShow;
         private TextView tv_goods_code, tv_goods_content,
                 tv_money, tv_meal_name;
-        private MyListView listView;
+        private RecyclerView listView;
 
 
         public MoreHolder(@NonNull View itemView) {

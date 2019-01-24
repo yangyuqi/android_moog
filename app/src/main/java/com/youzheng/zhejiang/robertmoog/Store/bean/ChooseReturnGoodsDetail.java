@@ -318,6 +318,15 @@ public class ChooseReturnGoodsDetail {
                     private String orderItemProductId;
                     private String num;
                     private int money;
+                    private int should;
+
+                    public int getShould() {
+                        return should;
+                    }
+
+                    public void setShould(int should) {
+                        this.should = should;
+                    }
 
                     public int getMoney() {
                         return money;

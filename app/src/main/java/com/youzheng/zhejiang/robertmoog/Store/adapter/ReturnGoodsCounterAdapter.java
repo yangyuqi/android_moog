@@ -21,6 +21,7 @@ import com.youzheng.zhejiang.robertmoog.Store.activity.ReturnGoods.ReturnGoodsCo
 import com.youzheng.zhejiang.robertmoog.Store.bean.ConfirmReturnRequest;
 import com.youzheng.zhejiang.robertmoog.Store.bean.OrderlistDetail;
 import com.youzheng.zhejiang.robertmoog.Store.bean.ReturnGoodsCounter;
+import com.youzheng.zhejiang.robertmoog.Store.listener.CounterListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,11 +37,14 @@ public class ReturnGoodsCounterAdapter extends RecyclerView.Adapter<ReturnGoodsC
     private List<Integer> money_all=new ArrayList<>();
     public static int totals=0;
     private List<EditText> textList=new ArrayList<>();
+    private int refund;
+    CounterListener listener;
 
-    public ReturnGoodsCounterAdapter(List<ReturnGoodsCounter.ReturnOrderInfoBean.ProductListBean> list, Context context) {
+    public ReturnGoodsCounterAdapter(List<ReturnGoodsCounter.ReturnOrderInfoBean.ProductListBean> list, Context context,CounterListener listener) {
         this.list = list;
         this.context = context;
         layoutInflater=LayoutInflater.from(context);
+        this.listener=listener;
     }
 
     public void setUI(List<ReturnGoodsCounter.ReturnOrderInfoBean.ProductListBean> list){
@@ -67,47 +71,58 @@ public class ReturnGoodsCounterAdapter extends RecyclerView.Adapter<ReturnGoodsC
         oneHolder.tv_number.setText("X "+bean.getCount()+"");
 
 
-
+          refund= Integer.parseInt(bean.getRefundAmount());
         if (bean.isIsSpecial()==true){
             oneHolder.tv_area.setVisibility(View.VISIBLE);
             if (bean.getSquare()!=0){
                 oneHolder.tv_area.setText(bean.getSquare()+"平方");
             }
-
         }else {
             oneHolder.tv_area.setVisibility(View.GONE);
 
         }
+
+        int refunds= Integer.parseInt(bean.getRefundAmount());
+        if (bean.getCount()!=0){
+            oneHolder.et_money.setText(bean.getRefundAmount());
+            bean.setMoney(refunds);
+            oneHolder.tv_item_total.setText(bean.getRefundAmount());
+
+        }else {
+            oneHolder.et_money.setText("0");
+            oneHolder.tv_item_total.setText("0");
+            bean.setMoney(0);
+        }
         //ReturnGoodsCounterActivity.tv_really_cut_money.setText("");
 
 //        bean.setMoney(bean.getMoney());
-        oneHolder.et_money.setTag(position);
-        textList.add((EditText) oneHolder.et_money);
-        oneHolder.et_money.setText(bean.getRefundAmount());
-        money_all.clear();
-        totals=0;
-        for (EditText editText:textList){
-            String mo=editText.getText().toString().trim();
-            int num_mon= Integer.parseInt(mo);
-            int count=bean.getCount();
-            int alls=num_mon*count;
-            bean.setMoney(alls);
-            oneHolder.tv_item_total.setText(alls+"");
-
-            Log.e("111",alls+"总和");
-
-            money_all.add(alls);
-
-            for (int i = 0; i <money_all.size() ; i++) {
-                all=money_all.get(i);
-                Log.e("111",all+"集合");
-
-            }
-            totals=all+totals;
-            Log.e("111",totals+"计算总和");
-            ReturnGoodsCounterActivity.tv_really_cut_money.setText(context.getString(R.string.label_money)+totals+"");
-        }
-
+//        oneHolder.et_money.setTag(position);
+//        textList.add((EditText) oneHolder.et_money);
+//        oneHolder.et_money.setText(bean.getRefundAmount());
+//        money_all.clear();
+//        totals=0;
+//        for (EditText editText:textList){
+//            String mo=editText.getText().toString().trim();
+//            int num_mon= Integer.parseInt(mo);
+//            int count=bean.getCount();
+//            int alls=num_mon*count;
+//            bean.setMoney(alls);
+//            oneHolder.tv_item_total.setText(alls+"");
+//
+//            Log.e("111",alls+"总和");
+//
+//            money_all.add(alls);
+//
+//            for (int i = 0; i <money_all.size() ; i++) {
+//                all=money_all.get(i);
+//                Log.e("111",all+"集合");
+//
+//            }
+//            totals=all+totals;
+//            Log.e("111",totals+"计算总和");
+//            ReturnGoodsCounterActivity.tv_really_cut_money.setText(context.getString(R.string.label_money)+totals+"");
+//        }
+//
 
 
 
@@ -137,62 +152,35 @@ public class ReturnGoodsCounterAdapter extends RecyclerView.Adapter<ReturnGoodsC
 
             @Override
             public void afterTextChanged(Editable s) {
+                if (TextUtils.isEmpty(s.toString())){
+                    oneHolder.tv_item_total.setText("0");
+                    bean.setMoney(0);
+                }else {
+                    money=s.toString();
+                    int edit= Integer.parseInt(money);
+                    bean.setMoney(edit);
+                    int num= Integer.parseInt(bean.getRefundAmount());
 
-                money_all.clear();
-                totals=0;
-                //money=oneHolder.et_money.getText().toString().trim();
-                Log.e("111",money+"内容");
+                    if (edit>num){
+                        Toast.makeText(context, "实退金额不能大于退货金额", Toast.LENGTH_SHORT).show();
+                        oneHolder.tv_item_total.setText(num+"");
+                        oneHolder.et_money.setText(num + "");
+                        bean.setMoney(num);
+//                       ReturnAllCounterActivity.more_total = num;
+                    }else {
+                        oneHolder.tv_item_total.setText(s.toString());
 
-                     for (EditText text:textList){
-                         money=text.getText().toString().trim();
-                         if (money.length()!=0){
-                             // int pos= (int) text.getTag();
-
-                             int num_mon= Integer.parseInt(money);
-
-                             int refund= Integer.parseInt(bean.getRefundAmount());
-
-                             if (num_mon>refund){
-                                 Toast.makeText(context,"实退金额不能大于退货金额",Toast.LENGTH_SHORT).show();
-                                 oneHolder.et_money.setText(refund+"");
-                                 bean.setMoney(refund);
-                                 oneHolder.tv_item_total.setText(refund+"");
-                                 ReturnGoodsCounterActivity.tv_really_cut_money.setText(context.getString(R.string.label_money)+refund+"");
-                             }else {
-                                 int count=bean.getCount();
-                                 int alls=num_mon*count;
-
-                                 bean.setMoney(alls);
-                                 oneHolder.tv_item_total.setText(alls+"");
-
-                                 Log.e("111",alls+"总和");
-
-                                 money_all.add(alls);
-
-                                 for (int i = 0; i <money_all.size() ; i++) {
-                                     all=money_all.get(i);
-                                     Log.e("111",all+"集合");
-
-                                 }
-                                 totals=all+totals;
-                                 Log.e("111",totals+"计算总和");
-                                 ReturnGoodsCounterActivity.tv_really_cut_money.setText(context.getString(R.string.label_money)+totals+"");
-
-                             }
-
-                         }else {
-                             money_all.clear();
-                             totals=0;
-                             all=0;
-                             bean.setMoney(0);
-                             oneHolder.tv_item_total.setText("");
-                             ReturnGoodsCounterActivity.tv_really_cut_money.setText("");
-                         }
-                     }
-
-
-                    //String money=oneHolder.et_money.getText().toString().trim();
-
+                        bean.setMoney(edit);
+                    }
+                    int all_should=0;
+                    for (int i = 0; i < list.size(); i++) {
+                        all_should = all_should+list.get(i).getMoney();
+                        Log.e("111", all + "集合1======"+i);
+                    }
+                    //totals = all_should + totals;
+                    Log.e("111", all_should + "计算总和");
+                }
+                listener.getTotal(list);
 
             }
         });
