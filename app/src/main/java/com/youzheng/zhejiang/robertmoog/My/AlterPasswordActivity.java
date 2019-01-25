@@ -10,6 +10,7 @@ import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
 import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
+import com.youzheng.zhejiang.robertmoog.Home.activity.LoginActivity;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.R;
 
@@ -58,6 +59,11 @@ public class AlterPasswordActivity extends BaseActivity {
                     showToast(mContext.getResources().getString(R.string.login_pwd_again));
                     return;
                 }
+                if (edt_phone.getText().toString().equals(edt_again_password.getText().toString())){
+                    showToast("新密不能与原密码重复");
+                    return;
+                }
+
                 Map<String,Object> map = new HashMap<>();
                 map.put("originalPassword", PublicUtils.getSHA256StrJava(edt_phone.getText().toString()));
                 map.put("newPassword",PublicUtils.getSHA256StrJava(edt_password.getText().toString()));
@@ -72,7 +78,7 @@ public class AlterPasswordActivity extends BaseActivity {
                     public void onResponse(String response) {
                         BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                         if (baseModel.getCode()==PublicUtils.code){
-                            startActivity(new Intent(mContext,AlterPasswordActivity.class));
+                            startActivity(new Intent(mContext,LoginActivity.class));
                             finish();
                         }else {
                             showToast(baseModel.getMsg());

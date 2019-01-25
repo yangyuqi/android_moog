@@ -163,7 +163,7 @@
 
         <com.youzheng.zhejiang.robertmoog.utils.View.NoScrollListView
             android:dividerHeight="@dimen/space_10"
-            android:layout_marginBottom="@dimen/space_10"
+
             android:divider="@color/bg_background_white"
             android:id="@+id/ls"
             android:background="@color/bg_background_white"

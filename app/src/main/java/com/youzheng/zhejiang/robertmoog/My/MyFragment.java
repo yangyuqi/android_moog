@@ -102,6 +102,13 @@ public class MyFragment extends BaseFragment implements BaseFragment.ReloadInter
             }
         });
 
+        iv_user_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
         textHeadTitle = (TextView) mView.findViewById(R.id.textHeadTitle);
         String title= (String) SharedPreferencesUtils.getParam(getActivity(),PublicUtils.shop_title,"");
         textHeadTitle.setText(title);

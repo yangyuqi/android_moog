@@ -42,8 +42,8 @@ public class ShopActionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @Override
     public void onBindViewHolder(final @NonNull RecyclerView.ViewHolder viewHolder, final int i) {
         Glide.with(context).load(comboPromo.get(i).getComboImageUrl()).error(R.mipmap.type_icon).into(((ShoptViewHolder) viewHolder).iv_icon);
-        ((ShoptViewHolder) viewHolder).tv_name.setText(comboPromo.get(i).getComboName());
-        ((ShoptViewHolder) viewHolder).tv_desc.setText(comboPromo.get(i).getComboCode());
+        ((ShoptViewHolder) viewHolder).tv_name.setText(comboPromo.get(i).getComboCode());
+        ((ShoptViewHolder) viewHolder).tv_desc.setText(comboPromo.get(i).getComboName());
         ((ShoptViewHolder) viewHolder).tv_price.setText("¥"+comboPromo.get(i).getComboPrice());
         ((ShoptViewHolder) viewHolder).tv_num.setText(comboPromo.get(i).getComboDes());
         ((ShoptViewHolder) viewHolder).iv_show_more.setOnClickListener(new View.OnClickListener() {

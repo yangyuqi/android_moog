@@ -23,7 +23,7 @@
             />
 
         <EditText
-            android:hint="填写收货人"
+            android:hint="请输入收货人姓名"
             android:background="@null"
             android:gravity="end"
             android:id="@+id/edt_name"
@@ -56,7 +56,8 @@
             />
 
         <EditText
-            android:hint="填写手机号"
+            android:maxLength="11"
+            android:hint="请输入手机号"
             android:inputType="number"
             android:background="@null"
             android:gravity="end"
@@ -90,7 +91,7 @@
             />
 
         <TextView
-            android:hint="选择省份"
+            android:hint="请选择省份"
             android:id="@+id/edt_provice"
             android:background="@null"
             android:gravity="end"
@@ -122,7 +123,7 @@
             />
 
         <TextView
-            android:hint="选择城市"
+            android:hint="请选择城市"
             android:id="@+id/edt_city"
             android:background="@null"
             android:gravity="end"
@@ -155,7 +156,7 @@
             />
 
         <TextView
-            android:hint="选择 县／区"
+            android:hint="请选择 县／区"
             android:id="@+id/edt_town"
             android:background="@null"
             android:gravity="end"
@@ -188,7 +189,7 @@
             />
 
         <TextView
-            android:hint="选择街道"
+            android:hint="请选择街道"
             android:id="@+id/edt_street"
             android:background="@null"
             android:gravity="end"
@@ -221,7 +222,7 @@
             />
 
         <EditText
-            android:hint="填写详细地址"
+            android:hint="请填写详细地址"
             android:id="@+id/edt_address"
             android:background="@null"
             android:gravity="end"

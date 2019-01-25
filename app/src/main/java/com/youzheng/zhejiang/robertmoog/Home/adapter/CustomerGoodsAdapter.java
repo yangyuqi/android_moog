@@ -95,9 +95,9 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
                         CommonAdapter<ProductListBean> commonAdapter = new CommonAdapter<ProductListBean>(context,listBeanList,R.layout.customer_nols_item) {
                             @Override
                             public void convert(ViewHolder helper, ProductListBean item) {
-                                helper.setText(R.id.tv_name,item.getName());
+                                helper.setText(R.id.tv_name,item.getSku());
                                 helper.setText(R.id.tv_time,item.getCreateDate());
-                                helper.setText(R.id.tv_desc,item.getSku());
+                                helper.setText(R.id.tv_desc,item.getName());
                                 Glide.with(context).load(item.getPhoto()).error(R.mipmap.type_icon).into((ImageView) helper.getView(R.id.iv_icon));
                                 LinearLayout view = helper.getView(R.id.ll_width);
                                 LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();

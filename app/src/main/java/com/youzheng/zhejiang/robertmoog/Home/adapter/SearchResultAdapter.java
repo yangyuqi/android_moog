@@ -80,9 +80,9 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             params.width = (int) PublicUtils.dip2px(PublicUtils.px2dip(widWidth));
             view.setLayoutParams(params);
 
-            ((CommonGoodsViewHolder) holder).tv_name.setText(objects.get(position).getName());
+            ((CommonGoodsViewHolder) holder).tv_name.setText(objects.get(position).getCode());
             Glide.with(context).load(objects.get(position).getPhoto()).error(R.mipmap.type_icon).into(((CommonGoodsViewHolder) holder).iv_icon);
-            ((CommonGoodsViewHolder) holder).tv_desc.setText(objects.get(position).getCode());
+            ((CommonGoodsViewHolder) holder).tv_desc.setText(objects.get(position).getName());
             ((CommonGoodsViewHolder) holder).tv_price.setText("¥"+objects.get(position).getPrice());
 
             if (type.equals("1")){
@@ -262,7 +262,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
             params.width = (int) PublicUtils.dip2px(PublicUtils.px2dip(widWidth));
             view.setLayoutParams(params);
-            ((CommonGoodsTypeViewHolder) holder).tv_name.setText(objects.get(position).getName());
+            ((CommonGoodsTypeViewHolder) holder).tv_name.setText(objects.get(position).getCode());
             ((CommonGoodsTypeViewHolder) holder).iv_show.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -282,8 +282,8 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     CommonAdapter<ProductListBean> adapter = new CommonAdapter<ProductListBean>(context,productListBeanList,R.layout.common_goods_ls_search) {
                         @Override
                         public void convert(ViewHolder helper, ProductListBean item) {
-                            helper.setText(R.id.tv_name,item.getName());
-                            helper.setText(R.id.tv_desc,item.getSku());
+                            helper.setText(R.id.tv_name,item.getSku());
+                            helper.setText(R.id.tv_desc,item.getName());
                             helper.setText(R.id.tv_price,"¥"+item.getPrice());
                             Glide.with(mContext).load(item.getPhoto()).error(R.mipmap.type_icon).into((ImageView) helper.getView(R.id.iv_icon));
                         }
@@ -300,7 +300,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             }
 
             ((CommonGoodsTypeViewHolder) holder).tv_price.setText("¥"+objects.get(position).getPrice());
-            ((CommonGoodsTypeViewHolder) holder).tv_desc.setText(objects.get(position).getCode());
+            ((CommonGoodsTypeViewHolder) holder).tv_desc.setText(objects.get(position).getName());
             Glide.with(context).load(objects.get(position).getPhoto()).error(R.mipmap.type_icon).into(((CommonGoodsTypeViewHolder) holder).iv_icon);
             ((CommonGoodsTypeViewHolder) holder).tv_golden.setText(objects.get(position).getComboDescribe());
             if (type.equals("1")){

@@ -52,7 +52,10 @@
 
 
         <com.youzheng.zhejiang.robertmoog.utils.View.NoScrollListView
-            android:padding="@dimen/space_15"
+            android:paddingTop="@dimen/space_15"
+            android:paddingBottom="@dimen/space_15"
+            android:paddingLeft="@dimen/space_5"
+            android:paddingRight="@dimen/space_5"
             android:background="@color/bg_background_white"
             android:layout_marginTop="@dimen/space_10"
             android:layout_width="match_parent"
@@ -63,8 +66,8 @@
             ></com.youzheng.zhejiang.robertmoog.utils.View.NoScrollListView>
 
         <com.youzheng.zhejiang.robertmoog.utils.View.NoScrollListView
-            android:paddingRight="@dimen/space_15"
-            android:paddingLeft="@dimen/space_15"
+            android:paddingRight="@dimen/space_5"
+            android:paddingLeft="@dimen/space_5"
             android:background="@color/bg_background_white"
             android:layout_marginTop="@dimen/space_10"
             android:layout_width="match_parent"

@@ -14,6 +14,7 @@ import com.youzheng.zhejiang.robertmoog.Base.utils.SSLSocketClient;
 import com.youzheng.zhejiang.robertmoog.Home.activity.LoginActivity;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.RMApp;
+import com.youzheng.zhejiang.robertmoog.utils.SharedPreferencesUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -356,6 +357,7 @@ public class OkHttpClientManager
                         BaseModel baseModel = new Gson().fromJson(string,BaseModel.class);
                         if (baseModel.getCode()==401){
                             RMApp.mContext.startActivity(new Intent(RMApp.mContext, LoginActivity.class));
+                            SharedPreferencesUtils.clear(RMApp.mContext);
                             Toast.makeText(RMApp.mContext,"登录失效,请重新登录",Toast.LENGTH_SHORT).show();
                         }
                     }catch (Exception e){
