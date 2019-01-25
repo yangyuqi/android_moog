@@ -165,6 +165,20 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             }else if (type.equals("4")){
                 ((CommonGoodsViewHolder) holder).ll_num.setVisibility(View.GONE);
                 ((CommonGoodsViewHolder) holder).tv_confirm.setVisibility(View.GONE);
+                ((CommonGoodsViewHolder) holder).main_right_drawer_layout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DeleteDialog dialog = new DeleteDialog(context,"提示","是否删除此商品","确定");
+                        dialog.show();
+                        dialog.OnDeleteBtn(new DeleteDialogInterface() {
+                            @Override
+                            public void isDelete(boolean isdelete) {
+                                objects.remove(position);
+                                notifyDataSetChanged();
+                            }
+                        });
+                    }
+                });
             }
 
             if (type.equals("1")||type.equals("3")){
@@ -339,9 +353,23 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 ((CommonGoodsTypeViewHolder) holder).tv_confirm.setVisibility(View.GONE);
                 ((CommonGoodsTypeViewHolder) holder).ll_num.setVisibility(View.GONE);
                 ((CommonGoodsTypeViewHolder) holder).tv_get_num.setText(context.getResources().getString(R.string.label_X)+objects.get(position).getNum());
-            }else {
+            }else if(type.equals("4")){
                 ((CommonGoodsTypeViewHolder) holder).ll_num.setVisibility(View.GONE);
                 ((CommonGoodsTypeViewHolder) holder).tv_confirm.setVisibility(View.GONE);
+                ((CommonGoodsTypeViewHolder) holder).main_right_drawer_layout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DeleteDialog dialog = new DeleteDialog(context,"提示","是否删除此商品","确定");
+                        dialog.show();
+                        dialog.OnDeleteBtn(new DeleteDialogInterface() {
+                            @Override
+                            public void isDelete(boolean isdelete) {
+                                objects.remove(position);
+                                notifyDataSetChanged();
+                            }
+                        });
+                    }
+                });
             }
 
             if (type.equals("1")||type.equals("3")){

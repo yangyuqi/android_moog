@@ -236,28 +236,6 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
     }
 
     private void addIntention() {
-        Map<String,Object> map1 = new HashMap<>();
-        map1.put("id",customerId);
-        OkHttpClientManager.postAsynJson(gson.toJson(map1), UrlUtils.ATTENTION_GOODS_LIST + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
-            @Override
-            public void onFailure(Request request, IOException e) {
-
-            }
-
-            @Override
-            public void onResponse(String response) {
-                BaseModel baseModel = gson.fromJson(response,BaseModel.class);
-                if (baseModel.getCode()== PublicUtils.code){
-                    final CustomerData intentDataBean = gson.fromJson(gson.toJson(baseModel.getDatas()),CustomerData.class);
-                    for (IntentProductList productList : intentDataBean.getCustomerIntentData().getIntentProductList()){
-                        String id = productList.getId();
-                        for (ScanDatasBean bean :datasBeanList){
-//                            if (id.equals(bean.getId()))
-                        }
-                    }
-                }
-            }
-        });
 
         Map<String,Object> map = new HashMap<>();
         map.put("customerId",customerId);
@@ -280,8 +258,9 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
                 BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                 if (baseModel.getCode()==PublicUtils.code){
                     finish();
+                }else {
+                    showToast(baseModel.getMsg());
                 }
-                showToast(baseModel.getMsg());
             }
         });
     }
@@ -490,6 +469,8 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
                             addapter.setDate(datasBeanList,mContext,"4",widWidth);
                         }
                     }
+                }else {
+                    showToast("条形码识别失败");
                 }
             }
         });

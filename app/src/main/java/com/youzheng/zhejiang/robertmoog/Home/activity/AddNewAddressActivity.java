@@ -1,5 +1,6 @@
 package com.youzheng.zhejiang.robertmoog.Home.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -19,6 +20,7 @@ import com.youzheng.zhejiang.robertmoog.Model.Home.DistrictList;
 import com.youzheng.zhejiang.robertmoog.Model.Home.ProvinceList;
 import com.youzheng.zhejiang.robertmoog.Model.Home.StreetList;
 import com.youzheng.zhejiang.robertmoog.R;
+import com.youzheng.zhejiang.robertmoog.utils.View.RemindDialog;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -47,7 +49,13 @@ public class AddNewAddressActivity extends BaseActivity {
         findViewById(R.id.btnBack).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                final RemindDialog dialog = new RemindDialog(mContext, new RemindDialog.onSuccessClick() {
+                    @Override
+                    public void onSuccess() {
+                        finish();
+                    }
+                }, "4");
+                dialog.show();
             }
         });
         customerId = getIntent().getStringExtra("customerId");
@@ -303,6 +311,8 @@ public class AddNewAddressActivity extends BaseActivity {
                 BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                 if (baseModel.getCode()==PublicUtils.code){
                     finish();
+                }else {
+                    showToast(baseModel.getMsg());
                 }
             }
         });

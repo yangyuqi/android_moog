@@ -104,7 +104,7 @@ public class RegisterSuccessActivity extends BaseActivity {
                                     if (customer!=null){
                                         intent1.putExtra("customerId",customer.getCustomerId());
                                     }else {
-                                        intent1.putExtra("customerId",registerBean.getCustomerId());
+                                        intent1.putExtra("customerId",String.valueOf(registerBean.getCustomerId()));
                                     }
                                     startActivity(intent1);
                                 }

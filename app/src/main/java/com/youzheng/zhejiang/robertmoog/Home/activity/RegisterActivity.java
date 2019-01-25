@@ -122,7 +122,7 @@ public class RegisterActivity  extends BaseActivity {
                         BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                         if (baseModel.getCode()== PublicUtils.code){
                             Code code = gson.fromJson(gson.toJson(baseModel.getDatas()),Code.class);
-                            showStopDialog(code.getCheckCode());
+//                            showStopDialog(code.getCheckCode());
                         }
                     }
                 });

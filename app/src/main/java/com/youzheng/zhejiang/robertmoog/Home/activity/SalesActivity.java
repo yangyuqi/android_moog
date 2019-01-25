@@ -269,8 +269,22 @@ public class SalesActivity extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                    initData();
-                tv_cut_money_of_store.setText("-¥"+s.toString());
+                if (payAmount==null){
+                    return;
+                }
+
+                try {
+                    if (Integer.parseInt(s.toString())<=Integer.parseInt(payAmount)){
+                        initData();
+                        tv_cut_money_of_store.setText("-¥"+s.toString());
+                    }else {
+                        showToast("门店优惠金额不能大于实际需付金额");
+                    }
+
+                }catch (Exception e){
+
+                }
+
             }
         });
 

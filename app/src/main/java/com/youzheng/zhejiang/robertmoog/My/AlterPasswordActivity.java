@@ -46,10 +46,17 @@ public class AlterPasswordActivity extends BaseActivity {
         findViewById(R.id.tv_confrim).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if (edt_phone.getText().toString().equals("")){
                     showToast("请输入原密码");
                     return;
                 }
+
+                if (edt_phone.getText().toString().length()<6){
+                    showToast("密码不能小于6位");
+                    return;
+                }
+
                 if (edt_password.getText().toString().equals("")){
                     showToast(mContext.getResources().getString(R.string.login_new_pwd));
                     return;

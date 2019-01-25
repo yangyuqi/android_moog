@@ -410,7 +410,7 @@
 
 
                 <EditText
-                    android:text="0"
+                    android:text=""
                     android:layout_marginRight="@dimen/space_15"
                     android:id="@+id/edt_door_ticket"
                     android:layout_width="80dp"
@@ -422,7 +422,7 @@
                     android:padding="5dp"
                     android:paddingLeft="@dimen/space_15"
                     android:paddingRight="@dimen/space_15"
-                    android:inputType="number"
+                    android:numeric="integer"
                     />
 
 

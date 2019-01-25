@@ -25,14 +25,14 @@
             />
 
         <EditText
+            android:maxLength="11"
+            android:numeric="integer"
             android:id="@+id/edt_phone"
             android:textSize="@dimen/text_size_15"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/space_15"
             android:background="@null"
-            android:maxLength="11"
-            android:inputType="phone"
             android:textColor="@color/text_drak_gray"
             android:hint="请输入手机号码"
             />

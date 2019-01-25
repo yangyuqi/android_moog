@@ -17,7 +17,7 @@ public class RemindDialog extends Dialog {
     Context mcontext ;
     TextView tv_no ,tv_ok ,confrim_dialog_tv_title ,confrim_dialog_tv_content;
     onSuccessClick click ;
-    String type ; //1 提交订单 2.注册 3.退出
+    String type ; //1 提交订单 2.注册 3.退出 4.是否退出地址
     public RemindDialog(@NonNull Context context ,onSuccessClick click ,String type) {
         super(context ,R.style.DeleteDialogStyle);
         mcontext = context ;
@@ -51,6 +51,9 @@ public class RemindDialog extends Dialog {
         }
         if (type.equals("2")){
             confrim_dialog_tv_content.setText("用户还未注册，请确认是否注册？");
+        }
+        if (type.equals("4")){
+            confrim_dialog_tv_content.setText("地址信息未保存，是否确认返回");
         }
 
         tv_no.setOnClickListener(new View.OnClickListener() {
