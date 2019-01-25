@@ -80,6 +80,14 @@ public class GoodsSaleActivity extends BaseActivity implements View.OnClickListe
         initView();
         setListener();
         initTimer();
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");// HH:mm:ss
+        Date date = new Date(System.currentTimeMillis());
+        tv_startDate.setText(simpleDateFormat.format(date));
+        tv_endDate.setText(simpleDateFormat.format(date));
+        starstDate=simpleDateFormat.format(date);
+        endsDate=simpleDateFormat.format(date);
+        initData(page,pageSize,isDay,starstDate,endsDate);
     }
 
     private void setListener() {
@@ -132,11 +140,7 @@ public class GoodsSaleActivity extends BaseActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");// HH:mm:ss
-        Date date = new Date(System.currentTimeMillis());
-        tv_startDate.setText(simpleDateFormat.format(date));
-        tv_endDate.setText(simpleDateFormat.format(date));
-        initData(page,pageSize,isDay,starstDate,endsDate);
+
     }
 
     private void initData(int page,int pageSize,boolean isDay,String startDate,String endDate) {
@@ -180,7 +184,7 @@ public class GoodsSaleActivity extends BaseActivity implements View.OnClickListe
             list.addAll(beanList);
             adapter.setUI(beanList);
         }else {
-           // showToast(getString(R.string.load_list_erron));
+            showToast(getString(R.string.load_list_erron));
         }
 
 
@@ -205,6 +209,7 @@ public class GoodsSaleActivity extends BaseActivity implements View.OnClickListe
             case R.id.tv_check:
                 isDay=false;
                 list.clear();
+                adapter.clear();
                 initData(page,pageSize,isDay,starstDate,endsDate);
                 break;
         }

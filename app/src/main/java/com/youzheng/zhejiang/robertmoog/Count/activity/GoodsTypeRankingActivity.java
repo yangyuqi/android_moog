@@ -102,6 +102,13 @@ public class GoodsTypeRankingActivity extends BaseActivity implements View.OnCli
         initView();
         setListener();
         initTimer();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");// HH:mm:ss
+        Date date = new Date(System.currentTimeMillis());
+        tv_startDate.setText(simpleDateFormat.format(date));
+        tv_endDate.setText(simpleDateFormat.format(date));
+        startstr=simpleDateFormat.format(date);
+        endstr=simpleDateFormat.format(date);
+        initData(page,pageSize,isDay,startstr,endstr,rulestr);
     }
 
     private void setListener() {
@@ -125,11 +132,7 @@ public class GoodsTypeRankingActivity extends BaseActivity implements View.OnCli
     @Override
     protected void onResume() {
         super.onResume();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");// HH:mm:ss
-        Date date = new Date(System.currentTimeMillis());
-        tv_startDate.setText(simpleDateFormat.format(date));
-        tv_endDate.setText(simpleDateFormat.format(date));
-        initData(page,pageSize,isDay,startstr,endstr,rulestr);
+
     }
 
     private void initView() {
@@ -227,7 +230,7 @@ public class GoodsTypeRankingActivity extends BaseActivity implements View.OnCli
             list.addAll(beanList);
             adapter.setUI(beanList);
         }else {
-           // showToast(getString(R.string.load_list_erron));
+            showToast(getString(R.string.load_list_erron));
         }
 
     }
@@ -251,6 +254,7 @@ public class GoodsTypeRankingActivity extends BaseActivity implements View.OnCli
             case R.id.tv_check:
                 isDay=false;
                 list.clear();
+                adapter.clear();
                 initData(page,pageSize,isDay,startstr,endstr,rulestr);
                 break;
             case R.id.iv_more:

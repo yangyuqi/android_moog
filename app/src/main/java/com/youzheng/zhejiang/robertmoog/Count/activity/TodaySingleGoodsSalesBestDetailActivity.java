@@ -59,7 +59,7 @@ public class TodaySingleGoodsSalesBestDetailActivity extends BaseActivity implem
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_goods_type_ranking_detail);
+        setContentView(R.layout.activity_today_goods_type_ranking_detail);
         initView();
         swtListener();
     }
@@ -156,7 +156,7 @@ public class TodaySingleGoodsSalesBestDetailActivity extends BaseActivity implem
             list.addAll(beanList);
             adapter.setUI(beanList);
         }else {
-           // showToast(getString(R.string.load_list_erron));
+            showToast(getString(R.string.load_list_erron));
         }
 
 

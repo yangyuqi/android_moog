@@ -60,7 +60,7 @@ public class TodayGoodsTypeSalesBestDetailActivity extends BaseActivity implemen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_goods_type_ranking_detail);
+        setContentView(R.layout.activity_today_goods_type_ranking_detail);
         categoryId=getIntent().getIntExtra("todaygoodsId",0);
         if (categoryId==0){
             categoryId=0;
@@ -165,7 +165,7 @@ public class TodayGoodsTypeSalesBestDetailActivity extends BaseActivity implemen
             list.addAll(beanList);
             adapter.setUI(beanList);
         }else {
-           // showToast(getString(R.string.load_list_erron));
+            showToast(getString(R.string.load_list_erron));
         }
 
 

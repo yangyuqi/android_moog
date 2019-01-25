@@ -26,7 +26,7 @@ public class CheckPicActivity extends BaseActivity implements View.OnClickListen
      * 1/4
      */
     private TextView tv_num;
-    private ImageView iv_more;
+    private TextView tv_finish;
     private ViewPager pager;
     private List<String> list;
     private int pos;
@@ -44,8 +44,8 @@ public class CheckPicActivity extends BaseActivity implements View.OnClickListen
 
 
         tv_num = (TextView) findViewById(R.id.tv_num);
-        iv_more = (ImageView) findViewById(R.id.iv_more);
-        iv_more.setOnClickListener(this);
+        tv_finish = (TextView) findViewById(R.id.tv_finish);
+        tv_finish.setOnClickListener(this);
         pager = (ViewPager) findViewById(R.id.pager);
 
         list = getIntent().getStringArrayListExtra(MyConstant.PRINT_GLANCE_OVER_LIST);
@@ -93,10 +93,11 @@ public class CheckPicActivity extends BaseActivity implements View.OnClickListen
         switch (v.getId()) {
             default:
                 break;
-            case R.id.iv_more:
+            case R.id.tv_finish:
+                finish();
                 break;
             case R.id.lin_back:
-                finish();
+               // finish();
                 break;
         }
     }

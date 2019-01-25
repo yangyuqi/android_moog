@@ -13,6 +13,8 @@ import com.youzheng.zhejiang.robertmoog.R;
 
 import java.util.List;
 
+import xyz.zpayh.hdimage.HDImageView;
+
 /**
  * 图片浏览器适配器
  */
@@ -45,8 +47,9 @@ public class ImageAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, int position) {//必须实现
         View view =layoutInflater.inflate(R.layout.item_image,container,false);
-        ImageView imageView=view.findViewById(R.id.iv_image);
-        Glide.with(context).load(list.get(position)).error(R.mipmap.type_icon).into(imageView);
+        HDImageView imageView=view.findViewById(R.id.iv_image);
+        imageView.setImageURI(list.get(position));
+       // Glide.with(context).load(list.get(position)).error(R.mipmap.type_icon).into(imageView);
         container.addView(view);
         return view;
     }

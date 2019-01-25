@@ -70,10 +70,19 @@ public class ReturnGoodsList {
 
             private String createDate;
             private String orderCode;
-            private String actualRefundAmount;
+            private int actualRefundAmount;
             private int productNum;
             private List<ProductListBean> productList;
             private int id;
+            private String returnOrderCode;
+
+            public String getReturnOrderCode() {
+                return returnOrderCode;
+            }
+
+            public void setReturnOrderCode(String returnOrderCode) {
+                this.returnOrderCode = returnOrderCode;
+            }
 
             public String getCreateDate() {
                 return createDate;
@@ -91,11 +100,11 @@ public class ReturnGoodsList {
                 this.orderCode = orderCode;
             }
 
-            public String getActualRefundAmount() {
+            public int getActualRefundAmount() {
                 return actualRefundAmount;
             }
 
-            public void setActualRefundAmount(String actualRefundAmount) {
+            public void setActualRefundAmount(int actualRefundAmount) {
                 this.actualRefundAmount = actualRefundAmount;
             }
 

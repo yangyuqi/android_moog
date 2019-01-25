@@ -32,6 +32,11 @@ public class GoodsSaleAdapter extends RecyclerView.Adapter<GoodsSaleAdapter.Sale
         notifyDataSetChanged();
     }
 
+    public void clear(){
+        list.clear();
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public SaleHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int position) {

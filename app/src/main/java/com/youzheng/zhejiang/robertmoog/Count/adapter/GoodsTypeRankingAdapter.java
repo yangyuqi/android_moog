@@ -37,7 +37,10 @@ public class GoodsTypeRankingAdapter extends RecyclerView.Adapter<GoodsTypeRanki
         this.list=list;
         notifyDataSetChanged();
     }
-
+    public void clear(){
+        list.clear();
+        notifyDataSetChanged();
+    }
     @NonNull
     @Override
     public SaleHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int position) {

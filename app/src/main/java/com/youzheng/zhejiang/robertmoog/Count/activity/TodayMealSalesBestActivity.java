@@ -149,7 +149,7 @@ public class TodayMealSalesBestActivity extends BaseActivity implements View.OnC
             list.addAll(beanList);
             adapter.setUI(beanList);
         }else {
-           // showToast(getString(R.string.load_list_erron));
+            showToast(getString(R.string.load_list_erron));
         }
         pr_list.setPullLoadMoreCompleted();
 

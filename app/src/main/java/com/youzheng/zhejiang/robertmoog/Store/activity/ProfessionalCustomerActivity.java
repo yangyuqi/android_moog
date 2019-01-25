@@ -155,7 +155,7 @@ public class ProfessionalCustomerActivity extends BaseActivity implements View.O
               list.addAll(beanList);
               adapter.setListRefreshUi(beanList);
           }else {
-              //showToast(getString(R.string.load_list_erron));
+              showToast(getString(R.string.load_list_erron));
           }
 
 

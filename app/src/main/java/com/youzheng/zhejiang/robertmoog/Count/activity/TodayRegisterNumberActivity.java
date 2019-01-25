@@ -115,7 +115,7 @@ public class TodayRegisterNumberActivity extends BaseActivity implements View.On
             list.addAll(beanList);
             adapter.refreshUI(beanList);
         }else {
-           // showToast(getString(R.string.load_list_erron));
+            showToast(getString(R.string.load_list_erron));
         }
 
 

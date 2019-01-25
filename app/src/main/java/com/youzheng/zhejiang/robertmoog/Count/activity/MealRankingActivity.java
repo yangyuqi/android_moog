@@ -101,6 +101,14 @@ public class MealRankingActivity extends BaseActivity implements View.OnClickLis
         initView();
         setListener();
         initTimer();
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");// HH:mm:ss
+        Date date = new Date(System.currentTimeMillis());
+        tv_startDate.setText(simpleDateFormat.format(date));
+        tv_endDate.setText(simpleDateFormat.format(date));
+        startstr=simpleDateFormat.format(date);
+        endstr=simpleDateFormat.format(date);
+        initData(page,pageSize,isDay,startstr,endstr,rulestr);
     }
 
     private void setListener() {
@@ -156,11 +164,7 @@ public class MealRankingActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void onResume() {
         super.onResume();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");// HH:mm:ss
-        Date date = new Date(System.currentTimeMillis());
-        tv_startDate.setText(simpleDateFormat.format(date));
-        tv_endDate.setText(simpleDateFormat.format(date));
-        initData(page,pageSize,isDay,startstr,endstr,rulestr);
+
     }
 
     private void initData(int page, int pageSize, boolean isDay, String startDate, String endDate, String rule) {
@@ -204,7 +208,7 @@ public class MealRankingActivity extends BaseActivity implements View.OnClickLis
             list.addAll(beanList);
             adapter.setUI(beanList);
         }else {
-            //showToast(getString(R.string.load_list_erron));
+            showToast(getString(R.string.load_list_erron));
         }
 
 
@@ -229,6 +233,7 @@ public class MealRankingActivity extends BaseActivity implements View.OnClickLis
             case R.id.tv_check:
                 isDay=false;
                 list.clear();
+                adapter.clear();
                 initData(page,pageSize,isDay,startstr,endstr,rulestr);
                 break;
             case R.id.iv_more:
