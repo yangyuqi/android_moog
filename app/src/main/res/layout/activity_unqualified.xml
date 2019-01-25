@@ -73,9 +73,9 @@
             android:horizontalSpacing="5dp"
             android:verticalSpacing="5dp"
             android:numColumns="3"
-            android:layout_marginLeft="15dp"
+            android:layout_marginLeft="35dp"
             android:scrollbars="none"
-            android:layout_marginRight="15dp"
+            android:layout_marginRight="35dp"
             android:paddingBottom="15dp"
             android:layout_height="wrap_content"></GridView>
 

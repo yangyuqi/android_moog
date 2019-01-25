@@ -213,7 +213,7 @@ public class StoreSalesNumberActivity extends BaseActivity implements View.OnCli
             list.addAll(beans);
             adapter.setUI(beans);
         }else {
-            showToast(getString(R.string.load_list_erron));
+           // showToast(getString(R.string.load_list_erron));
         }
 
 

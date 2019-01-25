@@ -58,7 +58,7 @@ public class PeopleMangerActivity extends BaseActivity implements View.OnClickLi
     private List<PeopleMangerList.ShopPersonalListBean> list = new ArrayList<>();
     private PeopleMangerAdapter adapter;
     private int page = 1;
-    private int pageSize = 10;
+    private int pageSize =10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,12 +74,14 @@ public class PeopleMangerActivity extends BaseActivity implements View.OnClickLi
             public void onRefresh() {
                 page = 1;
                 list.clear();
+                adapter.clear();
                 initData(page, pageSize);
             }
 
             @Override
             public void onLoadMore() {
-                page++;
+                list.clear();
+                page=page+1;
                 initData(page, pageSize);
             }
         });
@@ -106,17 +108,7 @@ public class PeopleMangerActivity extends BaseActivity implements View.OnClickLi
 
         adapter = new PeopleMangerAdapter(list, this);
         lv_list.setAdapter(adapter);
-        adapter.setOnItemClickListener(new OnRecyclerViewAdapterItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                showStopDialog(list.get(position).getId());
-            }
 
-            @Override
-            public void onItemLongClick(View view, int position) {
-
-            }
-        });
     }
 
     public void showStopDialog(final int id) {
@@ -177,8 +169,10 @@ public class PeopleMangerActivity extends BaseActivity implements View.OnClickLi
                 if (baseModel.getCode() == PublicUtils.code) {
 
                     showToast(getString(R.string.stop_success));
+//                    page=1;
+                    //list.clear();
                     initData(page, pageSize);
-                    lv_list.setRefreshing(true);
+
                 } else {
                     if (!baseModel.getMsg().equals("")) {
                         showToast(baseModel.getMsg());
@@ -227,7 +221,6 @@ public class PeopleMangerActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void setData(PeopleMangerList peopleMangerList) {
-        if (peopleMangerList.getShopPersonalList() == null) return;
         if (!peopleMangerList.getShopName().equals("")) {
             tv_store_name.setText(peopleMangerList.getShopName());
         }
@@ -236,9 +229,20 @@ public class PeopleMangerActivity extends BaseActivity implements View.OnClickLi
             list.addAll(listBeans);
             adapter.setUI(listBeans);
         } else {
-            showToast(getString(R.string.load_list_erron));
+           // showToast(getString(R.string.load_list_erron));
         }
+        adapter.setOnItemClickListener(new OnRecyclerViewAdapterItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Log.e("下标",position+"");
+                showStopDialog(list.get(position).getId());
+            }
 
+            @Override
+            public void onItemLongClick(View view, int position) {
+
+            }
+        });
 
     }
 

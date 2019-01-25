@@ -1,5 +1,6 @@
 package com.youzheng.zhejiang.robertmoog.Store.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -136,6 +137,7 @@ public class AddStaffActivity extends BaseActivity implements View.OnClickListen
                 BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                 if (baseModel!=null){
                     if (baseModel.getCode()==PublicUtils.code){
+                        startActivity(new Intent(AddStaffActivity.this,PeopleMangerActivity.class));
                         finish();
                         tv_add.setClickable(true);
                     }else {

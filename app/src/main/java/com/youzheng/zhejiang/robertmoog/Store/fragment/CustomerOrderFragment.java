@@ -85,7 +85,7 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
     private int who;
     private String edit;
     private String token;
-
+    private boolean isFirstLoad = false;
 
     @Nullable
     @Override
@@ -97,11 +97,37 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
         }
          token = (String) SharedPreferencesUtils.getParam(mContext, PublicUtils.access_token,"");
         initView();
-        initData(page,pageSize,orderCode,timeQuantum,isCustomer,type);
-        initGetDate();
-        setListener();
+
+        isFirstLoad = true;//视图创建完成，将变量置为true
+
+        if (getUserVisibleHint()) {//如果Fragment可见进行数据加载
+            initData(page,pageSize,orderCode,timeQuantum,isCustomer,type);
+            initGetDate();
+            setListener();
+            isFirstLoad = false;
+        }
+
+
 
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        isFirstLoad = false;//视图销毁将变量置为false
+    }
+
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isFirstLoad && isVisibleToUser) {//视图变为可见并且是第一次加载
+            initData(page,pageSize,orderCode,timeQuantum,isCustomer,type);
+            initGetDate();
+            setListener();
+            isFirstLoad = false;
+        }
     }
 
     private void setListener() {
@@ -233,7 +259,6 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
                 if (baseModel.getCode()==PublicUtils.code){
                     NewOrderListBean listBean = gson.fromJson(gson.toJson(baseModel.getDatas()),NewOrderListBean.class);
                     setData(listBean);
-
                 }else {
                     showToast(baseModel.getMsg());
                 }
@@ -283,6 +308,7 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
                 timeQuantum=strlist.get(0).getId();
                 break;
             case R.id.tv_confirm:
+                adapter.clear();
                 initData(page,pageSize,orderCode,timeQuantum,isCustomer,type);
                 drawer_layout.closeDrawer(GravityCompat.END);
                 goodsTimeAdapter.setSelectItem(who);
@@ -300,8 +326,8 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
 
     @Override
     public void onItemClick(View view, int position) {
-        Intent intent=new Intent(getActivity(),ProfessionalOrderDetailActivity.class);
-        intent.putExtra("ProfessionalId",list.get(position).getId());
+        Intent intent=new Intent(getActivity(),StoreOrderlistDetailActivity.class);
+        intent.putExtra("OrderGoodsId",list.get(position).getId());
         startActivity(intent);
     }
 

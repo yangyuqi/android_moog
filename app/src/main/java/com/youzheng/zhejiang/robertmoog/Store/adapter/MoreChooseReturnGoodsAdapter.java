@@ -66,6 +66,16 @@ public class MoreChooseReturnGoodsAdapter extends RecyclerView.Adapter<MoreChoos
         moreHolder.tv_goods_content.setText(bean.getComboName());
         moreHolder.tv_money.setText(context.getString(R.string.label_money) + bean.getRefundAmount());
         moreHolder.tv_meal_name.setText(bean.getComboDescribe());
+
+        productListBeanList = list.get(position).getProductList();
+        list.get(position).setIsexpress(true);
+        moreHolder.iv_isShow.setImageResource(R.mipmap.group_12_3);
+
+        adapter = new SmallChooseReturnGoodsAdapter(productListBeanList, context);
+        moreHolder.listView.setAdapter(adapter);
+
+        adapter.setRefreshUI(productListBeanList);
+
         //productListBeanList = list.get(position).getProductList();
         moreHolder.iv_isShow.setOnClickListener(new View.OnClickListener() {
             @Override

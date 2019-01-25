@@ -88,7 +88,7 @@ public class GoodsTypeRankingActivity extends BaseActivity implements View.OnCli
 
     private int page=1;
     private int pageSize=10;
-    private boolean isDay=true;
+    private boolean isDay=false;
     private String startstr="";
     private String endstr="";
     private String rulestr="COUNT";//默认是数量
@@ -227,7 +227,7 @@ public class GoodsTypeRankingActivity extends BaseActivity implements View.OnCli
             list.addAll(beanList);
             adapter.setUI(beanList);
         }else {
-            showToast(getString(R.string.load_list_erron));
+           // showToast(getString(R.string.load_list_erron));
         }
 
     }

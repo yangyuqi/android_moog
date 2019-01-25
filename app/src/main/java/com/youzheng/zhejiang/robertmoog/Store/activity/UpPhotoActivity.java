@@ -3,7 +3,9 @@ package com.youzheng.zhejiang.robertmoog.Store.activity;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -119,11 +121,31 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
         textHeadNext = (TextView) findViewById(R.id.textHeadNext);
         textHeadNext.setOnClickListener(this);
-        textHeadNext.setText("发表");
+
         iv_next = (ImageView) findViewById(R.id.iv_next);
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);
         gv_photo = (GridView) findViewById(R.id.gv_photo);
         textHeadNext.setOnClickListener(this);
+
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                Window window = this.getWindow();
+                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                window.setStatusBarColor(getResources().getColor(R.color.bg_background_white));
+
+                //底部导航栏
+                //window.setNavigationBarColor(activity.getResources().getColor(colorResId));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        layout_header.setBackgroundColor(getResources().getColor(R.color.bg_background_white));
+
+        textHeadNext.setText("发表");
+        textHeadNext.setTextColor(getResources().getColor(R.color.colorPrimary));
+
+        btnBack.setImageResource(R.mipmap.group_126_9);
 
         path = getIntent().getStringExtra("picturePath");
         list.add(path);
@@ -252,6 +274,7 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
                         BaseModel baseModel = gson.fromJson(s, BaseModel.class);
                         if (baseModel.getCode() == PublicUtils.code) {
                             showToast("图片上传成功");
+                            startActivity(new Intent(UpPhotoActivity.this,SampleOutDetailActivity.class));
                             finish();
                         }else {
                             showToast(baseModel.getMsg());

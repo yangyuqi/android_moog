@@ -1,6 +1,8 @@
 package com.youzheng.zhejiang.robertmoog.Store.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -19,6 +21,7 @@ import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.activity.ReturnGoods.ReturnAllCounterActivity;
 import com.youzheng.zhejiang.robertmoog.Store.activity.ReturnGoods.ReturnGoodsCounterActivity;
 import com.youzheng.zhejiang.robertmoog.Store.bean.ChooseReturnGoodsDetail;
+import com.youzheng.zhejiang.robertmoog.Store.listener.GetData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,22 +29,26 @@ import java.util.List;
 /**
  *sss
  */
-public class SmallCounterAdapter extends BaseAdapter {
+public class SmallCounterAdapter extends RecyclerView.Adapter<SmallCounterAdapter.ViewHolder> {
     private List<ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean.ProductListBeanX> list;
     private Context context;
     private LayoutInflater layoutInflater;
     private List<TextView> textViews;
     private String money;
-    private int  all;
+    public static int  all;
     private List<Integer> money_all=new ArrayList<>();
     public static int totals=0;
     private List<EditText> textList=new ArrayList<>();
+    private int refund;
+    private GetData listener ;
+    public static boolean ismoren=true;
 
-    public SmallCounterAdapter(List<ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean.ProductListBeanX> list, Context context) {
+    public SmallCounterAdapter(List<ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean.ProductListBeanX> list, Context context,GetData listener) {
         this.list = list;
         this.context = context;
         layoutInflater = LayoutInflater.from(context);
-        textViews=new ArrayList<>();
+        this.listener=listener;
+
     }
 
     public void setRefreshUI(List<ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean.ProductListBeanX> list) {
@@ -50,81 +57,38 @@ public class SmallCounterAdapter extends BaseAdapter {
 
     }
 
+
+    @NonNull
     @Override
-    public int getCount() {
-        return list.size();
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int position) {
+        View view=layoutInflater.inflate(R.layout.item_return_goods_counter,viewGroup,false);
+        ViewHolder viewHolder=new ViewHolder(view);
+        return viewHolder;
     }
 
     @Override
-    public Object getItem(int position) {
-        return list.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder = null;
-        if (convertView == null) {
-            convertView = layoutInflater.inflate(R.layout.item_return_goods_counter, null);
-            viewHolder = new ViewHolder();
-            viewHolder.iv_goods=convertView.findViewById(R.id.iv_goods);
-            viewHolder.tv_goods_code=convertView.findViewById(R.id.tv_goods_code);
-            viewHolder.tv_goods_content=convertView.findViewById(R.id.tv_goods_content);
-            viewHolder.tv_money=convertView.findViewById(R.id.tv_money);
-            viewHolder. tv_number=convertView.findViewById(R.id.tv_number);
-            viewHolder.tv_area=convertView.findViewById(R.id.tv_area);
-            viewHolder. et_money=convertView.findViewById(R.id.et_money);
-
-            convertView.setTag(viewHolder);
-        } else {
-            viewHolder = (ViewHolder) convertView.getTag();
-        }
+    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int position) {
         final ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean.ProductListBeanX bean = list.get(position);
         Glide.with(context).load(bean.getPhoto()).error(R.mipmap.type_icon).into(viewHolder.iv_goods);
         viewHolder.tv_goods_code.setText(bean.getSku());
         viewHolder.tv_goods_content.setText(bean.getName());
         viewHolder.tv_money.setText(context.getString(R.string.label_money) + bean.getRefundAmount());
         viewHolder.tv_number.setText("X "+bean.getCount()+"");
-
-        viewHolder.et_money.setTag(position);
-        textList.add((EditText) viewHolder.et_money);
-        viewHolder.et_money.setText(bean.getRefundAmount());
-        money_all.clear();
-        totals=0;
-        for (EditText editText:textList){
-            String mo=editText.getText().toString().trim();
-            if (!TextUtils.isEmpty(mo)){
-                int num_mon= Integer.parseInt(mo);
-                int count=bean.getCount();
-                int alls=num_mon*count;
-                Log.e("111",alls+"总和");
-
-                money_all.add(alls);
-
-                for (int i = 0; i <money_all.size() ; i++) {
-                    all=money_all.get(i);
-                    Log.e("111",all+"集合");
-
-                }
-                totals=all+totals;
-                Log.e("111",totals+"计算总和");
-                ReturnAllCounterActivity.more_total=totals;
-                int all=ReturnAllCounterActivity.one_list_total+ReturnAllCounterActivity.more_total;
-                ReturnAllCounterActivity.tv_really_cut_money.setText(all+"");
-            }else {
-                viewHolder.et_money.setText("");
-            }
-
-
-
+//
+        Log.e("111",refund+"呵呵");
+        ismoren=true;
+       int refunds= Integer.parseInt(bean.getRefundAmount());
+        if (bean.getCount()!=0){
+            viewHolder.et_money.setText(bean.getRefundAmount());
+            bean.setMoney(refunds);
+            viewHolder.tv_item_total.setText(bean.getRefundAmount());
+        }else {
+            viewHolder.et_money.setText("0");
+            viewHolder.tv_item_total.setText("0");
+            bean.setMoney(0);
         }
 
 
-        final ViewHolder finalViewHolder = viewHolder;
         viewHolder.et_money.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -133,92 +97,80 @@ public class SmallCounterAdapter extends BaseAdapter {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                  if (money.length()==0){
-//                      money_all.clear();
-//                      totals=0;
-//                      all=0;
-//                      ReturnGoodsCounterActivity.tv_really_cut_money.setText("");
-//                  }
 
-
-//                   for (ReturnGoodsCounter.ReturnOrderInfoBean.ProductListBean productListBean:list){
-//                       money_num+=productListBean.getMoney()*productListBean.getCount();
-//                   }
-
-
-                //  notifyDataSetChanged();
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                bean.setMoney(0);
-                money_all.clear();
-                totals=0;
-                //money=oneHolder.et_money.getText().toString().trim();
-                Log.e("111",money+"内容");
 
-                for (EditText text:textList){
-                    money=text.getText().toString().trim();
-                    if (money.length()!=0){
-                        // int pos= (int) text.getTag();
+               if (s.length()==0){
+                   viewHolder.tv_item_total.setText("0");
+                   bean.setMoney(0);
+                   //viewHolder.et_money.setText("0");
+               }else {
+//                   viewHolder.et_money.setText("");
+                    money=s.toString();
+                    int edit= Integer.parseInt(money);
+                    bean.setMoney(edit);
+                    int num= Integer.parseInt(bean.getRefundAmount());
 
-                        int num_mon= Integer.parseInt(money);
+                   if (edit>num){
+                       Toast.makeText(context, "实退金额不能大于退货金额", Toast.LENGTH_SHORT).show();
+                       viewHolder.tv_item_total.setText(num+"");
+                       viewHolder.et_money.setText(num + "");
+                       bean.setMoney(num);
+//                       ReturnAllCounterActivity.more_total = num;
+                   }else {
+                       viewHolder.tv_item_total.setText(s.toString());
 
-                        int refund= Integer.parseInt(bean.getRefundAmount());
-
-                        if (num_mon>refund){
-                            Toast.makeText(context,"实退金额不能大于退货金额",Toast.LENGTH_SHORT).show();
-                            finalViewHolder.et_money.setText(refund+"");
-                            ReturnAllCounterActivity.more_total=refund;
-                            int all=ReturnAllCounterActivity.one_list_total+ReturnAllCounterActivity.more_total;
-                            ReturnAllCounterActivity.tv_really_cut_money.setText(all+"");
-                        }else {
-                            int count=bean.getCount();
-                            int alls=num_mon*count;
-
-                            Log.e("111",alls+"总和");
-
-                            money_all.add(alls);
-
-                            for (int i = 0; i <money_all.size() ; i++) {
-                                all=money_all.get(i);
-                                Log.e("111",all+"集合");
-
-                            }
-                            totals=all+totals;
-                            Log.e("111",totals+"计算总和");
-                            ReturnAllCounterActivity.more_total=totals;
-                            int all=ReturnAllCounterActivity.one_list_total+ReturnAllCounterActivity.more_total;
-                            ReturnAllCounterActivity.tv_really_cut_money.setText(all+"");
-                        }
-
-                    }else {
-                        money_all.clear();
-                        totals=0;
-                        all=0;
-                        ReturnAllCounterActivity.more_total=0;
-                        bean.setMoney(0);
-                       // int all=ReturnAllCounterActivity.one_list_total+ReturnAllCounterActivity.more_total;
-                        ReturnAllCounterActivity.tv_really_cut_money.setText("0");
-                    }
-                }
+                       bean.setMoney(edit);
+//                       ReturnAllCounterActivity.more_total = edit;
+//                       money_all.add(num);
+                   }
+                   int all_should=0;
+                   for (int i = 0; i < list.size(); i++) {
+                           all_should = all_should+list.get(i).getMoney();
+                           Log.e("111", all + "集合1======"+i);
+                   }
+                   //totals = all_should + totals;
+                   Log.e("111", all_should + "计算总和");
+                     ismoren=false;
 
 
-                //String money=oneHolder.et_money.getText().toString().trim();
+               }
 
-
+                listener.getMoreTotal(list);
             }
         });
+    }
 
-        return convertView;
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemCount() {
+        return list.size();
     }
 
 
 
-    class ViewHolder {
+   public class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView iv_goods;
         private TextView tv_goods_code,tv_goods_content,
-                tv_money,tv_number,tv_area,et_money;
+                tv_money,tv_number,tv_area,et_money,tv_item_total;
 
-    }
+       public ViewHolder(@NonNull View itemView) {
+           super(itemView);
+           iv_goods=itemView.findViewById(R.id.iv_goods);
+           tv_goods_code=itemView.findViewById(R.id.tv_goods_code);
+           tv_goods_content=itemView.findViewById(R.id.tv_goods_content);
+           tv_money=itemView.findViewById(R.id.tv_money);
+           tv_number=itemView.findViewById(R.id.tv_number);
+           tv_area=itemView.findViewById(R.id.tv_area);
+            et_money=itemView.findViewById(R.id.et_money);
+           tv_item_total=itemView.findViewById(R.id.tv_item_total);
+       }
+   }
 }

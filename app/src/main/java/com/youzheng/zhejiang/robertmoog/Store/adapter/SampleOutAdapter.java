@@ -43,8 +43,8 @@ public class SampleOutAdapter extends BaseAdapter {
 
     public void setAppear(Boolean isappear) {
         this.isappear = isappear;
-        editTextList.clear();
         notifyDataSetChanged();
+        editTextList.clear();
     }
 
     @Override

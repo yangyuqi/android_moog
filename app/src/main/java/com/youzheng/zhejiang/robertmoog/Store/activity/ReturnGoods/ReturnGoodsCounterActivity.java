@@ -35,6 +35,7 @@ import com.youzheng.zhejiang.robertmoog.Store.bean.ConfirmReturnRequest;
 import com.youzheng.zhejiang.robertmoog.Store.bean.NewOrderListBean;
 import com.youzheng.zhejiang.robertmoog.Store.bean.ReturnGoodsCounter;
 import com.youzheng.zhejiang.robertmoog.Store.bean.ReturnGoodsSuccess;
+import com.youzheng.zhejiang.robertmoog.Store.listener.CounterListener;
 import com.youzheng.zhejiang.robertmoog.Store.view.RecycleViewDivider;
 import com.youzheng.zhejiang.robertmoog.Store.view.SingleOptionsPicker;
 
@@ -48,7 +49,7 @@ import okhttp3.Request;
 /**
  * 退货柜台界面ss
  */
-public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnClickListener {
+public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnClickListener,CounterListener {
 
     private ImageView btnBack;
     /**  */
@@ -172,6 +173,20 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
               list.addAll(beans);
               adapter.setUI(beans);
           }
+          int totals=0;
+          if (beans.size()!=0){
+              for (int i = 0; i < beans.size(); i++) {
+                  int item= Integer.parseInt(beans.get(i).getRefundAmount());
+                  int count=beans.get(i).getCount();
+                  int all=item*count;
+                  totals=totals+all;
+              }
+
+              tv_really_cut_money.setText(totals+"");
+
+          }
+
+
             orderID=counter.getReturnOrderInfo().getId();
           if (counter.getReturnOrderInfo().getReturnCount()!=0){
               tv_goods_number.setText(counter.getReturnOrderInfo().getReturnCount()+"");
@@ -180,7 +195,7 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
           }
 
           if (!TextUtils.isEmpty(counter.getReturnOrderInfo().getRefundAmount())){
-              tv_should_cut_money.setText(getString(R.string.label_money)+counter.getReturnOrderInfo().getRefundAmount());
+              tv_should_cut_money.setText(counter.getReturnOrderInfo().getRefundAmount());
               refundAmount=counter.getReturnOrderInfo().getRefundAmount();
           }
 
@@ -281,7 +296,7 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
         rv_list_one.addItemDecoration(new com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider(ReturnGoodsCounterActivity.this, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
 
 
-        adapter=new ReturnGoodsCounterAdapter(list,this);
+        adapter=new ReturnGoodsCounterAdapter(list,this,this);
         rv_list_one.setAdapter(adapter);
 
     }
@@ -311,7 +326,7 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
                     showToast(getString(R.string.please_choose_get_type));
                 }else if (tv_return_type.getText().equals(getString(R.string.please_choose))){
                     showToast(getString(R.string.please_choose_return_type));
-                }else if (tv_return_type.getText().equals(getString(R.string.please_choose))){
+                }else if (tv_return_reason.getText().equals(getString(R.string.please_choose))){
                     showToast(getString(R.string.please_choose_return_reason));
                 }else if (TextUtils.isEmpty(tv_really_cut_money.getText().toString())){
                     showToast(getString(R.string.please_write_really_money));
@@ -360,7 +375,7 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
         map.put("paymentMethod",paymentMethod);
         map.put("reason",reasons);
         map.put("refundAmount",refundAmount);
-        map.put("actualRefundAmount",ReturnGoodsCounterAdapter.totals+"");
+        map.put("actualRefundAmount",tv_really_cut_money.getText().toString());
         map.put("id",orderID);
 
         if (list.size()!=0){
@@ -443,4 +458,21 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
 
     }
 
+    @Override
+    public void getTotal(List<ReturnGoodsCounter.ReturnOrderInfoBean.ProductListBean> list) {
+        if (list!=null||list.size()!=0){
+            int total=0;
+
+            for (int i = 0; i <list.size() ; i++) {
+                int item_total=list.get(i).getMoney();
+                int count =list.get(i).getCount();
+                int all=item_total*count;
+                total=total+all;
+            }
+
+            tv_really_cut_money.setText(total+"");
+
+
+        }
+    }
 }

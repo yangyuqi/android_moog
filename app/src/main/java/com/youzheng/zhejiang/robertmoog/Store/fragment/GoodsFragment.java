@@ -41,15 +41,38 @@ public class GoodsFragment extends BaseFragment {
     private int page = 1;
     private String sku;
     private int goodsId;
-
+    private boolean isFirstLoad = false;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.layout_goods_list, null);
         initView();
-        setListener();
-        initData(page,pageSize);
+
+        isFirstLoad = true;//视图创建完成，将变量置为true
+
+        if (getUserVisibleHint()) {//如果Fragment可见进行数据加载
+            setListener();
+            initData(page,pageSize);
+            isFirstLoad = false;
+        }
+
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        isFirstLoad = false;//视图销毁将变量置为false
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isFirstLoad && isVisibleToUser) {//视图变为可见并且是第一次加载
+            setListener();
+            initData(page,pageSize);
+            isFirstLoad = false;
+        }
     }
 
     @Override
@@ -67,7 +90,7 @@ public class GoodsFragment extends BaseFragment {
         map.put("pageNum",page);
         map.put("pageSize",pageSize);
 //        map.put("sku",goodsName);
-        map.put("sku","cs1003");//测试用
+        map.put("sku",sku);//测试用
         map.put("firstCategoryId",goodsId);
         String token = (String) SharedPreferencesUtils.getParam(mContext, PublicUtils.access_token,"");
         if (token!=null){
@@ -94,14 +117,14 @@ public class GoodsFragment extends BaseFragment {
     private void setData(GoodsList goodsList) {
         if (goodsList.getProductListDetailData()==null) return;
         List<GoodsList.ProductListDetailDataBean> productListDetailDataBeans=goodsList.getProductListDetailData();
-        list=goodsList.getProductListDetailData();
+
         if (productListDetailDataBeans.size()!=0){
             list.addAll(productListDetailDataBeans);
             adapter.setRefreshUI(productListDetailDataBeans);
         }else {
             showToast(getString(R.string.load_list_erron));
         }
-
+        //list=goodsList.getProductListDetailData();
 
 
     }

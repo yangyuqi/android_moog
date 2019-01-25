@@ -168,6 +168,7 @@ public class SampleOutInformationActivity extends BaseActivity implements View.O
     }
 
     private void CommitData(){
+        request.clear();
 
         List<EditText> edList = adapter.getEdList();
 
@@ -219,7 +220,14 @@ public class SampleOutInformationActivity extends BaseActivity implements View.O
                     BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                     if (baseModel.getCode()==PublicUtils.code){
                         showToast(getString(R.string.commit_success));
-                        finish();
+                       // finish();
+                        list.clear();
+                        list2.clear();
+                        initData();
+                        adapter.setAppear(false);
+                        out2Adapter.setAppear(false);
+                        textHeadNext.setText(getString(R.string.edit));
+                        tv_commit.setVisibility(View.GONE);
                     }
                 }
             });

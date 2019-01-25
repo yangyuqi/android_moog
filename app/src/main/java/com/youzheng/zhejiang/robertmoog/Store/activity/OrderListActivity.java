@@ -308,6 +308,8 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
                 break;
 
             case R.id.tv_confirm:
+                list.clear();
+                adapter.clear();
                 initData(page,pageSize,orderCode,timeQuantum,isCustomer,type);
                 drawer_layout.closeDrawer(GravityCompat.END);
                 goodsTimeAdapter.setSelectItem(who);

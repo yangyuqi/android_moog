@@ -1,8 +1,10 @@
 package com.youzheng.zhejiang.robertmoog.Store.adapter;
 
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.view.ViewGroup;
 
 
 import com.youzheng.zhejiang.robertmoog.Store.bean.GoodsType;
@@ -39,5 +41,10 @@ public class GoodsPagerAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         return titlelist.get(position).getName();
+    }
+
+    @Override
+    public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+        //super.destroyItem(container, position, object);
     }
 }

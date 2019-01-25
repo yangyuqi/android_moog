@@ -22,7 +22,6 @@
 
 
         <LinearLayout
-            android:layout_marginTop="@dimen/space_10"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -302,7 +301,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@mipmap/group_8_5"
+                        android:src="@mipmap/group_8_6"
                         android:layout_marginLeft="@dimen/space_15"
                         />
 
@@ -360,7 +359,7 @@
                         android:layout_marginLeft="@dimen/space_15"
                         android:drawablePadding="@dimen/space_10"
                         android:layout_centerVertical="true"
-                        android:drawableLeft="@mipmap/group_8_5"
+                        android:drawableLeft="@mipmap/group_8_7"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="今日品类销量最佳"
@@ -393,7 +392,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@mipmap/group_8_5"
+                        android:src="@mipmap/group_8_8"
                         android:layout_marginLeft="@dimen/space_15"
                         />
 
@@ -451,7 +450,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@mipmap/group_8_5"
+                        android:src="@mipmap/group_8_9"
                         android:layout_marginLeft="@dimen/space_15"
                         />
 

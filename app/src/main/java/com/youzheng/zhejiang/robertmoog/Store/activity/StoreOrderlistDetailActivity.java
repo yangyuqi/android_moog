@@ -391,10 +391,10 @@ public class StoreOrderlistDetailActivity extends BaseActivity implements View.O
             tv_goods_num.setText(productCount+"");
         }
 
-        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getReturnOrderStatus())){
-            returnOrderStatus=orderlistDetail.getOrderItemData().getReturnOrderStatus();
-//            tv_goods_num.setText(productCount);
-        }
+//        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getReturnOrderStatus())){
+//            returnOrderStatus=orderlistDetail.getOrderItemData().getReturnOrderStatus();
+////            tv_goods_num.setText(productCount);
+//        }
 
         if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getAmountPayable())){
             amountPayable=orderlistDetail.getOrderItemData().getAmountPayable();

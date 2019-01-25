@@ -39,11 +39,16 @@ public class PeopleMangerAdapter extends RecyclerView.Adapter<PeopleMangerAdapte
         notifyDataSetChanged();
     }
 
+    public void clear(){
+        list.clear();
+        notifyDataSetChanged();
+    }
+
 
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int position) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, final int position) {
         View view=layoutInflater.inflate(R.layout.item_people,viewGroup,false);
         final ViewHolder viewHolder=new ViewHolder(view);
 
@@ -51,10 +56,10 @@ public class PeopleMangerAdapter extends RecyclerView.Adapter<PeopleMangerAdapte
         viewHolder.tv_stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int position = viewHolder.getLayoutPosition();
+                int positions = viewHolder.getLayoutPosition();
                 //设置监听
                 if (mOnItemClickListener != null) {
-                    mOnItemClickListener.onItemClick(view ,position );
+                    mOnItemClickListener.onItemClick(view ,positions);
                 }
             }
         });

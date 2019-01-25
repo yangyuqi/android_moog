@@ -29,11 +29,13 @@ import com.youzheng.zhejiang.robertmoog.Model.Home.EnumsDatasBeanDatas;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.MoreReturnCounterAdapter;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.ReturnGoodsCounterAdapter;
+import com.youzheng.zhejiang.robertmoog.Store.adapter.SmallCounterAdapter;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.oneReturnGoodsCounterAdapter;
 import com.youzheng.zhejiang.robertmoog.Store.bean.ChooseReturnGoodsDetail;
 import com.youzheng.zhejiang.robertmoog.Store.bean.ConfirmReturnRequest;
 import com.youzheng.zhejiang.robertmoog.Store.bean.ReturnGoodsCounter;
 import com.youzheng.zhejiang.robertmoog.Store.bean.ReturnGoodsSuccess;
+import com.youzheng.zhejiang.robertmoog.Store.listener.GetData;
 import com.youzheng.zhejiang.robertmoog.Store.view.SingleOptionsPicker;
 
 import java.io.IOException;
@@ -43,7 +45,7 @@ import java.util.List;
 
 import okhttp3.Request;
 
-public class ReturnAllCounterActivity extends BaseActivity implements View.OnClickListener {
+public class ReturnAllCounterActivity extends BaseActivity implements View.OnClickListener ,GetData {
 
     private ImageView btnBack;
     /**  */
@@ -120,6 +122,10 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
     public static int one_list_total;
     public static int more_total;
 
+    private int one_all;
+    private int all;
+    private int more_all;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,6 +135,9 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
         initView();
         initGetDate();
         initData(returnId,isall);
+
+
+
 
     }
 
@@ -196,6 +205,33 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
         }else {
             rv_list_more.setVisibility(View.GONE);
         }
+        int moren_more=0;
+        if (more.size()!=0){
+            for (int i = 0; i <more.size() ; i++) {
+                for (ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean.ProductListBeanX beanX:more.get(i).getProductList()){
+                    int moren= Integer.parseInt(beanX.getRefundAmount());
+
+                        more_all=more_all+moren;
+
+
+
+
+                }
+            }
+        }
+
+        int one_list=0;
+          if (one.size()!=0){
+              for (int i = 0; i < one.size(); i++) {
+                  int moren_one= Integer.parseInt(one.get(i).getRefundAmount());
+                  one_all=one_all+moren_one;
+              }
+          }
+
+
+        int all=one_all+more_all;
+
+        tv_really_cut_money.setText(all+"");
 
 
     }
@@ -298,11 +334,11 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
         rv_list_more.setAdapter(moreReturnCounterAdapter);
         rv_list_more.addItemDecoration(new com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider(ReturnAllCounterActivity.this, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
 
-        oneCounteradapter=new oneReturnGoodsCounterAdapter(onelist,this);
+        oneCounteradapter=new oneReturnGoodsCounterAdapter(onelist,this,this);
         rv_list_one.setAdapter(oneCounteradapter);
 
 
-        moreReturnCounterAdapter=new MoreReturnCounterAdapter(morelist,this);
+        moreReturnCounterAdapter=new MoreReturnCounterAdapter(morelist,this,this);
         rv_list_more.setAdapter(moreReturnCounterAdapter);
     }
 
@@ -328,7 +364,7 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
                     showToast(getString(R.string.please_choose_get_type));
                 }else if (tv_return_type.getText().equals(getString(R.string.please_choose))){
                     showToast(getString(R.string.please_choose_return_type));
-                }else if (tv_return_type.getText().equals(getString(R.string.please_choose))){
+                }else if (tv_return_reason.getText().equals(getString(R.string.please_choose))){
                     showToast(getString(R.string.please_choose_return_reason));
                 }else if (tv_really_cut_money.getText().toString().equals("0")){
                     showToast("商品不可退");
@@ -462,5 +498,37 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
         intent.putExtra("type","1");
         startActivity(intent);
         finish();
+    }
+
+
+    @Override
+    public void getoneTotal(List<ChooseReturnGoodsDetail.ReturnOrderInfoBean.ProductListBean> lists) {
+         one_all=0;
+       // Log.e("ssss",gson.toJson(list)+"--"+gson.toJson(lists));
+        if (lists!=null){
+            for (int i = 0; i <lists.size() ; i++) {
+                one_all=one_all+lists.get(i).getMoney();
+                Log.e("233",one_all+"单品总和");
+            }
+
+        }
+         all=one_all+more_all;
+         Log.e("233",all+"界面总和1");
+         tv_really_cut_money.setText(all+"");
+    }
+
+    @Override
+    public void getMoreTotal(List<ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean.ProductListBeanX> list) {
+         more_all=0;
+        if (list!=null){
+            for (int i = 0; i <list.size() ; i++) {
+                more_all=more_all+list.get(i).getMoney();
+                Log.e("233",more_all+"套餐总和");
+            }
+        }
+
+        all=one_all+more_all;
+        Log.e("233",all+"界面总和2");
+        tv_really_cut_money.setText(all+"");
     }
 }

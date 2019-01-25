@@ -5,9 +5,11 @@ import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -43,6 +45,10 @@ public class ProfessionalCustomerOrderListAdapter extends RecyclerView.Adapter {
 
     public void setUI(List<NewOrderListBean.OrderListBean> list){
         this.list = list;
+        notifyDataSetChanged();
+    }
+    public void clear(){
+        list.clear();
         notifyDataSetChanged();
     }
 
@@ -129,7 +135,7 @@ public class ProfessionalCustomerOrderListAdapter extends RecyclerView.Adapter {
         }
     }
 
-    private void setMoreImageData(MoreImageHolder holder, final int position) {
+    private void setMoreImageData(final MoreImageHolder holder, final int position) {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         holder.mRvListPic.setLayoutManager(linearLayoutManager);
@@ -151,12 +157,10 @@ public class ProfessionalCustomerOrderListAdapter extends RecyclerView.Adapter {
         holder.mTvCount.setText("共" + beans.getProductNum() + "件商品");
         holder.mTvMoney.setText(context.getString(R.string.label_money)+beans.getPayAmount());
 
-        holder.mRvListPic.setOnClickListener(new View.OnClickListener() {
+        holder.mRvListPic.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(context,StoreOrderlistDetailActivity.class);
-                intent.putExtra("OrderGoodsId",list.get(position).getId());
-                context.startActivity(intent);
+            public boolean onTouch(View v, MotionEvent event) {
+                return holder.item.onTouchEvent(event);
             }
         });
 
@@ -215,6 +219,7 @@ public class ProfessionalCustomerOrderListAdapter extends RecyclerView.Adapter {
         RecyclerView mRvListPic;
         TextView mTvCount;
         TextView mTvMoney;
+        LinearLayout item;
         public MoreImageHolder(View itemView) {
             super(itemView);
             mTvDate = itemView.findViewById(R.id.tv_date);
@@ -222,6 +227,7 @@ public class ProfessionalCustomerOrderListAdapter extends RecyclerView.Adapter {
             mRvListPic = itemView.findViewById(R.id.rv_list_pic);
             mTvCount = itemView.findViewById(R.id.tv_count);
             mTvMoney = itemView.findViewById(R.id.tv_money);
+            item= itemView.findViewById(R.id.item);
         }
     }
 
