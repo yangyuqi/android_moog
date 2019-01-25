@@ -98,6 +98,14 @@ public class StoreSalesNumberActivity extends BaseActivity implements View.OnCli
         initView();
         initTimer();
         //setListener();
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");// HH:mm:ss
+        Date date = new Date(System.currentTimeMillis());
+        tv_startDate.setText(simpleDateFormat.format(date));
+        tv_endDate.setText(simpleDateFormat.format(date));
+        starstDate=simpleDateFormat.format(date);
+        endsDate=simpleDateFormat.format(date);
+        initData(isDay,starstDate,endsDate);
     }
 
     private void setListener() {
@@ -122,11 +130,7 @@ public class StoreSalesNumberActivity extends BaseActivity implements View.OnCli
     @Override
     protected void onResume() {
         super.onResume();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");// HH:mm:ss
-        Date date = new Date(System.currentTimeMillis());
-        tv_startDate.setText(simpleDateFormat.format(date));
-        tv_endDate.setText(simpleDateFormat.format(date));
-        initData(isDay,starstDate,endsDate);
+
     }
 
     private void initView() {
@@ -213,7 +217,7 @@ public class StoreSalesNumberActivity extends BaseActivity implements View.OnCli
             list.addAll(beans);
             adapter.setUI(beans);
         }else {
-           // showToast(getString(R.string.load_list_erron));
+            showToast(getString(R.string.load_list_erron));
         }
 
 
@@ -237,6 +241,7 @@ public class StoreSalesNumberActivity extends BaseActivity implements View.OnCli
                 break;
             case R.id.tv_check:
                 list.clear();
+                adapter.clear();
                 isDay=false;
                 initData(isDay,starstDate,endsDate);
                 break;

@@ -297,6 +297,7 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
                 }else {
                     orderCode=edit;
                     list.clear();
+                    adapter.clear();
                     initData(page,pageSize,orderCode,timeQuantum,isCustomer,type);
                 }
                 break;

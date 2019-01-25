@@ -50,6 +50,11 @@ public class ReturnGoodsListAdapter extends RecyclerView.Adapter {
         notifyDataSetChanged();
     }
 
+    public void clear(){
+        list.clear();
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemViewType(int position) {
         ReturnGoodsList.ReturnOrderListBean bean=list.get(position);
@@ -128,7 +133,7 @@ public class ReturnGoodsListAdapter extends RecyclerView.Adapter {
         moreGoodsAdapter.setPic(piclist);
         ReturnGoodsList.ReturnOrderListBean beans =list.get(position);
         holder.mTvDate.setText(beans.getCreateDate());
-        holder.mTvOrderNum.setText(beans.getOrderCode());
+        holder.mTvOrderNum.setText(beans.getReturnOrderCode());
         holder.mTvCount.setText("共" + beans.getProductNum() + "件商品");
         holder.mTvMoney.setText(context.getString(R.string.label_money)+beans.getActualRefundAmount());
 
@@ -144,7 +149,7 @@ public class ReturnGoodsListAdapter extends RecyclerView.Adapter {
     private void setOneImageData(OneImageHolder holder,int position) {
         ReturnGoodsList.ReturnOrderListBean beans =list.get(position);
         holder.tv_date.setText(beans.getCreateDate());
-        holder.tv_order_num.setText(beans.getOrderCode());
+        holder.tv_order_num.setText(beans.getReturnOrderCode());
         holder.tv_count.setText("共" + beans.getProductNum() + "件商品");
         holder.tv_money.setText(context.getString(R.string.label_money)+beans.getActualRefundAmount());
 

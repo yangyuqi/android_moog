@@ -223,7 +223,7 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
     private void LuBan(String picpath) {
         Luban.with(this)
                 .load(picpath)                                   // 传人要压缩的图片列表
-                .ignoreBy(100)                                  // 忽略不压缩图片的大小
+                .ignoreBy(500)                                  // 忽略不压缩图片的大小
 //                .setTargetDir(getPath())                        // 设置压缩后文件存储位置
                 .setCompressListener(new OnCompressListener() { //设置回调
                     @Override

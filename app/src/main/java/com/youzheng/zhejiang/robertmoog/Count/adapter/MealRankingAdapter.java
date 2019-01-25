@@ -29,6 +29,10 @@ public class MealRankingAdapter extends RecyclerView.Adapter<MealRankingAdapter.
         notifyDataSetChanged();
     }
 
+    public void clear(){
+        list.clear();
+        notifyDataSetChanged();
+    }
     @NonNull
     @Override
     public SaleHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int position) {

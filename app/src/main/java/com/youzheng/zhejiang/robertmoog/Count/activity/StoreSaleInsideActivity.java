@@ -216,7 +216,7 @@ public class StoreSaleInsideActivity extends BaseActivity implements View.OnClic
             list.addAll(shopDataBeans);
             adapter.setUI(shopDataBeans);
         }else {
-          //  showToast(getString(R.string.load_list_erron));
+            showToast(getString(R.string.load_list_erron));
         }
 
     }

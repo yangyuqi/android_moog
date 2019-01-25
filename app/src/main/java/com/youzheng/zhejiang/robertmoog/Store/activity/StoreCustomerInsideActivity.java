@@ -142,7 +142,7 @@ public class StoreCustomerInsideActivity extends BaseActivity implements View.On
             list.addAll(monthCoustomerDetailBeans);
             adapter.refreshUI(monthCoustomerDetailBeans);
         }else {
-          //showToast(getString(R.string.load_list_erron));
+          showToast(getString(R.string.load_list_erron));
         }
 
 

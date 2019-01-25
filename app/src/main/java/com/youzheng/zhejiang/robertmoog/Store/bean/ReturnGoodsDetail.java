@@ -45,7 +45,7 @@ public class ReturnGoodsDetail {
             private String businessRole;
             private String pickUpStatus;
             private String paymentMethod;
-            private String productCount;
+            private int productCount;
             private String reason;
             private String refundAmount;
             private String actualRefundAmount;
@@ -115,11 +115,11 @@ public class ReturnGoodsDetail {
                 this.paymentMethod = paymentMethod;
             }
 
-            public String getProductCount() {
+            public int getProductCount() {
                 return productCount;
             }
 
-            public void setProductCount(String productCount) {
+            public void setProductCount(int productCount) {
                 this.productCount = productCount;
             }
 

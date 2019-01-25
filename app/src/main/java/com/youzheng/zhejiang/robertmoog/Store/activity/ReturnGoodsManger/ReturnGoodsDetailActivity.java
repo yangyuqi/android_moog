@@ -190,8 +190,10 @@ public class ReturnGoodsDetailActivity extends BaseActivity implements View.OnCl
             tv_customer.setText(returnGoodsDetail.getReturnItem().getCustCode());
         }
 
-        if (!TextUtils.isEmpty(returnGoodsDetail.getReturnItem().getProductCount())){
-            tv_goods_number.setText(returnGoodsDetail.getReturnItem().getProductCount());
+        if (returnGoodsDetail.getReturnItem().getProductCount()!=0){
+            tv_goods_number.setText(returnGoodsDetail.getReturnItem().getProductCount()+"");
+        }else {
+            tv_goods_number.setText("0");
         }
 
 

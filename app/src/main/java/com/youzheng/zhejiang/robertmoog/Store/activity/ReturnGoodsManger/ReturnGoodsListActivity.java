@@ -260,7 +260,7 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
             list.addAll(listBeans);
             adapter.setUI(listBeans);
         }else {
-           //showToast(getString(R.string.load_list_erron));
+           showToast(getString(R.string.load_list_erron));
         }
 
 
@@ -286,6 +286,7 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
                 }else {
                     orderCode=edit;
                     list.clear();
+                    adapter.clear();
                     initData(page,pageSize,orderCode,timeQuantum,isCustomer);
                 }
 
@@ -297,6 +298,7 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
                 break;
 
             case R.id.tv_confirm:
+                adapter.clear();
                 initData(page,pageSize,orderCode,timeQuantum,isCustomer);
                 drawer_layout.closeDrawer(GravityCompat.END);
                 goodsTimeAdapter.setSelectItem(who);

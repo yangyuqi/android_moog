@@ -30,7 +30,10 @@ public class CheckRuleAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-
+    public void clear(){
+        list.clear();
+        notifyDataSetChanged();
+    }
 
     @Override
     public int getCount() {

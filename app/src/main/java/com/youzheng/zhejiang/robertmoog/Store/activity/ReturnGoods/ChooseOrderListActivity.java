@@ -156,7 +156,7 @@ public class ChooseOrderListActivity extends BaseActivity implements View.OnClic
             list.addAll(orderListBeans);
             adapter.setUI(list);
         }else {
-            //showToast(getString(R.string.load_list_erron));
+            showToast(getString(R.string.load_list_erron));
         }
 
     }
