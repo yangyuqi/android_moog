@@ -83,6 +83,7 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
     private int pageSize = 10;
     private int page = 1;
     public static GoodsFragment goodsFragment;
+    private int who;
 
 
     @Override
@@ -193,7 +194,9 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
                 }
                 break;
             case R.id.iv_more:
+
                 showPopuWindow();
+                goodsTitleAdapter.setSelectItem(who);
                 break;
             case R.id.btnBack:
                 finish();
@@ -250,13 +253,13 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
 
         goodsTitleAdapter = new GoodsTitleAdapter(stringList, this);
         mGvTitle.setAdapter(goodsTitleAdapter);
-        goodsTitleAdapter.notifyDataSetChanged();
 
         mGvTitle.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 goodsTitleAdapter.setSelectItem(position);
                 tab.getTabAt(position).select();
+                who=position;
                 window.dismiss();
             }
         });

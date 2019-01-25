@@ -214,6 +214,18 @@
                     android:gravity="center_vertical"
                     android:paddingLeft="15dp"
                     android:background="@color/bg_background_white"
+
+                    />
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="@string/label_money"
+                    android:textColor="@color/text_golden2"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:gravity="center_vertical"
+                    android:background="@color/bg_background_white"
                     />
                 <TextView
                     android:id="@+id/tv_should_cut_money"
@@ -225,6 +237,7 @@
                     android:textStyle="bold"
                     android:gravity="center_vertical"
                     android:paddingRight="15dp"
+                    android:paddingLeft="5dp"
                     android:background="@color/bg_background_white"
                     />
 
@@ -252,6 +265,17 @@
                     android:background="@color/bg_background_white"
                     />
                 <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="@string/label_money"
+                    android:textColor="@color/text_golden2"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:gravity="center_vertical"
+                    android:background="@color/bg_background_white"
+                    />
+
+                <TextView
                     android:id="@+id/tv_really_cut_money"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
@@ -261,6 +285,7 @@
                     android:textStyle="bold"
                     android:gravity="center_vertical"
                     android:paddingRight="15dp"
+                    android:paddingLeft="5dp"
                     android:background="@color/bg_background_white"
                     />
 

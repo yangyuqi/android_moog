@@ -2,6 +2,7 @@ package com.youzheng.zhejiang.robertmoog.Store.activity.ReturnGoods;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -92,9 +93,13 @@ public class ReturnRecognitionActivity extends BaseActivity implements View.OnCl
                 BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                 if (baseModel.getCode()==PublicUtils.code){
                     CustomerBean customerBean = gson.fromJson(gson.toJson(baseModel.getDatas()),CustomerBean.class);
-                    Intent intent = new Intent(mContext, RegisterSuccessActivity.class);
-                    intent.putExtra("customer",customerBean.getCustomer());
-                    startActivity(intent);
+                    if (!TextUtils.isEmpty(customerBean.getCustomer().getCustomerId())){
+                        Intent intent6 = new Intent(mContext,ChooseOrderListActivity.class);
+                        intent6.putExtra("customerId",customerBean.getCustomer().getCustomerId());
+                        intent6.putExtra("identifion",true);
+                        startActivity(intent6);
+                    }
+
                 }else {
                     showToast(baseModel.getMsg());
                 }

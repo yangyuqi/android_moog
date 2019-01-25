@@ -204,7 +204,7 @@ public class MealRankingActivity extends BaseActivity implements View.OnClickLis
             list.addAll(beanList);
             adapter.setUI(beanList);
         }else {
-            showToast(getString(R.string.load_list_erron));
+            //showToast(getString(R.string.load_list_erron));
         }
 
 

@@ -85,7 +85,7 @@ public class SmallChooseReturnGoodsAdapter extends BaseAdapter {
         if (bean.getCount()==0){
             viewHolder.tv_number.setText("0");
         }else {
-            viewHolder.tv_number.setText("1");//默认为1
+            viewHolder.tv_number.setText("0");//默认为1
         }
         final String num=viewHolder.tv_number.getText().toString();
         addnumber= Integer.parseInt(num);

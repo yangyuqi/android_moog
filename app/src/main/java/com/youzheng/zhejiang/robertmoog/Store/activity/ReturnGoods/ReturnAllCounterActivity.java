@@ -364,7 +364,7 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
                     showToast(getString(R.string.please_choose_get_type));
                 }else if (tv_return_type.getText().equals(getString(R.string.please_choose))){
                     showToast(getString(R.string.please_choose_return_type));
-                }else if (tv_return_type.getText().equals(getString(R.string.please_choose))){
+                }else if (tv_return_reason.getText().equals(getString(R.string.please_choose))){
                     showToast(getString(R.string.please_choose_return_reason));
                 }else if (tv_really_cut_money.getText().toString().equals("0")){
                     showToast("商品不可退");

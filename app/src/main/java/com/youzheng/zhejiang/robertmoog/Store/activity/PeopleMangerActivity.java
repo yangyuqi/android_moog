@@ -229,7 +229,7 @@ public class PeopleMangerActivity extends BaseActivity implements View.OnClickLi
             list.addAll(listBeans);
             adapter.setUI(listBeans);
         } else {
-            showToast(getString(R.string.load_list_erron));
+           // showToast(getString(R.string.load_list_erron));
         }
         adapter.setOnItemClickListener(new OnRecyclerViewAdapterItemClickListener() {
             @Override

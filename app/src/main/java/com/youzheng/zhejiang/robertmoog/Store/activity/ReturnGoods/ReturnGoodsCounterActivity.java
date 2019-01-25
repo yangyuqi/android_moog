@@ -182,7 +182,7 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
                   totals=totals+all;
               }
 
-              tv_really_cut_money.setText(getString(R.string.label_money)+totals+"");
+              tv_really_cut_money.setText(totals+"");
 
           }
 
@@ -195,7 +195,7 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
           }
 
           if (!TextUtils.isEmpty(counter.getReturnOrderInfo().getRefundAmount())){
-              tv_should_cut_money.setText(getString(R.string.label_money)+counter.getReturnOrderInfo().getRefundAmount());
+              tv_should_cut_money.setText(counter.getReturnOrderInfo().getRefundAmount());
               refundAmount=counter.getReturnOrderInfo().getRefundAmount();
           }
 
@@ -326,7 +326,7 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
                     showToast(getString(R.string.please_choose_get_type));
                 }else if (tv_return_type.getText().equals(getString(R.string.please_choose))){
                     showToast(getString(R.string.please_choose_return_type));
-                }else if (tv_return_type.getText().equals(getString(R.string.please_choose))){
+                }else if (tv_return_reason.getText().equals(getString(R.string.please_choose))){
                     showToast(getString(R.string.please_choose_return_reason));
                 }else if (TextUtils.isEmpty(tv_really_cut_money.getText().toString())){
                     showToast(getString(R.string.please_write_really_money));
@@ -375,7 +375,7 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
         map.put("paymentMethod",paymentMethod);
         map.put("reason",reasons);
         map.put("refundAmount",refundAmount);
-        map.put("actualRefundAmount",ReturnGoodsCounterAdapter.totals+"");
+        map.put("actualRefundAmount",tv_really_cut_money.getText().toString());
         map.put("id",orderID);
 
         if (list.size()!=0){
@@ -470,7 +470,7 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
                 total=total+all;
             }
 
-            tv_really_cut_money.setText(getString(R.string.label_money)+total+"");
+            tv_really_cut_money.setText(total+"");
 
 
         }

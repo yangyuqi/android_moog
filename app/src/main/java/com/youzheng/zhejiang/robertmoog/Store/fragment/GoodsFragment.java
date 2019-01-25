@@ -41,15 +41,38 @@ public class GoodsFragment extends BaseFragment {
     private int page = 1;
     private String sku;
     private int goodsId;
-
+    private boolean isFirstLoad = false;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.layout_goods_list, null);
         initView();
-        setListener();
-        initData(page,pageSize);
+
+        isFirstLoad = true;//视图创建完成，将变量置为true
+
+        if (getUserVisibleHint()) {//如果Fragment可见进行数据加载
+            setListener();
+            initData(page,pageSize);
+            isFirstLoad = false;
+        }
+
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        isFirstLoad = false;//视图销毁将变量置为false
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isFirstLoad && isVisibleToUser) {//视图变为可见并且是第一次加载
+            setListener();
+            initData(page,pageSize);
+            isFirstLoad = false;
+        }
     }
 
     @Override

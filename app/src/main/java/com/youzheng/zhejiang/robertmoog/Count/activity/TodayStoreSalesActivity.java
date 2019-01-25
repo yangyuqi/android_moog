@@ -187,7 +187,7 @@ public class TodayStoreSalesActivity extends BaseActivity implements View.OnClic
             list.addAll(beans);
             adapter.setUI(beans);
         }else {
-            showToast(getString(R.string.load_list_erron));
+            //showToast(getString(R.string.load_list_erron));
         }
 
 

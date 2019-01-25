@@ -163,7 +163,7 @@ public class StoreCustomerActivity extends BaseActivity implements View.OnClickL
             list.addAll(coustomerListBeans);
             adapter.setListRefreshUi(coustomerListBeans);
         }else {
-            showToast(getString(R.string.load_list_erron));
+            //showToast(getString(R.string.load_list_erron));
         }
 
 

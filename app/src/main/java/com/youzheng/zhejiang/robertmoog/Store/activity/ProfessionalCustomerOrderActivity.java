@@ -66,26 +66,25 @@ public class ProfessionalCustomerOrderActivity extends BaseActivity implements V
         Bundle upcomingBundle = new Bundle();
         upcomingBundle.putString(MyConstant.LIST_TYPE ,"MAJOR");
         onefragment.setArguments(upcomingBundle);
-
+        list.add(onefragment);
         //推荐客户订单
         CustomerOrderFragment twofragment=new CustomerOrderFragment();
         Bundle bundle = new Bundle();
         bundle.putString(MyConstant.LIST_TYPE ,"GROOM");
         twofragment.setArguments(bundle);
-
-
-        list.add(onefragment);
         list.add(twofragment);
 
 
         FragmentManager fm = getSupportFragmentManager();
         pagerAdapter = new ProfessionalCustomerPagerAdapter(fm, list);
         pager.setAdapter(pagerAdapter);
-        pager.setOffscreenPageLimit(1);
+        //pager.setOffscreenPageLimit(0);
 
         tab.setupWithViewPager(pager);
         //默认选中
         tab.getTabAt(0).select();
+
+
     }
 
     @Override

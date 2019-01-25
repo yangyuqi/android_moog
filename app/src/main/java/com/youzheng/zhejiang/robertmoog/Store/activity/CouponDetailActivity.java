@@ -118,7 +118,7 @@ public class CouponDetailActivity extends BaseActivity implements View.OnClickLi
             list.addAll(beans);
             adapter.refreshUI(beans);
         }else {
-            showToast(getString(R.string.load_list_erron));
+            //showToast(getString(R.string.load_list_erron));
         }
 
 

@@ -29,6 +29,8 @@ public class GoodsTimeAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+
+
     @Override
     public int getCount() {
         return list.size();

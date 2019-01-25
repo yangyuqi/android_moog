@@ -68,10 +68,12 @@ public class OneChooseReturnGoodsAdapter extends RecyclerView.Adapter<OneChooseR
         }else {
             oneHolder.tv_area.setVisibility(View.GONE);
         }
+
+
         if (bean.getCount()==0){
             oneHolder.tv_number.setText("0");
         }else {
-            oneHolder.tv_number.setText("1");//默认为1
+            oneHolder.tv_number.setText("0");//默认为1
         }
 
         final String num=oneHolder.tv_number.getText().toString();

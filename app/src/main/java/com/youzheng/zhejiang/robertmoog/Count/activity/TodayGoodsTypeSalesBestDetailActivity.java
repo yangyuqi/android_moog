@@ -165,7 +165,7 @@ public class TodayGoodsTypeSalesBestDetailActivity extends BaseActivity implemen
             list.addAll(beanList);
             adapter.setUI(beanList);
         }else {
-            showToast(getString(R.string.load_list_erron));
+           // showToast(getString(R.string.load_list_erron));
         }
 
 

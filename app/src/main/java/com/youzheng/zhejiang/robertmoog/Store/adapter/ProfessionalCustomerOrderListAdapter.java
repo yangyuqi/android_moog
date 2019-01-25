@@ -47,6 +47,10 @@ public class ProfessionalCustomerOrderListAdapter extends RecyclerView.Adapter {
         this.list = list;
         notifyDataSetChanged();
     }
+    public void clear(){
+        list.clear();
+        notifyDataSetChanged();
+    }
 
     @Override
     public int getItemViewType(int position) {

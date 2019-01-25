@@ -260,22 +260,7 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
                 }
 
                 if (morelist.size()!=0){
-                    if (MoreChooseReturnGoodsAdapter.productListBeanList!=null){
                         requests.addAll(moreChooseReturnGoodsAdapter.getRequests());
-//                        if (requests.size()==0){
-//                            Intent intent=new Intent(this,ReturnGoodsCounterActivity.class);
-//                            intent.putExtra("request", (Serializable) requests);
-//                            intent.putExtra("is_all",isall);
-//                            intent.putExtra("orderID",orderid);
-//                            startActivity(intent);
-//                            finish();
-//                        }else {
-//                            showToast("暂无可退商品");
-//                        }
-
-                    }else {
-                        showToast(getString(R.string.please_choose_goods_number));
-                    }
                 }
 
 
