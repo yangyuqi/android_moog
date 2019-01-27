@@ -242,8 +242,9 @@ public class BaseCameraActivity extends BaseActivity {
                     .build();
 
         }else {
+            int num=9-UpPhotoActivity.list.size();
             config = new FunctionConfig.Builder()
-                    .setMutiSelectMaxSize(1)
+                    .setMutiSelectMaxSize(num)
                     .setEnablePreview(true)
                     .build();
         }
@@ -264,7 +265,8 @@ public class BaseCameraActivity extends BaseActivity {
                     Bitmap bm = null;
                     try {
                         bm = Bimp.revitionImageSize(photoPath);
-                        setHeadIvEvenSendMine(bm ,photoPath);
+                        //setHeadIvEvenSendMine(bm ,photoPath);
+                        setPicList(resultList);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -280,7 +282,8 @@ public class BaseCameraActivity extends BaseActivity {
                     Bitmap bm = null;
                     try {
                         bm = Bimp.revitionImageSize(photoPath);
-                        setHeadIvEvenSendMine(bm ,photoPath);
+                       // setHeadIvEvenSendMine(bm ,photoPath);
+                        setPicList(resultList);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -298,6 +301,9 @@ public class BaseCameraActivity extends BaseActivity {
 
         }
     };
+
+    protected void setPicList(List<PhotoInfo> resultList) {
+    }
 
     protected void sendPhotoList(List<PhotoInfo> list){
         mPhotoInfos.clear();

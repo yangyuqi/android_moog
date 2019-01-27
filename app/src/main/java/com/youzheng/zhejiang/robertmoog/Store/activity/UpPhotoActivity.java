@@ -31,6 +31,7 @@ import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.AddphotoAdapter;
 import com.youzheng.zhejiang.robertmoog.Store.bean.SampleOutPic;
+import com.youzheng.zhejiang.robertmoog.Store.listener.DeleteListener;
 import com.youzheng.zhejiang.robertmoog.Store.listener.OnRecyclerViewAdapterItemClickListener;
 import com.youzheng.zhejiang.robertmoog.Store.utils.AndroidScheduler;
 
@@ -40,6 +41,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import cn.finalteam.galleryfinal.model.PhotoInfo;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Request;
@@ -52,7 +54,7 @@ import top.zibin.luban.OnCompressListener;
 /**
  * 上传图片界面sss
  */
-public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickListener, OnRecyclerViewAdapterItemClickListener {
+public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickListener, OnRecyclerViewAdapterItemClickListener, DeleteListener {
 
     private ImageView btnBack;
     /**  */
@@ -62,7 +64,7 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
     private ImageView iv_next;
     private RelativeLayout layout_header;
     private GridView gv_photo;
-    private List<String> list = new ArrayList<>();
+    public static List<String> list = new ArrayList<>();
     private AddphotoAdapter adapter;
     private String path;
     private LinearLayout inflate;
@@ -84,28 +86,6 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
     private String response;
     private LinearLayout lin_show;
 
-
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case 1:
-                    BaseModel baseModel = gson.fromJson(response, BaseModel.class);
-                    if (baseModel.getCode() == PublicUtils.code) {
-                        showToast("图片上传成功");
-                        finish();
-                    }
-
-                    break;
-
-                case 2:
-                    showToast("图片上传失败");
-                    break;
-
-            }
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,9 +126,17 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
         textHeadNext.setTextColor(getResources().getColor(R.color.colorPrimary));
 
         btnBack.setImageResource(R.mipmap.group_126_9);
-
         path = getIntent().getStringExtra("picturePath");
-        list.add(path);
+        addlist= (List<String>) getIntent().getSerializableExtra("picturePathlist");
+
+
+
+        if (addlist!=null){
+            list.addAll(addlist);
+        }else {
+            list.add(path);
+        }
+        Log.e("ppp", list.size() + "");
         Log.e("ppp", path + "");
         adapter = new AddphotoAdapter(list, this);
         gv_photo.setAdapter(adapter);
@@ -158,11 +146,16 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
         new Thread(new Runnable() {
             @Override
             public void run() {
-                LuBan(path);
+                for (int i = 0; i <list.size() ; i++) {
+                    LuBan(list.get(i));
+                }
+
             }
         }).start();
 
-        Log.e("集合路径", path);
+       // Log.e("集合路径", path);
+
+        adapter.setDeleteListener(this);
 
 
     }
@@ -170,15 +163,47 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
     @Override
     protected void setHeadIvEvenSendMine(Bitmap bm, final String picturePath) {
         super.setHeadIvEvenSendMine(bm, picturePath);
-        list.add(picturePath);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                LuBan(picturePath);
+        if (list.size()<10){
+            list.add(picturePath);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+
+                    LuBan(picturePath);
+
+
+                }
+            }).start();
+            Log.e("www", picturePath + "");
+            Log.e("2131", list.size() + "");
+        }else {
+            return;
+        }
+
+
+    }
+
+    @Override
+    protected void setPicList(List<PhotoInfo> resultList) {
+        super.setPicList(resultList);
+        for (final PhotoInfo photoInfo:resultList){
+            if (list.size()<10){
+                list.add(photoInfo.getPhotoPath());
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        LuBan(photoInfo.getPhotoPath());
+
+
+                    }
+                }).start();
+            }else {
+                return;
             }
-        }).start();
-        Log.e("www", picturePath + "");
-        Log.e("2131", list.size() + "");
+
+        }
+
 
     }
 
@@ -198,6 +223,7 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
             case R.id.btnBack:
                 list.clear();
                 fileList.clear();
+//                addlist.clear();
                 finish();
                 break;
             case R.id.textHeadNext:
@@ -223,7 +249,7 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
     private void LuBan(String picpath) {
         Luban.with(this)
                 .load(picpath)                                   // 传人要压缩的图片列表
-                .ignoreBy(500)                                  // 忽略不压缩图片的大小
+                .ignoreBy(100)                                  // 忽略不压缩图片的大小
 //                .setTargetDir(getPath())                        // 设置压缩后文件存储位置
                 .setCompressListener(new OnCompressListener() { //设置回调
                     @Override
@@ -362,5 +388,12 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
 ////       将属性设置给窗体
         dialogWindow.setAttributes(lp);
         dialog.show();//显示对话框
+    }
+
+    @Override
+    public void deletePic(View view, int position) {
+        list.remove(position);
+        fileList.remove(position);
+        adapter.notifyDataSetChanged();
     }
 }

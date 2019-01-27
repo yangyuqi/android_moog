@@ -44,6 +44,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import cn.finalteam.galleryfinal.model.PhotoInfo;
+
 /**
  * 出样管理界面
  */
@@ -102,10 +104,23 @@ public class SampleOutMangerActivity extends BaseCameraActivity implements View.
     protected void setHeadIvEvenSendMine(Bitmap bm, String picturePath) {
         super.setHeadIvEvenSendMine(bm, picturePath);
 //        list.clear();
-//        list.add(picturePath);
+        //list.add(picturePath);
         Intent intent=new Intent(this,UpPhotoActivity.class);
         intent.putExtra("picturePath", picturePath);
         Log.e("路径",picturePath);
+        startActivity(intent);
+    }
+
+    @Override
+    protected void setPicList(List<PhotoInfo> resultList) {
+        super.setPicList(resultList);
+        list.clear();
+        for (PhotoInfo photoInfo:resultList){
+            list.add(photoInfo.getPhotoPath());
+        }
+        Intent intent=new Intent(this,UpPhotoActivity.class);
+        intent.putExtra("picturePathlist", (Serializable) list);
+        //Log.e("路径",picturePath);
         startActivity(intent);
     }
 

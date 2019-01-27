@@ -168,7 +168,7 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
-        textHeadTitle.setText(getString(R.string.return_goods_list));
+        textHeadTitle.setText(getString(R.string.store_return));
         textHeadNext = (TextView) findViewById(R.id.textHeadNext);
         iv_next = (ImageView) findViewById(R.id.iv_next);
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);
