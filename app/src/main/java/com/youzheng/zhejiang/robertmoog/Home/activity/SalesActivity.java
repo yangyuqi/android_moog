@@ -144,6 +144,8 @@ public class SalesActivity extends BaseActivity {
                             if (enumsDatas.getEnums().size()>0){
                                 for (final EnumsDatasBean bean : enumsDatas.getEnums()){
                                     if (bean.getClassName().equals("PickUpStatus")){
+                                        tv_get_state.setText(bean.getDatas().get(0).getDes());
+                                        PickUpStatus = bean.getDatas().get(0).getId();
                                         final List<String> date = new ArrayList<String>();
                                         for (int i = 0; i < bean.getDatas().size(); i++) {
                                             date.add(bean.getDatas().get(i).getDes());
@@ -187,6 +189,8 @@ public class SalesActivity extends BaseActivity {
                             if (enumsDatas.getEnums().size()>0){
                                 for (final EnumsDatasBean bean : enumsDatas.getEnums()){
                                     if (bean.getClassName().equals("ShoppingMethod")){
+                                        tv_dispatching_type.setText(bean.getDatas().get(0).getDes());
+                                        ShoppingMethod = bean.getDatas().get(0).getId();
                                         final List<String> date = new ArrayList<String>();
                                         for (int i = 0; i < bean.getDatas().size(); i++) {
                                             date.add(bean.getDatas().get(i).getDes());
@@ -230,6 +234,8 @@ public class SalesActivity extends BaseActivity {
                             if (enumsDatas.getEnums().size()>0){
                                 for (final EnumsDatasBean bean : enumsDatas.getEnums()){
                                     if (bean.getClassName().equals("PaymentMethod")){
+                                        tv_get_money_type.setText(bean.getDatas().get(0).getDes());
+                                        paymentMethod = bean.getDatas().get(0).getId();
                                         final List<String> date = new ArrayList<String>();
                                         for (int i = 0; i < bean.getDatas().size(); i++) {
                                             date.add(bean.getDatas().get(i).getDes());
@@ -453,6 +459,7 @@ public class SalesActivity extends BaseActivity {
                         }
                     }else {
                         tv_get_tivket.setVisibility(View.GONE);
+                        tv_get_ticket.setText("无优惠券");
                     }
                 }
             }

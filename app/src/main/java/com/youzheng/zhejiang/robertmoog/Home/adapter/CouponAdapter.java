@@ -75,9 +75,9 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.CouponView
         couponViewHolder.tv_name.setText(useCouponList.get(i).getCouponType());
         couponViewHolder.tv_time.setText(useCouponList.get(i).getStartDate()+"-"+useCouponList.get(i).getEndDate());
 
-        if (useCouponList.get(i).getCouponType().equals("订单优惠")){
+        if (useCouponList.get(i).getCouponType().equals("订单满减")){
             couponViewHolder.rl_bg.setBackgroundResource(R.mipmap.group_24_4);
-        }else if (useCouponList.get(i).getCouponType().equals("品类优惠")){
+        }else if (useCouponList.get(i).getCouponType().equals("品类满减")){
             couponViewHolder.rl_bg.setBackgroundResource(R.mipmap.group_24_5);
         }
 

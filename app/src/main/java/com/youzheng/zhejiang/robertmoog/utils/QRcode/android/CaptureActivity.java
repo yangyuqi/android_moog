@@ -257,6 +257,7 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
             public void onResponse(String response) {
                 BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                 if (baseModel.getCode()==PublicUtils.code){
+                    showToast("添加意向商品成功");
                     finish();
                 }else {
                     showToast(baseModel.getMsg());
@@ -405,7 +406,7 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
 
                 @Override
                 public void onImageDecodeFailed() {
-                    Toast.makeText(CaptureActivity.this, "抱歉，解析失败,换个图片试试.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CaptureActivity.this, "条形码识别失败.", Toast.LENGTH_SHORT).show();
                 }
             }).run();
 

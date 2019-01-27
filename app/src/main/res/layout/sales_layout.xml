@@ -239,6 +239,7 @@
                     android:background="@color/bg_background_white"
                     />
                 <TextView
+                    android:clickable="true"
                     android:hint="请选择提货方式"
                     android:drawablePadding="@dimen/space_10"
                     android:drawableRight="@mipmap/group_9_4"

@@ -94,6 +94,8 @@ public class ShopActionDetailsActivity extends BaseActivity {
                 finish();
             }
         });
+        findViewById(R.id.iv_next).setVisibility(View.VISIBLE);
+
         ls = findViewById(R.id.ls);
         tv_desc = findViewById(R.id.tv_desc);
         tv_start_time = findViewById(R.id.tv_start_time);
