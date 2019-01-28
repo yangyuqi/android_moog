@@ -49,13 +49,20 @@ public class AddNewAddressActivity extends BaseActivity {
         findViewById(R.id.btnBack).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final RemindDialog dialog = new RemindDialog(mContext, new RemindDialog.onSuccessClick() {
-                    @Override
-                    public void onSuccess() {
-                        finish();
-                    }
-                }, "4");
-                dialog.show();
+                if (edt_name.getText().toString().equals("")&&edt_phone.getText().toString().equals("")&&edt_provice.getText().toString().equals("")
+                        &&edt_city.getText().toString().equals("")&&edt_town.getText().toString().equals("")&&edt_address.getText().toString().equals("")
+                        &&edt_street.getText().toString().equals("")){
+                    finish();
+                }else {
+                    final RemindDialog dialog = new RemindDialog(mContext, new RemindDialog.onSuccessClick() {
+                        @Override
+                        public void onSuccess() {
+                            finish();
+                        }
+                    }, "4");
+                    dialog.show();
+                }
+
             }
         });
         customerId = getIntent().getStringExtra("customerId");

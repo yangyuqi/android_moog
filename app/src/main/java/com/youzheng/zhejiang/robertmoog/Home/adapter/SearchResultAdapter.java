@@ -229,6 +229,14 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     if (Integer.parseInt(s.toString().trim())<1){
                         return;
                     }
+
+                    if (Integer.parseInt(s.toString())>999){
+                        objects.get(position).setNum(999);
+                        ((CommonGoodsViewHolder) holder).edt_num.setText("999");
+                        Toast.makeText(context,"不能大于999",Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
                     if (s.toString().startsWith("0")){
                         ((CommonGoodsViewHolder) holder).edt_num.setText(s.toString().substring(1));
                         return;

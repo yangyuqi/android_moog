@@ -128,6 +128,7 @@ public class SampleOutDetailActivity extends BaseActivity implements View.OnClic
             default:
                 break;
             case R.id.btnBack:
+                UpPhotoActivity.list.clear();
                 finish();
                 break;
         }

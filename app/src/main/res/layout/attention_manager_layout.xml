@@ -59,6 +59,8 @@
                 android:hint="输入客户手机号,识别后快速进入服务"
                 android:paddingLeft="10dp"
                 android:singleLine="true"
+                android:inputType="number"
+                android:maxLength="11"
                 android:textColorHint="#B7B7B7"
                 android:textSize="@dimen/text_size_13" />
 

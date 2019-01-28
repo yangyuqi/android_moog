@@ -85,6 +85,7 @@ public class AlterPasswordActivity extends BaseActivity {
                     public void onResponse(String response) {
                         BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                         if (baseModel.getCode()==PublicUtils.code){
+                            showToast(getString(R.string.change_psd_success));
                             startActivity(new Intent(mContext,LoginActivity.class));
                             finish();
                         }else {

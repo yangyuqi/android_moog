@@ -36,7 +36,7 @@ public class RemarkDialog extends Dialog implements View.OnClickListener{
     TextView tv_no ,tv_ok ;
     String token ;
     public RemarkDialog(Context context, String id, String remark){
-        super(context, R.style.DeleteDialogStyle);
+        super(context, R.style.mydialog);
         mcontext = context;
         token = (String) SharedPreferencesUtils.getParam(context, PublicUtils.access_token,"");
         if (id!=null){
@@ -66,7 +66,7 @@ public class RemarkDialog extends Dialog implements View.OnClickListener{
         Window dialogWindow = getWindow();
         WindowManager.LayoutParams lp = dialogWindow.getAttributes();
         DisplayMetrics d = mcontext.getResources().getDisplayMetrics(); // 获取屏幕宽、高用
-        lp.width = (int) (d.widthPixels * 0.74); // 高度设置为屏幕的0.6
+        lp.width = (int) (d.widthPixels * 0.9); // 高度设置为屏幕的0.6
         dialogWindow.setAttributes(lp);
     }
 

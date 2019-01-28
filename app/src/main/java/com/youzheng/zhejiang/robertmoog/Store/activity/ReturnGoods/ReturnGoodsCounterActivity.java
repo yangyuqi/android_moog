@@ -177,8 +177,8 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
           if (beans.size()!=0){
               for (int i = 0; i < beans.size(); i++) {
                   int item= Integer.parseInt(beans.get(i).getRefundAmount());
-                  int count=beans.get(i).getCount();
-                  int all=item*count;
+//                  int count=beans.get(i).getCount();
+                  int all=item;
                   totals=totals+all;
               }
 
@@ -419,7 +419,7 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
     }
 
     public void showStopDialog() {
-        final AlertDialog dialogBuilder = new AlertDialog.Builder(ReturnGoodsCounterActivity.this).create();
+        final AlertDialog dialogBuilder = new AlertDialog.Builder(ReturnGoodsCounterActivity.this,R.style.mydialog).create();
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_confirm_return, null);
         dialogBuilder.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -450,8 +450,8 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
         WindowManager.LayoutParams lp = window.getAttributes();
         //这句就是设置dialog横向满屏了。
         DisplayMetrics d = this.getResources().getDisplayMetrics(); // 获取屏幕宽、高用
-//        lp.width = (int) (d.widthPixels * 0.74); // 高度设置为屏幕的0.6
-        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.width = (int) (d.widthPixels * 0.9); // 高度设置为屏幕的0.6
+        //lp.width = WindowManager.LayoutParams.MATCH_PARENT;
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
         window.setAttributes(lp);
 
@@ -465,8 +465,8 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
 
             for (int i = 0; i <list.size() ; i++) {
                 int item_total=list.get(i).getMoney();
-                int count =list.get(i).getCount();
-                int all=item_total*count;
+//                int count =list.get(i).getCount();
+                int all=item_total;
                 total=total+all;
             }
 

@@ -145,7 +145,7 @@ public class LoginActivity extends BaseActivity {
 
 
     public void showStopDialog(final String code) {
-        final AlertDialog dialogBuilder = new AlertDialog.Builder(LoginActivity.this).create();
+        final AlertDialog dialogBuilder = new AlertDialog.Builder(LoginActivity.this,R.style.mydialog).create();
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_get_code, null);
         dialogBuilder.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -177,8 +177,8 @@ public class LoginActivity extends BaseActivity {
         WindowManager.LayoutParams lp = window.getAttributes();
         //这句就是设置dialog横向满屏了。
         DisplayMetrics d = this.getResources().getDisplayMetrics(); // 获取屏幕宽、高用
-//        lp.width = (int) (d.widthPixels * 0.74); // 高度设置为屏幕的0.6
-        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.width = (int) (d.widthPixels * 0.9); // 高度设置为屏幕的0.6
+       // lp.width = WindowManager.LayoutParams.MATCH_PARENT;
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
         window.setAttributes(lp);
 
@@ -191,7 +191,7 @@ public class LoginActivity extends BaseActivity {
             name = edt_phone.getText().toString();
             password =  PublicUtils.getSHA256StrJava(code);
         }else {
-            name = edt_phone.getText().toString()+"_"+code;
+            name = edt_phone.getText().toString()+"__"+code;
             password = code ;
         }
 

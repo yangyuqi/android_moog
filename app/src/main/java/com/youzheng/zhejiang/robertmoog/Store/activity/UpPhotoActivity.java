@@ -310,7 +310,7 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
     }
 
     public void showStopDialog() {
-        final AlertDialog dialogBuilder = new AlertDialog.Builder(UpPhotoActivity.this).create();
+        final AlertDialog dialogBuilder = new AlertDialog.Builder(UpPhotoActivity.this,R.style.mydialog).create();
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_send_pic, null);
         dialogBuilder.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -346,8 +346,8 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
         WindowManager.LayoutParams lp = window.getAttributes();
         //这句就是设置dialog横向满屏了。
         DisplayMetrics d = this.getResources().getDisplayMetrics(); // 获取屏幕宽、高用
-//        lp.width = (int) (d.widthPixels * 0.74); // 高度设置为屏幕的0.6
-        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.width = (int) (d.widthPixels * 0.9); // 高度设置为屏幕的0.6
+        //lp.width = WindowManager.LayoutParams.MATCH_PARENT;
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
         window.setAttributes(lp);
 

@@ -86,7 +86,7 @@ public class StoreSalesNumberActivity extends BaseActivity implements View.OnCli
     private List<ShopSale.ShopDataBean> list=new ArrayList<>();
     private int page=1;
     private int pageSize=10;
-    private boolean isDay=true;
+    private boolean isDay=false;
     private String starstDate="";
     private String endsDate="";
     private String orderCount,orderAmountCount,customerTransaction;

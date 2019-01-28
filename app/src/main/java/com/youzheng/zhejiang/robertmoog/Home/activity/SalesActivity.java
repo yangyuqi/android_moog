@@ -460,6 +460,7 @@ public class SalesActivity extends BaseActivity {
                     }else {
                         tv_get_tivket.setVisibility(View.GONE);
                         tv_get_ticket.setText("无优惠券");
+                        tv_get_ticket.setEnabled(false);
                     }
                 }
             }

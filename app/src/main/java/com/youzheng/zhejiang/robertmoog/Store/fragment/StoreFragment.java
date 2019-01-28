@@ -131,7 +131,9 @@ public class StoreFragment extends BaseFragment implements BaseFragment.ReloadIn
                             break;
 
                         case 4:
-                            startActivity(new Intent(getActivity(), ReturnGoodsListActivity.class));
+                            Intent intent=new Intent(getActivity(), ReturnGoodsListActivity.class);
+                            intent.putExtra("type","2");
+                            startActivity(intent);
                             break;
                     }
                 } else {
@@ -177,7 +179,9 @@ public class StoreFragment extends BaseFragment implements BaseFragment.ReloadIn
                             break;
 
                         case 10:
-                            startActivity(new Intent(getActivity(), ReturnGoodsListActivity.class));
+                            Intent intent=new Intent(getActivity(), ReturnGoodsListActivity.class);
+                            intent.putExtra("type","2");
+                            startActivity(intent);
                             break;
                         case 11:
                             startActivity(new Intent(getActivity(), CouponRecordActivity.class));

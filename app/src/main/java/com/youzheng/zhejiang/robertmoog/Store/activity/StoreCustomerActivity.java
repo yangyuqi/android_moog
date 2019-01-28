@@ -164,6 +164,7 @@ public class StoreCustomerActivity extends BaseActivity implements View.OnClickL
             adapter.setListRefreshUi(coustomerListBeans);
         }else {
             showToast(getString(R.string.load_list_erron));
+            year=year+1;
         }
 
 

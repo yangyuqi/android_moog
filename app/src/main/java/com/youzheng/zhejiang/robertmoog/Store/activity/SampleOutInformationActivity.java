@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -46,6 +47,7 @@ public class SampleOutInformationActivity extends BaseActivity implements View.O
     private int pos;
     private String text;
     private List<CommitRequest.ProductSampleDataBean> request=new ArrayList<>();
+    private LinearLayout lin_title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +70,7 @@ public class SampleOutInformationActivity extends BaseActivity implements View.O
         lv_rain_information = (MyListView) findViewById(R.id.lv_rain_information);
         tv_commit=findViewById(R.id.tv_commit);
         tv_commit.setOnClickListener(this);
+        lin_title=findViewById(R.id.lin_title);
 
 
 //        initData();
@@ -122,6 +125,9 @@ public class SampleOutInformationActivity extends BaseActivity implements View.O
             }
 
 
+        }else {
+            lin_title.setVisibility(View.GONE);
+            showToast(getString(R.string.load_list_erron));
         }
 
 

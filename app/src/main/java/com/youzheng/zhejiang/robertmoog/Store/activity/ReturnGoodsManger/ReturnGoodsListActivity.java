@@ -90,6 +90,7 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
     private Boolean isCustomer=false;
     private int who;
     private String edit;
+    private String type;
 
 
 
@@ -99,6 +100,7 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
         setContentView(R.layout.activity_return_goods_list);
         isCustomer=getIntent().getBooleanExtra("identifion",false);
         customerId=getIntent().getStringExtra("customerId");
+        type=getIntent().getStringExtra("type");
         initView();
         setListener();
         initGetDate();
@@ -168,7 +170,13 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
-        textHeadTitle.setText(getString(R.string.store_return));
+         if (type.equals("1")){
+             textHeadTitle.setText(getString(R.string.customer_return));
+         }else {
+             textHeadTitle.setText(getString(R.string.store_return));
+         }
+
+
         textHeadNext = (TextView) findViewById(R.id.textHeadNext);
         iv_next = (ImageView) findViewById(R.id.iv_next);
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);

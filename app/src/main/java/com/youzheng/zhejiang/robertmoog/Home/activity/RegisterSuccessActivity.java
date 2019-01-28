@@ -144,6 +144,7 @@ public class RegisterSuccessActivity extends BaseActivity {
                         Intent intent7 = new Intent(mContext,ReturnGoodsListActivity.class);
                         intent7.putExtra("customerId",customer.getCustomerId());
                         intent7.putExtra("identifion",true);
+                        intent7.putExtra("type","1");
                         startActivity(intent7);
 
                         break;

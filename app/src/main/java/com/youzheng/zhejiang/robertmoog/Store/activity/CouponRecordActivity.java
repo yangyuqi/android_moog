@@ -62,6 +62,7 @@ public class CouponRecordActivity extends BaseActivity implements View.OnClickLi
         //年
         year = selectedDate.get(Calendar.YEAR);
         setListener();
+        initData(year);
     }
 
     private void setListener() {
@@ -81,6 +82,7 @@ public class CouponRecordActivity extends BaseActivity implements View.OnClickLi
             @Override
             public void onLoadMore() {
                 year=year-1;
+                list.clear();
                 initData(year);
             }
         });
@@ -113,10 +115,10 @@ public class CouponRecordActivity extends BaseActivity implements View.OnClickLi
     @Override
     protected void onResume() {
         super.onResume();
-        initData(year);
+
     }
 
-    private void initData(int year) {
+    private void initData(final int year) {
 
         HashMap<String,Object> map=new HashMap<>();
         map.put("year",year);
@@ -136,6 +138,7 @@ public class CouponRecordActivity extends BaseActivity implements View.OnClickLi
                     setData(couponRecord);
                 }else {
                     showToast(baseModel.getMsg());
+
                 }
             }
         });
@@ -159,6 +162,7 @@ public class CouponRecordActivity extends BaseActivity implements View.OnClickLi
             adapter.setListRefreshUi(beanList);
         }else {
             showToast(getString(R.string.load_list_erron));
+            year=year+1;
         }
 
 

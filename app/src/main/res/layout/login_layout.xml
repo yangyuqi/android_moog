@@ -96,6 +96,7 @@
                 android:drawableLeft="@mipmap/group_2_1"
                 android:drawablePadding="@dimen/space_10"
                 android:hint="@string/login_input_code"
+                android:maxLength="6"
                 android:textColor="@color/color_air_blue"
                 android:textSize="@dimen/text_size_13"
                 android:id="@+id/edt_code"

@@ -19,7 +19,7 @@ public class RemindDialog extends Dialog {
     onSuccessClick click ;
     String type ; //1 提交订单 2.注册 3.退出 4.是否退出地址
     public RemindDialog(@NonNull Context context ,onSuccessClick click ,String type) {
-        super(context ,R.style.DeleteDialogStyle);
+        super(context ,R.style.mydialog);
         mcontext = context ;
         this.click = click ;
         this.type = type;
@@ -65,7 +65,7 @@ public class RemindDialog extends Dialog {
         Window dialogWindow = getWindow();
         WindowManager.LayoutParams lp = dialogWindow.getAttributes();
         DisplayMetrics d = mcontext.getResources().getDisplayMetrics(); // 获取屏幕宽、高用
-        lp.width = (int) (d.widthPixels * 0.74); // 高度设置为屏幕的0.6
+        lp.width = (int) (d.widthPixels * 0.9); // 高度设置为屏幕的0.6
         dialogWindow.setAttributes(lp);
     }
 

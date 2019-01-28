@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.activity.SampleOutInformationActivity;
@@ -73,12 +74,13 @@ public class SampleOutAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        SampleOutList.SampleResDataBean.SampleSingleDataListBean bean = list.get(position);
+        final SampleOutList.SampleResDataBean.SampleSingleDataListBean bean = list.get(position);
         viewHolder.tv_content.setText(bean.getSampleName());
         viewHolder.tv_number.setText(bean.getSampleQuantity() + "");
 
         int sampleId = list.get(position).getSampleId();
         viewHolder.et_number.setTag(sampleId);
+
 
         if (isappear == true) {
             viewHolder.tv_number.setVisibility(View.GONE);
@@ -90,6 +92,35 @@ public class SampleOutAdapter extends BaseAdapter {
         }
 
         editTextList.add(viewHolder.et_number);
+
+        final ViewHolder finalViewHolder = viewHolder;
+        viewHolder.et_number.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (TextUtils.isEmpty(s.toString())){
+                    bean.setSampleQuantity(0);
+                   // finalViewHolder.et_number.setText(bean.getSampleQuantity()+"");
+                    return;
+                }else {
+                    int num= Integer.parseInt(s.toString());
+                    if (num>999){
+                        Toast.makeText(context,"最大不超过999",Toast.LENGTH_SHORT).show();
+                        finalViewHolder.et_number.setText("999");
+                    }
+                }
+
+            }
+        });
 
         return convertView;
     }
@@ -112,42 +143,4 @@ public class SampleOutAdapter extends BaseAdapter {
         }
     }
 
-    class TextSwitcher implements TextWatcher {
-        private ViewHolder mHolder;
-
-        public TextSwitcher(ViewHolder mHolder) {
-            this.mHolder = mHolder;
-        }
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-//            List<CommitRequest.ProductSampleDataBean> requests=new ArrayList<>();
-//            CommitRequest.ProductSampleDataBean bean=new CommitRequest.ProductSampleDataBean();
-//            bean.setSampleId(list.get(position).getSampleId());
-//            bean.setSampleQuantity(list.get(position).getSampleQuantity());
-//            requests.add(bean);
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-//            if (!TextUtils.isEmpty(s)){
-//
-//                int position = (int) mHolder.et_number.getTag();//取tag值
-////                ((SampleOutInformationActivity) context).getEditData(position, s.toString());
-//                CommitRequest.ProductSampleDataBean commit=new CommitRequest.ProductSampleDataBean();
-//                for (int i = 0; i <list.size() ; i++) {
-//                    commit.setSampleQuantity(Integer.parseInt(mHolder.et_number.getText().toString()));
-//                    commit.setSampleId(list.get(position).getSampleId());
-//                    text.add(commit);
-//                }
-
-
-        }
-    }
 }
