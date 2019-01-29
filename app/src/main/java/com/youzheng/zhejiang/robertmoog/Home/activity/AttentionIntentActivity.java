@@ -124,6 +124,9 @@ public class AttentionIntentActivity extends BaseActivity {
     }
 
     private void initView(final int i , List<ShopPersonalListBean> list) {
+        if (list.size()==0){
+            showToast(getString(R.string.load_list_erron));
+        }
         if (i==0) {
             layout_id = R.layout.attention_intent_layout_item;
         }else if (i==1){

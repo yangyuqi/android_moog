@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -36,6 +37,7 @@ import com.youzheng.zhejiang.robertmoog.Store.bean.NewOrderListBean;
 import com.youzheng.zhejiang.robertmoog.Store.bean.ReturnGoodsCounter;
 import com.youzheng.zhejiang.robertmoog.Store.bean.ReturnGoodsSuccess;
 import com.youzheng.zhejiang.robertmoog.Store.listener.CounterListener;
+import com.youzheng.zhejiang.robertmoog.Store.listener.GetListener;
 import com.youzheng.zhejiang.robertmoog.Store.view.RecycleViewDivider;
 import com.youzheng.zhejiang.robertmoog.Store.view.SingleOptionsPicker;
 
@@ -49,7 +51,7 @@ import okhttp3.Request;
 /**
  * 退货柜台界面ss
  */
-public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnClickListener,CounterListener {
+public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnClickListener,CounterListener, GetListener {
 
     private ImageView btnBack;
     /**  */
@@ -117,6 +119,7 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
     private String refundAmount;
     private String orderID;
     private List<ConfirmReturnRequest.ReshippedGoodsDataListBean> request=new ArrayList<>();
+    private EditText et_other_reason;
 
 
     @Override
@@ -289,6 +292,7 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
         tv_really_cut_money = (TextView) findViewById(R.id.tv_really_cut_money);
         tv_confirm_return = (TextView) findViewById(R.id.tv_confirm_return);
         tv_confirm_return.setOnClickListener(this);
+        et_other_reason=findViewById(R.id.et_other_reason);
 
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rv_list_one.setLayoutManager(manager);
@@ -311,15 +315,16 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
                 break;
             case R.id.lin_get_goods:
                 //SingleOptionsPicker.tv_choose_degree.setText("提货状态");
-                SingleOptionsPicker.openOptionsPicker(this, type, tv_get_state,getString(R.string.get_goods_state));
+                SingleOptionsPicker.openOptionsPicker(this, type, tv_get_state,getString(R.string.get_goods_state),this);
                 break;
             case R.id.lin_return_type:
                // SingleOptionsPicker.tv_choose_degree.setText("退款方式");
-                SingleOptionsPicker.openOptionsPicker(this, returns, tv_return_type,getString(R.string.return_goods_type));
+                SingleOptionsPicker.openOptionsPicker(this, returns, tv_return_type,getString(R.string.return_goods_type),this);
                 break;
             case R.id.lin_return_reason:
                 //SingleOptionsPicker.tv_choose_degree.setText("退货理由");
-                SingleOptionsPicker.openOptionsPicker(this, reason, tv_return_reason,getString(R.string.return_reason));
+                SingleOptionsPicker.openOptionsPicker(this, reason, tv_return_reason,getString(R.string.return_reason),this);
+
                 break;
             case R.id.tv_confirm_return:
                 if (tv_get_state.getText().equals(getString(R.string.please_choose))){
@@ -330,6 +335,8 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
                     showToast(getString(R.string.please_choose_return_reason));
                 }else if (TextUtils.isEmpty(tv_really_cut_money.getText().toString())){
                     showToast(getString(R.string.please_write_really_money));
+                }else if (et_other_reason.getVisibility()==View.VISIBLE&&et_other_reason.getText().toString().equals("")){
+                    showToast(getString(R.string.please_write_reason));
                 }else {
                     showStopDialog();
                 }
@@ -370,6 +377,7 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
         }else if (tv_return_reason.getText().equals(getString(R.string.other))){
             reasons="OTHER";
         }
+
         HashMap<String,Object> map=new HashMap<>();
         map.put("pickUpStatus",pick_state);
         map.put("paymentMethod",paymentMethod);
@@ -377,6 +385,9 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
         map.put("refundAmount",refundAmount);
         map.put("actualRefundAmount",tv_really_cut_money.getText().toString());
         map.put("id",orderID);
+        if (tv_return_reason.getText().equals(getString(R.string.other))){
+            map.put("otherReson",et_other_reason.getText().toString());
+        }
 
         if (list.size()!=0){
             for (ReturnGoodsCounter.ReturnOrderInfoBean.ProductListBean bean1:list){
@@ -473,6 +484,17 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
             tv_really_cut_money.setText(total+"");
 
 
+        }
+    }
+
+    @Override
+    public void getTextStr(String str,String title) {
+        if (title.equals(getString(R.string.return_reason))){
+            if (str.equals(getString(R.string.other))){
+                et_other_reason.setVisibility(View.VISIBLE);
+            }else {
+                et_other_reason.setVisibility(View.GONE);
+            }
         }
     }
 }

@@ -18,6 +18,7 @@ import com.youzheng.zhejiang.robertmoog.Store.activity.SampleOutInformationActiv
 import com.youzheng.zhejiang.robertmoog.Store.bean.CommitRequest;
 import com.youzheng.zhejiang.robertmoog.Store.bean.SampleOutList;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,6 +87,35 @@ public class SampleOutAdapter extends BaseAdapter {
             viewHolder.tv_number.setVisibility(View.GONE);
             viewHolder.et_number.setVisibility(View.VISIBLE);
             viewHolder.et_number.setText(bean.getSampleQuantity()+"");
+
+            final ViewHolder finalViewHolder1 = viewHolder;
+            viewHolder.et_number.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (TextUtils.isEmpty(s.toString())){
+                        bean.setSampleQuantity(0);
+                        // finalViewHolder.et_number.setText(bean.getSampleQuantity()+"");
+                        return;
+                    }else {
+                        long num= Long.parseLong(s.toString());
+                        if (num>999){
+                            Toast.makeText(context,"最大不超过999",Toast.LENGTH_SHORT).show();
+                            finalViewHolder1.et_number.setText("999");
+                        }
+                    }
+
+                }
+            });
         } else {
             viewHolder.tv_number.setVisibility(View.VISIBLE);
             viewHolder.et_number.setVisibility(View.GONE);
@@ -93,34 +123,6 @@ public class SampleOutAdapter extends BaseAdapter {
 
         editTextList.add(viewHolder.et_number);
 
-        final ViewHolder finalViewHolder = viewHolder;
-        viewHolder.et_number.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (TextUtils.isEmpty(s.toString())){
-                    bean.setSampleQuantity(0);
-                   // finalViewHolder.et_number.setText(bean.getSampleQuantity()+"");
-                    return;
-                }else {
-                    int num= Integer.parseInt(s.toString());
-                    if (num>999){
-                        Toast.makeText(context,"最大不超过999",Toast.LENGTH_SHORT).show();
-                        finalViewHolder.et_number.setText("999");
-                    }
-                }
-
-            }
-        });
 
         return convertView;
     }

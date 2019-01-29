@@ -76,6 +76,15 @@ public class NewOrderListBean {
             private String payAmount;
             private String createDate;
             private List<OrderItemInfosBean> orderItemInfos;
+            private String recommender;
+
+            public String getRecommender() {
+                return recommender;
+            }
+
+            public void setRecommender(String recommender) {
+                this.recommender = recommender;
+            }
 
             public String getId() {
                 return id;

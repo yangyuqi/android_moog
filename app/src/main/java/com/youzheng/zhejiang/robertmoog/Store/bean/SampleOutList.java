@@ -53,7 +53,7 @@ public class SampleOutList {
 
                 private int sampleId;
                 private String sampleName;
-                private int sampleQuantity;
+                private long sampleQuantity;
                 private String sampleType;
 
                 public int getSampleId() {
@@ -72,11 +72,11 @@ public class SampleOutList {
                     this.sampleName = sampleName;
                 }
 
-                public int getSampleQuantity() {
+                public long getSampleQuantity() {
                     return sampleQuantity;
                 }
 
-                public void setSampleQuantity(int sampleQuantity) {
+                public void setSampleQuantity(long sampleQuantity) {
                     this.sampleQuantity = sampleQuantity;
                 }
 

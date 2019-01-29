@@ -40,11 +40,13 @@ public class ShopActionActivity extends BaseActivity {
 
     CommonAdapter<GetPromoListBean> adapter ;
     private List<GetPromoListBean> data = new ArrayList<>();
+    private boolean types;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shop_action_layout);
+
         initView();
         initData();
     }
@@ -79,6 +81,7 @@ public class ShopActionActivity extends BaseActivity {
                         adapter.setData(data);
                         adapter.notifyDataSetChanged();
                     }else {
+                        showToast(getString(R.string.load_list_erron));
                         adapter.setData(new ArrayList<GetPromoListBean>());
                         adapter.notifyDataSetChanged();
                     }
@@ -89,9 +92,20 @@ public class ShopActionActivity extends BaseActivity {
 
     private void initView() {
         ls = findViewById(R.id.ls);
-        ((TextView)findViewById(R.id.textHeadTitle)).setText("门店活动");
-        ((TextView)findViewById(R.id.textHeadNext)).setText("历史信息");
-        ((TextView)findViewById(R.id.textHeadNext)).setVisibility(View.VISIBLE);
+        types=getIntent().getBooleanExtra("is_appear",false);
+        TextView  tv_title=findViewById(R.id.textHeadTitle);
+        TextView tv_next=((TextView)findViewById(R.id.textHeadNext));
+        if (types==true){
+          tv_title.setText("门店活动");
+          tv_next.setVisibility(View.VISIBLE);
+          tv_next.setText("历史信息");
+
+        }else {
+            tv_title.setText("客户活动");
+            tv_next.setVisibility(View.GONE);
+            tv_next.setText("历史信息");
+        }
+
         findViewById(R.id.btnBack).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

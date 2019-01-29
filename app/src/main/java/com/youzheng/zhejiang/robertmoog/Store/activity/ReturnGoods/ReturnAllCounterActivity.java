@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -36,6 +37,7 @@ import com.youzheng.zhejiang.robertmoog.Store.bean.ConfirmReturnRequest;
 import com.youzheng.zhejiang.robertmoog.Store.bean.ReturnGoodsCounter;
 import com.youzheng.zhejiang.robertmoog.Store.bean.ReturnGoodsSuccess;
 import com.youzheng.zhejiang.robertmoog.Store.listener.GetData;
+import com.youzheng.zhejiang.robertmoog.Store.listener.GetListener;
 import com.youzheng.zhejiang.robertmoog.Store.view.SingleOptionsPicker;
 
 import java.io.IOException;
@@ -45,7 +47,7 @@ import java.util.List;
 
 import okhttp3.Request;
 
-public class ReturnAllCounterActivity extends BaseActivity implements View.OnClickListener ,GetData {
+public class ReturnAllCounterActivity extends BaseActivity implements View.OnClickListener ,GetData, GetListener {
 
     private ImageView btnBack;
     /**  */
@@ -125,6 +127,7 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
     private int one_all;
     private int all;
     private int more_all;
+    private EditText et_other_reason;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -322,6 +325,7 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
         tv_really_cut_money = (TextView) findViewById(R.id.tv_really_cut_money);
         tv_confirm_return = (TextView) findViewById(R.id.tv_confirm_return);
         tv_confirm_return.setOnClickListener(this);
+        et_other_reason=findViewById(R.id.et_other_reason);
 
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rv_list_one.setLayoutManager(manager);
@@ -351,13 +355,13 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
                 finish();
                 break;
             case R.id.lin_get_goods:
-                SingleOptionsPicker.openOptionsPicker(this, type, tv_get_state,getString(R.string.get_goods_state));
+                SingleOptionsPicker.openOptionsPicker(this, type, tv_get_state,getString(R.string.get_goods_state),this);
                 break;
             case R.id.lin_return_type:
-                SingleOptionsPicker.openOptionsPicker(this, returns, tv_return_type,getString(R.string.return_goods_type));
+                SingleOptionsPicker.openOptionsPicker(this, returns, tv_return_type,getString(R.string.return_goods_type),this);
                 break;
             case R.id.lin_return_reason:
-                SingleOptionsPicker.openOptionsPicker(this, reason, tv_return_reason,getString(R.string.return_reason));
+                SingleOptionsPicker.openOptionsPicker(this, reason, tv_return_reason,getString(R.string.return_reason),this);
                 break;
             case R.id.tv_confirm_return:
                 if (tv_get_state.getText().equals(getString(R.string.please_choose))){
@@ -368,6 +372,8 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
                     showToast(getString(R.string.please_choose_return_reason));
                 }else if (tv_really_cut_money.getText().toString().equals("0")){
                     showToast("商品不可退");
+                } if (et_other_reason.getVisibility()==View.VISIBLE&&et_other_reason.getText().toString().equals("")){
+                showToast(getString(R.string.please_write_reason));
                 }else {
                     showStopDialog();
                 }
@@ -455,6 +461,9 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
         map.put("refundAmount",refundAmount);
         map.put("actualRefundAmount",tv_really_cut_money.getText().toString());
         map.put("id",orderID);
+        if (tv_return_reason.getText().equals(getString(R.string.other))){
+            map.put("otherReson",et_other_reason.getText().toString());
+        }
 
         if (onelist.size()!=0){
             for (ChooseReturnGoodsDetail.ReturnOrderInfoBean.ProductListBean bean1:onelist){
@@ -530,5 +539,16 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
         all=one_all+more_all;
         Log.e("233",all+"界面总和2");
         tv_really_cut_money.setText(all+"");
+    }
+
+    @Override
+    public void getTextStr(String str,String title) {
+        if (title.equals(getString(R.string.return_reason))){
+            if (str.equals(getString(R.string.other))){
+                et_other_reason.setVisibility(View.VISIBLE);
+            }else {
+                et_other_reason.setVisibility(View.GONE);
+            }
+        }
     }
 }

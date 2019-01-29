@@ -151,5 +151,7 @@
     <string name="store_return">门店退货单</string>
     <string name="customer_return">客户退货单</string>
     <string name="change_psd_success">密码修改成功</string>
+    <string name="please_write_reason">请输入退货原因</string>
+    <string name="people_manger">员工管理</string>
 
 </resources>

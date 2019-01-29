@@ -156,6 +156,7 @@ public class ProfessionalCustomerOrderListAdapter extends RecyclerView.Adapter {
         holder.mTvOrderNum.setText(beans.getOrderCode());
         holder.mTvCount.setText("共" + beans.getProductNum() + "件商品");
         holder.mTvMoney.setText(context.getString(R.string.label_money)+beans.getPayAmount());
+        holder.tv_people.setText(beans.getRecommender());
 
         holder.mRvListPic.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -163,8 +164,6 @@ public class ProfessionalCustomerOrderListAdapter extends RecyclerView.Adapter {
                 return holder.item.onTouchEvent(event);
             }
         });
-
-
     }
 
     private void setOneImageData(OneImageHolder holder,int position) {
@@ -173,6 +172,7 @@ public class ProfessionalCustomerOrderListAdapter extends RecyclerView.Adapter {
         holder.tv_order_num.setText(beans.getOrderCode());
         holder.tv_count.setText("共" + beans.getProductNum() + "件商品");
         holder.tv_money.setText(context.getString(R.string.label_money)+beans.getPayAmount());
+        holder.tv_people.setText(beans.getRecommender());
 
         if (list.size() != 0) {
             for (NewOrderListBean.OrderListBean.OrderItemInfosBean itemInfosBean : list.get(position).getOrderItemInfos()) {
@@ -200,6 +200,7 @@ public class ProfessionalCustomerOrderListAdapter extends RecyclerView.Adapter {
         TextView tv_goods_content;
         TextView tv_count;
         TextView tv_money;
+        TextView tv_people;
 
         public OneImageHolder(View itemView) {
             super(itemView);
@@ -210,6 +211,7 @@ public class ProfessionalCustomerOrderListAdapter extends RecyclerView.Adapter {
             tv_goods_content = itemView.findViewById(R.id.tv_goods_content);
             tv_count = itemView.findViewById(R.id.tv_count);
             tv_money = itemView.findViewById(R.id.tv_money);
+            tv_people= itemView.findViewById(R.id.tv_people);
         }
     }
 
@@ -220,6 +222,7 @@ public class ProfessionalCustomerOrderListAdapter extends RecyclerView.Adapter {
         TextView mTvCount;
         TextView mTvMoney;
         LinearLayout item;
+        TextView tv_people;
         public MoreImageHolder(View itemView) {
             super(itemView);
             mTvDate = itemView.findViewById(R.id.tv_date);
@@ -228,6 +231,7 @@ public class ProfessionalCustomerOrderListAdapter extends RecyclerView.Adapter {
             mTvCount = itemView.findViewById(R.id.tv_count);
             mTvMoney = itemView.findViewById(R.id.tv_money);
             item= itemView.findViewById(R.id.item);
+            tv_people=itemView.findViewById(R.id.tv_people);
         }
     }
 

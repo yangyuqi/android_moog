@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -105,6 +106,11 @@ public class SalesActivity extends BaseActivity {
                 }
                 if (paymentMethod == null) {
                     showToast("选择收款方式");
+                    return;
+                }
+
+                if (TextUtils.isEmpty(addressId)){
+                    showToast("请选择卖货地址");
                     return;
                 }
 
@@ -314,10 +320,10 @@ public class SalesActivity extends BaseActivity {
         map.put("paymentMethod", paymentMethod);
         map.put("shopDerate",edt_door_ticket.getText().toString());
         map.put("shoppingMethod", ShoppingMethod);
-        if (addressId!=null){
+        if (TextUtils.isEmpty(addressId)){
             map.put("addressId",addressId);
         }
-        if (assetId!=null){
+        if (TextUtils.isEmpty(assetId)){
             map.put("assetId",assetId);
         }
         if (data.size() > 0) {

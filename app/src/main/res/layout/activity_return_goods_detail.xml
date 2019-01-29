@@ -311,7 +311,7 @@
                 android:id="@+id/tv_reason_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="吾问无为谓吾问无为谓"
+                android:text=""
                 android:textSize="13sp"
                 android:visibility="gone"
                 android:textColor="@color/text_main"
@@ -320,7 +320,7 @@
                 android:layout_marginTop="1dp"
                 android:background="@color/bg_background_white"
                 android:paddingTop="10dp"
-                android:paddingBottom="10dp"
+                android:paddingBottom="30dp"
                 />
 
 

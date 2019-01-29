@@ -10,6 +10,7 @@ import com.bigkoo.pickerview.listener.CustomListener;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.youzheng.zhejiang.robertmoog.R;
+import com.youzheng.zhejiang.robertmoog.Store.listener.GetListener;
 
 import java.util.List;
 
@@ -108,7 +109,7 @@ public class SingleOptionsPicker<T> {
         return pvOptions;
     }
 
-    public static void openOptionsPicker(Activity activity, final List<String> list, final TextView textView, final String title) {
+    public static void openOptionsPicker(Activity activity, final List<String> list, final TextView textView, final String title, final GetListener getListener) {
          String select = textView.getText().toString();
         new SingleOptionsPicker(activity, select, list,
                 new OnPickerOptionsClickListener() {
@@ -123,6 +124,7 @@ public class SingleOptionsPicker<T> {
 //                            textView.setText(options1 + 30 + "KG");
 //                        }
                         textView.setText(list.get(options1));
+                        getListener.getTextStr(list.get(options1),title);
 
 
                     }

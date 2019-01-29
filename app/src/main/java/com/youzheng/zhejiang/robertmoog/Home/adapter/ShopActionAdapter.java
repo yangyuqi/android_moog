@@ -23,8 +23,9 @@ import java.util.List;
 
 public class ShopActionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    List<ComboPromoBean> comboPromo = new ArrayList<>();
+    List<ComboPromoBean> comboPromo;
     Context context ;
+    List<ProductsBean> listBeanList ;
 
     public ShopActionAdapter(List<ComboPromoBean> comboPromo, Context mContext) {
         this.comboPromo = comboPromo ;
@@ -38,7 +39,7 @@ public class ShopActionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         View view = LayoutInflater.from(context).inflate(R.layout.shop_action_details_rv_item,null);
         return new ShoptViewHolder(view);
     }
-    List<ProductsBean> listBeanList ;
+
     @Override
     public void onBindViewHolder(final @NonNull RecyclerView.ViewHolder viewHolder, final int i) {
         Glide.with(context).load(comboPromo.get(i).getComboImageUrl()).error(R.mipmap.type_icon).into(((ShoptViewHolder) viewHolder).iv_icon);
@@ -56,7 +57,8 @@ public class ShopActionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                         ((ShoptViewHolder) viewHolder).iv_show_more.setImageResource(R.mipmap.group_14_1);
                         comboPromo.get(i).setExpress(false);
                     } else {
-                        listBeanList = comboPromo.get(i).getProducts().subList(1, comboPromo.get(i).getProducts().size());
+                       // listBeanList = comboPromo.get(i).getProducts().subList(1, comboPromo.get(i).getProducts().size());
+                        listBeanList=comboPromo.get(i).getProducts();
                         ((ShoptViewHolder) viewHolder).iv_show_more.setImageResource(R.mipmap.group_12_3);
                         comboPromo.get(i).setExpress(true);
                     }

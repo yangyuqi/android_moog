@@ -50,6 +50,15 @@ public class ReturnGoodsDetail {
             private String refundAmount;
             private String actualRefundAmount;
             private List<ProductListBean> productList;
+            private String otherReson;
+
+            public String getOtherReson() {
+                return otherReson;
+            }
+
+            public void setOtherReson(String otherReson) {
+                this.otherReson = otherReson;
+            }
 
             public String getId() {
                 return id;

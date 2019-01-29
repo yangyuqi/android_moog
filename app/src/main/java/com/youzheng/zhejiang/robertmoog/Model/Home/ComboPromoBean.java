@@ -10,7 +10,7 @@ public class ComboPromoBean {
     private String comboCode ;
     private String comboName ;
     private String comboImageUrl ;
-    private double comboPrice ;
+    private int comboPrice ;
     private String comboDes ;
     private List<ProductsBean> products = new ArrayList<>();
     private String orderPromo ;
@@ -57,11 +57,11 @@ public class ComboPromoBean {
         this.comboImageUrl = comboImageUrl;
     }
 
-    public double getComboPrice() {
+    public int getComboPrice() {
         return comboPrice;
     }
 
-    public void setComboPrice(double comboPrice) {
+    public void setComboPrice(int comboPrice) {
         this.comboPrice = comboPrice;
     }
 

@@ -151,7 +151,7 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
 
         if (goodsType.getListData() == null) return;
         List<GoodsType.ListDataBean> listDataBeans = goodsType.getListData();
-        stringList = goodsType.getListData();
+        //stringList = goodsType.getListData();
         if (listDataBeans.size() != 0) {
             stringList.addAll(listDataBeans);
             adapter.setUI(listDataBeans);

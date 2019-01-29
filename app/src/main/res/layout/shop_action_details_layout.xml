@@ -136,7 +136,7 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="@dimen/space_7"
+            android:layout_height="@dimen/space_5"
             android:background="@color/bg_all"/>
 
         <ScrollView
@@ -174,7 +174,7 @@
 
            <View
                android:layout_width="match_parent"
-               android:layout_height="@dimen/space_7"
+               android:layout_height="@dimen/space_5"
                android:background="@color/bg_all"/>
 
                 <TextView

@@ -21,6 +21,7 @@ import com.youzheng.zhejiang.robertmoog.Model.Home.EnumsDatasBean;
 import com.youzheng.zhejiang.robertmoog.Model.Home.EnumsDatasBeanDatas;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.bean.AddProfessionalCustomerRequest;
+import com.youzheng.zhejiang.robertmoog.Store.listener.GetListener;
 import com.youzheng.zhejiang.robertmoog.Store.utils.ButtonUtils;
 import com.youzheng.zhejiang.robertmoog.Store.utils.SoftInputUtils;
 import com.youzheng.zhejiang.robertmoog.Store.view.SingleOptionsPicker;
@@ -35,7 +36,7 @@ import okhttp3.Request;
 /**
  * 添加专业客户界面
  */
-public class AddCustomerActivity extends BaseActivity implements View.OnClickListener, TextWatcher {
+public class AddCustomerActivity extends BaseActivity implements View.OnClickListener, TextWatcher, GetListener {
 
     private ImageView btnBack;
     /**  */
@@ -140,7 +141,7 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
 //                list.add(getString(R.string.gong_zhang));
 //                list.add(getString(R.string.desinger));
                 //SingleOptionsPicker.tv_choose_degree.setText("选择身份");
-                SingleOptionsPicker.openOptionsPicker(this, list, tv_degree,getString(R.string.choose_rule));
+                SingleOptionsPicker.openOptionsPicker(this, list, tv_degree,getString(R.string.choose_rule),this);
                 SoftInputUtils.hideSoftInput(this);
                 break;
             case R.id.tv_add:
@@ -227,6 +228,11 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
 
 
         }
+
+    }
+
+    @Override
+    public void getTextStr(String str,String title) {
 
     }
 }

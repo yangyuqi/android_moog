@@ -44,7 +44,7 @@ public class GoodsTypeRankingAdapter extends RecyclerView.Adapter<GoodsTypeRanki
     @NonNull
     @Override
     public SaleHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int position) {
-        View view=layoutInflater.inflate(R.layout.item_goods_type_ranking,viewGroup,false);
+        View view=layoutInflater.inflate(R.layout.item_goods_type_ranking2,viewGroup,false);
         final SaleHolder saleHolder=new SaleHolder(view);
 
         saleHolder.tv_name.setOnClickListener(new View.OnClickListener() {

@@ -6,6 +6,15 @@ public class UserConfigData {
     private String dealerName ;
     private String shopId ;
     private String shopName ;
+    private String employeeId;
+
+    public String getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(String employeeId) {
+        this.employeeId = employeeId;
+    }
 
     public String getUserRole() {
         return userRole;

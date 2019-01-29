@@ -86,6 +86,7 @@ public class RegisterSuccessActivity extends BaseActivity {
 
                     case 1:
                         Intent intent = new Intent(mContext,ShopActionActivity.class);
+                        intent.putExtra("is_appear",false);
                         if (customer!=null){
                             intent.putExtra("customerId",Integer.parseInt(customer.getCustomerId()));
                         }else {
@@ -174,7 +175,7 @@ public class RegisterSuccessActivity extends BaseActivity {
         registerBean = (RegisterBean) getIntent().getSerializableExtra("register");
         if (registerBean!=null){
             String phone = registerBean.getPhone().substring(0,3)+" "+registerBean.getPhone().substring(3,7)+" "+registerBean.getPhone().substring(7,11);
-            tv_phone.setText(phone);
+            tv_phone.setText("手机号码 : "+phone);
         }
         if (registerBean!=null) {
             data.add(new HomeBean("卖货", R.mipmap.group_34_2));

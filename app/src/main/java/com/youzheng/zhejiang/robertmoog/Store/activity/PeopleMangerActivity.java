@@ -92,7 +92,7 @@ public class PeopleMangerActivity extends BaseActivity implements View.OnClickLi
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
-        textHeadTitle.setText(getString(R.string.store_manger));
+        textHeadTitle.setText(getString(R.string.people_manger));
         textHeadNext = (TextView) findViewById(R.id.textHeadNext);
         iv_next = (ImageView) findViewById(R.id.iv_next);
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);

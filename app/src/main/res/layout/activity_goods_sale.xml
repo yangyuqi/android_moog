@@ -103,7 +103,7 @@
             android:text="销售数量"
             android:layout_weight="1"
             android:textSize="13sp"
-            android:paddingRight="30dp"
+            android:paddingRight="15dp"
             android:gravity="right|center_vertical"
             android:textColor="@color/text_main"/>
     </LinearLayout>

@@ -17,6 +17,7 @@ import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.Model.Home.CustomerBean;
 import com.youzheng.zhejiang.robertmoog.R;
+import com.youzheng.zhejiang.robertmoog.utils.PhoneUtil;
 import com.youzheng.zhejiang.robertmoog.utils.QRcode.android.CaptureActivity;
 import com.youzheng.zhejiang.robertmoog.utils.View.RemindDialog;
 
@@ -63,47 +64,53 @@ public class ClientViewActivity extends BaseActivity {
                 if (tv_search.getText().toString().equals("")){
                     showToast(getString(R.string.phone_not_null));
                     return;
-                }
-                Map<String,Object> map = new HashMap<>();
-                map.put("phone",tv_search.getText().toString());
-                OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.GET_CUSTOMER + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
-                    @Override
-                    public void onFailure(Request request, IOException e) {
+                }else if (tv_search.getText().toString().length()<11){
+                    showToast("手机号有误,请重新输入");
+                }else if (PhoneUtil.isCellphone(tv_search.getText().toString())==false){
+                    showToast("手机号格式错误,请重新输入");
+                }else {
+                    Map<String,Object> map = new HashMap<>();
+                    map.put("phone",tv_search.getText().toString());
+                    OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.GET_CUSTOMER + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
+                        @Override
+                        public void onFailure(Request request, IOException e) {
 
-                    }
+                        }
 
-                    @Override
-                    public void onResponse(String response) {
-                       final BaseModel baseModel = gson.fromJson(response,BaseModel.class);
-                        if (baseModel.getCode()== PublicUtils.code){
+                        @Override
+                        public void onResponse(String response) {
+                            final BaseModel baseModel = gson.fromJson(response,BaseModel.class);
+                            if (baseModel.getCode()== PublicUtils.code){
 
-                            RxPermissions permissions = new RxPermissions(ClientViewActivity.this);
-                            permissions.request(Manifest.permission.CAMERA,Manifest.permission.VIBRATE ,Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe(new Action1<Boolean>() {
-                                @Override
-                                public void call(Boolean aBoolean) {
-                                    if (aBoolean){
-                                        Intent intent = new Intent(mContext, CaptureActivity.class);
-                                        CustomerBean customerBean = gson.fromJson(gson.toJson(baseModel.getDatas()),CustomerBean.class);
-                                        intent.putExtra("customerId",customerBean.getCustomer().getCustomerId());
-                                        startActivity(intent);
-                                    }
-                                }
-                            });
-
-                        }else {
-                            showToast(baseModel.getMsg());
-                            if (baseModel.getCode()==PublicUtils.no_exist){
-                                final RemindDialog dialog = new RemindDialog(mContext, new RemindDialog.onSuccessClick() {
+                                RxPermissions permissions = new RxPermissions(ClientViewActivity.this);
+                                permissions.request(Manifest.permission.CAMERA,Manifest.permission.VIBRATE ,Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe(new Action1<Boolean>() {
                                     @Override
-                                    public void onSuccess() {
-                                        startActivity(new Intent(mContext,RegisterActivity.class));
+                                    public void call(Boolean aBoolean) {
+                                        if (aBoolean){
+                                            Intent intent = new Intent(mContext, CaptureActivity.class);
+                                            CustomerBean customerBean = gson.fromJson(gson.toJson(baseModel.getDatas()),CustomerBean.class);
+                                            intent.putExtra("customerId",customerBean.getCustomer().getCustomerId());
+                                            startActivity(intent);
+                                        }
                                     }
-                                },"2");
-                                dialog.show();
+                                });
+
+                            }else {
+                                showToast(baseModel.getMsg());
+                                if (baseModel.getCode()==PublicUtils.no_exist){
+                                    final RemindDialog dialog = new RemindDialog(mContext, new RemindDialog.onSuccessClick() {
+                                        @Override
+                                        public void onSuccess() {
+                                            startActivity(new Intent(mContext,RegisterActivity.class));
+                                        }
+                                    },"2");
+                                    dialog.show();
+                                }
                             }
                         }
-                    }
-                });
+                    });
+                }
+
             }
         });
     }

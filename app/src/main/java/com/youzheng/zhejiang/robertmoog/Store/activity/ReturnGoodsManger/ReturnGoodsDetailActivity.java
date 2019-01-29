@@ -209,6 +209,14 @@ public class ReturnGoodsDetailActivity extends BaseActivity implements View.OnCl
             tv_cut_reason.setText(returnGoodsDetail.getReturnItem().getReason());
         }
 
+        if (!TextUtils.isEmpty(returnGoodsDetail.getReturnItem().getOtherReson())){
+            tv_reason_content.setVisibility(View.VISIBLE);
+            tv_reason_content.setText(returnGoodsDetail.getReturnItem().getOtherReson());
+        }else {
+            tv_reason_content.setVisibility(View.GONE);
+        }
+
+
         List<ReturnGoodsDetail.ReturnItemBean.ProductListBean> beanList=returnGoodsDetail.getReturnItem().getProductList();
 
         if (beanList.size()!=0){

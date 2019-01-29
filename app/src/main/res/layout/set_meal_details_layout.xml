@@ -57,11 +57,11 @@
             android:paddingLeft="@dimen/space_5"
             android:paddingRight="@dimen/space_5"
             android:background="@color/bg_background_white"
-            android:layout_marginTop="@dimen/space_10"
+            android:layout_marginTop="@dimen/space_5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:divider="@color/bg_all"
-            android:dividerHeight="@dimen/space_10"
+            android:divider="@color/bg_background_white"
+            android:dividerHeight="@dimen/space_5"
             android:id="@+id/ls"
             ></com.youzheng.zhejiang.robertmoog.utils.View.NoScrollListView>
 
@@ -69,11 +69,11 @@
             android:paddingRight="@dimen/space_5"
             android:paddingLeft="@dimen/space_5"
             android:background="@color/bg_background_white"
-            android:layout_marginTop="@dimen/space_10"
+            android:layout_marginTop="@dimen/space_5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:divider="@color/bg_all"
-            android:dividerHeight="@dimen/space_10"
+            android:dividerHeight="@dimen/space_5"
             android:id="@+id/ls_two"
             ></com.youzheng.zhejiang.robertmoog.utils.View.NoScrollListView>
 

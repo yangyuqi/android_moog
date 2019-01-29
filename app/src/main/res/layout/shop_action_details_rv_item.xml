@@ -118,15 +118,15 @@
 
                 <ImageView
 
-                    android:paddingLeft="@dimen/space_30"
-                    android:paddingRight="@dimen/space_20"
+                    android:padding="@dimen/space_8"
+                    android:layout_marginRight="15dp"
                     android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
                     android:id="@+id/iv_show_more"
                     android:layout_marginLeft="@dimen/space_5"
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:src="@mipmap/group_14_1"
                     />
 

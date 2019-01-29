@@ -17,6 +17,7 @@ import com.youzheng.zhejiang.robertmoog.Home.activity.RegisterSuccessActivity;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.Model.Home.CustomerBean;
 import com.youzheng.zhejiang.robertmoog.R;
+import com.youzheng.zhejiang.robertmoog.utils.PhoneUtil;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -70,7 +71,10 @@ public class ReturnRecognitionActivity extends BaseActivity implements View.OnCl
             case R.id.iv_search:
                 if (tv_search.getText().toString().equals("")){
                     showToast(getString(R.string.phone_not_null));
-
+                }else if (tv_search.getText().toString().length()<11){
+                    showToast("手机号有误,请重新输入");
+                }else if (PhoneUtil.isCellphone(tv_search.getText().toString())==false){
+                    showToast("手机号格式错误,请重新输入");
                 }else {
                     Recognition();
                 }

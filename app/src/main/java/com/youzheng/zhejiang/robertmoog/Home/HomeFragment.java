@@ -30,6 +30,7 @@ import com.youzheng.zhejiang.robertmoog.Model.Home.CustomerBean;
 import com.youzheng.zhejiang.robertmoog.Model.Home.HomePageBean;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.utils.CommonAdapter;
+import com.youzheng.zhejiang.robertmoog.utils.PhoneUtil;
 import com.youzheng.zhejiang.robertmoog.utils.SharedPreferencesUtils;
 import com.youzheng.zhejiang.robertmoog.utils.View.RemindDialog;
 import com.youzheng.zhejiang.robertmoog.utils.ViewHolder;
@@ -112,39 +113,42 @@ public class HomeFragment extends BaseFragment implements BaseFragment.ReloadInt
                 if (tv_search.getText().toString().equals("")) {
                     showToast(getString(R.string.phone_not_null));
                     return;
-                }
-                Map<String, Object> map = new HashMap<>();
-                map.put("phone", tv_search.getText().toString());
-                OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.GET_CUSTOMER + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
-                    @Override
-                    public void onFailure(Request request, IOException e) {
+                }else if (tv_search.getText().toString().length()<11){
+                    showToast("手机号有误,请重新输入");
+                }else if (PhoneUtil.isCellphone(tv_search.getText().toString())==false){
+                    showToast("手机号格式错误,请重新输入");
+                }else {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("phone", tv_search.getText().toString());
+                    OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.GET_CUSTOMER + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
+                        @Override
+                        public void onFailure(Request request, IOException e) {
 
-                    }
+                        }
 
-                    @Override
-                    public void onResponse(String response) {
-                        BaseModel baseModel = gson.fromJson(response, BaseModel.class);
-                        if (baseModel.getCode() == PublicUtils.code) {
-                            CustomerBean customerBean = gson.fromJson(gson.toJson(baseModel.getDatas()), CustomerBean.class);
-                            Intent intent = new Intent(mContext, RegisterSuccessActivity.class);
-                            intent.putExtra("customer", customerBean.getCustomer());
-                            startActivity(intent);
-                        } else {
-                            showToast(baseModel.getMsg());
-                            if (baseModel.getCode() == PublicUtils.no_exist) {
-                                final RemindDialog dialog = new RemindDialog(mContext, new RemindDialog.onSuccessClick() {
-                                    @Override
-                                    public void onSuccess() {
-                                        startActivity(new Intent(mContext, RegisterActivity.class));
-                                    }
-                                }, "2");
-                                dialog.show();
+                        @Override
+                        public void onResponse(String response) {
+                            BaseModel baseModel = gson.fromJson(response, BaseModel.class);
+                            if (baseModel.getCode() == PublicUtils.code) {
+                                CustomerBean customerBean = gson.fromJson(gson.toJson(baseModel.getDatas()), CustomerBean.class);
+                                Intent intent = new Intent(mContext, RegisterSuccessActivity.class);
+                                intent.putExtra("customer", customerBean.getCustomer());
+                                startActivity(intent);
+                            } else {
+                                showToast(baseModel.getMsg());
+                                if (baseModel.getCode() == PublicUtils.no_exist) {
+                                    final RemindDialog dialog = new RemindDialog(mContext, new RemindDialog.onSuccessClick() {
+                                        @Override
+                                        public void onSuccess() {
+                                            startActivity(new Intent(mContext, RegisterActivity.class));
+                                        }
+                                    }, "2");
+                                    dialog.show();
+                                }
                             }
                         }
-                    }
-                });
-
-//                startActivity(new Intent(mContext, SearchGoodsActivity.class));
+                    });
+                }
             }
         });
         textHeadTitle = (TextView) mView.findViewById(R.id.textHeadTitle);
@@ -204,7 +208,9 @@ public class HomeFragment extends BaseFragment implements BaseFragment.ReloadInt
 
                     case 2:
 //                        startActivity(new Intent(mContext,LoginActivity.class));
-                        startActivity(new Intent(mContext, ShopActionActivity.class));
+                        Intent intent=new Intent(mContext, ShopActionActivity.class);
+                        intent.putExtra("is_appear",true);
+                        startActivity(intent);
                         break;
 
                     case 3:
