@@ -62,6 +62,7 @@ public class ChooseOrderListActivity extends BaseActivity implements View.OnClic
         customerId=getIntent().getStringExtra("customerId");
         initView();
         setListener();
+        initData(page,pageSize,orderCode,timeQuantum,isCustomer);
     }
     private void setListener() {
         pr_list.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
@@ -85,7 +86,7 @@ public class ChooseOrderListActivity extends BaseActivity implements View.OnClic
     @Override
     protected void onResume() {
         super.onResume();
-        initData(page,pageSize,orderCode,timeQuantum,isCustomer);
+
     }
 
     private void initView() {

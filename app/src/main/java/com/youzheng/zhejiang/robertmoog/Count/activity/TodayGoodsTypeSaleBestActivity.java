@@ -62,6 +62,7 @@ public class TodayGoodsTypeSaleBestActivity extends BaseActivity implements View
         setContentView(R.layout.activity_today_goods_type_sale_best);
         initView();
         setListener();
+        initData(page,pageSize,isDay,startstr,endstr,rulestr);
     }
 
     private void setListener() {
@@ -109,7 +110,7 @@ public class TodayGoodsTypeSaleBestActivity extends BaseActivity implements View
     @Override
     protected void onResume() {
         super.onResume();
-        initData(page,pageSize,isDay,startstr,endstr,rulestr);
+
     }
 
     private void initData(int page, int pageSize, boolean isDay, String startDate, String endDate, String rule) {

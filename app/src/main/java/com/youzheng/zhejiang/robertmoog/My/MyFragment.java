@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +43,7 @@ public class MyFragment extends BaseFragment implements BaseFragment.ReloadInter
 
     /**  */
     private TextView textHeadTitle;
+    private String url;
 
     @Nullable
     @Override
@@ -74,6 +76,7 @@ public class MyFragment extends BaseFragment implements BaseFragment.ReloadInter
                 if (baseModel.getCode()==PublicUtils.code){
                     ShopQRCodeBean qrCodeBean = gson.fromJson(gson.toJson(baseModel.getDatas()),ShopQRCodeBean.class);
                     if (qrCodeBean.getShopQRCode()!=null){
+                        url=qrCodeBean.getShopQRCode();
                         Glide.with(mContext).load(qrCodeBean.getShopQRCode()).error(R.mipmap.type_icon).into(iv_user_icon);
                     }
                 }
@@ -105,7 +108,10 @@ public class MyFragment extends BaseFragment implements BaseFragment.ReloadInter
         iv_user_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+              if (!TextUtils.isEmpty(url)){
+                  NoteInfoDialog infoDialog = new NoteInfoDialog(mContext,url);
+                  infoDialog.show();
+              }
             }
         });
 

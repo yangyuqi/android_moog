@@ -67,6 +67,7 @@ public class TodayGoodsTypeSalesBestDetailActivity extends BaseActivity implemen
         }
         initView();
         setListener();
+        initData(page,pageSize,isDay,startstr,endstr,categoryId,type);
     }
 
     private void setListener() {
@@ -120,7 +121,7 @@ public class TodayGoodsTypeSalesBestDetailActivity extends BaseActivity implemen
     @Override
     protected void onResume() {
         super.onResume();
-        initData(page,pageSize,isDay,startstr,endstr,categoryId,type);
+
     }
 
     private void initData(int page, int pageSize, boolean isDay, String startDate, String endDate, int categoryId,String type) {

@@ -21,6 +21,11 @@ public abstract class CommonAdapter<T> extends BaseAdapter {
         this.mItemLayoutId = itemLayoutId;
     }
 
+    public void clear(){
+        mDatas.clear();
+        notifyDataSetChanged();
+    }
+
     public void setData(List<T> data) {
         this.mDatas = data;
     }

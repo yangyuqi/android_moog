@@ -51,6 +51,7 @@ public class CouponDetailActivity extends BaseActivity implements View.OnClickLi
         setContentView(R.layout.activity_coupon_detail);
         date=getIntent().getStringExtra("couponDate");
         initView();
+        initData(date);
     }
 
     private void initView() {
@@ -79,7 +80,7 @@ public class CouponDetailActivity extends BaseActivity implements View.OnClickLi
     @Override
     protected void onResume() {
         super.onResume();
-        initData(date);
+
     }
 
     private void initData(String date) {

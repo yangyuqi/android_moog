@@ -442,7 +442,7 @@ public class ProfessionalOrderDetailActivity extends BaseActivity implements Vie
             businessRole=orderlistDetail.getOrderItemData().getBusinessRole();
             if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getCreateUser())){
                 createUser=orderlistDetail.getOrderItemData().getCreateUser();
-                tv_maker.setText(createUser+"("+businessRole+")");
+                tv_maker.setText(createUser);
             }
         }
 

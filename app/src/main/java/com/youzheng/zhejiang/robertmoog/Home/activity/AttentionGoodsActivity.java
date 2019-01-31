@@ -4,7 +4,9 @@ import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -53,6 +55,7 @@ public class AttentionGoodsActivity extends BaseActivity {
     CommonAdapter<IntentProductList> adapter ;
     TextView tv_attention ,tv_update_intent;
     int widWidth ;
+    private LinearLayout lin_over;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +71,7 @@ public class AttentionGoodsActivity extends BaseActivity {
 
         EventBus.getDefault().register(this);
         initClick();
+
     }
 
     @Override
@@ -86,6 +90,7 @@ public class AttentionGoodsActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        adapter.clear();
         initData();
     }
 
@@ -134,16 +139,31 @@ public class AttentionGoodsActivity extends BaseActivity {
                 BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                 if (baseModel.getCode()== PublicUtils.code){
                     final CustomerData intentDataBean = gson.fromJson(gson.toJson(baseModel.getDatas()),CustomerData.class);
-                    if (intentDataBean.getCustomerIntentData().getRemark()!=null){
+                    if (!TextUtils.isEmpty(intentDataBean.getCustomerIntentData().getRemark())){
+                        //tv_update_intent.setVisibility(View.VISIBLE);
                         tv_attention.setText(intentDataBean.getCustomerIntentData().getRemark());
+                    }else {
+                        //tv_update_intent.setVisibility(View.GONE);
                     }
+
+
                     if (intentDataBean.getCustomerIntentData().isIntent()) {
-                        if (intentDataBean.getCustomerIntentData().getIntentProductList().size() > 0) {
+                        if (intentDataBean.getCustomerIntentData().getIntentProductList().size()!=0) {
+                            Log.e("112312",intentDataBean.getCustomerIntentData().getIntentProductList().size()+"");
                             adapter.setData(intentDataBean.getCustomerIntentData().getIntentProductList());
                             adapter.notifyDataSetChanged();
+                            lin_over.setVisibility(View.VISIBLE);
                         }else {
                             adapter.setData(new ArrayList<IntentProductList>());
                             adapter.notifyDataSetChanged();
+                            showToast(getString(R.string.load_list_erron));
+                        }
+                    }else {
+                        if (intentDataBean.getCustomerIntentData().getIntentProductList().size()!=0) {
+                            lin_over.setVisibility(View.VISIBLE);
+                        }else {
+                            lin_over.setVisibility(View.GONE);
+                            showToast(getString(R.string.load_list_erron));
                         }
                     }
                     tv_update_intent.setOnClickListener(new View.OnClickListener() {
@@ -174,6 +194,7 @@ public class AttentionGoodsActivity extends BaseActivity {
         ls = (ListView) findViewById(R.id.ls);
         tv_attention = findViewById(R.id.tv_attention);
         tv_update_intent = findViewById(R.id.tv_update_intent);
+        lin_over=findViewById(R.id.lin_over);
         adapter = new CommonAdapter<IntentProductList>(mContext,new ArrayList<IntentProductList>(),R.layout.common_goods_vh_item) {
             @Override
             public void convert(ViewHolder helper, final IntentProductList item) {

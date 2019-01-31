@@ -56,6 +56,7 @@ public class UnqualifiedActivity extends BaseActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_unqualified);
         initView();
+        initData();
     }
 
     private void initView() {
@@ -81,7 +82,7 @@ public class UnqualifiedActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void onResume() {
         super.onResume();
-        initData();
+
     }
 
     private void initData() {

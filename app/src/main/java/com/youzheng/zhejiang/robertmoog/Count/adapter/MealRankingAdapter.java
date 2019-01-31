@@ -36,7 +36,7 @@ public class MealRankingAdapter extends RecyclerView.Adapter<MealRankingAdapter.
     @NonNull
     @Override
     public SaleHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int position) {
-        View view=layoutInflater.inflate(R.layout.item_goods_sale,viewGroup,false);
+        View view=layoutInflater.inflate(R.layout.item_goods_sale2,viewGroup,false);
         SaleHolder saleHolder=new SaleHolder(view);
         return saleHolder;
     }

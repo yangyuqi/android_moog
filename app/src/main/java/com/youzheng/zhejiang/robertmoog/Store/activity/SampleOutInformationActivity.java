@@ -54,6 +54,7 @@ public class SampleOutInformationActivity extends BaseActivity implements View.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sample_out_information);
         initView();
+        initData();
     }
 
     private void initView() {
@@ -79,7 +80,7 @@ public class SampleOutInformationActivity extends BaseActivity implements View.O
     @Override
     protected void onResume() {
         super.onResume();
-        initData();
+
     }
 
     private void initData() {

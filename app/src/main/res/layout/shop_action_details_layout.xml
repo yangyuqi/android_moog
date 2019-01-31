@@ -134,10 +134,10 @@
             android:background="@color/bg_all"/>
 
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/space_5"
-            android:background="@color/bg_all"/>
+        <!--<View-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="@dimen/space_5"-->
+            <!--android:background="@color/bg_all"/>-->
 
         <ScrollView
 
@@ -151,12 +151,14 @@
                 >
 
         <TextView
+            android:id="@+id/tv_goods"
             android:layout_marginBottom="@dimen/space_7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/space_7"
             android:layout_marginLeft="@dimen/space_15"
             android:text="订单促销"
+            android:visibility="gone"
             android:textColor="@color/text_main"
             android:textSize="@dimen/text_size_17"
             />
@@ -178,6 +180,7 @@
                android:background="@color/bg_all"/>
 
                 <TextView
+                    android:id="@+id/tv_meal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/space_7"
@@ -188,7 +191,10 @@
                     android:layout_marginBottom="@dimen/space_7"
 
                     />
-
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/space_1"
+                    android:background="@color/bg_all"/>
 
                 <android.support.v7.widget.RecyclerView
                     android:paddingLeft="@dimen/space_15"

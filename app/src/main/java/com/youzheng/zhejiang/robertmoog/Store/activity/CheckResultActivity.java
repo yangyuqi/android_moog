@@ -62,6 +62,8 @@ public class CheckResultActivity extends BaseActivity implements View.OnClickLis
         //年
          year = selectedDate.get(Calendar.YEAR);
         setListener();
+        initData(year);
+        tv_title.setText(year+"年");
     }
 
     private void setListener() {
@@ -94,8 +96,7 @@ public class CheckResultActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void onResume() {
         super.onResume();
-        initData(year);
-        tv_title.setText(year+"年");
+
     }
 
     private void initView() {

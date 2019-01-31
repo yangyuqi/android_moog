@@ -154,4 +154,8 @@
     <string name="please_write_reason">请输入退货原因</string>
     <string name="people_manger">员工管理</string>
 
+    <string name="get_type">提货方式</string>
+    <string name="send_type">配送方式</string>
+    <string name="get_money_type">收款方式</string>
+
 </resources>

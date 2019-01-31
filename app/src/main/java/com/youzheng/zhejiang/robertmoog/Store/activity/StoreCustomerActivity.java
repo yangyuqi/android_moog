@@ -66,6 +66,7 @@ public class StoreCustomerActivity extends BaseActivity implements View.OnClickL
         //年
         year = calendar.get(Calendar.YEAR);
         setListener();
+        initData(year);
     }
 
     private void setListener() {
@@ -117,7 +118,7 @@ public class StoreCustomerActivity extends BaseActivity implements View.OnClickL
     @Override
     protected void onResume() {
         super.onResume();
-        initData(year);
+
     }
 
     /**

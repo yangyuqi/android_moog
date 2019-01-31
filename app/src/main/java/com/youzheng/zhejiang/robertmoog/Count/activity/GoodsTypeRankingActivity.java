@@ -102,12 +102,16 @@ public class GoodsTypeRankingActivity extends BaseActivity implements View.OnCli
         initView();
         setListener();
         initTimer();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");// HH:mm:ss
-        Date date = new Date(System.currentTimeMillis());
-        tv_startDate.setText(simpleDateFormat.format(date));
-        tv_endDate.setText(simpleDateFormat.format(date));
-        startstr=simpleDateFormat.format(date);
-        endstr=simpleDateFormat.format(date);
+        SimpleDateFormat dateFormater = new SimpleDateFormat("yyyy/MM/dd");
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        cal.getTime();
+        tv_startDate.setText(dateFormater.format(cal.getTime()) + "");
+        startstr=dateFormater.format(cal.getTime()) + "";
+        cal.set(Calendar.DAY_OF_MONTH,
+                cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+        tv_endDate.setText(dateFormater.format(cal.getTime()));
+        endstr=dateFormater.format(cal.getTime());
         initData(page,pageSize,isDay,startstr,endstr,rulestr);
     }
 

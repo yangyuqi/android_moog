@@ -185,6 +185,7 @@ public class StoreOrderlistDetailActivity extends BaseActivity implements View.O
 
     private String comment;
     private String returnOrderStatus;
+    private LinearLayout lin_send;
 
 
     @Override
@@ -235,6 +236,7 @@ public class StoreOrderlistDetailActivity extends BaseActivity implements View.O
         tv_content = (TextView) findViewById(R.id.tv_content);
         lin_is_cut=findViewById(R.id.lin_is_cut);
         tv_goods_num=findViewById(R.id.tv_goods_num);
+        lin_send=findViewById(R.id.lin_send);
 
 
 
@@ -322,7 +324,7 @@ public class StoreOrderlistDetailActivity extends BaseActivity implements View.O
             businessRole=orderlistDetail.getOrderItemData().getBusinessRole();
             if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getCreateUser())){
                 createUser=orderlistDetail.getOrderItemData().getCreateUser();
-                tv_maker.setText(createUser+"("+businessRole+")");
+                tv_maker.setText(createUser);
             }
         }
 
@@ -379,6 +381,8 @@ public class StoreOrderlistDetailActivity extends BaseActivity implements View.O
         if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getShoppingMethod())){
             shoppingMethod=orderlistDetail.getOrderItemData().getShoppingMethod();
             tv_dispatching_type.setText(shoppingMethod);
+        }else {
+            lin_send.setVisibility(View.GONE);
         }
 
         if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getPaymentMethod())){

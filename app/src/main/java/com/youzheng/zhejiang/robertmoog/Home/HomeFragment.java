@@ -133,6 +133,8 @@ public class HomeFragment extends BaseFragment implements BaseFragment.ReloadInt
                                 CustomerBean customerBean = gson.fromJson(gson.toJson(baseModel.getDatas()), CustomerBean.class);
                                 Intent intent = new Intent(mContext, RegisterSuccessActivity.class);
                                 intent.putExtra("customer", customerBean.getCustomer());
+                                intent.putExtra("referee",customerBean.getCustomer().getReferee());
+                                intent.putExtra("identity",customerBean.getCustomer().getIdentity());
                                 startActivity(intent);
                             } else {
                                 showToast(baseModel.getMsg());

@@ -109,4 +109,6 @@ public class UrlUtils {
     public static String ABOUT_APP = BASE_URL+"/v1/app/user/appInfo";
     public static String CHANGE_PSW = BASE_URL+"/v1/app/user/changePassword";
 
+    public static String SEARCH_MEAL = BASE_URL+"/v1/app/customer/selectPromoCombo";
+
 }

@@ -66,6 +66,7 @@ public class PeopleMangerActivity extends BaseActivity implements View.OnClickLi
         setContentView(R.layout.activity_people_manger);
         initView();
         setListener();
+
     }
 
     private void setListener() {
@@ -85,7 +86,6 @@ public class PeopleMangerActivity extends BaseActivity implements View.OnClickLi
                 initData(page, pageSize);
             }
         });
-
     }
 
     private void initView() {
@@ -187,6 +187,7 @@ public class PeopleMangerActivity extends BaseActivity implements View.OnClickLi
     @Override
     protected void onResume() {
         super.onResume();
+        list.clear();
         initData(page, pageSize);
     }
 

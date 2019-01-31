@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -37,7 +38,7 @@ public class RegisterSuccessActivity extends BaseActivity {
     CommonAdapter<HomeBean> adapter ;
     List<HomeBean> data = new ArrayList<>();
     RegisterBean registerBean ;
-    TextView tv_phone ;
+    TextView tv_phone ,tv_people;
     Customer customer ;
 
     @Override
@@ -163,12 +164,22 @@ public class RegisterSuccessActivity extends BaseActivity {
             }
         });
         tv_phone = (TextView) findViewById(R.id.tv_phone);
+        tv_people=findViewById(R.id.tv_people);
         customer = (Customer) getIntent().getSerializableExtra("customer");
         if (customer!=null){
             ((TextView)findViewById(R.id.textHeadTitle)).setText("识别成功");
             ((TextView)findViewById(R.id.tv_type)).setText("识别成功");
             String phone = customer.getAccount().substring(0,3)+" "+customer.getAccount().substring(3,7)+" "+customer.getAccount().substring(7,11);
             tv_phone.setText("手机号码 : "+phone);
+            if (!TextUtils.isEmpty(customer.getIdentity())){
+                tv_people.setVisibility(View.VISIBLE);
+                tv_people.setText("身份："+customer.getIdentity());
+            }
+            if (!TextUtils.isEmpty(customer.getReferee())){
+                tv_people.setVisibility(View.VISIBLE);
+                tv_people.setText("推荐人："+customer.getReferee());
+            }
+
         }
         gv = (GridView) findViewById(R.id.gv);
         data.clear();

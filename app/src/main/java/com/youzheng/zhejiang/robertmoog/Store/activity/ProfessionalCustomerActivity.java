@@ -58,11 +58,13 @@ public class ProfessionalCustomerActivity extends BaseActivity implements View.O
         initView();
         setListener();
 
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        list.clear();
         initData(page,pageSize);
     }
 

@@ -88,12 +88,14 @@ public class RegisterActivity  extends BaseActivity {
                     public void onResponse(String response) {
                         BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                         if (baseModel.getCode()==PublicUtils.code){
-                            showToast(getString(R.string.register_success));
+                           // showToast(getString(R.string.register_success));
                             RegisterBean registerBean = gson.fromJson(gson.toJson(baseModel.getDatas()),RegisterBean.class);
                             Intent intent = new Intent(mContext,RegisterSuccessActivity.class);
                             intent.putExtra("register",registerBean);
                             startActivity(intent);
                             finish();
+                        }else {
+                            showToast(baseModel.getMsg());
                         }
                     }
                 });

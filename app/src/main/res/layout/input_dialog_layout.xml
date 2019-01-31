@@ -35,6 +35,8 @@
                 android:layout_height="wrap_content"
                 android:hint="添加单号"
                 android:textSize="15sp"
+                android:maxLength="20"
+                android:inputType="number"
                 android:textColor="#383838"
                 android:background="@null"
                 />

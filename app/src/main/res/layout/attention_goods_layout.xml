@@ -9,6 +9,7 @@
     <include layout="@layout/title_bar"/>
 
     <LinearLayout
+        android:id="@+id/lin_over"
         android:padding="@dimen/space_15"
         android:paddingBottom="@dimen/space_10"
         android:orientation="vertical"

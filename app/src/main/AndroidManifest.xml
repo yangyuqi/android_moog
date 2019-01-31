@@ -218,6 +218,7 @@
         <activity android:name=".My.AboutAppActivity" />
         <activity android:name=".My.AlterPasswordActivity" />
         <activity android:name=".Store.activity.ReturnGoods.ReturnAllCounterActivity" />
+        <activity android:name=".Home.activity.SearchMealInfoActivity"></activity>
     </application>
 
 </manifest>

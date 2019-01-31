@@ -102,6 +102,7 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
     }
     int widWidth ;
     private ImageView iv_preview ;
+    private boolean isPreview = true;
 
     public CameraManager getCameraManager() {
         return cameraManager;
@@ -178,7 +179,7 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
         });
     }
 
-    private boolean isPreview = true;
+
 
     private void initView() {
         previewView = findViewById(R.id.preview_view);

@@ -61,6 +61,7 @@ public class TodayMealSalesBestActivity extends BaseActivity implements View.OnC
         setContentView(R.layout.activity_today_meal_sales_best);
         initView();
         setListener();
+        initData(page,pageSize,isDay,startstr,endstr,rulestr);
     }
     private void setListener() {
         pr_list.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
@@ -84,7 +85,7 @@ public class TodayMealSalesBestActivity extends BaseActivity implements View.OnC
     @Override
     protected void onResume() {
         super.onResume();
-        initData(page,pageSize,isDay,startstr,endstr,rulestr);
+
     }
 
     private void initView() {

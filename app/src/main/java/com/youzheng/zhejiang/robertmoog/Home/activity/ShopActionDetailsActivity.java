@@ -1,5 +1,6 @@
 package com.youzheng.zhejiang.robertmoog.Home.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -42,6 +43,9 @@ public class ShopActionDetailsActivity extends BaseActivity {
 
     RecyclerView recycler_view ;
     ShopActionAdapter shop_adapter ;
+    private String codeid;
+    private TextView tv_goods,tv_meal;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,9 +74,13 @@ public class ShopActionDetailsActivity extends BaseActivity {
                     tv_start_time.setText(promoIdDetails.getData().getStartTime());
                     tv_end_time.setText(promoIdDetails.getData().getEndTime());
                     tv_desc.setText(promoIdDetails.getData().getActivityAbstract());
+                    codeid=promoIdDetails.getData().getPromoId();
                     if (promoIdDetails.getData().getOrderPromo().size()>0){
                         adapter.setData(promoIdDetails.getData().getOrderPromo());
                         adapter.notifyDataSetChanged();
+                        tv_goods.setVisibility(View.VISIBLE);
+                    }else {
+                        tv_goods.setVisibility(View.GONE);
                     }
                     if (promoIdDetails.getData().getComboPromo().size()>0){
                         LinearLayoutManager manager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
@@ -80,6 +88,8 @@ public class ShopActionDetailsActivity extends BaseActivity {
                         shop_adapter = new ShopActionAdapter(promoIdDetails.getData().getComboPromo(),mContext );
                         recycler_view.setAdapter(shop_adapter);
                         recycler_view.addItemDecoration(new RecycleViewDivider(mContext, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
+                    }else {
+                        tv_meal.setVisibility(View.GONE);
                     }
                 }
             }
@@ -87,6 +97,8 @@ public class ShopActionDetailsActivity extends BaseActivity {
     }
 
     private void initView() {
+        tv_goods=findViewById(R.id.tv_goods);
+        tv_meal=findViewById(R.id.tv_meal);
         ((TextView)findViewById(R.id.textHeadTitle)).setText("促销活动");
         findViewById(R.id.btnBack).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,7 +107,15 @@ public class ShopActionDetailsActivity extends BaseActivity {
             }
         });
         findViewById(R.id.iv_next).setVisibility(View.VISIBLE);
+        findViewById(R.id.iv_next).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(ShopActionDetailsActivity.this,SearchMealInfoActivity.class);
+                intent.putExtra("codeid",codeid);
+                startActivity(intent);
 
+            }
+        });
         ls = findViewById(R.id.ls);
         tv_desc = findViewById(R.id.tv_desc);
         tv_start_time = findViewById(R.id.tv_start_time);

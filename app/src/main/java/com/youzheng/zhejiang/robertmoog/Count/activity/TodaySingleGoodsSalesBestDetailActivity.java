@@ -62,6 +62,7 @@ public class TodaySingleGoodsSalesBestDetailActivity extends BaseActivity implem
         setContentView(R.layout.activity_today_goods_type_ranking_detail);
         initView();
         swtListener();
+        initData(page,pageSize,isDay,starstDate,endsDate);
     }
 
     private void swtListener() {
@@ -86,7 +87,7 @@ public class TodaySingleGoodsSalesBestDetailActivity extends BaseActivity implem
     @Override
     protected void onResume() {
         super.onResume();
-        initData(page,pageSize,isDay,starstDate,endsDate);
+
     }
 
     private void initView() {

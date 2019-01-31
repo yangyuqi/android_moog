@@ -78,6 +78,7 @@ public class TodayStoreSalesActivity extends BaseActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_today_store_sales);
         initView();
+        initData(isDay,starstDate,endsDate);
         //setListener();
     }
 
@@ -131,7 +132,7 @@ public class TodayStoreSalesActivity extends BaseActivity implements View.OnClic
     @Override
     protected void onResume() {
         super.onResume();
-        initData(isDay,starstDate,endsDate);
+
     }
 
     private void initData(boolean isDay,String startDate,String endDate) {

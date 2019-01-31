@@ -259,6 +259,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/lin_send"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginTop="1dp"

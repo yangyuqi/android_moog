@@ -53,6 +53,7 @@ public class StoreCustomerInsideActivity extends BaseActivity implements View.On
         setContentView(R.layout.activity_store_customer_inside);
         initView();
         setListener();
+        initData(page,pageSize);
     }
 
     private void setListener() {
@@ -103,7 +104,7 @@ public class StoreCustomerInsideActivity extends BaseActivity implements View.On
     @Override
     protected void onResume() {
         super.onResume();
-        initData(page,pageSize);
+
     }
 
     private void initData(int page, int pageSize) {

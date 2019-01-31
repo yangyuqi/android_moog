@@ -48,6 +48,7 @@ public class TodayRegisterNumberActivity extends BaseActivity implements View.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_today_register_number);
         initView();
+        initData();
     }
 
     private void initView() {
@@ -77,7 +78,7 @@ public class TodayRegisterNumberActivity extends BaseActivity implements View.On
     @Override
     protected void onResume() {
         super.onResume();
-        initData();
+
     }
 
     private void initData() {

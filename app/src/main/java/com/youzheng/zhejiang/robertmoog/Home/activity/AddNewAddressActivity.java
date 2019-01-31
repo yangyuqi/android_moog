@@ -3,6 +3,7 @@ package com.youzheng.zhejiang.robertmoog.Home.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -42,6 +43,25 @@ public class AddNewAddressActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_new_address_layout);
         initView();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if (edt_name.getText().toString().equals("")&&edt_phone.getText().toString().equals("")&&edt_provice.getText().toString().equals("")
+                &&edt_city.getText().toString().equals("")&&edt_town.getText().toString().equals("")&&edt_address.getText().toString().equals("")
+                &&edt_street.getText().toString().equals("")){
+        finish();
+        }else {
+            final RemindDialog dialog = new RemindDialog(mContext, new RemindDialog.onSuccessClick() {
+                @Override
+                public void onSuccess() {
+                    finish();
+                }
+            }, "4");
+            dialog.show();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     private void initView() {

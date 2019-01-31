@@ -180,7 +180,7 @@ public class ReturnGoodsDetailActivity extends BaseActivity implements View.OnCl
 
         if (!TextUtils.isEmpty(returnGoodsDetail.getReturnItem().getUserName())){
             if (!TextUtils.isEmpty(returnGoodsDetail.getReturnItem().getBusinessRole())){
-                tv_maker.setText(returnGoodsDetail.getReturnItem().getUserName()+"("+returnGoodsDetail.getReturnItem().getBusinessRole()+")");
+                tv_maker.setText(returnGoodsDetail.getReturnItem().getUserName());
             }
         }
 

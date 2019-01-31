@@ -98,13 +98,22 @@ public class StoreSalesNumberActivity extends BaseActivity implements View.OnCli
         initView();
         initTimer();
         //setListener();
+        SimpleDateFormat dateFormater = new SimpleDateFormat("yyyy/MM/dd");
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        cal.getTime();
+        tv_startDate.setText(dateFormater.format(cal.getTime()) + "");
+        starstDate=dateFormater.format(cal.getTime()) + "";
+        cal.set(Calendar.DAY_OF_MONTH,
+                cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+        tv_endDate.setText(dateFormater.format(cal.getTime()));
+        endsDate=dateFormater.format(cal.getTime());
+//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");// HH:mm:ss
+//        Date date = new Date(System.currentTimeMillis());
+//        tv_startDate.setText(simpleDateFormat.format(date));
+//        tv_endDate.setText(simpleDateFormat.format(date));
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");// HH:mm:ss
-        Date date = new Date(System.currentTimeMillis());
-        tv_startDate.setText(simpleDateFormat.format(date));
-        tv_endDate.setText(simpleDateFormat.format(date));
-        starstDate=simpleDateFormat.format(date);
-        endsDate=simpleDateFormat.format(date);
+
         initData(isDay,starstDate,endsDate);
     }
 

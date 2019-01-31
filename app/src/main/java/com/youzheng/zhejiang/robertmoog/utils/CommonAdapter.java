@@ -25,6 +25,11 @@ public abstract class CommonAdapter<T> extends BaseAdapter {
         this.mDatas = data;
     }
 
+    public void clear(){
+        mDatas.clear();
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
         return null !=mDatas? mDatas.size():0;

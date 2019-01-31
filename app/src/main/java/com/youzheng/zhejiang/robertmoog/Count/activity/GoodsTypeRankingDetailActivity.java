@@ -92,6 +92,7 @@ public class GoodsTypeRankingDetailActivity extends BaseActivity implements View
         initView();
         initTimer();
         swtListener();
+        initData(page, pageSize, isDay, startstr, endstr, categoryId, type);
     }
 
     private void swtListener() {
@@ -157,7 +158,7 @@ public class GoodsTypeRankingDetailActivity extends BaseActivity implements View
     @Override
     protected void onResume() {
         super.onResume();
-        initData(page, pageSize, isDay, startstr, endstr, categoryId, type);
+
     }
 
     private void initData(int page, int pageSize, boolean isDay, String startDate, String endDate, int categoryId, String rule) {
