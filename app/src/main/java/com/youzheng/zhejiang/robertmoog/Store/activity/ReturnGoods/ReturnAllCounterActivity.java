@@ -47,7 +47,7 @@ import java.util.List;
 
 import okhttp3.Request;
 
-public class ReturnAllCounterActivity extends BaseActivity implements View.OnClickListener ,GetData, GetListener {
+public class ReturnAllCounterActivity extends BaseActivity implements View.OnClickListener, GetData, GetListener {
 
     private ImageView btnBack;
     /**  */
@@ -92,14 +92,14 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
      */
     private TextView tv_confirm_return;
     private String returnId;
-    private List<EnumsDatasBeanDatas> typelist=new ArrayList<>();
-    private List<EnumsDatasBeanDatas> returnlist=new ArrayList<>();
-    private List<EnumsDatasBeanDatas> reasonlist=new ArrayList<>();
+    private List<EnumsDatasBeanDatas> typelist = new ArrayList<>();
+    private List<EnumsDatasBeanDatas> returnlist = new ArrayList<>();
+    private List<EnumsDatasBeanDatas> reasonlist = new ArrayList<>();
 
 
-    private List<String> type=new ArrayList<>();
-    private List<String> returns=new ArrayList<>();
-    private List<String> reason=new ArrayList<>();
+    private List<String> type = new ArrayList<>();
+    private List<String> returns = new ArrayList<>();
+    private List<String> reason = new ArrayList<>();
 
     private String paymentMethod;
     private String reasons;
@@ -108,15 +108,11 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
     private boolean isall;
 
     private String orderID;
-    private List<ConfirmReturnRequest.ReshippedGoodsDataListBean> request=new ArrayList<>();
+    private List<ConfirmReturnRequest.ReshippedGoodsDataListBean> request = new ArrayList<>();
 
 
-
-
-
-
-    private List<ChooseReturnGoodsDetail.ReturnOrderInfoBean.ProductListBean> onelist=new ArrayList<>();
-    private List<ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean> morelist=new ArrayList<>();
+    private List<ChooseReturnGoodsDetail.ReturnOrderInfoBean.ProductListBean> onelist = new ArrayList<>();
+    private List<ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean> morelist = new ArrayList<>();
 
     private oneReturnGoodsCounterAdapter oneCounteradapter;
     private MoreReturnCounterAdapter moreReturnCounterAdapter;
@@ -133,35 +129,34 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_return_all_counter);
-        returnId=getIntent().getStringExtra("orderID");
-        isall=getIntent().getBooleanExtra("isAll",false);
+        returnId = getIntent().getStringExtra("orderID");
+        isall = getIntent().getBooleanExtra("isAll", false);
         initView();
         initGetDate();
-        initData(returnId,isall);
-
-
+        initData(returnId, isall);
 
 
     }
 
-    private void initData(String id, boolean isAll){
-        HashMap<String,Object> map=new HashMap<>();
-        map.put("id",id);
-        map.put("isAll",isAll);
+    private void initData(String id, boolean isAll) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("id", id);
+        map.put("isAll", isAll);
 
         OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.CHOOSE_GOODS + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
             public void onFailure(Request request, IOException e) {
 
             }
+
             @Override
             public void onResponse(String response) {
-                Log.e("选择商品列表(整单)",response);
-                BaseModel baseModel = gson.fromJson(response,BaseModel.class);
-                if (baseModel.getCode()==PublicUtils.code){
-                    ChooseReturnGoodsDetail chooseReturnGoodsDetail = gson.fromJson(gson.toJson(baseModel.getDatas()),ChooseReturnGoodsDetail.class);
+                Log.e("选择商品列表(整单)", response);
+                BaseModel baseModel = gson.fromJson(response, BaseModel.class);
+                if (baseModel.getCode() == PublicUtils.code) {
+                    ChooseReturnGoodsDetail chooseReturnGoodsDetail = gson.fromJson(gson.toJson(baseModel.getDatas()), ChooseReturnGoodsDetail.class);
                     setData(chooseReturnGoodsDetail);
-                }else {
+                } else {
                     showToast(baseModel.getMsg());
                 }
             }
@@ -169,78 +164,85 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
 
 
     }
+
     private void setData(ChooseReturnGoodsDetail chooseReturnGoodsDetail) {
-        if (chooseReturnGoodsDetail.getReturnOrderInfo()==null) return;
-        ChooseReturnGoodsDetail.ReturnOrderInfoBean infoBean=chooseReturnGoodsDetail.getReturnOrderInfo();
+        if (chooseReturnGoodsDetail.getReturnOrderInfo() == null) return;
+        ChooseReturnGoodsDetail.ReturnOrderInfoBean infoBean = chooseReturnGoodsDetail.getReturnOrderInfo();
 
-        orderID=infoBean.getId();
+        orderID = infoBean.getId();
 
-        if (infoBean.getReturnCount()!=0){
-            tv_goods_number.setText(infoBean.getReturnCount()+"");
-        }else {
+        if (infoBean.getReturnCount() != 0) {
+            tv_goods_number.setText(infoBean.getReturnCount() + "");
+        } else {
             tv_goods_number.setText("0");
         }
 
-        if (!TextUtils.isEmpty(infoBean.getRefundAmount())){
+        if (!TextUtils.isEmpty(infoBean.getRefundAmount())) {
             tv_should_cut_money.setText(infoBean.getRefundAmount());
-            refundAmount=infoBean.getRefundAmount();
+            refundAmount = infoBean.getRefundAmount();
         }
 
 
-        List<ChooseReturnGoodsDetail.ReturnOrderInfoBean.ProductListBean> one=infoBean.getProductList();
+        List<ChooseReturnGoodsDetail.ReturnOrderInfoBean.ProductListBean> one = infoBean.getProductList();
 
-        if (one.size()!=0){
+        if (one.size() != 0) {
             onelist.addAll(one);
             oneCounteradapter.setUI(one);
 //            requests.clear();
-        }else {
+        } else {
             rv_list_one.setVisibility(View.GONE);
         }
 
 
-        List<ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean> more=infoBean.getSetMealList();
+        List<ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean> more = infoBean.getSetMealList();
 
-        if (more.size()!=0){
+        if (more.size() != 0) {
             morelist.addAll(more);
             moreReturnCounterAdapter.setUI(more);
 //            requests.addAll(moreChooseReturnGoodsAdapter.getRequests());
 //            Log.e("sada",requests+"");
-        }else {
+        } else {
             rv_list_more.setVisibility(View.GONE);
         }
-        int moren_more=0;
-        if (more.size()!=0){
-            for (int i = 0; i <more.size() ; i++) {
-                for (ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean.ProductListBeanX beanX:more.get(i).getProductList()){
-                    int moren= Integer.parseInt(beanX.getRefundAmount());
-
-                        more_all=more_all+moren;
-
-
+        int moren_more = 0;
+        if (more.size() != 0) {
+            for (int i = 0; i < more.size(); i++) {
+                for (ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean.ProductListBeanX beanX : more.get(i).getProductList()) {
+                    if (beanX.getCount() == 0) {
+                        moren_more = 0;
+                    } else {
+                        moren_more = Integer.parseInt(beanX.getRefundAmount());
+                    }
+                    more_all = more_all + moren_more;
 
 
                 }
             }
         }
 
-        int one_list=0;
-          if (one.size()!=0){
-              for (int i = 0; i < one.size(); i++) {
-                  int moren_one= Integer.parseInt(one.get(i).getRefundAmount());
-                  one_all=one_all+moren_one;
-              }
-          }
+        int one_list = 0;
+        if (one.size() != 0) {
+            for (int i = 0; i < one.size(); i++) {
+                if (one.get(i).getCount() == 0) {
+                    one_list = 0;
+                } else {
+                    one_list = Integer.parseInt(one.get(i).getRefundAmount());
+                }
+
+                one_all = one_all + one_list;
+            }
+        }
 
 
-        int all=one_all+more_all;
+        int all = one_all + more_all;
 
-        tv_really_cut_money.setText(all+"");
+        tv_really_cut_money.setText(all + "");
 
 
     }
 
     private void initGetDate() {
-        OkHttpClientManager.postAsynJson(gson.toJson(new HashMap<>()), UrlUtils.LIST_DATA+"?access_token="+access_token, new OkHttpClientManager.StringCallback() {
+        OkHttpClientManager.postAsynJson(gson.toJson(new HashMap<>()), UrlUtils.LIST_DATA + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
             public void onFailure(Request request, IOException e) {
 
@@ -248,57 +250,58 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
 
             @Override
             public void onResponse(String response) {
-                Log.e("获取时间枚举",response);
-                BaseModel baseModel = gson.fromJson(response,BaseModel.class);
-                if (baseModel.getCode()==PublicUtils.code){
-                    EnumsDatas enumsDatas = gson.fromJson(gson.toJson(baseModel.getDatas()),EnumsDatas.class);
-                    if (enumsDatas.getEnums().size()>0){
-                        for (final EnumsDatasBean bean : enumsDatas.getEnums()){
-                            if (bean.getClassName().equals("PickUpStatus")){//  TimeQuantum
-                                List<EnumsDatasBeanDatas> list1=new ArrayList<>();
+                Log.e("获取时间枚举", response);
+                BaseModel baseModel = gson.fromJson(response, BaseModel.class);
+                if (baseModel.getCode() == PublicUtils.code) {
+                    EnumsDatas enumsDatas = gson.fromJson(gson.toJson(baseModel.getDatas()), EnumsDatas.class);
+                    if (enumsDatas.getEnums().size() > 0) {
+                        for (final EnumsDatasBean bean : enumsDatas.getEnums()) {
+                            if (bean.getClassName().equals("PickUpStatus")) {//  TimeQuantum
+                                List<EnumsDatasBeanDatas> list1 = new ArrayList<>();
                                 for (int i = 0; i < bean.getDatas().size(); i++) {
                                     list1.add(bean.getDatas().get(i));
                                     type.add(bean.getDatas().get(i).getDes());
                                 }
-                                typelist=list1;
+                                typelist = list1;
                             }
                         }
 
 
-                        for (final EnumsDatasBean bean : enumsDatas.getEnums()){
-                            if (bean.getClassName().equals("RefundMethod")){//  TimeQuantum
+                        for (final EnumsDatasBean bean : enumsDatas.getEnums()) {
+                            if (bean.getClassName().equals("RefundMethod")) {//  TimeQuantum
 //                                final List<String> date = new ArrayList<String>();
-                                List<EnumsDatasBeanDatas> list2=new ArrayList<>();
+                                List<EnumsDatasBeanDatas> list2 = new ArrayList<>();
                                 for (int i = 0; i < bean.getDatas().size(); i++) {
                                     list2.add(bean.getDatas().get(i));
                                     returns.add(bean.getDatas().get(i).getDes());
                                 }
-                                returnlist=list2;
+                                returnlist = list2;
                             }
                         }
 
 
-                        for (final EnumsDatasBean bean : enumsDatas.getEnums()){
-                            if (bean.getClassName().equals("ReturnReason")){//  TimeQuantum
+                        for (final EnumsDatasBean bean : enumsDatas.getEnums()) {
+                            if (bean.getClassName().equals("ReturnReason")) {//  TimeQuantum
 //                                final List<String> date = new ArrayList<String>();
-                                List<EnumsDatasBeanDatas> list3=new ArrayList<>();
+                                List<EnumsDatasBeanDatas> list3 = new ArrayList<>();
                                 for (int i = 0; i < bean.getDatas().size(); i++) {
                                     list3.add(bean.getDatas().get(i));
                                     reason.add(bean.getDatas().get(i).getDes());
                                 }
-                                reasonlist=list3;
+                                reasonlist = list3;
                             }
                         }
 
                     }
 
-                }else {
+                } else {
                     showToast(baseModel.getMsg());
                 }
             }
         });
 
     }
+
     private void initView() {
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
@@ -325,7 +328,7 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
         tv_really_cut_money = (TextView) findViewById(R.id.tv_really_cut_money);
         tv_confirm_return = (TextView) findViewById(R.id.tv_confirm_return);
         tv_confirm_return.setOnClickListener(this);
-        et_other_reason=findViewById(R.id.et_other_reason);
+        et_other_reason = findViewById(R.id.et_other_reason);
 
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rv_list_one.setLayoutManager(manager);
@@ -338,11 +341,11 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
         rv_list_more.setAdapter(moreReturnCounterAdapter);
         rv_list_more.addItemDecoration(new com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider(ReturnAllCounterActivity.this, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
 
-        oneCounteradapter=new oneReturnGoodsCounterAdapter(onelist,this,this);
+        oneCounteradapter = new oneReturnGoodsCounterAdapter(onelist, this, this);
         rv_list_one.setAdapter(oneCounteradapter);
 
 
-        moreReturnCounterAdapter=new MoreReturnCounterAdapter(morelist,this,this);
+        moreReturnCounterAdapter = new MoreReturnCounterAdapter(morelist, this, this);
         rv_list_more.setAdapter(moreReturnCounterAdapter);
     }
 
@@ -355,26 +358,26 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
                 finish();
                 break;
             case R.id.lin_get_goods:
-                SingleOptionsPicker.openOptionsPicker(this, type, tv_get_state,getString(R.string.get_goods_state),this);
+                SingleOptionsPicker.openOptionsPicker(this, type, tv_get_state, getString(R.string.get_goods_state), this);
                 break;
             case R.id.lin_return_type:
-                SingleOptionsPicker.openOptionsPicker(this, returns, tv_return_type,getString(R.string.return_goods_type),this);
+                SingleOptionsPicker.openOptionsPicker(this, returns, tv_return_type, getString(R.string.return_goods_type), this);
                 break;
             case R.id.lin_return_reason:
-                SingleOptionsPicker.openOptionsPicker(this, reason, tv_return_reason,getString(R.string.return_reason),this);
+                SingleOptionsPicker.openOptionsPicker(this, reason, tv_return_reason, getString(R.string.return_reason), this);
                 break;
             case R.id.tv_confirm_return:
-                if (tv_get_state.getText().equals(getString(R.string.please_choose))){
-                    showToast(getString(R.string.please_choose_get_type));
-                }else if (tv_return_type.getText().equals(getString(R.string.please_choose))){
-                    showToast(getString(R.string.please_choose_return_type));
-                }else if (tv_return_reason.getText().equals(getString(R.string.please_choose))){
-                    showToast(getString(R.string.please_choose_return_reason));
-                }else if (tv_really_cut_money.getText().toString().equals("0")){
+                if (tv_really_cut_money.getText().toString().equals("0")) {
                     showToast("商品不可退");
-                } if (et_other_reason.getVisibility()==View.VISIBLE&&et_other_reason.getText().toString().equals("")){
-                showToast(getString(R.string.please_write_reason));
-                }else {
+                } else if (tv_get_state.getText().equals(getString(R.string.please_choose))) {
+                    showToast(getString(R.string.please_choose_get_type));
+                } else if (tv_return_type.getText().equals(getString(R.string.please_choose))) {
+                    showToast(getString(R.string.please_choose_return_type));
+                } else if (tv_return_reason.getText().equals(getString(R.string.please_choose))) {
+                    showToast(getString(R.string.please_choose_return_reason));
+                } else if (et_other_reason.getVisibility() == View.VISIBLE && et_other_reason.getText().toString().equals("")) {
+                    showToast(getString(R.string.please_write_reason));
+                } else {
                     showStopDialog();
                 }
                 break;
@@ -382,15 +385,15 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
     }
 
     public void showStopDialog() {
-        final AlertDialog dialogBuilder = new AlertDialog.Builder(ReturnAllCounterActivity.this,R.style.mydialog).create();
+        final AlertDialog dialogBuilder = new AlertDialog.Builder(ReturnAllCounterActivity.this, R.style.mydialog).create();
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_confirm_return, null);
         dialogBuilder.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialogBuilder.show();
         dialogBuilder.setContentView(dialogView);
 
-        TextView tv_no=dialogView.findViewById(R.id.tv_no);
-        TextView tv_ok=dialogView.findViewById(R.id.tv_ok);
+        TextView tv_no = dialogView.findViewById(R.id.tv_no);
+        TextView tv_ok = dialogView.findViewById(R.id.tv_ok);
 
         tv_no.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -414,7 +417,7 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
         //这句就是设置dialog横向满屏了。
         DisplayMetrics d = this.getResources().getDisplayMetrics(); // 获取屏幕宽、高用
         lp.width = (int) (d.widthPixels * 0.9); // 高度设置为屏幕的0.6
-       // lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        // lp.width = WindowManager.LayoutParams.MATCH_PARENT;
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
         window.setAttributes(lp);
 
@@ -423,63 +426,63 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
 
     private void confirmReturn() {
 
-        if (tv_return_type.getText().equals(getString(R.string.bank_card))){
-            paymentMethod="BANK_CARD";
-        }else if (tv_return_type.getText().equals(getString(R.string.we_chat))){
-            paymentMethod="WECHAT";
-        }else if (tv_return_type.getText().equals(getString(R.string.alipay))){
-            paymentMethod="ALIPAY";
-        }else if (tv_return_type.getText().equals(getString(R.string.cash))){
-            paymentMethod="CASH";
-        }else if (tv_return_type.getText().equals(getString(R.string.market_get))){
-            paymentMethod="MARKET";
-        }else if (tv_return_type.getText().equals(getString(R.string.other))){
-            paymentMethod="OTHER";
+        if (tv_return_type.getText().equals(getString(R.string.bank_card))) {
+            paymentMethod = "BANK_CARD";
+        } else if (tv_return_type.getText().equals(getString(R.string.we_chat))) {
+            paymentMethod = "WECHAT";
+        } else if (tv_return_type.getText().equals(getString(R.string.alipay))) {
+            paymentMethod = "ALIPAY";
+        } else if (tv_return_type.getText().equals(getString(R.string.cash))) {
+            paymentMethod = "CASH";
+        } else if (tv_return_type.getText().equals(getString(R.string.market_get))) {
+            paymentMethod = "MARKET";
+        } else if (tv_return_type.getText().equals(getString(R.string.other))) {
+            paymentMethod = "OTHER";
         }
 
-        if (tv_get_state.getText().equals(getString(R.string.all_lift))){
-            pick_state="ALL_LIFT";
-        }else if (tv_get_state.getText().equals(getString(R.string.limit_lift))){
-            pick_state="LIMIT_LIFT";
-        }else if (tv_get_state.getText().equals(getString(R.string.no_lift))){
-            pick_state="NO_LIFT";
+        if (tv_get_state.getText().equals(getString(R.string.all_lift))) {
+            pick_state = "ALL_LIFT";
+        } else if (tv_get_state.getText().equals(getString(R.string.limit_lift))) {
+            pick_state = "LIMIT_LIFT";
+        } else if (tv_get_state.getText().equals(getString(R.string.no_lift))) {
+            pick_state = "NO_LIFT";
         }
 
-        if (tv_return_reason.getText().equals(getString(R.string.quality_problem))){
-            reasons="QUALITY_PROBLEM";
-        }else if (tv_return_reason.getText().equals(getString(R.string.brand_problem))){
-            reasons="BRAND_PROBLEM";
-        }else if (tv_return_reason.getText().equals(getString(R.string.price_problem))){
-            reasons="PRICE_PROBLEM";
-        }else if (tv_return_reason.getText().equals(getString(R.string.other))){
-            reasons="OTHER";
+        if (tv_return_reason.getText().equals(getString(R.string.quality_problem))) {
+            reasons = "QUALITY_PROBLEM";
+        } else if (tv_return_reason.getText().equals(getString(R.string.brand_problem))) {
+            reasons = "BRAND_PROBLEM";
+        } else if (tv_return_reason.getText().equals(getString(R.string.price_problem))) {
+            reasons = "PRICE_PROBLEM";
+        } else if (tv_return_reason.getText().equals(getString(R.string.other))) {
+            reasons = "OTHER";
         }
-        HashMap<String,Object> map=new HashMap<>();
-        map.put("pickUpStatus",pick_state);
-        map.put("paymentMethod",paymentMethod);
-        map.put("reason",reasons);
-        map.put("refundAmount",refundAmount);
-        map.put("actualRefundAmount",tv_really_cut_money.getText().toString());
-        map.put("id",orderID);
-        if (tv_return_reason.getText().equals(getString(R.string.other))){
-            map.put("otherReson",et_other_reason.getText().toString());
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("pickUpStatus", pick_state);
+        map.put("paymentMethod", paymentMethod);
+        map.put("reason", reasons);
+        map.put("refundAmount", refundAmount);
+        map.put("actualRefundAmount", tv_really_cut_money.getText().toString());
+        map.put("id", orderID);
+        if (tv_return_reason.getText().equals(getString(R.string.other))) {
+            map.put("otherReson", et_other_reason.getText().toString());
         }
 
-        if (onelist.size()!=0){
-            for (ChooseReturnGoodsDetail.ReturnOrderInfoBean.ProductListBean bean1:onelist){
-                ConfirmReturnRequest.ReshippedGoodsDataListBean requestBean=new ConfirmReturnRequest.ReshippedGoodsDataListBean();
+        if (onelist.size() != 0) {
+            for (ChooseReturnGoodsDetail.ReturnOrderInfoBean.ProductListBean bean1 : onelist) {
+                ConfirmReturnRequest.ReshippedGoodsDataListBean requestBean = new ConfirmReturnRequest.ReshippedGoodsDataListBean();
                 requestBean.setOrderItemProductId(bean1.getOrderItemProductId());
-                requestBean.setCount(bean1.getCount()+"");
+                requestBean.setCount(bean1.getCount() + "");
                 requestBean.setRefundAmount(bean1.getRefundAmount());
-                requestBean.setActualRefundAmount(bean1.getMoney()+"");
+                requestBean.setActualRefundAmount(bean1.getMoney() + "");
                 request.add(requestBean);
             }
         }
 
-        if (morelist.size()!=0){
-           request.addAll(moreReturnCounterAdapter.getRequests());
+        if (morelist.size() != 0) {
+            request.addAll(moreReturnCounterAdapter.getRequests());
         }
-        map.put("reshippedGoodsDataList",request);
+        map.put("reshippedGoodsDataList", request);
         OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.CONFIRM_RETURN + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
             public void onFailure(Request request, IOException e) {
@@ -488,12 +491,12 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
 
             @Override
             public void onResponse(String response) {
-                Log.e("退货柜台",response);
-                BaseModel baseModel = gson.fromJson(response,BaseModel.class);
-                if (baseModel.getCode()==PublicUtils.code){
-                    ReturnGoodsSuccess success = gson.fromJson(gson.toJson(baseModel.getDatas()),ReturnGoodsSuccess.class);
+                Log.e("退货柜台", response);
+                BaseModel baseModel = gson.fromJson(response, BaseModel.class);
+                if (baseModel.getCode() == PublicUtils.code) {
+                    ReturnGoodsSuccess success = gson.fromJson(gson.toJson(baseModel.getDatas()), ReturnGoodsSuccess.class);
                     toSuccess(success);
-                }else {
+                } else {
                     showToast(getString(R.string.return_failure));
                     request.clear();
                 }
@@ -502,9 +505,9 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
     }
 
     private void toSuccess(ReturnGoodsSuccess success) {
-        Intent intent=new Intent(this,ReturnGoodsSuccessActivity.class);
-        intent.putExtra("returnid",success.getId()+"");
-        intent.putExtra("type","1");
+        Intent intent = new Intent(this, ReturnGoodsSuccessActivity.class);
+        intent.putExtra("returnid", success.getId() + "");
+        intent.putExtra("type", "1");
         startActivity(intent);
         finish();
     }
@@ -512,41 +515,41 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
 
     @Override
     public void getoneTotal(List<ChooseReturnGoodsDetail.ReturnOrderInfoBean.ProductListBean> lists) {
-         one_all=0;
-       // Log.e("ssss",gson.toJson(list)+"--"+gson.toJson(lists));
-        if (lists!=null){
-            for (int i = 0; i <lists.size() ; i++) {
-                one_all=one_all+lists.get(i).getMoney();
-                Log.e("233",one_all+"单品总和");
+        one_all = 0;
+        // Log.e("ssss",gson.toJson(list)+"--"+gson.toJson(lists));
+        if (lists != null) {
+            for (int i = 0; i < lists.size(); i++) {
+                one_all = one_all + lists.get(i).getMoney();
+                Log.e("233", one_all + "单品总和");
             }
 
         }
-         all=one_all+more_all;
-         Log.e("233",all+"界面总和1");
-         tv_really_cut_money.setText(all+"");
+        all = one_all + more_all;
+        Log.e("233", all + "界面总和1");
+        tv_really_cut_money.setText(all + "");
     }
 
     @Override
     public void getMoreTotal(List<ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean.ProductListBeanX> list) {
-         more_all=0;
-        if (list!=null){
-            for (int i = 0; i <list.size() ; i++) {
-                more_all=more_all+list.get(i).getMoney();
-                Log.e("233",more_all+"套餐总和");
+        more_all = 0;
+        if (list != null) {
+            for (int i = 0; i < list.size(); i++) {
+                more_all = more_all + list.get(i).getMoney();
+                Log.e("233", more_all + "套餐总和");
             }
         }
 
-        all=one_all+more_all;
-        Log.e("233",all+"界面总和2");
-        tv_really_cut_money.setText(all+"");
+        all = one_all + more_all;
+        Log.e("233", all + "界面总和2");
+        tv_really_cut_money.setText(all + "");
     }
 
     @Override
-    public void getTextStr(String str,String title) {
-        if (title.equals(getString(R.string.return_reason))){
-            if (str.equals(getString(R.string.other))){
+    public void getTextStr(String str, String title) {
+        if (title.equals(getString(R.string.return_reason))) {
+            if (str.equals(getString(R.string.other))) {
                 et_other_reason.setVisibility(View.VISIBLE);
-            }else {
+            } else {
                 et_other_reason.setVisibility(View.GONE);
             }
         }

@@ -68,9 +68,17 @@ public class AttentionManagerActivity extends BaseActivity {
         widWidth = outMetrics.widthPixels;
         EventBus.getDefault().register(this);
         initView();
-        initData();
+
 
         initClick();
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        data.clear();
+        initData();
     }
 
     @Override
@@ -111,6 +119,7 @@ public class AttentionManagerActivity extends BaseActivity {
             @Override
             public void onRefresh() {
                 pageNum=1 ;
+                data.clear();
                 initData();
             }
 

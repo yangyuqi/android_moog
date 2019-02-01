@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -92,6 +93,7 @@ public class oneReturnGoodsCounterAdapter extends RecyclerView.Adapter<oneReturn
         }else {
             oneHolder.et_money.setText("0");
             oneHolder.tv_item_total.setText("0");
+            oneHolder.lin_ed.setVisibility(View.GONE);
             bean.setMoney(0);
         }
 
@@ -165,6 +167,8 @@ public class oneReturnGoodsCounterAdapter extends RecyclerView.Adapter<oneReturn
         private TextView tv_goods_code,tv_goods_content,
                 tv_money,tv_number,tv_area,et_money,tv_item_total;
 
+        private LinearLayout lin_ed;
+
 
         public OneHolder(@NonNull View itemView) {
             super(itemView);
@@ -177,6 +181,7 @@ public class oneReturnGoodsCounterAdapter extends RecyclerView.Adapter<oneReturn
             tv_area=itemView.findViewById(R.id.tv_area);
             et_money=itemView.findViewById(R.id.et_money);
             tv_item_total=itemView.findViewById(R.id.tv_item_total);
+            lin_ed=itemView.findViewById(R.id.lin_ed);
 
 
 

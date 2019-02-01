@@ -47,20 +47,23 @@ public class AddNewAddressActivity extends BaseActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-
-        if (edt_name.getText().toString().equals("")&&edt_phone.getText().toString().equals("")&&edt_provice.getText().toString().equals("")
-                &&edt_city.getText().toString().equals("")&&edt_town.getText().toString().equals("")&&edt_address.getText().toString().equals("")
-                &&edt_street.getText().toString().equals("")){
-        finish();
-        }else {
-            final RemindDialog dialog = new RemindDialog(mContext, new RemindDialog.onSuccessClick() {
-                @Override
-                public void onSuccess() {
-                    finish();
-                }
-            }, "4");
-            dialog.show();
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            //返回事件
+            if (edt_name.getText().toString().equals("")&&edt_phone.getText().toString().equals("")&&edt_provice.getText().toString().equals("")
+                    &&edt_city.getText().toString().equals("")&&edt_town.getText().toString().equals("")&&edt_address.getText().toString().equals("")
+                    &&edt_street.getText().toString().equals("")){
+                finish();
+            }else {
+                final RemindDialog dialog = new RemindDialog(mContext, new RemindDialog.onSuccessClick() {
+                    @Override
+                    public void onSuccess() {
+                        finish();
+                    }
+                }, "4");
+                dialog.show();
+            }
         }
+
         return super.onKeyDown(keyCode, event);
     }
 

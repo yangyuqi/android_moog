@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,6 +55,8 @@ public class HomeFragment extends BaseFragment implements BaseFragment.ReloadInt
     private View view;
     /**  */
     private TextView textHeadTitle;
+    private boolean isnewCu;
+    private boolean isNewMeal;
 
 
     @Override
@@ -67,6 +70,7 @@ public class HomeFragment extends BaseFragment implements BaseFragment.ReloadInt
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.home_fragment_layout, null);
         getmView = mView.findViewById(R.id.include_state);
+        initData();
         initView();
         setUpView(mView);
         setReloadInterface(this);
@@ -90,14 +94,14 @@ public class HomeFragment extends BaseFragment implements BaseFragment.ReloadInt
                 helper.setText(R.id.tv_text, item.name);
                 helper.setImageResource(R.id.iv_icon, item.icon);
                 if (helper.getPosition() == 2) {
-                    if (item.newPromotion) {
-                        helper.getView(R.id.iv_small).setVisibility(View.VISIBLE);
+                    if (isnewCu==true) {
+                        helper.getView(R.id.iv_emp).setVisibility(View.VISIBLE);
                     } else {
-                        helper.getView(R.id.iv_small).setVisibility(View.GONE);
+                        helper.getView(R.id.iv_emp).setVisibility(View.GONE);
                     }
                 }
                 if (helper.getPosition() == 4) {
-                    if (item.newCombo) {
+                    if (isNewMeal==true) {
                         helper.getView(R.id.iv_emp).setVisibility(View.VISIBLE);
                     } else {
                         helper.getView(R.id.iv_emp).setVisibility(View.GONE);
@@ -106,7 +110,6 @@ public class HomeFragment extends BaseFragment implements BaseFragment.ReloadInt
             }
         };
         gv.setAdapter(adapter);
-
         mView.findViewById(R.id.iv_search).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -162,7 +165,6 @@ public class HomeFragment extends BaseFragment implements BaseFragment.ReloadInt
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initClick();
-
         initData();
     }
 
@@ -177,14 +179,21 @@ public class HomeFragment extends BaseFragment implements BaseFragment.ReloadInt
 
                 @Override
                 public void onResponse(String response) {
+                    Log.e("首页信息",response);
                     BaseModel baseModel = gson.fromJson(response, BaseModel.class);
                     if (baseModel.getCode() == PublicUtils.code) {
                         HomePageBean homePageData = gson.fromJson(gson.toJson(baseModel.getDatas()), HomePageBean.class);
                         if (homePageData.getHomePageData().isNewPromotion()) {
-                            data.get(2).newPromotion = true;
+                            isnewCu=true;
+                            gv.setAdapter(adapter);
+                            gv.notify();
+                            //data.get(2).newPromotion = true;
                         }
                         if (homePageData.getHomePageData().isNewCombo()) {
-                            data.get(4).newCombo = true;
+                            isNewMeal=true;
+                            gv.setAdapter(adapter);
+                            gv.notify();
+                            //ata.get(4).newCombo = true;
                         }
                         if (homePageData.getHomePageData().getBannerImageData().size() > 0) {
                             rollPagerView.setAdapter(new BannerNormalAdapter(homePageData.getHomePageData().getBannerImageData(), access_token));

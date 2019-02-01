@@ -170,10 +170,41 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
                     iv_preview.setImageResource(R.mipmap.group_14_1);
                     findViewById(R.id.largeLabel).setVisibility(View.GONE);
                     isPreview = false;
+
+                    if (handler != null) {
+                        handler.quitSynchronously();
+                        handler = null;
+                    }
+                    inactivityTimer.onPause();
+                    beepManager.close();
+                    cameraManager.closeDriver();
+
+                    if (!hasSurface) {
+
+                        surfaceHolder.removeCallback(CaptureActivity.this);
+                    }
                 }else {
                     iv_preview.setImageResource(R.mipmap.group_12_3);
                     findViewById(R.id.largeLabel).setVisibility(View.VISIBLE);
                     isPreview = true;
+
+
+                    cameraManager = new CameraManager(getApplication(), config);
+
+                    viewfinderView.setCameraManager(cameraManager);
+                    handler = null;
+                    surfaceHolder = previewView.getHolder();
+                    if (hasSurface) {
+
+                        initCamera(surfaceHolder);
+                    } else {
+                        // 重置callback，等待surfaceCreated()来初始化camera
+                        surfaceHolder.addCallback(CaptureActivity.this);
+                    }
+
+                    beepManager.updatePrefs();
+                    inactivityTimer.onResume();
+
                 }
             }
         });
@@ -402,7 +433,8 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
             new DecodeImgThread(path, new DecodeImgCallback() {
                 @Override
                 public void onImageDecodeSuccess(Result result) {
-                    handleDecode(result);
+                        handleDecode(result);
+
                 }
 
                 @Override

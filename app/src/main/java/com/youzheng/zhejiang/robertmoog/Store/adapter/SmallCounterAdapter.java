@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -86,6 +87,7 @@ public class SmallCounterAdapter extends RecyclerView.Adapter<SmallCounterAdapte
             viewHolder.et_money.setText("0");
             viewHolder.tv_item_total.setText("0");
             bean.setMoney(0);
+            viewHolder.lin_ed.setVisibility(View.GONE);
         }
 
 
@@ -160,6 +162,7 @@ public class SmallCounterAdapter extends RecyclerView.Adapter<SmallCounterAdapte
         private ImageView iv_goods;
         private TextView tv_goods_code,tv_goods_content,
                 tv_money,tv_number,tv_area,et_money,tv_item_total;
+        private LinearLayout lin_ed;
 
        public ViewHolder(@NonNull View itemView) {
            super(itemView);
@@ -171,6 +174,7 @@ public class SmallCounterAdapter extends RecyclerView.Adapter<SmallCounterAdapte
            tv_area=itemView.findViewById(R.id.tv_area);
             et_money=itemView.findViewById(R.id.et_money);
            tv_item_total=itemView.findViewById(R.id.tv_item_total);
+           lin_ed=itemView.findViewById(R.id.lin_ed);
        }
    }
 }

@@ -200,7 +200,7 @@ public class SalesActivity extends BaseActivity implements GetListener {
                 }
 
                 if (TextUtils.isEmpty(addressId)){
-                    showToast("请选择卖货地址");
+                    showToast("请添加卖货地址");
                     return;
                 }
 

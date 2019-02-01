@@ -1,14 +1,11 @@
 package com.youzheng.zhejiang.robertmoog.Home.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
-import android.text.SpannableString;
 import android.text.TextWatcher;
-import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -27,7 +24,6 @@ import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
 import com.youzheng.zhejiang.robertmoog.Model.Home.ProductListBean;
 import com.youzheng.zhejiang.robertmoog.Model.Home.ScanDatasBean;
-import com.youzheng.zhejiang.robertmoog.Model.TestBean;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.utils.View.AddPriceDialog;
 import com.youzheng.zhejiang.robertmoog.utils.View.DeleteDialog;
@@ -37,7 +33,6 @@ import com.youzheng.zhejiang.robertmoog.utils.View.NoScrollListView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import de.greenrobot.event.EventBus;
 
@@ -104,6 +99,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 ((CommonGoodsViewHolder) holder).tv_get_num.setVisibility(View.GONE);
                 if (objects.get(position).isSpecial()) {
                     ((CommonGoodsViewHolder) holder).tv_specail.setVisibility(View.VISIBLE);
+                    Log.e("13123123",objects.get(position).getSquare()+""+objects.get(position).getSquare__suffix()+"11111111");
                     ((CommonGoodsViewHolder) holder).tv_specail.setText(""+objects.get(position).getSquare() + objects.get(position).getSquare__suffix());
                     ((CommonGoodsViewHolder) holder).edt_num.setText(""+objects.get(position).getSquare_num());
                 }else {
@@ -132,6 +128,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     ((CommonGoodsViewHolder) holder).ll_num.setVisibility(View.VISIBLE);
                     ((CommonGoodsViewHolder) holder).edt_num.setText(""+objects.get(position).getNum());
                     ((CommonGoodsViewHolder) holder).tv_specail.setVisibility(View.VISIBLE);
+                    Log.e("13123123",objects.get(position).getSquare()+""+objects.get(position).getSquare__suffix()+"222222");
                     ((CommonGoodsViewHolder) holder).tv_specail.setText(""+objects.get(position).getSquare()+objects.get(position).getSquare__suffix());
                     if (objects.get(position).getCodePU()==null){
                         ((CommonGoodsViewHolder) holder).tv_add_code.setVisibility(View.VISIBLE);
@@ -195,7 +192,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 public void onClick(View v) {
                         if (objects.get(position).isSpecial()) {
                             if (type.equals("2")) {
-                                objects.get(position).setSquare(objects.get(position).getSquare() + 0.001);
+                                objects.get(position).setSquare((float) (objects.get(position).getSquare() + 0.001));
                                 objects.get(position).setSquare_num(objects.get(position).getSquare_num() + 1);
                             }else if (type.equals("3")){
                                 objects.get(position).setNum(objects.get(position).getNum() + 1);
@@ -221,12 +218,35 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    if (s.toString().equals("")){
+                    if (s.length()==0){
 //                        ((CommonGoodsViewHolder) holder).edt_num.setText("1");
                         objects.get(position).setNum(1);
+                       // objects.get(position).setSquare_num(1);
+//                        try {
+//                            ((CommonGoodsTypeViewHolder) holder).edt_num.setText("1");
+//                        }catch (Exception e){
+//                            ((CommonGoodsTypeViewHolder) holder).edt_num.setText("1");
+//                            e.printStackTrace();
+//                        }
+                        //((CommonGoodsTypeViewHolder) holder).edt_num.setText("1");
+                        Toast.makeText(context,"最小值不能小于1",Toast.LENGTH_SHORT).show();
+                        //((CommonGoodsTypeViewHolder) holder).edt_num.setText(objects.get(position).getNum()+"");
                         return;
                     }
+
                     if (Integer.parseInt(s.toString().trim())<1){
+                        objects.get(position).setNum(1);
+//                        try {
+//                            ((CommonGoodsTypeViewHolder) holder).edt_num.setText("1");
+//                        }catch (Exception e){
+//                            ((CommonGoodsTypeViewHolder) holder).edt_num.setText("1");
+//                            e.printStackTrace();
+//                        }
+
+                       // objects.get(position).setSquare_num(1);
+                        //((CommonGoodsTypeViewHolder) holder).edt_num.setText(objects.get(position).getNum()+"");
+                        //((CommonGoodsTypeViewHolder) holder).edt_num.setText("1");
+                        Toast.makeText(context,"最小值不能小于1",Toast.LENGTH_SHORT).show();
                         return;
                     }
 
@@ -244,9 +264,14 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                     if (objects.get(position).isSpecial()){
                         if (type.equals("2")) {
-                            objects.get(position).setSquare(Integer.parseInt(s.toString())*0.001);
+                            int num=Integer.parseInt(s.toString());
+                            float sss= (float) (num*0.001);
+                            objects.get(position).setSquare(sss);
                             objects.get(position).setSquare_num(Integer.parseInt(s.toString()));
-                            ((CommonGoodsViewHolder) holder).tv_specail.setText(Integer.parseInt(s.toString())*0.001+objects.get(position).getSquare__suffix());
+
+                            Log.e("1222",sss+"------2222");
+                            Log.e("13123123",Integer.parseInt(s.toString())+"----"+Integer.parseInt(s.toString())*0.001+""+objects.get(position).getSquare__suffix()+"33333333");
+                            ((CommonGoodsViewHolder) holder).tv_specail.setText(sss+objects.get(position).getSquare__suffix());
                         }else if (type.equals("3")){
                             objects.get(position).setNum(Integer.parseInt(s.toString()));
                             EventBus.getDefault().post(objects);
@@ -260,20 +285,32 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             ((CommonGoodsViewHolder) holder).tv_reduce.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (((CommonGoodsViewHolder) holder).edt_num.getText().toString().equals("1")){
+                        Toast.makeText(context,"最小不能小于1",Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
                         if (objects.get(position).isSpecial()) {
                             if (type.equals("2")) {
                                 if (objects.get(position).getSquare() > 0.001) {
-                                    objects.get(position).setSquare(objects.get(position).getSquare() - 0.001);
+                                    objects.get(position).setSquare((float) (objects.get(position).getSquare() - 0.001));
                                     objects.get(position).setSquare_num(objects.get(position).getSquare_num() - 1);
                                 }
                             }else if (type.equals("3")){
                                 if (objects.get(position).getNum()>1){
                                     objects.get(position).setNum(objects.get(position).getNum() - 1);
                                     EventBus.getDefault().post(objects);
+                                }else {
+                                    if (objects.get(position).getNum()==1){
+                                        Toast.makeText(context,"最小不能小于1",Toast.LENGTH_SHORT).show();
+                                    }
+
                                 }
                             }
                         }else if (objects.get(position).getNum()>1){
                             objects.get(position).setNum(objects.get(position).getNum() - 1);
+                        }else {
+                            Toast.makeText(context,"最小不能小于1",Toast.LENGTH_SHORT).show();
                         }
                         notifyDataSetChanged();
                 }
@@ -400,9 +437,17 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             ((CommonGoodsTypeViewHolder) holder).tv_reduce.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if (((CommonGoodsViewHolder) holder).edt_num.getText().toString().equals("1")){
+                        Toast.makeText(context,"最小不能小于1",Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     if (objects.get(position).getNum()>1){
                         objects.get(position).setNum(objects.get(position).getNum()-1) ;
                         notifyDataSetChanged();
+                    }else {
+                        if (objects.get(position).getNum()==1){
+                            Toast.makeText(context,"最小不能小于1",Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
             });
@@ -422,9 +467,14 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 public void afterTextChanged(Editable s) {
                     if (s.toString().equals("")){
                         objects.get(position).setNum(1);
+//                        ((CommonGoodsTypeViewHolder) holder).edt_num.setText("1");
+//                        Toast.makeText(context,"最小值不能小于1",Toast.LENGTH_SHORT).show();
                         return;
                     }
                     if (Integer.parseInt(s.toString().trim())<1){
+                        objects.get(position).setNum(1);
+//                        ((CommonGoodsTypeViewHolder) holder).edt_num.setText("1");
+//                        Toast.makeText(context,"最小值不能小于1",Toast.LENGTH_SHORT).show();
                         return;
                     }
                     if (s.toString().startsWith("0")){

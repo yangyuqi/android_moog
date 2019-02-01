@@ -306,7 +306,7 @@ public class OrderlistDetail {
                 private int count;
                 private String codePu;
                 private String addPrice;
-                private int square;
+                private float square;
                 private int returnCount;
                 private boolean isSpecial;
 
@@ -366,11 +366,11 @@ public class OrderlistDetail {
                     this.addPrice = addPrice;
                 }
 
-                public int getSquare() {
+                public float getSquare() {
                     return square;
                 }
 
-                public void setSquare(int square) {
+                public void setSquare(float square) {
                     this.square = square;
                 }
 

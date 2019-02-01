@@ -147,7 +147,7 @@ public class AttentionGoodsActivity extends BaseActivity {
                     }
 
 
-                    if (intentDataBean.getCustomerIntentData().isIntent()) {
+                    if (intentDataBean.getCustomerIntentData().isIntent()==true) {
                         if (intentDataBean.getCustomerIntentData().getIntentProductList().size()!=0) {
                             Log.e("112312",intentDataBean.getCustomerIntentData().getIntentProductList().size()+"");
                             adapter.setData(intentDataBean.getCustomerIntentData().getIntentProductList());

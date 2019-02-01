@@ -31,18 +31,18 @@ public class ScanDatasBean implements Serializable{
     private int num = 1;//添加数量
 
     private String addPrice ;//特殊单品
-    private double square =0.001;//特殊单品
+    private float square =0.001f;//特殊单品
     private String codePU ;//特殊单品
     private String square__suffix="平方";
-    private int square_num = 1 ;
+    private long square_num = 1 ;
     private String addPrice__suffix="增项加价 : ¥ ";
     private String codePU__suffix = "PU单号 : " ;
 
-    public int getSquare_num() {
+    public long getSquare_num() {
         return square_num;
     }
 
-    public void setSquare_num(int square_num) {
+    public void setSquare_num(long square_num) {
         this.square_num = square_num;
     }
 
@@ -66,11 +66,11 @@ public class ScanDatasBean implements Serializable{
         this.addPrice = addPrice;
     }
 
-    public double getSquare() {
+    public float getSquare() {
         return square;
     }
 
-    public void setSquare(double square) {
+    public void setSquare(float square) {
         this.square = square;
     }
 

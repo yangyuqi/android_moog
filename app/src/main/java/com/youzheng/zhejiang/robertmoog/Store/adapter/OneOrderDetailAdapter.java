@@ -67,10 +67,10 @@ public class OneOrderDetailAdapter  extends RecyclerView.Adapter<OneOrderDetailA
             }
 
             if (!TextUtils.isEmpty(bean.getAddPrice())){
-                oneHolder.tv_add_money.setText("增项加价 "+context.getString(R.string.label_money)+bean.getAddPrice());
+                oneHolder.tv_add_money.setText("增项加价 "+context.getString(R.string.label_money)+" "+bean.getAddPrice());
             }
           if (!TextUtils.isEmpty(bean.getCodePu())){
-              oneHolder.tv_pu_code.setText("PU单号: "+bean.getCodePu());
+              oneHolder.tv_pu_code.setText("PU单号: "+" "+bean.getCodePu());
           }
         }else {
             oneHolder.tv_area.setVisibility(View.GONE);
