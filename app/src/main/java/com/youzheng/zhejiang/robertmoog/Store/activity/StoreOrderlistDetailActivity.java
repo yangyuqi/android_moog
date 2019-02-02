@@ -322,10 +322,11 @@ public class StoreOrderlistDetailActivity extends BaseActivity implements View.O
 
         if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getBusinessRole())){
             businessRole=orderlistDetail.getOrderItemData().getBusinessRole();
-            if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getCreateUser())){
-                createUser=orderlistDetail.getOrderItemData().getCreateUser();
-                tv_maker.setText(createUser);
-            }
+        }
+
+        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getCreateUser())){
+            createUser=orderlistDetail.getOrderItemData().getCreateUser();
+            tv_maker.setText(createUser);
         }
 
         if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getShipPerson())){

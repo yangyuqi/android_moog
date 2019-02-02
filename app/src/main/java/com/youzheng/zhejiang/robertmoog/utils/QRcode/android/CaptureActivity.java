@@ -22,12 +22,9 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.zxing.Result;
 import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
@@ -39,15 +36,13 @@ import com.youzheng.zhejiang.robertmoog.Home.activity.SearchGoodsActivity;
 import com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider;
 import com.youzheng.zhejiang.robertmoog.Home.adapter.SearchResultAdapter;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
-import com.youzheng.zhejiang.robertmoog.Model.Home.CustomerData;
-import com.youzheng.zhejiang.robertmoog.Model.Home.IntentProductList;
+
 import com.youzheng.zhejiang.robertmoog.Model.Home.IntentProductsBeanAdd;
-import com.youzheng.zhejiang.robertmoog.Model.Home.OrderSetMealDatasBean;
-import com.youzheng.zhejiang.robertmoog.Model.Home.ProductListBean;
+
 import com.youzheng.zhejiang.robertmoog.Model.Home.ScanDatas;
 import com.youzheng.zhejiang.robertmoog.Model.Home.ScanDatasBean;
 import com.youzheng.zhejiang.robertmoog.R;
-import com.youzheng.zhejiang.robertmoog.utils.CommonAdapter;
+
 import com.youzheng.zhejiang.robertmoog.utils.QRcode.bean.ZxingConfig;
 import com.youzheng.zhejiang.robertmoog.utils.QRcode.camera.CameraManager;
 import com.youzheng.zhejiang.robertmoog.utils.QRcode.common.Constant;
@@ -56,16 +51,14 @@ import com.youzheng.zhejiang.robertmoog.utils.QRcode.decode.DecodeImgThread;
 import com.youzheng.zhejiang.robertmoog.utils.QRcode.decode.ImageUtil;
 import com.youzheng.zhejiang.robertmoog.utils.QRcode.view.ViewfinderView;
 import com.youzheng.zhejiang.robertmoog.utils.SharedPreferencesUtils;
-import com.youzheng.zhejiang.robertmoog.utils.ViewHolder;
+
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+
 import java.util.Map;
 
-import de.greenrobot.event.EventBus;
-import de.greenrobot.event.Subscribe;
 import okhttp3.Request;
 
 
@@ -120,12 +113,11 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         // 保持Activity处于唤醒状态
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.setStatusBarColor(Color.BLACK);
+            window.setStatusBarColor(getResources().getColor(R.color.colorPrimary));
         }
 
 

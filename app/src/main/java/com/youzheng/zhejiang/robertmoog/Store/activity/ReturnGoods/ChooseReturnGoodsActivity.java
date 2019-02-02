@@ -196,10 +196,7 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
           }
 
         if (!TextUtils.isEmpty(infoBean.getCreateUser())){
-            if (!TextUtils.isEmpty(infoBean.getBusinessRole())){
-                tv_maker.setText(infoBean.getCreateUser()+"("+infoBean.getBusinessRole()+")");
-            }
-
+                tv_maker.setText(infoBean.getCreateUser());
         }
 
 

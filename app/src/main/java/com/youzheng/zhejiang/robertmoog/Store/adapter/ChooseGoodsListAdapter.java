@@ -46,6 +46,11 @@ public class ChooseGoodsListAdapter extends RecyclerView.Adapter {
         notifyDataSetChanged();
     }
 
+    public void clear(){
+        list.clear();
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemViewType(int position) {
         NewOrderListBean.OrderListBean orderList = list.get(position);
