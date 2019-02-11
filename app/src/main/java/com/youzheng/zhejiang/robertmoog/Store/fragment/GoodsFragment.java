@@ -166,6 +166,7 @@ public class GoodsFragment extends BaseFragment {
 
             @Override
             public void onLoadMore() {
+                list.clear();
                page++;
                initData(page,pageSize);
             }

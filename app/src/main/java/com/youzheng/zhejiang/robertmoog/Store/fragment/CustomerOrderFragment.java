@@ -142,6 +142,7 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
 
             @Override
             public void onLoadMore() {
+                list.clear();
                 page++;
                 initData(page,pageSize,orderCode,timeQuantum,isCustomer,type);
             }

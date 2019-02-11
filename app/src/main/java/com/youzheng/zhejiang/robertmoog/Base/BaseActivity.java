@@ -1,25 +1,29 @@
 package com.youzheng.zhejiang.robertmoog.Base;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.utils.ActivityStack;
+import com.youzheng.zhejiang.robertmoog.utils.NetBroadcastReceiver;
+import com.youzheng.zhejiang.robertmoog.utils.NetUtil;
 import com.youzheng.zhejiang.robertmoog.utils.SharedPreferencesUtils;
 
-public class BaseActivity extends AppCompatActivity {
+public class BaseActivity extends AppCompatActivity implements NetBroadcastReceiver.NetChangeListener {
 
 
     LinearLayout mRootBaseView;//根布局
@@ -33,6 +37,14 @@ public class BaseActivity extends AppCompatActivity {
     protected FragmentManager fm;
     protected Gson gson ;
     protected String access_token ,role;
+
+    public static NetBroadcastReceiver netBroadcastReceiver;
+    public static NetBroadcastReceiver.NetChangeListener listener;
+    /**
+     * 网络类型
+     */
+    private int netMobile;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,7 +63,66 @@ public class BaseActivity extends AppCompatActivity {
         role = (String) SharedPreferencesUtils.getParam(mContext,PublicUtils.role,"");
         ActivityStack.getScreenManager().pushActivity(this);
         initBaseView();
+        listener = this;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            //实例化IntentFilter对象
+            IntentFilter filter = new IntentFilter();
+            filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+            netBroadcastReceiver = new NetBroadcastReceiver();
+            //注册广播接收
+            registerReceiver(netBroadcastReceiver, filter);
+        }
+        checkNet();
     }
+
+    private boolean checkNet() {
+        this.netMobile = NetUtil.getNetWorkState(BaseActivity.this);
+        if (!isNetConnect()) {
+            //网络异常，请检查网络
+            //showNetDialog();
+            changePageState(PageState.ERROR);
+           // T.showShort("网络异常，请检查网络，哈哈");
+        }
+        return isNetConnect();
+    }
+
+    @Override
+    public void onChangeListener(int status) {
+        this.netMobile = status;
+        Log.i("netType", "netType:" + netMobile);
+        if (!isNetConnect()) {
+            changePageState(PageState.ERROR);
+//            showNetDialog();
+//            T.showShort("网络异常，请检查网络，哈哈");
+        } else {
+            changePageState(PageState.NORMAL);
+//            hideNetDialog();
+//            T.showShort("网络恢复正常");
+        }
+    }
+
+
+
+
+    /**
+     * 判断有无网络 。
+     *
+     * @return true 有网, false 没有网络.
+     */
+    public boolean isNetConnect() {
+        if (netMobile == 1) {
+            return true;
+        } else if (netMobile == 0) {
+            return true;
+        } else if (netMobile == -1) {
+            return false;
+
+        }
+        return false;
+    }
+
+
+
 
     public void initBaseView() {
         mRootBaseView = (LinearLayout) findViewById(R.id.activity_base_root);
@@ -86,7 +157,9 @@ public class BaseActivity extends AppCompatActivity {
                     btReload.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            reloadInterface.reloadClickListener();
+                            Intent intent =  new Intent(Settings.ACTION_AIRPLANE_MODE_SETTINGS);
+                            startActivity(intent);
+                            //reloadInterface.reloadClickListener();
                         }
                     });
                     ll_page_state_empty.setVisibility(View.GONE);
@@ -110,6 +183,8 @@ public class BaseActivity extends AppCompatActivity {
     public void setReloadInterface(ReloadInterface reloadInterface) {
         this.reloadInterface = reloadInterface;
     }
+
+
 
     public interface ReloadInterface {
         void reloadClickListener();

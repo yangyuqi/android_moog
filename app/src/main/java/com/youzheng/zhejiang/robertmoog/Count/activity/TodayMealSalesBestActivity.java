@@ -75,6 +75,7 @@ public class TodayMealSalesBestActivity extends BaseActivity implements View.OnC
 
             @Override
             public void onLoadMore() {
+                list.clear();
                 page++;
                 initData(page,pageSize,isDay,startstr,endstr,rulestr);
 

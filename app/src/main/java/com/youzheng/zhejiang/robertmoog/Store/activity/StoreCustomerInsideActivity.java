@@ -67,6 +67,7 @@ public class StoreCustomerInsideActivity extends BaseActivity implements View.On
 
             @Override
             public void onLoadMore() {
+                list.clear();
               page++;
               initData(page,pageSize);
             }

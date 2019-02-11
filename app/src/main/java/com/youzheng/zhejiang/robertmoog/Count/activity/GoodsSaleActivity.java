@@ -105,6 +105,7 @@ public class GoodsSaleActivity extends BaseActivity implements View.OnClickListe
 
             @Override
             public void onLoadMore() {
+                list.clear();
              page++;
              initData(page,pageSize,isDay,starstDate,endsDate);
             }

@@ -127,6 +127,7 @@ public class MealRankingActivity extends BaseActivity implements View.OnClickLis
 
             @Override
             public void onLoadMore() {
+                list.clear();
                 page++;
                 initData(page,pageSize,isDay,startstr,endstr,rulestr);
 

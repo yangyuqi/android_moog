@@ -84,6 +84,7 @@ public class CheckResultActivity extends BaseActivity implements View.OnClickLis
 
             @Override
             public void onLoadMore() {
+                list.clear();
                     year=year-1;
                     tv_title.setText(year+"年");
                     initData(year);

@@ -13,6 +13,7 @@ import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
 import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
+import com.youzheng.zhejiang.robertmoog.Home.adapter.CouponActionAdapter;
 import com.youzheng.zhejiang.robertmoog.Home.adapter.CustomerGoodsAdapter;
 import com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider;
 import com.youzheng.zhejiang.robertmoog.Home.adapter.ShopActionAdapter;
@@ -37,14 +38,15 @@ public class ShopActionDetailsActivity extends BaseActivity {
     private int promoId ;
 
     private NoScrollListView ls ;
-    TextView tv_name ,tv_start_time ,tv_desc ,tv_end_time;
+    TextView tv_name ,tv_start_time ,tv_desc ,tv_end_time,tv_coupon;
     CommonAdapter<String> adapter ;
     List<String> data = new ArrayList<>();
 
-    RecyclerView recycler_view ;
+    RecyclerView recycler_view ,rv_coupon;
     ShopActionAdapter shop_adapter ;
     private String codeid;
     private TextView tv_goods,tv_meal;
+    private CouponActionAdapter actionAdapter;
 
 
     @Override
@@ -79,10 +81,14 @@ public class ShopActionDetailsActivity extends BaseActivity {
                         adapter.setData(promoIdDetails.getData().getOrderPromo());
                         adapter.notifyDataSetChanged();
                         tv_goods.setVisibility(View.VISIBLE);
+                        ls.setVisibility(View.VISIBLE);
                     }else {
                         tv_goods.setVisibility(View.GONE);
+                        ls.setVisibility(View.GONE);
                     }
                     if (promoIdDetails.getData().getComboPromo().size()>0){
+                        tv_meal.setVisibility(View.VISIBLE);
+                        recycler_view.setVisibility(View.VISIBLE);
                         LinearLayoutManager manager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
                         recycler_view.setLayoutManager(manager);
                         shop_adapter = new ShopActionAdapter(promoIdDetails.getData().getComboPromo(),mContext );
@@ -90,6 +96,20 @@ public class ShopActionDetailsActivity extends BaseActivity {
                         recycler_view.addItemDecoration(new RecycleViewDivider(mContext, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
                     }else {
                         tv_meal.setVisibility(View.GONE);
+                        recycler_view.setVisibility(View.VISIBLE);
+                    }
+
+                    if (promoIdDetails.getData().getCouponPromo().size()>0){
+                        tv_coupon.setVisibility(View.VISIBLE);
+                        rv_coupon.setVisibility(View.VISIBLE);
+                        LinearLayoutManager manager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
+                        rv_coupon.setLayoutManager(manager);
+                        actionAdapter = new CouponActionAdapter(promoIdDetails.getData().getCouponPromo(),mContext);
+                        rv_coupon.setAdapter(actionAdapter);
+                        rv_coupon.addItemDecoration(new RecycleViewDivider(mContext, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
+                    }else {
+                        tv_coupon.setVisibility(View.GONE);
+                        rv_coupon.setVisibility(View.GONE);
                     }
                 }
             }
@@ -121,6 +141,8 @@ public class ShopActionDetailsActivity extends BaseActivity {
         tv_start_time = findViewById(R.id.tv_start_time);
         tv_name = findViewById(R.id.tv_name);
         tv_end_time = findViewById(R.id.tv_end_time);
+        tv_coupon=findViewById(R.id.tv_coupon);
+        rv_coupon=findViewById(R.id.rv_coupon);
         adapter = new CommonAdapter<String>(mContext,data,R.layout.shop_details_ls_item) {
             @Override
             public void convert(ViewHolder helper, String item) {

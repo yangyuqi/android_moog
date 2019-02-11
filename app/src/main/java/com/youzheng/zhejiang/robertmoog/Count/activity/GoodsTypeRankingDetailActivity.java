@@ -106,6 +106,7 @@ public class GoodsTypeRankingDetailActivity extends BaseActivity implements View
 
             @Override
             public void onLoadMore() {
+                list.clear();
                 page++;
                 initData(page, pageSize, isDay, startstr, endstr, categoryId, type);
             }

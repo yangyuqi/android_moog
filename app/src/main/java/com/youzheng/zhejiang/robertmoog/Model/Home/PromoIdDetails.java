@@ -13,6 +13,15 @@ public class PromoIdDetails {
     private String typeId ;
     private List<String> orderPromo = new ArrayList<>();
     private List<ComboPromoBean> comboPromo = new ArrayList<>();
+    private List<CouponPromo> couponPromo=new ArrayList<>();
+
+    public List<CouponPromo> getCouponPromo() {
+        return couponPromo;
+    }
+
+    public void setCouponPromo(List<CouponPromo> couponPromo) {
+        this.couponPromo = couponPromo;
+    }
 
     public List<ComboPromoBean> getComboPromo() {
         return comboPromo;

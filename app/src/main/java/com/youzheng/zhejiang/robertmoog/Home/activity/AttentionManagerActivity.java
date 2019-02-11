@@ -29,6 +29,7 @@ import com.youzheng.zhejiang.robertmoog.Model.Home.CustomerIntentListBean;
 import com.youzheng.zhejiang.robertmoog.Model.Home.NotLabelList;
 import com.youzheng.zhejiang.robertmoog.Model.Home.ShopPersonalListBean;
 import com.youzheng.zhejiang.robertmoog.R;
+import com.youzheng.zhejiang.robertmoog.utils.PhoneUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -185,10 +186,13 @@ public class AttentionManagerActivity extends BaseActivity {
                                 customerList.get(i).setName(customerList.get(i).getProductList().get(0).getName());
                                 customerList.get(i).setSku(customerList.get(i).getProductList().get(0).getSku());
                                 customerList.get(i).setCreateDate(customerList.get(i).getProductList().get(0).getCreateDate());
+                            }else {
+
                             }
                         }
                         adapter.setData(customerList,mContext);
                     }else {
+                        showToast(getString(R.string.load_list_erron));
                         adapter.setData(new ArrayList<CustomerIntentListBean>(),mContext);
                     }
                 }
@@ -250,8 +254,19 @@ public class AttentionManagerActivity extends BaseActivity {
         iv_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                phone = tv_search.getText().toString();
-                initData();
+                if (tv_search.getText().toString().equals("")) {
+                    showToast(getString(R.string.phone_not_null));
+                    return;
+                }else if (tv_search.getText().toString().length()<11){
+                    showToast("手机号有误,请重新输入");
+                }else if (PhoneUtil.isCellphone(tv_search.getText().toString())==false){
+                    showToast("手机号格式错误,请重新输入");
+                }else {
+                    phone = tv_search.getText().toString();
+                    initData();
+                }
+
+
             }
         });
     }

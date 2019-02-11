@@ -128,6 +128,7 @@ public class StoreSalesNumberActivity extends BaseActivity implements View.OnCli
 
             @Override
             public void onLoadMore() {
+                list.clear();
                 page++;
                 initData(isDay,starstDate,endsDate);
             }

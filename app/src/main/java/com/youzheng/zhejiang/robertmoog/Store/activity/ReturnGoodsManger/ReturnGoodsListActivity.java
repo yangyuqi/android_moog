@@ -118,6 +118,7 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
 
             @Override
             public void onLoadMore() {
+                list.clear();
                page++;
                 initData(page,pageSize,orderCode,timeQuantum,isCustomer);
             }

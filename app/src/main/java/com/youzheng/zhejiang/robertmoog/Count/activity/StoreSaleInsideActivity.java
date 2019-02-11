@@ -102,9 +102,9 @@ public class StoreSaleInsideActivity extends BaseActivity implements View.OnClic
         }else {
             lin_search.setVisibility(View.GONE);
         }
-        setListener();
+        //setListener();
         initTimer();
-        initData(page,pageSize,shopid,startstr,endstr);
+        initData(shopid,startstr,endstr);
     }
 
     private void setListener() {
@@ -113,13 +113,14 @@ public class StoreSaleInsideActivity extends BaseActivity implements View.OnClic
             public void onRefresh() {
                 page=1;
                 list.clear();
-                initData(page,pageSize,shopid,startstr,endstr);
+                initData(shopid,startstr,endstr);
             }
 
             @Override
             public void onLoadMore() {
+                list.clear();
                 page++;
-                initData(page,pageSize,shopid,startstr,endstr);
+                initData(shopid,startstr,endstr);
             }
         });
 
@@ -157,16 +158,19 @@ public class StoreSaleInsideActivity extends BaseActivity implements View.OnClic
                 this, LinearLayoutManager.VERTICAL, 5, getResources().getColor(R.color.divider_color_item)));
         pr_list.setColorSchemeResources(R.color.colorPrimary);
 
+        pr_list.setPushRefreshEnable(false);
+        pr_list.setPullRefreshEnable(false);
+
         adapter=new StoreSaleInsideAdapter(list,this);
         pr_list.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
     }
 
-    private void initData(int page,int pageSize,long shopPersonalId,String startDate,String endDate) {
+    private void initData(long shopPersonalId,String startDate,String endDate) {
         HashMap<String,Object> map=new HashMap<>();
-        map.put("pageNum",page);
-        map.put("pageSize",pageSize);
+//        map.put("pageNum",page);
+//        map.put("pageSize",pageSize);
         map.put("shopPersonalId",shopPersonalId);
         map.put("startDate",startDate);
         map.put("endDate",endDate);
@@ -239,7 +243,7 @@ public class StoreSaleInsideActivity extends BaseActivity implements View.OnClic
                 break;
             case R.id.tv_check:
                 list.clear();
-                initData(page,pageSize,shopid,startstr,endstr);
+                initData(shopid,startstr,endstr);
                 break;
         }
     }

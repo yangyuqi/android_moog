@@ -126,6 +126,7 @@ public class GoodsTypeRankingActivity extends BaseActivity implements View.OnCli
 
             @Override
             public void onLoadMore() {
+                list.clear();
                page++;
                 initData(page,pageSize,isDay,startstr,endstr,rulestr);
             }

@@ -161,6 +161,7 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
 
             @Override
             public void onLoadMore() {
+                list.clear();
                 page++;
                 initData(page,pageSize,orderCode,timeQuantum,isCustomer,type);
             }

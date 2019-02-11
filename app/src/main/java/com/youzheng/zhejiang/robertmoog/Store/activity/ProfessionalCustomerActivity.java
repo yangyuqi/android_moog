@@ -79,6 +79,7 @@ public class ProfessionalCustomerActivity extends BaseActivity implements View.O
 
             @Override
             public void onLoadMore() {
+                list.clear();
               page++;
               initData(page,pageSize);
             }

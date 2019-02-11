@@ -76,6 +76,7 @@ public class TodaySingleGoodsSalesBestDetailActivity extends BaseActivity implem
 
             @Override
             public void onLoadMore() {
+                list.clear();
                 page++;
                 initData(page,pageSize,isDay,starstDate,endsDate);
             }

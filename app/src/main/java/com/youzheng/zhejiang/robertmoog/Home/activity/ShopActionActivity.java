@@ -164,6 +164,7 @@ public class ShopActionActivity extends BaseActivity {
             @Override
             public void onRefresh() {
                 pageNum=1;
+                data.clear();
                 adapter.clear();
                 initData();
             }

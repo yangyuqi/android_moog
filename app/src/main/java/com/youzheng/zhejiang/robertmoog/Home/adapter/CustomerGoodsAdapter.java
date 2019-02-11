@@ -209,7 +209,11 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
                                 @Override
                                 public void onResponse(String response) {
-
+                                    BaseModel baseModel = gson.fromJson(response,BaseModel.class);
+                                    if (baseModel.getCode()==PublicUtils.code){
+                                        data.remove(i);
+                                        notifyDataSetChanged();
+                                    }
                                 }
                             });
                         }

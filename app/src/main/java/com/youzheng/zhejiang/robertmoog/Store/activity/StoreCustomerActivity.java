@@ -87,6 +87,7 @@ public class StoreCustomerActivity extends BaseActivity implements View.OnClickL
 
             @Override
             public void onLoadMore() {
+                list.clear();
                 year--;
                 initData(year);
             }
@@ -94,6 +95,8 @@ public class StoreCustomerActivity extends BaseActivity implements View.OnClickL
 
 
     }
+
+
 
     private void initView() {
         btnBack = (ImageView) findViewById(R.id.btnBack);
