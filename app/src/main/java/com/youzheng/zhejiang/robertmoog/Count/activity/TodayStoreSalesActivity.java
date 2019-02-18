@@ -123,6 +123,9 @@ public class TodayStoreSalesActivity extends BaseActivity implements View.OnClic
         pr_list.addItemDecoration(new RecycleViewDivider(
                 this, LinearLayoutManager.VERTICAL, 5, getResources().getColor(R.color.divider_color_item)));
         pr_list.setColorSchemeResources(R.color.colorPrimary);
+
+        pr_list.setPushRefreshEnable(false);
+        pr_list.setPullRefreshEnable(false);
         adapter=new TodayStoreSaleAdapter(list,this);
         pr_list.setAdapter(adapter);
         adapter.notifyDataSetChanged();

@@ -17,6 +17,7 @@ import com.youzheng.zhejiang.robertmoog.Home.activity.RegisterSuccessActivity;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.Model.Home.CustomerBean;
 import com.youzheng.zhejiang.robertmoog.R;
+import com.youzheng.zhejiang.robertmoog.Store.utils.SoftInputUtils;
 import com.youzheng.zhejiang.robertmoog.utils.PhoneUtil;
 
 import java.io.IOException;
@@ -69,6 +70,7 @@ public class ReturnRecognitionActivity extends BaseActivity implements View.OnCl
                 finish();
                 break;
             case R.id.iv_search:
+                SoftInputUtils.hideSoftInput(ReturnRecognitionActivity.this);
                 if (tv_search.getText().toString().equals("")){
                     showToast(getString(R.string.phone_not_null));
                 }else if (tv_search.getText().toString().length()<11){

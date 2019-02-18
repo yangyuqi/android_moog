@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
@@ -20,6 +21,7 @@ import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
 import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
 import com.youzheng.zhejiang.robertmoog.Home.activity.AttentionGoodsActivity;
+import com.youzheng.zhejiang.robertmoog.Home.bean.MangerListener;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.Model.Home.CustomerIntentData;
 import com.youzheng.zhejiang.robertmoog.Model.Home.CustomerIntentListBean;
@@ -47,11 +49,12 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
     public int widWidth ;
     public String token ;
     public Gson gson = new Gson() ;
-
-    public CustomerGoodsAdapter(List<CustomerIntentListBean> dataList, Context context ,int widWidth) {
+    private MangerListener listener;
+    public CustomerGoodsAdapter(List<CustomerIntentListBean> dataList, Context context ,int widWidth,MangerListener listener) {
         data = dataList ;
         this.context = context ;
         this.widWidth = widWidth ;
+        this.listener=listener;
         this.token = (String) SharedPreferencesUtils.getParam(context,PublicUtils.access_token,"");
     }
 
@@ -100,10 +103,46 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
                                 helper.setText(R.id.tv_time,item.getCreateDate());
                                 helper.setText(R.id.tv_desc,item.getName());
                                 Glide.with(context).load(item.getPhoto()).error(R.mipmap.type_icon).into((ImageView) helper.getView(R.id.iv_icon));
-                                LinearLayout view = helper.getView(R.id.ll_width);
-                                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
-                                params.width = (int) PublicUtils.dip2px(PublicUtils.px2dip(widWidth));
-                                view.setLayoutParams(params);
+//                                LinearLayout view = helper.getView(R.id.ll_width);
+//                                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
+//                                params.width = (int) PublicUtils.dip2px(PublicUtils.px2dip(widWidth));
+//                                view.setLayoutParams(params);
+                                helper.getView(R.id.iv_delete_items).setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        if (token.equals("")){
+                                            return;
+                                        }
+                                        DeleteDialog dialog = new DeleteDialog(context,"提示","是否删除此意向商品","确定");
+                                        dialog.show();
+                                        dialog.OnDeleteBtn(new DeleteDialogInterface() {
+                                            @Override
+                                            public void isDelete(boolean isdelete) {
+                                                Map<String,Object> map = new HashMap<>();
+                                                map.put("id",data.get(i).getGoodsId());
+                                                OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.DELETE_GOODS + "?access_token=" + token, new OkHttpClientManager.StringCallback() {
+                                                    @Override
+                                                    public void onFailure(Request request, IOException e) {
+
+                                                    }
+
+                                                    @Override
+                                                    public void onResponse(String response) {
+                                                        BaseModel baseModel = gson.fromJson(response,BaseModel.class);
+                                                        if (baseModel.getCode()==PublicUtils.code){
+                                                            listBeanList.remove(i);
+                                                            listener.refresh(data);
+                                                            //listBeanList.remove(i);
+//                                                            commonAdapter.notifyDataSetChanged();
+                                                            notifyDataSetChanged();
+                                                            //notifyItemInserted(i);
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
+                                });
                                 helper.getView(R.id.main_right_drawer_layout).setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
@@ -121,23 +160,31 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
             }
 
 
-            LinearLayout view = ((CustomerIntentViewHolder) viewHolder).ll_width;
-            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
-            params.width = (int) PublicUtils.dip2px(PublicUtils.px2dip(widWidth));
-            view.setLayoutParams(params);
+//            LinearLayout view = ((CustomerIntentViewHolder) viewHolder).ll_width;
+//            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
+//            params.width = (int) PublicUtils.dip2px(PublicUtils.px2dip(widWidth));
+//            view.setLayoutParams(params);
+
+//
+//            ((CustomerIntentViewHolder) viewHolder).hsv.setOnTouchListener(new View.OnTouchListener() {
+//                @Override
+//                public boolean onTouch(View v, MotionEvent event) {
+//                    return true;
+//                }
+//            });
 
             ((CustomerIntentViewHolder) viewHolder).tv_phone.setText(data.get(i).getCustCode());
-            ((CustomerIntentViewHolder) viewHolder).tv_name.setText(data.get(i).getName());
-            ((CustomerIntentViewHolder) viewHolder).tv_desc.setText(data.get(i).getSku());
+            ((CustomerIntentViewHolder) viewHolder).tv_name.setText(data.get(i).getSku());
+            ((CustomerIntentViewHolder) viewHolder).tv_desc.setText(data.get(i).getName());
             ((CustomerIntentViewHolder) viewHolder).tv_time.setText(data.get(i).getCreateDate());
 
             Glide.with(context).load(data.get(i).getPhoto()).error(R.mipmap.type_icon).into(((CustomerIntentViewHolder) viewHolder).iv_icon);
 
-            if (data.get(i).getProductList().size()>0){
-                ((CustomerIntentViewHolder) viewHolder).hsv.setVisibility(View.VISIBLE);
-            }else {
-                ((CustomerIntentViewHolder) viewHolder).hsv.setVisibility(View.GONE);
-            }
+//            if (data.get(i).getProductList().size()>0){
+//                ((CustomerIntentViewHolder) viewHolder).hsv.setVisibility(View.VISIBLE);
+//            }else {
+//                ((CustomerIntentViewHolder) viewHolder).hsv.setVisibility(View.GONE);
+//            }
               if (TextUtils.isEmpty(data.get(i).getRemark())){
                   ((CustomerIntentViewHolder) viewHolder).iv_message.setVisibility(View.GONE);
               }else {
@@ -152,6 +199,8 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
                     }
                 }
             });
+
+
 
             ((CustomerIntentViewHolder) viewHolder).iv_delete.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -188,7 +237,7 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
                 }
             });
 
-            ((CustomerIntentViewHolder) viewHolder).main_right_drawer_layout.setOnClickListener(new View.OnClickListener() {
+            ((CustomerIntentViewHolder) viewHolder).iv_delete_item.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (token.equals("")){
@@ -211,16 +260,50 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
                                 public void onResponse(String response) {
                                     BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                                     if (baseModel.getCode()==PublicUtils.code){
-                                        data.remove(i);
+                                        data.get(i).getProductList().remove(i);
+                                        listener.refresh(data);
                                         notifyDataSetChanged();
                                     }
                                 }
                             });
                         }
                     });
-
                 }
             });
+
+//            ((CustomerIntentViewHolder) viewHolder).main_right_drawer_layout.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if (token.equals("")){
+//                        return;
+//                    }
+//                    DeleteDialog dialog = new DeleteDialog(context,"提示","是否删除此意向商品","确定");
+//                    dialog.show();
+//                    dialog.OnDeleteBtn(new DeleteDialogInterface() {
+//                        @Override
+//                        public void isDelete(boolean isdelete) {
+//                            Map<String,Object> map = new HashMap<>();
+//                            map.put("id",data.get(i).getGoodsId());
+//                            OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.DELETE_GOODS + "?access_token=" + token, new OkHttpClientManager.StringCallback() {
+//                                @Override
+//                                public void onFailure(Request request, IOException e) {
+//
+//                                }
+//
+//                                @Override
+//                                public void onResponse(String response) {
+//                                    BaseModel baseModel = gson.fromJson(response,BaseModel.class);
+//                                    if (baseModel.getCode()==PublicUtils.code){
+//                                        data.remove(i);
+//                                        notifyDataSetChanged();
+//                                    }
+//                                }
+//                            });
+//                        }
+//                    });
+//
+//                }
+//            });
 
         }
     }
@@ -234,7 +317,7 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         View rl_show ,main_right_drawer_layout;
         TextView tv_phone ,tv_time ,tv_name ,tv_desc ,tv_num;
-        ImageView iv_message , iv_delete ,iv_icon ,iv_show_more;
+        ImageView iv_message , iv_delete ,iv_icon ,iv_show_more,iv_delete_item;
         NoScrollListView ls ;
         LinearLayout ll_width ;
         HorizontalScrollView hsv ;
@@ -251,9 +334,10 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
             ll_width = itemView.findViewById(R.id.ll_width);
             iv_delete = itemView.findViewById(R.id.iv_delete);
             main_right_drawer_layout = itemView.findViewById(R.id.main_right_drawer_layout);
-            hsv = itemView.findViewById(R.id.hsv);
+           // hsv = itemView.findViewById(R.id.hsv);
             iv_show_more = itemView.findViewById(R.id.iv_show_more);
             iv_message = itemView.findViewById(R.id.iv_message);
+            iv_delete_item=itemView.findViewById(R.id.iv_delete_item);
         }
     }
 }

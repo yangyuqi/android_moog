@@ -16,7 +16,7 @@ import com.youzheng.zhejiang.robertmoog.Store.bean.OrderlistDetail;
 
 import java.util.List;
 
-public class OneOrderDetailAdapter  extends RecyclerView.Adapter<OneOrderDetailAdapter.OneHolder> {
+public class  OneOrderDetailAdapter  extends RecyclerView.Adapter<OneOrderDetailAdapter.OneHolder> {
     private List<OrderlistDetail.OrderItemDataBean.OrderProductListBean> list;
     private LayoutInflater layoutInflater;
     private Context context;
@@ -64,13 +64,19 @@ public class OneOrderDetailAdapter  extends RecyclerView.Adapter<OneOrderDetailA
         if (bean.isIsSpecial()==true){
             if (bean.getSquare()!=0){
                 oneHolder.tv_area.setText(bean.getSquare()+"平方");
+            }else {
+                oneHolder.tv_area.setVisibility(View.GONE);
             }
 
             if (!TextUtils.isEmpty(bean.getAddPrice())){
                 oneHolder.tv_add_money.setText("增项加价 "+context.getString(R.string.label_money)+" "+bean.getAddPrice());
+            }else {
+                oneHolder.tv_add_money.setVisibility(View.GONE);
             }
           if (!TextUtils.isEmpty(bean.getCodePu())){
               oneHolder.tv_pu_code.setText("PU单号: "+" "+bean.getCodePu());
+          }else {
+              oneHolder.tv_pu_code.setVisibility(View.GONE);
           }
         }else {
             oneHolder.tv_area.setVisibility(View.GONE);

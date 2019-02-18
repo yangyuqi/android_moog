@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -59,6 +60,7 @@ public class RegisterSuccessActivity extends BaseActivity {
                         if (registerBean!=null){
                             Intent intent = new Intent(mContext,LocationManageActivity.class);
                             intent.putExtra("customerId",registerBean.getCustomerId());
+                            Log.e("customerid","注册成功"+registerBean.getCustomerId());
                             startActivity(intent);
                         }
 

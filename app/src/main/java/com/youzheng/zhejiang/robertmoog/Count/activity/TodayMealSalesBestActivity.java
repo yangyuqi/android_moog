@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.liaoinstan.springview.widget.SpringView;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
@@ -19,6 +20,8 @@ import com.youzheng.zhejiang.robertmoog.Count.bean.MealRankingList;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.view.RecycleViewDivider;
+import com.youzheng.zhejiang.robertmoog.utils.View.MyFooter;
+import com.youzheng.zhejiang.robertmoog.utils.View.MyHeader;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -46,14 +49,15 @@ public class TodayMealSalesBestActivity extends BaseActivity implements View.OnC
     private LinearLayout lin_title;
     private PullLoadMoreRecyclerView pr_list;
     private TodayMealSalesBestAdapter adapter;
-    private List<MealRankingList.SetMealListBean> list=new ArrayList<>();
+    private List<MealRankingList.SetMealListBean> list = new ArrayList<>();
 
-    private int page=1;
-    private int pageSize=10;
-    private boolean isDay=true;
-    private String startstr="";
-    private String endstr="";
-    private String rulestr="COUNT";//默认是数量
+    private int page = 1;
+    private int pageSize = 10;
+    private boolean isDay = true;
+    private String startstr = "";
+    private String endstr = "";
+    private String rulestr = "COUNT";//默认是数量
+    private SpringView mSpringView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,24 +65,41 @@ public class TodayMealSalesBestActivity extends BaseActivity implements View.OnC
         setContentView(R.layout.activity_today_meal_sales_best);
         initView();
         setListener();
-        initData(page,pageSize,isDay,startstr,endstr,rulestr);
+        initData(page, pageSize, isDay, startstr, endstr, rulestr);
     }
+
     private void setListener() {
-        pr_list.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
+//        pr_list.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
+//            @Override
+//            public void onRefresh() {
+//                page = 1;
+//                list.clear();
+//                initData(page, pageSize, isDay, startstr, endstr, rulestr);
+//
+//            }
+//
+//            @Override
+//            public void onLoadMore() {
+//                list.clear();
+//                page++;
+//                initData(page, pageSize, isDay, startstr, endstr, rulestr);
+//
+//            }
+//        });
+
+        mSpringView.setListener(new SpringView.OnFreshListener() {
             @Override
             public void onRefresh() {
-                page=1;
+                page = 1;
                 list.clear();
-                initData(page,pageSize,isDay,startstr,endstr,rulestr);
-
+                initData(page, pageSize, isDay, startstr, endstr, rulestr);
             }
 
             @Override
-            public void onLoadMore() {
-                list.clear();
+            public void onLoadmore() {
+                //list.clear();
                 page++;
-                initData(page,pageSize,isDay,startstr,endstr,rulestr);
-
+                initData(page, pageSize, isDay, startstr, endstr, rulestr);
             }
         });
     }
@@ -105,37 +126,46 @@ public class TodayMealSalesBestActivity extends BaseActivity implements View.OnC
         pr_list.addItemDecoration(new RecycleViewDivider(
                 this, LinearLayoutManager.VERTICAL, 5, getResources().getColor(R.color.divider_color_item)));
         pr_list.setColorSchemeResources(R.color.colorPrimary);
-        adapter=new TodayMealSalesBestAdapter(list,this);
+
+        pr_list.setPullRefreshEnable(false);
+        pr_list.setPushRefreshEnable(false);
+        adapter = new TodayMealSalesBestAdapter(list, this);
         pr_list.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+        mSpringView = (SpringView) findViewById(R.id.springView);
+
+        mSpringView.setHeader(new MyHeader(this));
+        mSpringView.setFooter(new MyFooter(this));
     }
 
     private void initData(int page, int pageSize, boolean isDay, String startDate, String endDate, String rule) {
 
-        HashMap<String,Object> map=new HashMap<>();
-        map.put("pageNum",page);
-        map.put("pageSize",pageSize);
-        map.put("isDay",isDay);
-        map.put("startDate",startDate);
-        map.put("endDate",endDate);
-        map.put("rule",rule);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("pageNum", page);
+        map.put("pageSize", pageSize);
+        map.put("isDay", isDay);
+        map.put("startDate", startDate);
+        map.put("endDate", endDate);
+        map.put("rule", rule);
 
 
         OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.MEAL_RANKING_LIST + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
             public void onFailure(Request request, IOException e) {
-                pr_list.setPullLoadMoreCompleted();
+               // pr_list.setPullLoadMoreCompleted();
+                mSpringView.onFinishFreshAndLoad();
             }
 
             @Override
             public void onResponse(String response) {
-                Log.e("套餐排名",response);
-                pr_list.setPullLoadMoreCompleted();
-                BaseModel baseModel = gson.fromJson(response,BaseModel.class);
-                if (baseModel.getCode()==PublicUtils.code){
-                    MealRankingList mealRankingList = gson.fromJson(gson.toJson(baseModel.getDatas()),MealRankingList.class);
+                Log.e("套餐排名", response);
+               // pr_list.setPullLoadMoreCompleted();
+                mSpringView.onFinishFreshAndLoad();
+                BaseModel baseModel = gson.fromJson(response, BaseModel.class);
+                if (baseModel.getCode() == PublicUtils.code) {
+                    MealRankingList mealRankingList = gson.fromJson(gson.toJson(baseModel.getDatas()), MealRankingList.class);
                     setData(mealRankingList);
-                }else {
+                } else {
                     showToast(baseModel.getMsg());
                 }
             }
@@ -144,13 +174,13 @@ public class TodayMealSalesBestActivity extends BaseActivity implements View.OnC
     }
 
     private void setData(MealRankingList mealRankingList) {
-        if (mealRankingList==null) return;
-        if (mealRankingList.getSetMealList()==null) return;
-        List<MealRankingList.SetMealListBean> beanList=mealRankingList.getSetMealList();
-        if (beanList.size()!=0){
+        if (mealRankingList == null) return;
+        if (mealRankingList.getSetMealList() == null) return;
+        List<MealRankingList.SetMealListBean> beanList = mealRankingList.getSetMealList();
+        if (beanList.size() != 0) {
             list.addAll(beanList);
             adapter.setUI(beanList);
-        }else {
+        } else {
             showToast(getString(R.string.load_list_erron));
         }
         pr_list.setPullLoadMoreCompleted();

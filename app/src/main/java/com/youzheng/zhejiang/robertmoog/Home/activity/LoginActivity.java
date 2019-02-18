@@ -4,8 +4,10 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -41,11 +43,13 @@ public class LoginActivity extends BaseActivity {
     Button btn_send_code ;
     private MyCountDownLoginTimer timer ;
     String type ="2" ;
+    private String phone;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_layout);
+        phone= (String) SharedPreferencesUtils.getParam(this,PublicUtils.shop_phone,"");
         initView();
     }
 
@@ -82,6 +86,9 @@ public class LoginActivity extends BaseActivity {
         });
 
         edt_phone = (EditText) findViewById(R.id.edt_phone);
+        if (!TextUtils.isEmpty(phone)){
+            edt_phone.setText(phone);
+        }
         edt_password = (EditText) findViewById(R.id.edt_password);
         btn_send_code = findViewById(R.id.btn_send_code);
         timer = new MyCountDownLoginTimer(btn_send_code,60000,1000);
@@ -233,6 +240,17 @@ public class LoginActivity extends BaseActivity {
            }
        });
     }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if(event.getKeyCode() == KeyEvent.KEYCODE_BACK ) {
+            //do something.
+            return true;
+        }else {
+            return super.dispatchKeyEvent(event);
+        }
+    }
+
 
     void changeLayout(String type){
         if (type!=null) {

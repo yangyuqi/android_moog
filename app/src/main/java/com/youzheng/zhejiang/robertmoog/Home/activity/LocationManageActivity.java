@@ -32,13 +32,16 @@ public class LocationManageActivity extends BaseActivity {
     ListView ls ;
     CommonAdapter<AddressDatasBean> adapter ;
     List<AddressDatasBean> data =new ArrayList<>();
-    private String customerId  , pageNum = "1" ,pageSize ="20" ,type;
+    private String pageNum = "1" ,pageSize ="20" ,type;
+    private long  customerId  ;
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.location_manage_layout);
+        customerId = getIntent().getLongExtra("customerId",0);
+        Log.e("customerid","地址管理"+customerId);
         initView();
     }
 
@@ -82,7 +85,7 @@ public class LocationManageActivity extends BaseActivity {
                 finish();
             }
         });
-        customerId = getIntent().getStringExtra("customerId");
+
         type = getIntent().getStringExtra("type");
         data.clear();
         ls = (ListView) findViewById(R.id.ls_location);

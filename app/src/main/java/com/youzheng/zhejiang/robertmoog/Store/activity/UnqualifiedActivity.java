@@ -1,8 +1,10 @@
 package com.youzheng.zhejiang.robertmoog.Store.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 
 import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
+import com.youzheng.zhejiang.robertmoog.Base.utils.MyConstant;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
 import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
@@ -19,6 +22,7 @@ import com.youzheng.zhejiang.robertmoog.Store.bean.CheckStoreDetail;
 import com.youzheng.zhejiang.robertmoog.Store.bean.UnqualifiedContent;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +32,7 @@ import okhttp3.Request;
 /**
  * 巡店不合格界面
  */
-public class UnqualifiedActivity extends BaseActivity implements View.OnClickListener {
+public class UnqualifiedActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     private ImageView btnBack;
     /**  */
@@ -75,6 +79,8 @@ public class UnqualifiedActivity extends BaseActivity implements View.OnClickLis
 
         adapter=new UnqualifiedAdapter(list,this);
         gv_pic.setAdapter(adapter);
+
+        gv_pic.setOnItemClickListener(this);
 
 
     }
@@ -145,5 +151,13 @@ public class UnqualifiedActivity extends BaseActivity implements View.OnClickLis
                 finish();
                 break;
         }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent intent=new Intent(this,CheckPicActivity.class);
+        intent.putExtra(MyConstant.PRINT_GLANCE_OVER_LIST, (Serializable) list);
+        intent.putExtra(MyConstant.PRINT_GLANCE_OVER_POS,position);
+        startActivity(intent);
     }
 }

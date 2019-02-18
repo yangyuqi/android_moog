@@ -21,6 +21,7 @@ import com.youzheng.zhejiang.robertmoog.Model.Home.DistrictList;
 import com.youzheng.zhejiang.robertmoog.Model.Home.ProvinceList;
 import com.youzheng.zhejiang.robertmoog.Model.Home.StreetList;
 import com.youzheng.zhejiang.robertmoog.R;
+import com.youzheng.zhejiang.robertmoog.Store.utils.SoftInputUtils;
 import com.youzheng.zhejiang.robertmoog.utils.View.RemindDialog;
 
 import java.io.IOException;
@@ -33,15 +34,17 @@ import okhttp3.Request;
 
 public class AddNewAddressActivity extends BaseActivity {
 
-    private String customerId ,provinceList_id ,cityList_id ,districtList_id ,streetList;
+    private String provinceList_id ,cityList_id ,districtList_id ,streetList;
     private EditText edt_name ,edt_phone ,edt_address ;
     private TextView edt_provice ,edt_city ,edt_town ,edt_street;
     private OptionsPickerView pvCustomTime;
+    private long customerId ;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_new_address_layout);
+        customerId = getIntent().getLongExtra("customerId",0);
         initView();
     }
 
@@ -88,7 +91,7 @@ public class AddNewAddressActivity extends BaseActivity {
 
             }
         });
-        customerId = getIntent().getStringExtra("customerId");
+
         edt_name = findViewById(R.id.edt_name);
         edt_phone = findViewById(R.id.edt_phone);
         edt_provice = findViewById(R.id.edt_provice);
@@ -108,6 +111,7 @@ public class AddNewAddressActivity extends BaseActivity {
         edt_provice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SoftInputUtils.hideSoftInput(AddNewAddressActivity.this);
                 edt_city.setText("");
                 edt_town.setText("");
                 OkHttpClientManager.postAsynJson(gson.toJson(new HashMap<>()), UrlUtils.GET_PRIVICE+"?access_token="+access_token, new OkHttpClientManager.StringCallback() {
@@ -151,6 +155,7 @@ public class AddNewAddressActivity extends BaseActivity {
         edt_city.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SoftInputUtils.hideSoftInput(AddNewAddressActivity.this);
                 if (provinceList_id==null){
                     showToast("请先获取省份");
                     return;
@@ -200,6 +205,7 @@ public class AddNewAddressActivity extends BaseActivity {
         edt_town.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SoftInputUtils.hideSoftInput(AddNewAddressActivity.this);
                 if (provinceList_id==null){
                     showToast("请先获取省份");
                     return;
@@ -250,6 +256,19 @@ public class AddNewAddressActivity extends BaseActivity {
         edt_street.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SoftInputUtils.hideSoftInput(AddNewAddressActivity.this);
+                if (provinceList_id==null){
+                    showToast("请先获取省份");
+                    return;
+                }
+                if (cityList_id==null){
+                    showToast("请先获取城市");
+                    return;
+                }
+                if (districtList_id==null){
+                    showToast("请先选择县/区");
+                    return;
+                }
                 Map<String,Object> map = new HashMap<>();
                 map.put("id",districtList_id);
                 OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.GET_STREET + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {

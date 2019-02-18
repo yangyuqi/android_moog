@@ -6,25 +6,24 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.liaoinstan.springview.widget.SpringView;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
 import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
-import com.youzheng.zhejiang.robertmoog.Home.activity.RegisterSuccessActivity;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
-import com.youzheng.zhejiang.robertmoog.Model.login.RegisterBean;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.StoreCustomerAdapter;
 import com.youzheng.zhejiang.robertmoog.Store.bean.CustomerList;
 import com.youzheng.zhejiang.robertmoog.Store.listener.OnRecyclerViewAdapterItemClickListener;
 import com.youzheng.zhejiang.robertmoog.Store.view.RecycleViewDivider;
+import com.youzheng.zhejiang.robertmoog.utils.View.MyFooter;
+import com.youzheng.zhejiang.robertmoog.utils.View.MyHeader;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -55,47 +54,69 @@ public class StoreCustomerActivity extends BaseActivity implements View.OnClickL
     private StoreCustomerAdapter adapter;
     private int year;
     private Calendar calendar;
+    private SpringView mSpringView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store_customer);
         initView();
-         calendar = Calendar.getInstance();
+        calendar = Calendar.getInstance();
         //获取系统的日期
         //年
         year = calendar.get(Calendar.YEAR);
-        setListener();
+       // setListener();
         initData(year);
     }
 
     private void setListener() {
-        lv_list.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
+//        lv_list.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
+//            @Override
+//            public void onRefresh() {
+//
+//                if (year == calendar.get(Calendar.YEAR)) {
+//                    list.clear();
+//                    initData(year);
+//                } else {
+//                    year++;
+//                    list.clear();
+//                    initData(year);
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onLoadMore() {
+//                list.clear();
+//                year--;
+//                initData(year);
+//            }
+//        });
+
+
+        mSpringView.setListener(new SpringView.OnFreshListener() {
             @Override
             public void onRefresh() {
-
-                if (year==calendar.get(Calendar.YEAR)){
+                if (year == calendar.get(Calendar.YEAR)) {
                     list.clear();
+                    adapter.clear();
                     initData(year);
-                }else {
+                } else {
                     year++;
                     list.clear();
+                    adapter.clear();
                     initData(year);
                 }
-
             }
 
             @Override
-            public void onLoadMore() {
-                list.clear();
+            public void onLoadmore() {
                 year--;
                 initData(year);
             }
         });
 
-
     }
-
 
 
     private void initView() {
@@ -114,8 +135,15 @@ public class StoreCustomerActivity extends BaseActivity implements View.OnClickL
         lv_list.setColorSchemeResources(R.color.colorPrimary);
         adapter = new StoreCustomerAdapter(list, this);
         lv_list.setAdapter(adapter);
-          adapter.setOnItemClickListener(this);
+        adapter.setOnItemClickListener(this);
+        lv_list.setPullRefreshEnable(false);
+        lv_list.setPushRefreshEnable(false);
 
+//        mSpringView = (SpringView) findViewById(R.id.springView);
+//
+//
+//        mSpringView.setHeader(new MyHeader(this));
+//        mSpringView.setFooter(new MyFooter(this));
     }
 
     @Override
@@ -129,23 +157,25 @@ public class StoreCustomerActivity extends BaseActivity implements View.OnClickL
      */
     private void initData(int year) {
 
-        HashMap<String,Object> map=new HashMap<>();
-        map.put("year",year);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("year", year);
         OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.GET_CUSTOMER_LIST + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
             public void onFailure(Request request, IOException e) {
-                lv_list.setPullLoadMoreCompleted();
+                //lv_list.setPullLoadMoreCompleted();
+                //mSpringView.onFinishFreshAndLoad();
             }
 
             @Override
             public void onResponse(String response) {
-                Log.e("门店客户列表",response);
-                lv_list.setPullLoadMoreCompleted();
-                BaseModel baseModel = gson.fromJson(response,BaseModel.class);
-                if (baseModel.getCode()==PublicUtils.code){
-                    CustomerList customerList = gson.fromJson(gson.toJson(baseModel.getDatas()),CustomerList.class);
+                Log.e("门店客户列表", response);
+                //lv_list.setPullLoadMoreCompleted();
+                //mSpringView.onFinishFreshAndLoad();
+                BaseModel baseModel = gson.fromJson(response, BaseModel.class);
+                if (baseModel.getCode() == PublicUtils.code) {
+                    CustomerList customerList = gson.fromJson(gson.toJson(baseModel.getDatas()), CustomerList.class);
                     setData(customerList);
-                }else {
+                } else {
                     showToast(baseModel.getMsg());
                 }
             }
@@ -154,25 +184,25 @@ public class StoreCustomerActivity extends BaseActivity implements View.OnClickL
     }
 
     private void setData(CustomerList customerList) {
-        if (customerList.getCoustomerList()==null) return;
-        if (customerList.getTotalAmount()!=0){
-            int num=customerList.getTotalAmount();
-            tv_number.setText(num+"");
-        }else {
+        if (customerList.getCoustomerList() == null) return;
+        if (customerList.getTotalAmount() != 0) {
+            int num = customerList.getTotalAmount();
+            tv_number.setText(num + "");
+        } else {
             tv_number.setText("0");
         }
 
-        List<CustomerList.CoustomerListBean> coustomerListBeans=customerList.getCoustomerList();
-        if (coustomerListBeans.size()!=0){
+        List<CustomerList.CoustomerListBean> coustomerListBeans = customerList.getCoustomerList();
+        if (coustomerListBeans.size() != 0) {
             list.addAll(coustomerListBeans);
             adapter.setListRefreshUi(coustomerListBeans);
-        }else {
+        } else {
             showToast(getString(R.string.load_list_erron));
-            year=year+1;
+            year = year + 1;
         }
 
 
-   }
+    }
 
     @Override
     public void onClick(View v) {
@@ -180,11 +210,10 @@ public class StoreCustomerActivity extends BaseActivity implements View.OnClickL
     }
 
 
-
     @Override
     public void onItemClick(View view, int position) {
-        Intent intent=new Intent(this, StoreCustomerInsideActivity.class);
-        intent.putExtra("month",list.get(position).getMonth());
+        Intent intent = new Intent(this, StoreCustomerInsideActivity.class);
+        intent.putExtra("month", list.get(position).getMonth());
         startActivity(intent);
     }
 

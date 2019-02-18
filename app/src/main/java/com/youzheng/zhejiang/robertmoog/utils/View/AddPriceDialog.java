@@ -85,7 +85,8 @@ public class AddPriceDialog extends Dialog implements View.OnClickListener{
                 break;
 
             case R.id.tv_no :
-                dismiss();
+                //dismiss();
+                confrim_dialog_tv_content.setText("");
                 break;
         }
     }

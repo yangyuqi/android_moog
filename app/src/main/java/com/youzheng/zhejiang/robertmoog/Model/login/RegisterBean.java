@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class RegisterBean implements Serializable{
     private String phone ;
-    private Integer customerId ;
+    private long customerId ;
 
     public String getPhone() {
         return phone;
@@ -14,11 +14,11 @@ public class RegisterBean implements Serializable{
         this.phone = phone;
     }
 
-    public Integer getCustomerId() {
+    public long getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(Integer customerId) {
+    public void setCustomerId(long customerId) {
         this.customerId = customerId;
     }
 }

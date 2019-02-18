@@ -40,6 +40,7 @@ import com.youzheng.zhejiang.robertmoog.Store.adapter.GoodsTitleAdapter;
 import com.youzheng.zhejiang.robertmoog.Store.bean.GoodsList;
 import com.youzheng.zhejiang.robertmoog.Store.bean.GoodsType;
 import com.youzheng.zhejiang.robertmoog.Store.fragment.GoodsFragment;
+import com.youzheng.zhejiang.robertmoog.Store.utils.SoftInputUtils;
 import com.youzheng.zhejiang.robertmoog.utils.SharedPreferencesUtils;
 
 import java.io.IOException;
@@ -182,6 +183,7 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
             default:
                 break;
             case R.id.iv_search:
+                SoftInputUtils.hideSoftInput(GoodsManageActivity.this);
                 searchlist.clear();
                 edit = tv_search.getText().toString().trim();
                 if (TextUtils.isEmpty(edit)) {

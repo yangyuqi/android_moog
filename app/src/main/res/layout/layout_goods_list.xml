@@ -2,13 +2,25 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
 
-    <com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView
-        android:id="@+id/pr_goods"
+    <com.liaoinstan.springview.widget.SpringView
+        android:id="@+id/springView"
+        app:type="follow"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        ></com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView>
+        android:layout_height="wrap_content">
+
+        <com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView
+            android:id="@+id/pr_goods"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            ></com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView>
+
+
+
+    </com.liaoinstan.springview.widget.SpringView>
+
 
 </LinearLayout>

@@ -32,7 +32,10 @@ import com.youzheng.zhejiang.robertmoog.Model.Home.MealMainDataList;
 import com.youzheng.zhejiang.robertmoog.Model.Home.SetMealData;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.GoodsTitleAdapter;
+import com.youzheng.zhejiang.robertmoog.Store.utils.SoftInputUtils;
 import com.youzheng.zhejiang.robertmoog.utils.CommonAdapter;
+import com.youzheng.zhejiang.robertmoog.utils.View.MyFooter;
+import com.youzheng.zhejiang.robertmoog.utils.View.MyHeader;
 import com.youzheng.zhejiang.robertmoog.utils.ViewHolder;
 
 import java.io.IOException;
@@ -154,6 +157,8 @@ public class SetMealActivity extends BaseActivity{
         tv_search = findViewById(R.id.tv_search);
         ls = findViewById(R.id.ls);
         springView = findViewById(R.id.sv);
+        springView.setHeader(new MyHeader(this));
+        springView.setFooter(new MyFooter(this));
         adapter = new CommonAdapter<HomeListDataBean>(mContext,data,R.layout.set_meal_ls_item) {
             @Override
             public void convert(ViewHolder helper, final HomeListDataBean item) {
@@ -186,6 +191,7 @@ public class SetMealActivity extends BaseActivity{
         findViewById(R.id.iv_search).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SoftInputUtils.hideSoftInput(SetMealActivity.this);
                 refreshData(typeId);
             }
         });

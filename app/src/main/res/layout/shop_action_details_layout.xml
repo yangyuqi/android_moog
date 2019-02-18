@@ -99,12 +99,14 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginBottom="@dimen/space_10"
+            android:id="@+id/lin_event"
+            android:layout_marginBottom="@dimen/space_5"
             android:layout_marginTop="@dimen/space_10"
             android:layout_marginLeft="@dimen/space_15"
             android:layout_below="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="visible"
             android:orientation="horizontal"
             >
 
@@ -128,10 +130,10 @@
         </LinearLayout>
 
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/space_divider_2"
-            android:background="@color/bg_all"/>
+        <!--<View-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="@dimen/space_divider_2"-->
+            <!--android:background="@color/bg_all"/>-->
 
 
         <!--<View-->
@@ -165,12 +167,12 @@
 
         <com.youzheng.zhejiang.robertmoog.utils.View.NoScrollListView
             android:dividerHeight="@dimen/space_10"
-
             android:divider="@color/bg_background_white"
             android:id="@+id/ls"
             android:background="@color/bg_background_white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="5dp"
             ></com.youzheng.zhejiang.robertmoog.utils.View.NoScrollListView>
 
 
@@ -198,18 +200,19 @@
                     android:background="@color/bg_all"/>
 
                 <android.support.v7.widget.RecyclerView
-                    android:paddingLeft="@dimen/space_15"
+
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:id="@+id/recycler_view"
+                    android:background="@color/bg_background_white"
                     android:visibility="gone"
                     ></android.support.v7.widget.RecyclerView>
 
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/space_5"
-                    android:background="@color/bg_all"/>
+                <!--<View-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="@dimen/space_5"-->
+                    <!--android:background="@color/bg_all"/>-->
 
                 <TextView
                     android:id="@+id/tv_coupon"

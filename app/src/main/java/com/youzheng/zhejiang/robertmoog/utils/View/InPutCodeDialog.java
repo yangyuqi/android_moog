@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -88,9 +89,11 @@ public class InPutCodeDialog extends Dialog implements View.OnClickListener{
                 break;
 
             case R.id.tv_no :
-                dismiss();
+                //dismiss();
+                confrim_dialog_tv_content.setText("");
                 break;
         }
     }
+
 }
 

@@ -39,15 +39,27 @@
 
     </LinearLayout>
 
-    <com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView
-        android:id="@+id/lv_list"
+    <com.liaoinstan.springview.widget.SpringView
+        android:id="@+id/springView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:divider="@color/divider_color_item"
-        android:dividerHeight="1dp"
-        android:scrollbars="none"
-        android:background="@color/bg_background_white"></com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView>
+        app:type="follow">
+
+
+        <com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView
+            android:id="@+id/lv_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="@color/divider_color_item"
+            android:dividerHeight="1dp"
+            android:scrollbars="none"
+            android:background="@color/bg_background_white"></com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView>
+
+
+
+
+    </com.liaoinstan.springview.widget.SpringView>
 
 
 

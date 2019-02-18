@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 import com.tbruyelle.rxpermissions.RxPermissions;
 import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
@@ -56,6 +57,8 @@ public class AttentionGoodsActivity extends BaseActivity {
     TextView tv_attention ,tv_update_intent;
     int widWidth ;
     private LinearLayout lin_over;
+    private String remark_id;
+     CustomerData intentDataBean;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +86,7 @@ public class AttentionGoodsActivity extends BaseActivity {
     @Subscribe
     public void onEvent(String d){
         if (d.equals("refresh")){
+            adapter.clear();
             initData();
         }
     }
@@ -121,7 +125,7 @@ public class AttentionGoodsActivity extends BaseActivity {
         });
     }
 
-    private void initData() {
+    public  void initData() {
         Map<String,Object> map = new HashMap<>();
         if (bean!=null) {
             map.put("id", bean.getCustomerId());
@@ -139,11 +143,12 @@ public class AttentionGoodsActivity extends BaseActivity {
             public void onResponse(String response) {
                 BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                 if (baseModel.getCode()== PublicUtils.code){
-                    final CustomerData intentDataBean = gson.fromJson(gson.toJson(baseModel.getDatas()),CustomerData.class);
+                     intentDataBean = gson.fromJson(gson.toJson(baseModel.getDatas()),CustomerData.class);
                     if (!TextUtils.isEmpty(intentDataBean.getCustomerIntentData().getRemark())){
                         //tv_update_intent.setVisibility(View.VISIBLE);
                         tv_attention.setText(intentDataBean.getCustomerIntentData().getRemark());
                     }else {
+                        tv_attention.setText("");
                         //tv_update_intent.setVisibility(View.GONE);
                     }
 
@@ -156,6 +161,8 @@ public class AttentionGoodsActivity extends BaseActivity {
                             lin_over.setVisibility(View.VISIBLE);
                         }else {
                             adapter.setData(new ArrayList<IntentProductList>());
+                            //lin_over.setVisibility(View.GONE);
+                            //sendRemark(intentDataBean.getCustomerIntentData().getId());
                             adapter.notifyDataSetChanged();
                             showToast(getString(R.string.load_list_erron));
                         }
@@ -163,19 +170,55 @@ public class AttentionGoodsActivity extends BaseActivity {
                         if (intentDataBean.getCustomerIntentData().getIntentProductList().size()!=0) {
                             lin_over.setVisibility(View.VISIBLE);
                         }else {
-                            lin_over.setVisibility(View.GONE);
+                            //lin_over.setVisibility(View.GONE);
+                            //sendRemark(intentDataBean.getCustomerIntentData().getId());
                             showToast(getString(R.string.load_list_erron));
                         }
                     }
                     tv_update_intent.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            if (intentDataBean.getCustomerIntentData().getId()!=null) {
+                            if (!TextUtils.isEmpty(intentDataBean.getCustomerIntentData().getId())) {
                                 RemarkDialog remarkDialog = new RemarkDialog(AttentionGoodsActivity.this, intentDataBean.getCustomerIntentData().getId(), intentDataBean.getCustomerIntentData().getRemark());
                                 remarkDialog.show();
+                            }else {
+                                if (bean!=null) {
+                                    remark_id=bean.getCustomerId();
+                                    Log.e("remark_id",remark_id+"111111111"+bean.getCustomerId());
+                                }
+                                if (registerBean!=null){
+                                    remark_id=registerBean.getCustomerId()+"";
+                                    Log.e("remark_id",remark_id+"22222222"+registerBean.getCustomerId());
+
+                                }
+                                Log.e("remark_id",remark_id);
+                                RemarkDialog remarkDialog = new RemarkDialog(AttentionGoodsActivity.this,remark_id, intentDataBean.getCustomerIntentData().getRemark());
+                                remarkDialog.show();
+
                             }
                         }
                     });
+
+                }
+            }
+        });
+    }
+
+
+    private void sendRemark(String id){
+        Map<String,Object> map = new HashMap<>();
+        map.put("id",id);
+        map.put("remark","");
+        OkHttpClientManager.postAsynJson(new Gson().toJson(map), UrlUtils.UPDATE_INTENT_REMARK + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(String response) {
+                BaseModel baseModel = new Gson().fromJson(response,BaseModel.class);
+                if (baseModel.getCode()==PublicUtils.code){
 
                 }
             }
@@ -228,6 +271,8 @@ public class AttentionGoodsActivity extends BaseActivity {
                                     public void onResponse(String response) {
                                         BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                                         if (baseModel.getCode()==PublicUtils.code){
+                                            adapter.clear();
+                                            sendRemark(intentDataBean.getCustomerIntentData().getId());
                                             initData();
                                         }
                                     }

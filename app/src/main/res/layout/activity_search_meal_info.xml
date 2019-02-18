@@ -33,7 +33,7 @@
                 android:layout_centerVertical="true"
                 android:background="@null"
                 android:cursorVisible="true"
-                android:hint="输入商品套餐号"
+                android:hint="输入商品SKU/套餐号"
                 android:paddingLeft="10dp"
                 android:singleLine="true"
                 android:textColorHint="#B7B7B7"
@@ -61,7 +61,7 @@
        android:id="@+id/rv_list"
        android:layout_width="match_parent"
        android:layout_marginTop="5dp"
-       android:background="@color/bg_background_white"
+       android:background="@color/bg_all"
        android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
 
 

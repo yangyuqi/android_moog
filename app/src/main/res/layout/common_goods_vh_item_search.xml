@@ -77,6 +77,9 @@
                         android:textColor="@color/bg_main"
                         android:layout_marginTop="@dimen/space_6"
                         android:text="哈哈时间"
+                        android:maxLines="2"
+                        android:ellipsize="end"
+                        android:paddingRight="10dp"
                         android:textSize="@dimen/text_size_15"
                         />
 

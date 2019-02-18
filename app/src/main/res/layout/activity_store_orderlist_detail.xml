@@ -587,6 +587,7 @@
 
 
                 <LinearLayout
+                    android:id="@+id/lin_juan"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
@@ -623,6 +624,7 @@
 
 
                 <LinearLayout
+                    android:id="@+id/lin_cuxiao"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
@@ -659,6 +661,7 @@
 
 
                 <LinearLayout
+                    android:id="@+id/lin_store"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"

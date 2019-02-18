@@ -9,13 +9,24 @@
 
     <include layout="@layout/title_bar"/>
 
-
-    <com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView
-        android:id="@+id/lv_list"
+    <com.liaoinstan.springview.widget.SpringView
         android:layout_width="match_parent"
-        android:divider="@color/divider_color_item"
-        android:dividerHeight="1dp"
-        android:scrollbars="none"
-        android:layout_height="match_parent"></com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView>
+        android:layout_height="wrap_content"
+        app:type="follow"
+        android:id="@+id/springView">
+
+        <com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView
+            android:id="@+id/lv_list"
+            android:layout_width="match_parent"
+            android:divider="@color/divider_color_item"
+            android:dividerHeight="1dp"
+            android:scrollbars="none"
+            android:layout_height="match_parent"></com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView>
+
+
+
+    </com.liaoinstan.springview.widget.SpringView>
+
+
 
 </LinearLayout>

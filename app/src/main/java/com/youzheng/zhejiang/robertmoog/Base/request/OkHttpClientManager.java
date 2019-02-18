@@ -452,14 +452,16 @@ public class OkHttpClientManager
                 .build();
     }
 
-    private static final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
-    public  Observable<String> sendMultipart(final String reqUrl, final Map<String, Object> params, final String pic_key, final List<File> files){
+    private static final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/jpg");
+    MediaType MutilPart_Form_Data = MediaType.parse("multipart/form-data; charset=utf-8");
+    public  Observable<String> sendMultipart(final String reqUrl, final String pic_key, final List<File> files){
         return Observable.create(new Observable.OnSubscribe<String>(){
 
             @Override
             public void call(final Subscriber<? super String> subscriber) {
                 MultipartBody.Builder multipartBodyBuilder = new MultipartBody.Builder();
                 multipartBodyBuilder.setType(MultipartBody.FORM);
+
                 //遍历map中所有参数到builder
 //                if (params != null){
 //                    for (String key : params.keySet()) {
@@ -469,8 +471,8 @@ public class OkHttpClientManager
                 //遍历paths中所有图片绝对路径到builder，并约定key如“upload”作为后台接受多张图片的key
                 if (files != null){
                     for (File file : files) {
-                        multipartBodyBuilder.addFormDataPart(pic_key, file.getName(), RequestBody.create(MEDIA_TYPE_PNG, file));
-                        Log.e("几张图片",file.toString());
+                        multipartBodyBuilder.addFormDataPart(pic_key,file.getName(), RequestBody.create(MEDIA_TYPE_PNG, file));
+                        Log.e("几张图片",file.toString()+"-------"+file.getName()+"");
                     }
                 }
                 //构建请求体
@@ -482,8 +484,8 @@ public class OkHttpClientManager
                 Request request = RequestBuilder.build();
                 Log.e("图片网址 ",request+"");
                 OkHttpClient client = new OkHttpClient.Builder()
-                        .connectTimeout(400, TimeUnit.SECONDS)//设置连接超时时间
-                        .readTimeout(400, TimeUnit.SECONDS)//设置读取超时时间
+                        .connectTimeout(4000, TimeUnit.SECONDS)//设置连接超时时间
+                        .readTimeout(4000, TimeUnit.SECONDS)//设置读取超时时间
                         .build();
                 client.newCall(request).enqueue(new Callback() {
                     @Override

@@ -1,6 +1,8 @@
 package com.youzheng.zhejiang.robertmoog.My;
 
+import android.Manifest;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,6 +23,7 @@ import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.Model.login.ShopQRCodeBean;
 import com.youzheng.zhejiang.robertmoog.Model.login.UserConfigDataBean;
 import com.youzheng.zhejiang.robertmoog.R;
+import com.youzheng.zhejiang.robertmoog.Store.utils.PermissionUtils;
 import com.youzheng.zhejiang.robertmoog.utils.SharedPreferencesUtils;
 import com.youzheng.zhejiang.robertmoog.utils.View.DeleteDialog;
 import com.youzheng.zhejiang.robertmoog.utils.View.DeleteDialogInterface;
@@ -44,6 +47,14 @@ public class MyFragment extends BaseFragment implements BaseFragment.ReloadInter
     /**  */
     private TextView textHeadTitle;
     private String url;
+
+    //读写权限
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    //请求状态码
+    private static int REQUEST_PERMISSION_CODE = 1;
+
 
     @Nullable
     @Override
@@ -109,8 +120,33 @@ public class MyFragment extends BaseFragment implements BaseFragment.ReloadInter
             @Override
             public void onClick(View v) {
               if (!TextUtils.isEmpty(url)){
-                  NoteInfoDialog infoDialog = new NoteInfoDialog(mContext,url);
-                  infoDialog.show();
+
+                  if (Build.VERSION.SDK_INT >= 23) {
+                      if (PermissionUtils.permissionIsOpen(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                              ){
+
+
+                          NoteInfoDialog infoDialog = new NoteInfoDialog(mContext,url);
+                          infoDialog.show();
+                      } else {
+
+                          if (!shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE) ){
+                              PermissionUtils.showCameraDialog(getString(R.string.content_str_read)
+                                      ,getActivity());
+                          } else {
+
+                              PermissionUtils.openSinglePermission(getActivity()
+                                      , Manifest.permission.WRITE_EXTERNAL_STORAGE
+                                      , PermissionUtils.CODE_MULTI);
+
+                          }
+
+                      }
+                  }else{
+                      NoteInfoDialog infoDialog = new NoteInfoDialog(mContext,url);
+                      infoDialog.show();
+                  }
+
               }
             }
         });

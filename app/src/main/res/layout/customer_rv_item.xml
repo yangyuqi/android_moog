@@ -52,16 +52,19 @@
 
         </RelativeLayout>
 
-        <HorizontalScrollView
-            android:scrollbars="none"
-            android:id="@+id/hsv"
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/bg_all"/>
+
+        <LinearLayout
             android:overScrollMode="never"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="145dp">
 
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
                 >
@@ -69,21 +72,43 @@
                 <LinearLayout
                     android:id="@+id/ll_width"
                     android:paddingRight="@dimen/space_20"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     >
 
-                    <TextView
-                        android:text="hhh"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/space_30"
-                        android:textSize="@dimen/text_size_15"
-                        android:layout_marginLeft="@dimen/space_20"
-                        android:gravity="center_vertical"
-                        android:textColor="@color/text_drak_black"
-                        android:id="@+id/tv_time"
-                        />
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+
+                        <TextView
+                            android:text="hhh"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/space_30"
+                            android:textSize="@dimen/text_size_15"
+                            android:layout_marginLeft="@dimen/space_20"
+                            android:gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:textColor="@color/text_drak_black"
+                            android:id="@+id/tv_time"
+                            />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:src="@mipmap/group_80_2"
+                            android:layout_alignParentRight="true"
+                            android:paddingLeft="@dimen/space_20"
+                            android:layout_gravity="center_vertical"
+                            android:id="@+id/iv_delete_item"
+                            />
+
+                    </LinearLayout>
+
+
 
                     <RelativeLayout
                         android:background="@color/bg_background_white"
@@ -113,6 +138,9 @@
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/text_drak_black"
                                 android:textSize="@dimen/text_size_18"
+                                android:maxLines="1"
+                                android:ellipsize="end"
+                                android:paddingRight="10dp"
                                 android:text="ywqeqw"
                                 />
 
@@ -124,6 +152,9 @@
                                 android:textColor="@color/bg_main"
                                 android:layout_marginTop="@dimen/space_6"
                                 android:text="哈哈时间"
+                                android:maxLines="2"
+                                android:ellipsize="end"
+                                android:paddingRight="10dp"
                                 android:textSize="@dimen/text_size_15"
                                 />
 
@@ -167,6 +198,7 @@
                         android:id="@+id/main_right_drawer_layout"
                         android:layout_width="65dp"
                         android:layout_height="match_parent"
+                        android:visibility="gone"
                         android:background="@color/text_golden"
                         >
                         <TextView
@@ -184,7 +216,7 @@
 
             </LinearLayout>
 
-        </HorizontalScrollView>
+        </LinearLayout>
 
         <com.youzheng.zhejiang.robertmoog.utils.View.NoScrollListView
             android:layout_width="match_parent"

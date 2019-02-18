@@ -15,6 +15,7 @@ import com.youzheng.zhejiang.robertmoog.Count.activity.StoreSaleInsideActivity;
 import com.youzheng.zhejiang.robertmoog.Count.bean.ShopSale;
 import com.youzheng.zhejiang.robertmoog.My.MyFragment;
 import com.youzheng.zhejiang.robertmoog.R;
+import com.youzheng.zhejiang.robertmoog.Store.listener.OnRecyclerViewAdapterItemClickListener;
 import com.youzheng.zhejiang.robertmoog.utils.SharedPreferencesUtils;
 
 import java.util.List;
@@ -23,6 +24,11 @@ public class StoreSaleAdapter extends RecyclerView.Adapter<StoreSaleAdapter.Sale
     private List<ShopSale.ShopDataBean> list;
     private Context context;
     private LayoutInflater layoutInflater;
+    private OnRecyclerViewAdapterItemClickListener mOnItemClickListener;
+
+    public void setOnItemClickListener(OnRecyclerViewAdapterItemClickListener mOnItemClickListener) {
+        this.mOnItemClickListener = mOnItemClickListener;
+    }
 
     public StoreSaleAdapter(List<ShopSale.ShopDataBean> list, Context context) {
         this.list = list;
@@ -40,11 +46,26 @@ public class StoreSaleAdapter extends RecyclerView.Adapter<StoreSaleAdapter.Sale
         notifyDataSetChanged();
     }
 
-    @NonNull
+
     @Override
     public SaleHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int position) {
         View view=layoutInflater.inflate(R.layout.item_store_sales,viewGroup,false);
-        SaleHolder saleHolder=new SaleHolder(view);
+        final SaleHolder saleHolder=new SaleHolder(view);
+
+        saleHolder.tv_name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                int position = saleHolder.getLayoutPosition();
+                //设置监听
+                if (mOnItemClickListener != null) {
+                    mOnItemClickListener.onItemClick(view, position);
+                }
+
+            }
+        });
+
+
         return saleHolder;
     }
 
@@ -59,18 +80,7 @@ public class StoreSaleAdapter extends RecyclerView.Adapter<StoreSaleAdapter.Sale
         saleHolder.tv_order_money.setText(bean.getOrderAmount());
         saleHolder.tv_order_value.setText(bean.getCustomerTransaction());
 
-        saleHolder.tv_name.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String  role = (String) SharedPreferencesUtils.getParam(context,PublicUtils.role,"");
 
-                    Intent intent=new Intent(context,StoreSaleInsideActivity.class);
-                    intent.putExtra("shopPersonalId",bean.getShopPersonalId());
-                    context.startActivity(intent);
-
-
-            }
-        });
     }
 
     @Override

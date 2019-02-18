@@ -2,7 +2,6 @@ package com.youzheng.zhejiang.robertmoog.Store.activity;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -16,13 +15,11 @@ import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
 import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
-import com.youzheng.zhejiang.robertmoog.Home.activity.SalesActivity;
 import com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.MoreOrderDetailAdapter;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.OneOrderDetailAdapter;
-import com.youzheng.zhejiang.robertmoog.Store.bean.CustomerList;
 import com.youzheng.zhejiang.robertmoog.Store.bean.OrderlistDetail;
 
 import java.io.IOException;
@@ -81,7 +78,7 @@ public class StoreOrderlistDetailActivity extends BaseActivity implements View.O
      * 已申请
      */
     private TextView tv_progress_state;
-    private RecyclerView rv_list_one,rv_list_more;
+    private RecyclerView rv_list_one, rv_list_more;
     /**
      * 订单促销
      */
@@ -145,14 +142,14 @@ public class StoreOrderlistDetailActivity extends BaseActivity implements View.O
     /**
      * ￥17700
      */
-    private TextView tv_get_money_of_now,tv_goods_num;
+    private TextView tv_get_money_of_now, tv_goods_num;
     /**
      * 该订单是长工CC推荐来的，未结算
      */
     private TextView tv_content;
 
-    private List<OrderlistDetail.OrderItemDataBean.OrderProductListBean> onelist=new ArrayList<>();
-    private List<OrderlistDetail.OrderItemDataBean.OrderSetMealListBean> morelist=new ArrayList<>();
+    private List<OrderlistDetail.OrderItemDataBean.OrderProductListBean> onelist = new ArrayList<>();
+    private List<OrderlistDetail.OrderItemDataBean.OrderSetMealListBean> morelist = new ArrayList<>();
 
     private OneOrderDetailAdapter oneOrderDetailAdapter;
     private MoreOrderDetailAdapter moreOrderDetailAdapter;
@@ -186,13 +183,16 @@ public class StoreOrderlistDetailActivity extends BaseActivity implements View.O
     private String comment;
     private String returnOrderStatus;
     private LinearLayout lin_send;
+    private LinearLayout lin_juan;
+    private LinearLayout lin_cuxiao;
+    private LinearLayout lin_store;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store_orderlist_detail);
-        id=getIntent().getStringExtra("OrderGoodsId");
+        id = getIntent().getStringExtra("OrderGoodsId");
         initView();
         initData(id);
     }
@@ -216,7 +216,7 @@ public class StoreOrderlistDetailActivity extends BaseActivity implements View.O
         tv_progress = (TextView) findViewById(R.id.tv_progress);
         tv_progress_state = (TextView) findViewById(R.id.tv_progress_state);
         rv_list_one = (RecyclerView) findViewById(R.id.rv_list_one);
-        rv_list_more=findViewById(R.id.rv_list_more);
+        rv_list_more = findViewById(R.id.rv_list_more);
         tv_order_promotion = (TextView) findViewById(R.id.tv_order_promotion);
         tv_over_money = (TextView) findViewById(R.id.tv_over_money);
         tv_cut_money = (TextView) findViewById(R.id.tv_cut_money);
@@ -234,10 +234,9 @@ public class StoreOrderlistDetailActivity extends BaseActivity implements View.O
         tv_cut_money_of_store = (TextView) findViewById(R.id.tv_cut_money_of_store);
         tv_get_money_of_now = (TextView) findViewById(R.id.tv_get_money_of_now);
         tv_content = (TextView) findViewById(R.id.tv_content);
-        lin_is_cut=findViewById(R.id.lin_is_cut);
-        tv_goods_num=findViewById(R.id.tv_goods_num);
-        lin_send=findViewById(R.id.lin_send);
-
+        lin_is_cut = findViewById(R.id.lin_is_cut);
+        tv_goods_num = findViewById(R.id.tv_goods_num);
+        lin_send = findViewById(R.id.lin_send);
 
 
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -246,23 +245,23 @@ public class StoreOrderlistDetailActivity extends BaseActivity implements View.O
         rv_list_one.addItemDecoration(new RecycleViewDivider(StoreOrderlistDetailActivity.this, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
 
 
-
         LinearLayoutManager manager2 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rv_list_more.setLayoutManager(manager2);
         rv_list_more.setAdapter(moreOrderDetailAdapter);
         rv_list_more.addItemDecoration(new RecycleViewDivider(StoreOrderlistDetailActivity.this, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
 
 
-
-        oneOrderDetailAdapter=new OneOrderDetailAdapter(onelist,this);
+        oneOrderDetailAdapter = new OneOrderDetailAdapter(onelist, this);
         rv_list_one.setAdapter(oneOrderDetailAdapter);
 
 
-        moreOrderDetailAdapter=new MoreOrderDetailAdapter(morelist,this);
+        moreOrderDetailAdapter = new MoreOrderDetailAdapter(morelist, this);
         rv_list_more.setAdapter(moreOrderDetailAdapter);
 
 
-
+        lin_juan = (LinearLayout) findViewById(R.id.lin_juan);
+        lin_cuxiao = (LinearLayout) findViewById(R.id.lin_cuxiao);
+        lin_store = (LinearLayout) findViewById(R.id.lin_store);
     }
 
     @Override
@@ -272,8 +271,8 @@ public class StoreOrderlistDetailActivity extends BaseActivity implements View.O
     }
 
     private void initData(String id) {
-        HashMap<String,Object> map=new HashMap<>();
-        map.put("id",id);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("id", id);
 
         OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.ORDERLIST_LIST_DETAIL + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
@@ -283,12 +282,12 @@ public class StoreOrderlistDetailActivity extends BaseActivity implements View.O
 
             @Override
             public void onResponse(String response) {
-                Log.e("订单详情",response);
-                BaseModel baseModel = gson.fromJson(response,BaseModel.class);
-                if (baseModel.getCode()==PublicUtils.code){
-                    OrderlistDetail orderlistDetail = gson.fromJson(gson.toJson(baseModel.getDatas()),OrderlistDetail.class);
+                Log.e("订单详情", response);
+                BaseModel baseModel = gson.fromJson(response, BaseModel.class);
+                if (baseModel.getCode() == PublicUtils.code) {
+                    OrderlistDetail orderlistDetail = gson.fromJson(gson.toJson(baseModel.getDatas()), OrderlistDetail.class);
                     setData(orderlistDetail);
-                }else {
+                } else {
                     showToast(baseModel.getMsg());
                 }
             }
@@ -297,103 +296,103 @@ public class StoreOrderlistDetailActivity extends BaseActivity implements View.O
     }
 
     private void setData(OrderlistDetail orderlistDetail) {
-        if (orderlistDetail==null) return;
-        if (orderlistDetail.getOrderItemData()==null) return;
+        if (orderlistDetail == null) return;
+        if (orderlistDetail.getOrderItemData() == null) return;
 
-        if (orderlistDetail.getOrderItemData().getOrderProductList()==null) return;
+        if (orderlistDetail.getOrderItemData().getOrderProductList() == null) return;
 
-        if (orderlistDetail.getOrderItemData().getOrderSetMealList()==null) return;
+        if (orderlistDetail.getOrderItemData().getOrderSetMealList() == null) return;
 
-        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getCode())){
-            code=orderlistDetail.getOrderItemData().getCode();
+        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getCode())) {
+            code = orderlistDetail.getOrderItemData().getCode();
             tv_num.setText(code);
         }
 
-        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getCreateDate())){
-           createDate=orderlistDetail.getOrderItemData().getCreateDate();
+        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getCreateDate())) {
+            createDate = orderlistDetail.getOrderItemData().getCreateDate();
             tv_time.setText(createDate);
         }
 
 
-        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getAccount())){
-            account=orderlistDetail.getOrderItemData().getAccount();
+        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getAccount())) {
+            account = orderlistDetail.getOrderItemData().getAccount();
             tv_customer.setText(account);
         }
 
-        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getBusinessRole())){
-            businessRole=orderlistDetail.getOrderItemData().getBusinessRole();
+        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getBusinessRole())) {
+            businessRole = orderlistDetail.getOrderItemData().getBusinessRole();
         }
 
-        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getCreateUser())){
-            createUser=orderlistDetail.getOrderItemData().getCreateUser();
+        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getCreateUser())) {
+            createUser = orderlistDetail.getOrderItemData().getCreateUser();
             tv_maker.setText(createUser);
         }
 
-        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getShipPerson())){
-            shipPerson=orderlistDetail.getOrderItemData().getShipPerson();
+        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getShipPerson())) {
+            shipPerson = orderlistDetail.getOrderItemData().getShipPerson();
             tv_name.setText(shipPerson);
         }
 
-        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getShipMobile())){
-            shipMobile=orderlistDetail.getOrderItemData().getShipMobile();
+        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getShipMobile())) {
+            shipMobile = orderlistDetail.getOrderItemData().getShipMobile();
             tv_phone.setText(settingphone(shipMobile));
         }
 
 
-        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getShipAddress())){
-            shipAddress=orderlistDetail.getOrderItemData().getShipAddress();
+        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getShipAddress())) {
+            shipAddress = orderlistDetail.getOrderItemData().getShipAddress();
             tv_address.setText(shipAddress);
         }
 
-        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getInstallStatus())){
-            installStatus=orderlistDetail.getOrderItemData().getInstallStatus();
+        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getInstallStatus())) {
+            installStatus = orderlistDetail.getOrderItemData().getInstallStatus();
             tv_progress_state.setText(installStatus);
         }
 
-        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getMaxAmount())){
-            maxAmount=orderlistDetail.getOrderItemData().getMaxAmount();
+        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getMaxAmount())) {
+            maxAmount = orderlistDetail.getOrderItemData().getMaxAmount();
             tv_over_money.setText(maxAmount);
         }
 
-        if (orderlistDetail.getOrderItemData().isIsOrderDerate()==true){
-            tv_cut_money.setText(getString(R.string.label_money)+orderDerate);
-        }else {
+        if (orderlistDetail.getOrderItemData().isIsOrderDerate() == true) {
+            tv_cut_money.setText(getString(R.string.label_money) + orderDerate);
+        } else {
             lin_is_cut.setVisibility(View.GONE);
         }
 
-        if (orderlistDetail.getOrderItemData().isIsMoen()==true){
-            tv_belong.setVisibility(View.VISIBLE);
-        }else {
-            tv_belong.setVisibility(View.GONE);
+        if (orderlistDetail.getOrderItemData().isIsMoen() == true) {
+            tv_belong.setText("属于摩恩全国活动");
+        } else {
+            tv_belong.setText("不属于摩恩全国活动");
         }
 
 
-        if (orderlistDetail.getOrderItemData().isIsFreeGift()==true){
+        if (orderlistDetail.getOrderItemData().isIsFreeGift() == true) {
             tv_or_send.setText(getString(R.string.have_award));
-        }else {
+        } else {
             tv_or_send.setText(getString(R.string.no_award));
         }
 
-        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getPickUpStatus())){
-            pickUpStatus=orderlistDetail.getOrderItemData().getPickUpStatus();
+        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getPickUpStatus())) {
+            pickUpStatus = orderlistDetail.getOrderItemData().getPickUpStatus();
             tv_get_state.setText(pickUpStatus);
         }
 
-        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getShoppingMethod())){
-            shoppingMethod=orderlistDetail.getOrderItemData().getShoppingMethod();
+        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getShoppingMethod())) {
+            shoppingMethod = orderlistDetail.getOrderItemData().getShoppingMethod();
             tv_dispatching_type.setText(shoppingMethod);
-        }else {
+        } else {
             lin_send.setVisibility(View.GONE);
         }
 
-        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getPaymentMethod())){
-            paymentMethod=orderlistDetail.getOrderItemData().getPaymentMethod();
+        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getPaymentMethod())) {
+            paymentMethod = orderlistDetail.getOrderItemData().getPaymentMethod();
             tv_get_money_type.setText(paymentMethod);
         }
 
-        if (orderlistDetail.getOrderItemData().getProductCount()!=0){
-            productCount=orderlistDetail.getOrderItemData().getProductCount();
-            tv_goods_num.setText(productCount+"");
+        if (orderlistDetail.getOrderItemData().getProductCount() != 0) {
+            productCount = orderlistDetail.getOrderItemData().getProductCount();
+            tv_goods_num.setText(productCount + "");
         }
 
 //        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getReturnOrderStatus())){
@@ -401,54 +400,76 @@ public class StoreOrderlistDetailActivity extends BaseActivity implements View.O
 ////            tv_goods_num.setText(productCount);
 //        }
 
-        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getAmountPayable())){
-            amountPayable=orderlistDetail.getOrderItemData().getAmountPayable();
+        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getAmountPayable())) {
+            amountPayable = orderlistDetail.getOrderItemData().getAmountPayable();
             tv_should_money.setText(amountPayable);
         }
 
-        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getCouponDerate())){
-            couponDerate=orderlistDetail.getOrderItemData().getCouponDerate();
-            tv_cut_money_of_juan.setText("-"+getString(R.string.label_money)+couponDerate);
-        }
-
-        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getOrderDerate())){
-            orderDerate=orderlistDetail.getOrderItemData().getOrderDerate();
-           tv_cut_money_of_promotion.setText("-"+getString(R.string.label_money)+orderDerate);
-        }
-
-        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getShopDerate())){
-            shopDerate=orderlistDetail.getOrderItemData().getShopDerate();
-            tv_cut_money_of_store.setText("-"+getString(R.string.label_money)+shopDerate);
-        }
-
-        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getPayAmount())){
-            payAmount=orderlistDetail.getOrderItemData().getPayAmount();
-            tv_get_money_of_now.setText(getString(R.string.label_money)+payAmount);
-        }
-
-        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getComment())){
-            comment=orderlistDetail.getOrderItemData().getComment();
-            tv_content.setText(comment);
+        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getCouponDerate())) {
+            if (orderlistDetail.getOrderItemData().getCouponDerate().equals("0")){
+                lin_juan.setVisibility(View.GONE);
+            }else {
+                couponDerate = orderlistDetail.getOrderItemData().getCouponDerate();
+                lin_juan.setVisibility(View.VISIBLE);
+                tv_cut_money_of_juan.setText("-" + getString(R.string.label_money) + couponDerate);
+            }
         }else {
+            lin_juan.setVisibility(View.GONE);
+        }
+
+        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getOrderDerate()) ) {
+            if (orderlistDetail.getOrderItemData().getOrderDerate().equals("0")){
+                lin_cuxiao.setVisibility(View.GONE);
+            }else {
+                orderDerate = orderlistDetail.getOrderItemData().getOrderDerate();
+                lin_cuxiao.setVisibility(View.VISIBLE);
+                tv_cut_money_of_promotion.setText("-" + getString(R.string.label_money) + orderDerate);
+            }
+
+        }else {
+            lin_cuxiao.setVisibility(View.GONE);
+        }
+
+        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getShopDerate())) {
+            if (orderlistDetail.getOrderItemData().getShopDerate().equals("0")){
+                lin_store.setVisibility(View.GONE);
+            }else {
+                shopDerate = orderlistDetail.getOrderItemData().getShopDerate();
+                lin_store.setVisibility(View.VISIBLE);
+                tv_cut_money_of_store.setText("-" + getString(R.string.label_money) + shopDerate);
+            }
+
+        }else {
+            lin_store.setVisibility(View.GONE);
+        }
+
+        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getPayAmount())) {
+            payAmount = orderlistDetail.getOrderItemData().getPayAmount();
+            tv_get_money_of_now.setText(getString(R.string.label_money) + payAmount);
+        }
+
+        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getComment())) {
+            comment = orderlistDetail.getOrderItemData().getComment();
+            tv_content.setText(comment);
+        } else {
             tv_content.setText(getString(R.string.have_no));
         }
 
 
-
-         List<OrderlistDetail.OrderItemDataBean.OrderProductListBean> onelists=orderlistDetail.getOrderItemData().getOrderProductList();
-        if (onelists.size()!=0){
+        List<OrderlistDetail.OrderItemDataBean.OrderProductListBean> onelists = orderlistDetail.getOrderItemData().getOrderProductList();
+        if (onelists.size() != 0) {
             onelist.addAll(onelists);
             oneOrderDetailAdapter.setUI(onelist);
-        }else {
+        } else {
             rv_list_one.setVisibility(View.GONE);
         }
 
 
-         List<OrderlistDetail.OrderItemDataBean.OrderSetMealListBean> morelists=orderlistDetail.getOrderItemData().getOrderSetMealList();
-        if (morelists.size()!=0){
+        List<OrderlistDetail.OrderItemDataBean.OrderSetMealListBean> morelists = orderlistDetail.getOrderItemData().getOrderSetMealList();
+        if (morelists.size() != 0) {
             morelist.addAll(morelists);
             moreOrderDetailAdapter.setUI(morelist);
-        }else {
+        } else {
             rv_list_more.setVisibility(View.GONE);
         }
     }

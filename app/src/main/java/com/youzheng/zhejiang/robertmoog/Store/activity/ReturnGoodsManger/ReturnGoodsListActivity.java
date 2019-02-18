@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.liaoinstan.springview.widget.SpringView;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
@@ -30,11 +31,12 @@ import com.youzheng.zhejiang.robertmoog.Model.Home.EnumsDatasBeanDatas;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.ReturnGoodsListAdapter;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.ReturnGoodsTimeAdapter;
-import com.youzheng.zhejiang.robertmoog.Store.bean.NewOrderListBean;
-import com.youzheng.zhejiang.robertmoog.Store.bean.OrderList;
 import com.youzheng.zhejiang.robertmoog.Store.bean.ReturnGoodsList;
 import com.youzheng.zhejiang.robertmoog.Store.listener.OnRecyclerViewAdapterItemClickListener;
+import com.youzheng.zhejiang.robertmoog.Store.utils.SoftInputUtils;
 import com.youzheng.zhejiang.robertmoog.Store.view.RecycleViewDivider;
+import com.youzheng.zhejiang.robertmoog.utils.View.MyFooter;
+import com.youzheng.zhejiang.robertmoog.utils.View.MyHeader;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -80,47 +82,62 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
     private List<String> piclist = new ArrayList<>();
     private ReturnGoodsTimeAdapter goodsTimeAdapter;
     private ReturnGoodsListAdapter adapter;
-    private List<EnumsDatasBeanDatas> strlist=new ArrayList<>();
+    private List<EnumsDatasBeanDatas> strlist = new ArrayList<>();
 
-    private int page=1;
-    private int pageSize=10;
+    private int page = 1;
+    private int pageSize = 10;
     private String customerId;
-    private String orderCode="";
-    private String timeQuantum="";
-    private Boolean isCustomer=false;
+    private String orderCode = "";
+    private String timeQuantum = "";
+    private Boolean isCustomer = false;
     private int who;
     private String edit;
     private String type;
-
+    private SpringView mSpringView;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_return_goods_list);
-        isCustomer=getIntent().getBooleanExtra("identifion",false);
-        customerId=getIntent().getStringExtra("customerId");
-        type=getIntent().getStringExtra("type");
+        isCustomer = getIntent().getBooleanExtra("identifion", false);
+        customerId = getIntent().getStringExtra("customerId");
+        type = getIntent().getStringExtra("type");
         initView();
         setListener();
         initGetDate();
-        initData(page,pageSize,orderCode,timeQuantum,isCustomer);
+        initData(page, pageSize, orderCode, timeQuantum, isCustomer);
     }
 
     private void setListener() {
-        rv_list.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
+//        rv_list.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
+//            @Override
+//            public void onRefresh() {
+//                page = 1;
+//                list.clear();
+//                initData(page, pageSize, orderCode, timeQuantum, isCustomer);
+//            }
+//
+//            @Override
+//            public void onLoadMore() {
+//                //list.clear();
+//                page++;
+//                initData(page, pageSize, orderCode, timeQuantum, isCustomer);
+//            }
+//        });
+
+        mSpringView.setListener(new SpringView.OnFreshListener() {
             @Override
             public void onRefresh() {
-                page=1;
+                page = 1;
                 list.clear();
-                initData(page,pageSize,orderCode,timeQuantum,isCustomer);
+                initData(page, pageSize, orderCode, timeQuantum, isCustomer);
             }
 
             @Override
-            public void onLoadMore() {
-                list.clear();
-               page++;
-                initData(page,pageSize,orderCode,timeQuantum,isCustomer);
+            public void onLoadmore() {
+                page++;
+                initData(page, pageSize, orderCode, timeQuantum, isCustomer);
             }
         });
 
@@ -128,7 +145,7 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
 
 
     private void initGetDate() {
-        OkHttpClientManager.postAsynJson(gson.toJson(new HashMap<>()), UrlUtils.LIST_DATA+"?access_token="+access_token, new OkHttpClientManager.StringCallback() {
+        OkHttpClientManager.postAsynJson(gson.toJson(new HashMap<>()), UrlUtils.LIST_DATA + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
             public void onFailure(Request request, IOException e) {
 
@@ -136,29 +153,28 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
 
             @Override
             public void onResponse(String response) {
-                Log.e("获取时间枚举",response);
-                BaseModel baseModel = gson.fromJson(response,BaseModel.class);
-                if (baseModel.getCode()==PublicUtils.code){
-                    EnumsDatas enumsDatas = gson.fromJson(gson.toJson(baseModel.getDatas()),EnumsDatas.class);
-                    if (enumsDatas.getEnums().size()>0){
-                        for (final EnumsDatasBean bean : enumsDatas.getEnums()){
-                            if (bean.getClassName().equals("TimeQuantum")){//  TimeQuantum
+                Log.e("获取时间枚举", response);
+                BaseModel baseModel = gson.fromJson(response, BaseModel.class);
+                if (baseModel.getCode() == PublicUtils.code) {
+                    EnumsDatas enumsDatas = gson.fromJson(gson.toJson(baseModel.getDatas()), EnumsDatas.class);
+                    if (enumsDatas.getEnums().size() > 0) {
+                        for (final EnumsDatasBean bean : enumsDatas.getEnums()) {
+                            if (bean.getClassName().equals("TimeQuantum")) {//  TimeQuantum
 //                                final List<String> date = new ArrayList<String>();
-                                List<EnumsDatasBeanDatas> list1=new ArrayList<>();
+                                List<EnumsDatasBeanDatas> list1 = new ArrayList<>();
                                 for (int i = 0; i < bean.getDatas().size(); i++) {
                                     list1.add(bean.getDatas().get(i));
                                 }
-                                strlist=list1;
+                                strlist = list1;
                             }
                         }
 
                         goodsTimeAdapter.setUI(strlist);
 
 
-
                     }
 
-                }else {
+                } else {
                     showToast(baseModel.getMsg());
                 }
             }
@@ -171,11 +187,11 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
-         if (type.equals("1")){
-             textHeadTitle.setText(getString(R.string.customer_return));
-         }else {
-             textHeadTitle.setText(getString(R.string.store_return));
-         }
+        if (type.equals("1")) {
+            textHeadTitle.setText(getString(R.string.customer_return));
+        } else {
+            textHeadTitle.setText(getString(R.string.store_return));
+        }
 
 
         textHeadNext = (TextView) findViewById(R.id.textHeadNext);
@@ -204,12 +220,14 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
         rv_list.setLinearLayout();
         rv_list.setColorSchemeResources(R.color.colorPrimary);
 
+        rv_list.setPushRefreshEnable(false);
+        rv_list.setPullRefreshEnable(false);
 
-        adapter=new ReturnGoodsListAdapter(list,this);
+        adapter = new ReturnGoodsListAdapter(list, this);
         rv_list.setAdapter(adapter);
 
 
-        goodsTimeAdapter=new ReturnGoodsTimeAdapter(strlist,this);
+        goodsTimeAdapter = new ReturnGoodsTimeAdapter(strlist, this);
         gv_time.setAdapter(goodsTimeAdapter);
 
 
@@ -217,6 +235,9 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
 
         gv_time.setOnItemClickListener(this);
 
+        mSpringView = (SpringView) findViewById(R.id.springView);
+        mSpringView.setHeader(new MyHeader(this));
+        mSpringView.setFooter(new MyFooter(this));
     }
 
     @Override
@@ -226,33 +247,35 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
     }
 
     private void initData(int page, int pageSize, String orderCode, String timeQuantum, Boolean isCustomer) {
-        HashMap<String,Object> map=new HashMap<>();
-        map.put("pageNum",page);
-        map.put("pageSize",pageSize);
-        map.put("orderCode",orderCode);
-        map.put("timeQuantum",timeQuantum);
-        map.put("identifion",isCustomer);
-        if (isCustomer==true){
-            map.put("customerId",customerId);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("pageNum", page);
+        map.put("pageSize", pageSize);
+        map.put("orderCode", orderCode);
+        map.put("timeQuantum", timeQuantum);
+        map.put("identifion", isCustomer);
+        if (isCustomer == true) {
+            map.put("customerId", customerId);
         }
 
 
         OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.RETURN_ORDERLIST_LIST + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
             public void onFailure(Request request, IOException e) {
-                rv_list.setPullLoadMoreCompleted();
+                //rv_list.setPullLoadMoreCompleted();
+                mSpringView.onFinishFreshAndLoad();
             }
 
             @Override
             public void onResponse(String response) {
-                Log.e("退货单列表",response);
-                rv_list.setPullLoadMoreCompleted();
-                BaseModel baseModel = gson.fromJson(response,BaseModel.class);
-                if (baseModel.getCode()==PublicUtils.code){
-                    ReturnGoodsList returnGoodsList = gson.fromJson(gson.toJson(baseModel.getDatas()),ReturnGoodsList.class);
+                Log.e("退货单列表", response);
+               // rv_list.setPullLoadMoreCompleted();
+                mSpringView.onFinishFreshAndLoad();
+                BaseModel baseModel = gson.fromJson(response, BaseModel.class);
+                if (baseModel.getCode() == PublicUtils.code) {
+                    ReturnGoodsList returnGoodsList = gson.fromJson(gson.toJson(baseModel.getDatas()), ReturnGoodsList.class);
                     setData(returnGoodsList);
 
-                }else {
+                } else {
                     showToast(baseModel.getMsg());
                 }
             }
@@ -261,17 +284,16 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
     }
 
     private void setData(ReturnGoodsList returnGoodsList) {
-        if (returnGoodsList==null) return;
-        if (returnGoodsList.getReturnOrderList()==null) return;
+        if (returnGoodsList == null) return;
+        if (returnGoodsList.getReturnOrderList() == null) return;
 
-        List<ReturnGoodsList.ReturnOrderListBean> listBeans=returnGoodsList.getReturnOrderList();
-        if (listBeans.size()!=0){
+        List<ReturnGoodsList.ReturnOrderListBean> listBeans = returnGoodsList.getReturnOrderList();
+        if (listBeans.size() != 0) {
             list.addAll(listBeans);
             adapter.setUI(listBeans);
-        }else {
-           showToast(getString(R.string.load_list_erron));
+        } else {
+            showToast(getString(R.string.load_list_erron));
         }
-
 
 
     }
@@ -288,38 +310,39 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
                 drawer_layout.openDrawer(GravityCompat.END);
                 break;
             case R.id.iv_search:
-                edit=tv_search.getText().toString();
+                SoftInputUtils.hideSoftInput(ReturnGoodsListActivity.this);
+                edit = tv_search.getText().toString();
                 //tv_search.setText("D1548784201901070011");
-                if (TextUtils.isEmpty(edit)){
+                if (TextUtils.isEmpty(edit)) {
                     showToast(getString(R.string.please_write_return_number));
-                }else {
-                    orderCode=edit;
+                } else {
+                    orderCode = edit;
                     list.clear();
                     adapter.clear();
-                    initData(page,pageSize,orderCode,timeQuantum,isCustomer);
+                    initData(page, pageSize, orderCode, timeQuantum, isCustomer);
                 }
 
                 break;
 
             case R.id.tv_again:
                 goodsTimeAdapter.setSelectItem(0);
-                timeQuantum=strlist.get(0).getId();
+                timeQuantum = strlist.get(0).getId();
                 break;
 
             case R.id.tv_confirm:
                 adapter.clear();
-                initData(page,pageSize,orderCode,timeQuantum,isCustomer);
+                initData(page, pageSize, orderCode, timeQuantum, isCustomer);
                 drawer_layout.closeDrawer(GravityCompat.END);
                 goodsTimeAdapter.setSelectItem(who);
-                timeQuantum=strlist.get(who).getId();
+                timeQuantum = strlist.get(who).getId();
                 break;
         }
     }
 
     @Override
     public void onItemClick(View view, int position) {
-        Intent intent=new Intent(this,ReturnGoodsDetailActivity.class);
-        intent.putExtra("returnGoodsId",list.get(position).getId()+"");
+        Intent intent = new Intent(this, ReturnGoodsDetailActivity.class);
+        intent.putExtra("returnGoodsId", list.get(position).getId() + "");
         startActivity(intent);
     }
 
@@ -331,8 +354,8 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         goodsTimeAdapter.setSelectItem(position);
-        timeQuantum=strlist.get(position).getId();
-        who=position;
+        timeQuantum = strlist.get(position).getId();
+        who = position;
     }
 
     @Override
@@ -342,10 +365,10 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        if (tv_search.length()==0){
+        if (tv_search.length() == 0) {
             list.clear();
-            orderCode="";
-            initData(page,pageSize,orderCode,timeQuantum,isCustomer);
+            orderCode = "";
+            initData(page, pageSize, orderCode, timeQuantum, isCustomer);
         }
     }
 

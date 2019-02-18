@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -45,6 +47,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import okhttp3.Request;
 
@@ -225,6 +229,10 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
                                 List<EnumsDatasBeanDatas> list1=new ArrayList<>();
                                 for (int i = 0; i < bean.getDatas().size(); i++) {
                                     list1.add(bean.getDatas().get(i));
+                                    if (bean.getDatas().get(i).getId().equals("NO_LIFT")){
+                                        tv_get_state.setText("未提");
+                                        pick_state="NO_LIFT";
+                                    }
                                     type.add(bean.getDatas().get(i).getDes());
                                 }
                                 typelist=list1;
@@ -238,6 +246,10 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
                                 List<EnumsDatasBeanDatas> list2=new ArrayList<>();
                                 for (int i = 0; i < bean.getDatas().size(); i++) {
                                     list2.add(bean.getDatas().get(i));
+                                    if (bean.getDatas().get(i).getId().equals("RETURN_CAME")){
+                                        tv_return_type.setText("原路返回");
+                                        paymentMethod="RETURN_CAME";
+                                    }
                                     returns.add(bean.getDatas().get(i).getDes());
                                 }
                                 returnlist=list2;
@@ -293,6 +305,24 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
         tv_confirm_return = (TextView) findViewById(R.id.tv_confirm_return);
         tv_confirm_return.setOnClickListener(this);
         et_other_reason=findViewById(R.id.et_other_reason);
+
+        InputFilter inputFilter=new InputFilter() {
+
+            Pattern pattern = Pattern.compile("[^a-zA-Z0-9\\u4E00-\\u9FA5_]");
+            @Override
+            public CharSequence filter(CharSequence charSequence, int i, int i1, Spanned spanned, int i2, int i3) {
+                Matcher matcher=  pattern.matcher(charSequence);
+                if(!matcher.find()){
+                    return null;
+                }else{
+                    showToast("只能输入汉字,英文,数字");
+                    return "";
+                }
+
+            }
+        };
+
+        et_other_reason.setFilters(new InputFilter[]{inputFilter,new InputFilter.LengthFilter(100)});
 
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rv_list_one.setLayoutManager(manager);
@@ -356,8 +386,8 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
             paymentMethod="CASH";
         }else if (tv_return_type.getText().equals(getString(R.string.market_get))){
             paymentMethod="MARKET";
-        }else if (tv_return_type.getText().equals(getString(R.string.other))){
-            paymentMethod="OTHER";
+        }else if (tv_return_type.getText().equals(getString(R.string.yuan_lu))){
+            paymentMethod="RETURN_CAME";
         }
 
         if (tv_get_state.getText().equals(getString(R.string.all_lift))){

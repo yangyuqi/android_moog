@@ -14,6 +14,7 @@ import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.CustomListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
+import com.liaoinstan.springview.widget.SpringView;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
@@ -24,6 +25,8 @@ import com.youzheng.zhejiang.robertmoog.Count.bean.GoodsTypeDetail;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.view.RecycleViewDivider;
+import com.youzheng.zhejiang.robertmoog.utils.View.MyFooter;
+import com.youzheng.zhejiang.robertmoog.utils.View.MyHeader;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -78,6 +81,7 @@ public class GoodsTypeRankingDetailActivity extends BaseActivity implements View
      * 查询
      */
     private TextView tv_check;
+    private SpringView mSpringView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +100,23 @@ public class GoodsTypeRankingDetailActivity extends BaseActivity implements View
     }
 
     private void swtListener() {
-        pr_list.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
+//        pr_list.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
+//            @Override
+//            public void onRefresh() {
+//                page = 1;
+//                list.clear();
+//                initData(page, pageSize, isDay, startstr, endstr, categoryId, type);
+//            }
+//
+//            @Override
+//            public void onLoadMore() {
+//                //list.clear();
+//                page++;
+//                initData(page, pageSize, isDay, startstr, endstr, categoryId, type);
+//            }
+//        });
+
+        mSpringView.setListener(new SpringView.OnFreshListener() {
             @Override
             public void onRefresh() {
                 page = 1;
@@ -105,8 +125,7 @@ public class GoodsTypeRankingDetailActivity extends BaseActivity implements View
             }
 
             @Override
-            public void onLoadMore() {
-                list.clear();
+            public void onLoadmore() {
                 page++;
                 initData(page, pageSize, isDay, startstr, endstr, categoryId, type);
             }
@@ -154,6 +173,10 @@ public class GoodsTypeRankingDetailActivity extends BaseActivity implements View
         tv_endDate.setOnClickListener(this);
         tv_check = (TextView) findViewById(R.id.tv_check);
         tv_check.setOnClickListener(this);
+        mSpringView = (SpringView) findViewById(R.id.springView);
+        mSpringView.setHeader(new MyHeader(this));
+        mSpringView.setFooter(new MyFooter(this));
+
     }
 
     @Override
@@ -175,13 +198,15 @@ public class GoodsTypeRankingDetailActivity extends BaseActivity implements View
         OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.GOODS_TYPE_RANKING_DETAIL + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
             public void onFailure(Request request, IOException e) {
-                pr_list.setPullLoadMoreCompleted();
+                //pr_list.setPullLoadMoreCompleted();
+                mSpringView.onFinishFreshAndLoad();
             }
 
             @Override
             public void onResponse(String response) {
                 Log.e("商品品类排名详情", response);
-                pr_list.setPullLoadMoreCompleted();
+                //pr_list.setPullLoadMoreCompleted();
+                mSpringView.onFinishFreshAndLoad();
                 BaseModel baseModel = gson.fromJson(response, BaseModel.class);
                 if (baseModel.getCode() == PublicUtils.code) {
                     GoodsTypeDetail goodsTypeDetail = gson.fromJson(gson.toJson(baseModel.getDatas()), GoodsTypeDetail.class);
@@ -217,15 +242,15 @@ public class GoodsTypeRankingDetailActivity extends BaseActivity implements View
                 finish();
                 break;
             case R.id.tv_startDate:
-                who=1;
+                who = 1;
                 pvTime.show(v, false);
                 break;
             case R.id.tv_endDate:
-                who=2;
+                who = 2;
                 pvTime.show(v, false);
                 break;
             case R.id.tv_check:
-                isDay=false;
+                isDay = false;
                 list.clear();
                 initData(page, pageSize, isDay, startstr, endstr, categoryId, type);
                 break;

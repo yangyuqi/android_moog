@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.liaoinstan.springview.widget.SpringView;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
@@ -24,11 +25,10 @@ import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.PeopleMangerAdapter;
 import com.youzheng.zhejiang.robertmoog.Store.bean.PeopleMangerList;
-import com.youzheng.zhejiang.robertmoog.Store.bean.ProfessionalCustomerList;
-import com.youzheng.zhejiang.robertmoog.Store.bean.StoreCustomerDetail;
 import com.youzheng.zhejiang.robertmoog.Store.listener.OnRecyclerViewAdapterItemClickListener;
-import com.youzheng.zhejiang.robertmoog.Store.view.MyListView;
 import com.youzheng.zhejiang.robertmoog.Store.view.RecycleViewDivider;
+import com.youzheng.zhejiang.robertmoog.utils.View.MyFooter;
+import com.youzheng.zhejiang.robertmoog.utils.View.MyHeader;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -58,34 +58,52 @@ public class PeopleMangerActivity extends BaseActivity implements View.OnClickLi
     private List<PeopleMangerList.ShopPersonalListBean> list = new ArrayList<>();
     private PeopleMangerAdapter adapter;
     private int page = 1;
-    private int pageSize =10;
+    private int pageSize = 10;
+    private SpringView mSpringView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_people_manger);
         initView();
-        setListener();
+        //setListener();
 
     }
 
     private void setListener() {
-        lv_list.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
-            @Override
-            public void onRefresh() {
-                page = 1;
-                list.clear();
-                adapter.clear();
-                initData(page, pageSize);
-            }
+//        lv_list.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
+//            @Override
+//            public void onRefresh() {
+//                page = 1;
+//                list.clear();
+//                adapter.clear();
+//                initData(page, pageSize);
+//            }
+//
+//            @Override
+//            public void onLoadMore() {
+//                list.clear();
+//                page = page + 1;
+//                initData(page, pageSize);
+//            }
+//        });
 
-            @Override
-            public void onLoadMore() {
-                list.clear();
-                page=page+1;
-                initData(page, pageSize);
-            }
-        });
+//        mSpringView.setListener(new SpringView.OnFreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                page = 1;
+//                list.clear();
+//                adapter.clear();
+//                initData(page, pageSize);
+//            }
+//
+//            @Override
+//            public void onLoadmore() {
+//                list.clear();
+//                page = page + 1;
+//                initData(page, pageSize);
+//            }
+//        });
     }
 
     private void initView() {
@@ -106,13 +124,20 @@ public class PeopleMangerActivity extends BaseActivity implements View.OnClickLi
                 this, LinearLayoutManager.VERTICAL, 5, getResources().getColor(R.color.divider_color_item)));
         lv_list.setColorSchemeResources(R.color.colorPrimary);
 
+        lv_list.setPushRefreshEnable(false);
+        lv_list.setPullRefreshEnable(false);
+
         adapter = new PeopleMangerAdapter(list, this);
         lv_list.setAdapter(adapter);
 
+//        mSpringView = (SpringView) findViewById(R.id.springView);
+//
+//        mSpringView.setHeader(new MyHeader(this));
+//        mSpringView.setFooter(new MyFooter(this));
     }
 
     public void showStopDialog(final int id) {
-        final AlertDialog dialogBuilder = new AlertDialog.Builder(PeopleMangerActivity.this,R.style.mydialog).create();
+        final AlertDialog dialogBuilder = new AlertDialog.Builder(PeopleMangerActivity.this, R.style.mydialog).create();
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_appear, null);
         dialogBuilder.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -143,8 +168,8 @@ public class PeopleMangerActivity extends BaseActivity implements View.OnClickLi
         WindowManager.LayoutParams lp = window.getAttributes();
         //这句就是设置dialog横向满屏了。
         DisplayMetrics d = this.getResources().getDisplayMetrics(); // 获取屏幕宽、高用
-       lp.width = (int) (d.widthPixels * 0.9); // 高度设置为屏幕的0.6
-       // lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.width = (int) (d.widthPixels * 0.9); // 高度设置为屏幕的0.6
+        // lp.width = WindowManager.LayoutParams.MATCH_PARENT;
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
         window.setAttributes(lp);
 
@@ -171,7 +196,7 @@ public class PeopleMangerActivity extends BaseActivity implements View.OnClickLi
                     showToast(getString(R.string.stop_success));
 //                    page=1;
                     //list.clear();
-                    initData(page, pageSize);
+                    initData();
 
                 } else {
                     if (!baseModel.getMsg().equals("")) {
@@ -188,26 +213,28 @@ public class PeopleMangerActivity extends BaseActivity implements View.OnClickLi
     protected void onResume() {
         super.onResume();
         list.clear();
-        initData(page, pageSize);
+        initData();
     }
 
-    private void initData(int page, int pageSize) {
+    private void initData() {
 
 
         HashMap<String, Object> map = new HashMap<>();
-        map.put("pageNum", page);
-        map.put("pageSize", pageSize);
+//        map.put("pageNum", page);
+//        map.put("pageSize", pageSize);
 
         OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.PEOPLE_MAGER_LIST + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
             public void onFailure(Request request, IOException e) {
-                lv_list.setPullLoadMoreCompleted();
+               // lv_list.setPullLoadMoreCompleted();
+               // mSpringView.onFinishFreshAndLoad();
             }
 
             @Override
             public void onResponse(String response) {
                 Log.e("门店管理列表", response);
-                lv_list.setPullLoadMoreCompleted();
+                //lv_list.setPullLoadMoreCompleted();
+               // mSpringView.onFinishFreshAndLoad();
                 BaseModel baseModel = gson.fromJson(response, BaseModel.class);
                 if (baseModel.getCode() == PublicUtils.code) {
                     PeopleMangerList peopleMangerList = gson.fromJson(gson.toJson(baseModel.getDatas()), PeopleMangerList.class);
@@ -235,7 +262,7 @@ public class PeopleMangerActivity extends BaseActivity implements View.OnClickLi
         adapter.setOnItemClickListener(new OnRecyclerViewAdapterItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Log.e("下标",position+"");
+                Log.e("下标", position + "");
                 showStopDialog(list.get(position).getId());
             }
 

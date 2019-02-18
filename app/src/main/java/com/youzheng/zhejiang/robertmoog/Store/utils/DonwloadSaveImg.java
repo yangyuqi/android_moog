@@ -9,12 +9,14 @@ import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,6 +53,7 @@ public class DonwloadSaveImg {
                     inputStream.close();
                 }
                 saveFile(mBitmap);
+                //saveImageToGallery(mBitmap);
                 mSaveMessage = "图片保存成功";
             } catch (IOException e) {
                 mSaveMessage = "图片保存失败";
@@ -86,11 +89,54 @@ public class DonwloadSaveImg {
         bm.compress(Bitmap.CompressFormat.JPEG, 80, bos);
         bos.flush();
         bos.close();
+        // 其次把文件插入到系统图库
+        String path = dirFile.getAbsolutePath();
+        try {
+            MediaStore.Images.Media.insertImage(context.getContentResolver(), path, fileName, null);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         //把图片保存后声明这个广播事件通知系统相册有新图片到来
         Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         Uri uri = Uri.fromFile(myCaptureFile);
         intent.setData(uri);
         context.sendBroadcast(intent);
     }
+
+    public static void saveImageToGallery( Bitmap bmp) {
+        // 首先保存图片
+        File appDir = new File(Environment.getExternalStorageDirectory().getPath());
+        if (!appDir.exists()) {
+            appDir.mkdir();
+        }
+        String fileName = "sign_"+System.currentTimeMillis() + ".jpg";
+        File file = new File(appDir, fileName);
+        try {
+           // FileOutputStream fos = new FileOutputStream(file);
+            BufferedOutputStream fos = new BufferedOutputStream(new FileOutputStream(file));
+            bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            fos.flush();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // 其次把文件插入到系统图库
+        String path = file.getAbsolutePath();
+        try {
+            MediaStore.Images.Media.insertImage(context.getContentResolver(), path, fileName, null);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        // 最后通知图库更新
+        Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        Uri uri = Uri.fromFile(file);
+        intent.setData(uri);
+        context.sendBroadcast(intent);
+
+    }
+
 
 }

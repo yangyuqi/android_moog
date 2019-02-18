@@ -164,8 +164,6 @@
                         android:id="@+id/tv_add"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingTop="@dimen/space_1"
-                        android:paddingBottom="@dimen/space_1"
                         android:paddingLeft="@dimen/space_12"
                         android:paddingRight="@dimen/space_12"
                         android:text="+"
@@ -193,6 +191,7 @@
                 android:layout_centerVertical="true"
                 android:text=""
                 android:textSize="@dimen/text_size_16"
+                android:layout_marginRight="25dp"
                 android:id="@+id/tv_golden"
                 />
 

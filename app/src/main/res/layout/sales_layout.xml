@@ -514,6 +514,7 @@
 
 
                 <LinearLayout
+                    android:id="@+id/lin_juan"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
@@ -550,6 +551,7 @@
 
 
                 <LinearLayout
+                    android:id="@+id/lin_cuxiao"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
@@ -586,6 +588,7 @@
 
 
                 <LinearLayout
+                    android:id="@+id/lin_store"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
@@ -670,7 +673,7 @@
 
                 <EditText
                     android:id="@+id/edt_content"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="添加备注:"
                     android:textColor="@color/colorPrimary"

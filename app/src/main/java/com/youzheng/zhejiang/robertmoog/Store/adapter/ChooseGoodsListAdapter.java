@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.youzheng.zhejiang.robertmoog.R;
+import com.youzheng.zhejiang.robertmoog.Store.activity.ReturnGoods.ChooseOrderListActivity;
 import com.youzheng.zhejiang.robertmoog.Store.activity.ReturnGoods.ChooseReturnGoodsActivity;
 import com.youzheng.zhejiang.robertmoog.Store.activity.ReturnGoods.ReturnAllCounterActivity;
 import com.youzheng.zhejiang.robertmoog.Store.activity.StoreOrderlistDetailActivity;
@@ -121,6 +122,8 @@ public class ChooseGoodsListAdapter extends RecyclerView.Adapter {
                 intent.putExtra("orderID",list.get(positions).getId());
                 intent.putExtra("isAll",true);
                 context.startActivity(intent);
+                ChooseOrderListActivity.Instance.finish();
+
             }
         });
 
@@ -131,6 +134,7 @@ public class ChooseGoodsListAdapter extends RecyclerView.Adapter {
                 intent.putExtra("returnGoodsId",list.get(positions).getId());
                 intent.putExtra("isAll",false);
                 context.startActivity(intent);
+                ChooseOrderListActivity.Instance.finish();
             }
         });
 
@@ -162,6 +166,7 @@ public class ChooseGoodsListAdapter extends RecyclerView.Adapter {
                 intent.putExtra("orderID",list.get(position).getId());
                 intent.putExtra("isAll",true);
                 context.startActivity(intent);
+                ChooseOrderListActivity.Instance.finish();
             }
         });
 
@@ -173,6 +178,7 @@ public class ChooseGoodsListAdapter extends RecyclerView.Adapter {
                 intent.putExtra("returnGoodsId",list.get(position).getId());
                 intent.putExtra("isAll",false);
                 context.startActivity(intent);
+                ChooseOrderListActivity.Instance.finish();
             }
         });
 

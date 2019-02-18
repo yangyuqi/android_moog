@@ -43,6 +43,7 @@ import com.youzheng.zhejiang.robertmoog.Model.Home.ScanDatas;
 import com.youzheng.zhejiang.robertmoog.Model.Home.ScanDatasBean;
 import com.youzheng.zhejiang.robertmoog.R;
 
+import com.youzheng.zhejiang.robertmoog.Store.utils.SoftInputUtils;
 import com.youzheng.zhejiang.robertmoog.utils.QRcode.bean.ZxingConfig;
 import com.youzheng.zhejiang.robertmoog.utils.QRcode.camera.CameraManager;
 import com.youzheng.zhejiang.robertmoog.utils.QRcode.common.Constant;
@@ -88,7 +89,7 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
     public ViewfinderView getViewfinderView() {
         return viewfinderView;
     }
-    private TextView tv_confrim ;
+    private TextView tv_confrim ,tv_mm;
     private String customerId ,type ;
     public Handler getHandler() {
         return handler;
@@ -158,6 +159,7 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
         findViewById(R.id.rl_text).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SoftInputUtils.hideSoftInput(CaptureActivity.this);
                 if (isPreview) {
                     iv_preview.setImageResource(R.mipmap.group_14_1);
                     findViewById(R.id.largeLabel).setVisibility(View.GONE);
@@ -175,7 +177,10 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
 
                         surfaceHolder.removeCallback(CaptureActivity.this);
                     }
+                    tv_mm.setText("展开扫描区");
                 }else {
+
+                    tv_mm.setText("收起扫描区");
                     iv_preview.setImageResource(R.mipmap.group_12_3);
                     findViewById(R.id.largeLabel).setVisibility(View.VISIBLE);
                     isPreview = true;
@@ -206,6 +211,7 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
 
     private void initView() {
         previewView = findViewById(R.id.preview_view);
+        tv_mm=findViewById(R.id.tv_mm);
         previewView.setOnClickListener(this);
 
         viewfinderView = findViewById(R.id.viewfinder_view);
@@ -243,12 +249,20 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
         tv_confrim.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                for (ScanDatasBean scanDatasBean:datasBeanList){
+                    if (scanDatasBean.getNum()==0){
+                        showToast("商品数量不能为空");
+                        return;
+                    }
+                }
+
                     if (datasBeanList.size() > 0) {
                         if (type==null) {
                             Intent intent = new Intent(CaptureActivity.this, SalesActivity.class);
                             intent.putExtra("customerId", customerId);
                             intent.putExtra("data", datasBeanList);
                             startActivity(intent);
+                            finish();
                         }else {
                             addIntention();
                         }

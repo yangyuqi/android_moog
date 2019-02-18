@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -21,6 +23,7 @@ import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.Model.Home.PromoIdDetails;
 import com.youzheng.zhejiang.robertmoog.Model.Home.PromoIdDetailsData;
 import com.youzheng.zhejiang.robertmoog.R;
+import com.youzheng.zhejiang.robertmoog.Store.utils.SoftInputUtils;
 import com.youzheng.zhejiang.robertmoog.utils.CommonAdapter;
 import com.youzheng.zhejiang.robertmoog.utils.View.NoScrollListView;
 import com.youzheng.zhejiang.robertmoog.utils.ViewHolder;
@@ -47,6 +50,7 @@ public class ShopActionDetailsActivity extends BaseActivity {
     private String codeid;
     private TextView tv_goods,tv_meal;
     private CouponActionAdapter actionAdapter;
+    private LinearLayout lin_event;
 
 
     @Override
@@ -75,18 +79,27 @@ public class ShopActionDetailsActivity extends BaseActivity {
                     tv_name.setText(promoIdDetails.getData().getPromoName());
                     tv_start_time.setText(promoIdDetails.getData().getStartTime());
                     tv_end_time.setText(promoIdDetails.getData().getEndTime());
-                    tv_desc.setText(promoIdDetails.getData().getActivityAbstract());
+                    if (!TextUtils.isEmpty(promoIdDetails.getData().getActivityAbstract())){
+                        tv_desc.setText(promoIdDetails.getData().getActivityAbstract());
+                        lin_event.setVisibility(View.VISIBLE);
+                    }else {
+                        lin_event.setVisibility(View.GONE);
+                    }
+
                     codeid=promoIdDetails.getData().getPromoId();
                     if (promoIdDetails.getData().getOrderPromo().size()>0){
                         adapter.setData(promoIdDetails.getData().getOrderPromo());
                         adapter.notifyDataSetChanged();
                         tv_goods.setVisibility(View.VISIBLE);
                         ls.setVisibility(View.VISIBLE);
+
                     }else {
                         tv_goods.setVisibility(View.GONE);
                         ls.setVisibility(View.GONE);
+
                     }
                     if (promoIdDetails.getData().getComboPromo().size()>0){
+                        findViewById(R.id.iv_next).setVisibility(View.VISIBLE);
                         tv_meal.setVisibility(View.VISIBLE);
                         recycler_view.setVisibility(View.VISIBLE);
                         LinearLayoutManager manager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
@@ -97,6 +110,7 @@ public class ShopActionDetailsActivity extends BaseActivity {
                     }else {
                         tv_meal.setVisibility(View.GONE);
                         recycler_view.setVisibility(View.VISIBLE);
+                        findViewById(R.id.iv_next).setVisibility(View.GONE);
                     }
 
                     if (promoIdDetails.getData().getCouponPromo().size()>0){
@@ -111,6 +125,10 @@ public class ShopActionDetailsActivity extends BaseActivity {
                         tv_coupon.setVisibility(View.GONE);
                         rv_coupon.setVisibility(View.GONE);
                     }
+                }else {
+                    if (!TextUtils.isEmpty(baseModel.getMsg())){
+                        showToast(baseModel.getMsg());
+                    }
                 }
             }
         });
@@ -119,6 +137,7 @@ public class ShopActionDetailsActivity extends BaseActivity {
     private void initView() {
         tv_goods=findViewById(R.id.tv_goods);
         tv_meal=findViewById(R.id.tv_meal);
+        lin_event=findViewById(R.id.lin_event);
         ((TextView)findViewById(R.id.textHeadTitle)).setText("促销活动");
         findViewById(R.id.btnBack).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,10 +145,11 @@ public class ShopActionDetailsActivity extends BaseActivity {
                 finish();
             }
         });
-        findViewById(R.id.iv_next).setVisibility(View.VISIBLE);
+
         findViewById(R.id.iv_next).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SoftInputUtils.hideSoftInput(ShopActionDetailsActivity.this);
                 Intent intent=new Intent(ShopActionDetailsActivity.this,SearchMealInfoActivity.class);
                 intent.putExtra("codeid",codeid);
                 startActivity(intent);

@@ -78,6 +78,7 @@
     <string name="cash">现金</string>
     <string name="market_get">商场收款</string>
     <string name="other">其他</string>
+    <string name="yuan_lu">原路返回</string>
     <string name="all_lift">全部已提</string>
     <string name="limit_lift">部分已提</string>
     <string name="no_lift">未提</string>

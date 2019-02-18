@@ -36,6 +36,11 @@ public class StoreCustomerAdapter extends RecyclerView.Adapter<StoreCustomerAdap
         notifyDataSetChanged();
     }
 
+    public void clear(){
+        list.clear();
+        notifyDataSetChanged();
+    }
+
 
     @NonNull
     @Override

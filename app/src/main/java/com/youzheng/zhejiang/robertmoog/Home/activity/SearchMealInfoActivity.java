@@ -3,7 +3,9 @@ package com.youzheng.zhejiang.robertmoog.Home.activity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -21,6 +23,7 @@ import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.Model.Home.EnumsDatas;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.activity.ReturnGoods.ReturnAllCounterActivity;
+import com.youzheng.zhejiang.robertmoog.Store.utils.SoftInputUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -29,7 +32,7 @@ import java.util.List;
 
 import okhttp3.Request;
 
-public class SearchMealInfoActivity extends BaseActivity implements View.OnClickListener {
+public class SearchMealInfoActivity extends BaseActivity implements View.OnClickListener, TextWatcher {
 
     private ImageView btnBack;
     /**  */
@@ -110,6 +113,8 @@ public class SearchMealInfoActivity extends BaseActivity implements View.OnClick
 
         adapter=new SearchMealAdapter(list,this);
         rv_list.setAdapter(adapter);
+
+        tv_search.addTextChangedListener(this);
     }
 
     @Override
@@ -121,6 +126,7 @@ public class SearchMealInfoActivity extends BaseActivity implements View.OnClick
                 finish();
                 break;
             case R.id.iv_search:
+                SoftInputUtils.hideSoftInput(SearchMealInfoActivity.this);
                 code=tv_search.getText().toString().trim();
                 if (TextUtils.isEmpty(code)){
                     showToast("请输入套餐号");
@@ -131,5 +137,25 @@ public class SearchMealInfoActivity extends BaseActivity implements View.OnClick
 
                 break;
         }
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+              if (tv_search.length()==0){
+                  //list.clear();
+                  adapter.clear();
+                  code="";
+                  initData(code,promoId);
+              }
     }
 }

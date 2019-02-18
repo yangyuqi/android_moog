@@ -20,12 +20,21 @@
         android:text="2018年"
         android:paddingLeft="17dp"
         android:textStyle="bold"/>
-
-    <com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView
-        android:id="@+id/pr_list"
+    <com.liaoinstan.springview.widget.SpringView
+        android:id="@+id/springView"
+        app:type="follow"
         android:layout_width="match_parent"
-        android:scrollbars="none"
-        android:layout_height="match_parent"></com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView>
+        android:layout_height="wrap_content">
+
+        <com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView
+            android:id="@+id/pr_list"
+            android:layout_width="match_parent"
+            android:scrollbars="none"
+            android:layout_height="match_parent"></com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView>
+
+
+    </com.liaoinstan.springview.widget.SpringView>
+
 
 
 </LinearLayout>

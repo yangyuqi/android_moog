@@ -3,13 +3,13 @@ package com.youzheng.zhejiang.robertmoog.Store.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.liaoinstan.springview.widget.SpringView;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
@@ -18,9 +18,10 @@ import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.ProfessionalCustomerAdapter;
-import com.youzheng.zhejiang.robertmoog.Store.bean.CustomerList;
 import com.youzheng.zhejiang.robertmoog.Store.bean.ProfessionalCustomerList;
 import com.youzheng.zhejiang.robertmoog.Store.view.RecycleViewDivider;
+import com.youzheng.zhejiang.robertmoog.utils.View.MyFooter;
+import com.youzheng.zhejiang.robertmoog.utils.View.MyHeader;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -46,10 +47,11 @@ public class ProfessionalCustomerActivity extends BaseActivity implements View.O
      */
     private TextView tv_number;
     private PullLoadMoreRecyclerView lv_list;
-    private List<ProfessionalCustomerList.SpecialtyCustomerListBean> list=new ArrayList<>();
+    private List<ProfessionalCustomerList.SpecialtyCustomerListBean> list = new ArrayList<>();
     private ProfessionalCustomerAdapter adapter;
-    private int page=1;
-    private int pageSize=10;
+    private int page = 1;
+    private int pageSize = 10;
+    private SpringView springView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,25 +67,42 @@ public class ProfessionalCustomerActivity extends BaseActivity implements View.O
     protected void onResume() {
         super.onResume();
         list.clear();
-        initData(page,pageSize);
+        initData(page, pageSize);
     }
 
     private void setListener() {
-        lv_list.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
+//        lv_list.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
+//            @Override
+//            public void onRefresh() {
+//                page = 1;
+//                list.clear();
+//                initData(page, pageSize);
+//            }
+//
+//            @Override
+//            public void onLoadMore() {
+//                list.clear();
+//                page++;
+//                initData(page, pageSize);
+//            }
+//        });
+
+        springView.setListener(new SpringView.OnFreshListener() {
             @Override
             public void onRefresh() {
-               page=1;
-               list.clear();
-               initData(page,pageSize);
+                page = 1;
+                list.clear();
+                initData(page, pageSize);
             }
 
             @Override
-            public void onLoadMore() {
+            public void onLoadmore() {
                 list.clear();
-              page++;
-              initData(page,pageSize);
+                page++;
+                initData(page, pageSize);
             }
         });
+
     }
 
     private void initView() {
@@ -101,43 +120,49 @@ public class ProfessionalCustomerActivity extends BaseActivity implements View.O
         tv_number = (TextView) findViewById(R.id.tv_number);
         lv_list = (PullLoadMoreRecyclerView) findViewById(R.id.lv_list);
 
-        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         lv_list.setLinearLayout();
         lv_list.setColorSchemeResources(R.color.colorPrimary);
         lv_list.addItemDecoration(new RecycleViewDivider(
                 this, LinearLayoutManager.VERTICAL, 5, getResources().getColor(R.color.divider_color_item)));
 
-
-        adapter=new ProfessionalCustomerAdapter(list,this);
+          lv_list.setPushRefreshEnable(false);
+          lv_list.setPullRefreshEnable(false);
+        adapter = new ProfessionalCustomerAdapter(list, this);
         lv_list.setAdapter(adapter);
 
 
+        springView = (SpringView) findViewById(R.id.springView);
+        springView.setHeader(new MyHeader(this));
+        springView.setFooter(new MyFooter(this));
     }
 
-    private void initData(int page,int pageSize) {
+    private void initData(int page, int pageSize) {
 
 
-        HashMap<String,Object> map=new HashMap<>();
-        map.put("pageNum",page);
-        map.put("pageSize",pageSize);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("pageNum", page);
+        map.put("pageSize", pageSize);
 
         OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.PROFESSIONAL_CUSTOMER_LIST + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
             public void onFailure(Request request, IOException e) {
-                lv_list.setPullLoadMoreCompleted();
+               // lv_list.setPullLoadMoreCompleted();
+                springView.onFinishFreshAndLoad();
 
             }
 
             @Override
             public void onResponse(String response) {
-                Log.e("专业客户列表",response);
-                lv_list.setPullLoadMoreCompleted();
-                BaseModel baseModel = gson.fromJson(response,BaseModel.class);
-                if (baseModel.getCode()==PublicUtils.code){
-                    ProfessionalCustomerList professionalCustomerList = gson.fromJson(gson.toJson(baseModel.getDatas()),ProfessionalCustomerList.class);
+                Log.e("专业客户列表", response);
+               // lv_list.setPullLoadMoreCompleted();
+                springView.onFinishFreshAndLoad();
+                BaseModel baseModel = gson.fromJson(response, BaseModel.class);
+                if (baseModel.getCode() == PublicUtils.code) {
+                    ProfessionalCustomerList professionalCustomerList = gson.fromJson(gson.toJson(baseModel.getDatas()), ProfessionalCustomerList.class);
                     setData(professionalCustomerList);
-                }else {
+                } else {
                     showToast(baseModel.getMsg());
                 }
             }
@@ -146,21 +171,20 @@ public class ProfessionalCustomerActivity extends BaseActivity implements View.O
     }
 
     private void setData(ProfessionalCustomerList professionalCustomerList) {
-          if (professionalCustomerList.getSpecialtyCustomerList()==null) return;
-          if (professionalCustomerList.getCount()!=0){
-              tv_number.setText(professionalCustomerList.getCount()+"");
-          }else {
-              tv_number.setText("0");
-          }
+        if (professionalCustomerList.getSpecialtyCustomerList() == null) return;
+        if (professionalCustomerList.getCount() != 0) {
+            tv_number.setText(professionalCustomerList.getCount() + "");
+        } else {
+            tv_number.setText("0");
+        }
 
-          List<ProfessionalCustomerList.SpecialtyCustomerListBean> beanList=professionalCustomerList.getSpecialtyCustomerList();
-          if (beanList.size()!=0){
-              list.addAll(beanList);
-              adapter.setListRefreshUi(beanList);
-          }else {
-              showToast(getString(R.string.load_list_erron));
-          }
-
+        List<ProfessionalCustomerList.SpecialtyCustomerListBean> beanList = professionalCustomerList.getSpecialtyCustomerList();
+        if (beanList.size() != 0) {
+            list.addAll(beanList);
+            adapter.setListRefreshUi(beanList);
+        } else {
+            showToast(getString(R.string.load_list_erron));
+        }
 
 
     }
@@ -174,7 +198,7 @@ public class ProfessionalCustomerActivity extends BaseActivity implements View.O
                 finish();
                 break;
             case R.id.iv_next:
-                startActivity(new Intent(this,AddCustomerActivity.class));
+                startActivity(new Intent(this, AddCustomerActivity.class));
                 break;
         }
     }

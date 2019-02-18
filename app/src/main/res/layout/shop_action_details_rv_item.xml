@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:paddingLeft="@dimen/space_15"
         android:background="@color/bg_background_white"
         >
 
@@ -22,7 +23,6 @@
 
                 <LinearLayout
                     android:id="@+id/ll_width"
-                    android:paddingRight="@dimen/space_20"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
@@ -101,6 +101,7 @@
         <RelativeLayout
             android:id="@+id/rl_show"
             android:layout_width="match_parent"
+            android:background="@color/bg_background_white"
             android:layout_height="35dp"
             >
                 <TextView

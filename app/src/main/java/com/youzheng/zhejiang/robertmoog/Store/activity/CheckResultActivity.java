@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.liaoinstan.springview.widget.SpringView;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
@@ -21,6 +22,8 @@ import com.youzheng.zhejiang.robertmoog.Store.adapter.CheckResultAdapter;
 import com.youzheng.zhejiang.robertmoog.Store.bean.CheckStoreList;
 import com.youzheng.zhejiang.robertmoog.Store.listener.OnRecyclerViewAdapterItemClickListener;
 import com.youzheng.zhejiang.robertmoog.Store.view.RecycleViewDivider;
+import com.youzheng.zhejiang.robertmoog.utils.View.MyFooter;
+import com.youzheng.zhejiang.robertmoog.utils.View.MyHeader;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -47,49 +50,73 @@ public class CheckResultActivity extends BaseActivity implements View.OnClickLis
      */
     private TextView tv_title;
     private PullLoadMoreRecyclerView pr_list;
-    private List<CheckStoreList.PatrolShopListBean> list=new ArrayList<>();
+    private List<CheckStoreList.PatrolShopListBean> list = new ArrayList<>();
     private CheckResultAdapter adapter;
     private int year;
     private Calendar selectedDate;
+    private SpringView mSpringView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_result);
         initView();
-         selectedDate = Calendar.getInstance();
+        selectedDate = Calendar.getInstance();
         //获取系统的日期
         //年
-         year = selectedDate.get(Calendar.YEAR);
+        year = selectedDate.get(Calendar.YEAR);
         setListener();
         initData(year);
-        tv_title.setText(year+"年");
+        tv_title.setText(year + "年");
     }
 
     private void setListener() {
-        pr_list.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
+//        pr_list.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
+//            @Override
+//            public void onRefresh() {
+//
+//                if (year == selectedDate.get(Calendar.YEAR)) {
+//                    list.clear();
+//                    initData(year);
+//                } else {
+//                    year++;
+//                    list.clear();
+//                    initData(year);
+//                }
+//                tv_title.setText(year + "年");
+//            }
+//
+//            @Override
+//            public void onLoadMore() {
+//                list.clear();
+//                year = year - 1;
+//                tv_title.setText(year + "年");
+//                initData(year);
+//
+//
+//            }
+//        });
+
+        mSpringView.setListener(new SpringView.OnFreshListener() {
             @Override
             public void onRefresh() {
-
-                if (year==selectedDate.get(Calendar.YEAR)){
+                if (year == selectedDate.get(Calendar.YEAR)) {
                     list.clear();
                     initData(year);
-                }else {
+                } else {
                     year++;
                     list.clear();
                     initData(year);
                 }
-               tv_title.setText(year+"年");
+                tv_title.setText(year + "年");
             }
 
             @Override
-            public void onLoadMore() {
+            public void onLoadmore() {
                 list.clear();
-                    year=year-1;
-                    tv_title.setText(year+"年");
-                    initData(year);
-
-
+                year = year - 1;
+                tv_title.setText(year + "年");
+                initData(year);
             }
         });
     }
@@ -115,32 +142,40 @@ public class CheckResultActivity extends BaseActivity implements View.OnClickLis
                 this, LinearLayoutManager.VERTICAL, 5, getResources().getColor(R.color.divider_color_item)));
         pr_list.setColorSchemeResources(R.color.colorPrimary);
 
-        adapter=new CheckResultAdapter(list,this);
+        pr_list.setPullRefreshEnable(false);
+        pr_list.setPushRefreshEnable(false);
+        adapter = new CheckResultAdapter(list, this);
         pr_list.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+
+        mSpringView = (SpringView) findViewById(R.id.springView);
+        mSpringView.setHeader(new MyHeader(this));
+        mSpringView.setFooter(new MyFooter(this));
 
     }
 
     private void initData(int Year) {
 
-        HashMap<String,Object> map=new HashMap<>();
-        map.put("createDate",Year);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("createDate", Year);
 
         OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.CHECK_STORE_LIST + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
             public void onFailure(Request request, IOException e) {
-                pr_list.setPullLoadMoreCompleted();
+                //pr_list.setPullLoadMoreCompleted();
+                mSpringView.onFinishFreshAndLoad();
             }
 
             @Override
             public void onResponse(String response) {
-                Log.e("巡店列表",response);
-                pr_list.setPullLoadMoreCompleted();
-                BaseModel baseModel = gson.fromJson(response,BaseModel.class);
-                if (baseModel.getCode()==PublicUtils.code){
-                    CheckStoreList checkStoreList = gson.fromJson(gson.toJson(baseModel.getDatas()),CheckStoreList.class);
+                Log.e("巡店列表", response);
+               // pr_list.setPullLoadMoreCompleted();
+                mSpringView.onFinishFreshAndLoad();
+                BaseModel baseModel = gson.fromJson(response, BaseModel.class);
+                if (baseModel.getCode() == PublicUtils.code) {
+                    CheckStoreList checkStoreList = gson.fromJson(gson.toJson(baseModel.getDatas()), CheckStoreList.class);
                     setData(checkStoreList);
-                }else {
+                } else {
                     showToast(baseModel.getMsg());
                 }
             }
@@ -149,8 +184,8 @@ public class CheckResultActivity extends BaseActivity implements View.OnClickLis
         adapter.setOnItemClickListener(new OnRecyclerViewAdapterItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Intent intent=new Intent(CheckResultActivity.this,CheckStoreDetailActivity.class);
-                intent.putExtra("checkID",list.get(position).getId());
+                Intent intent = new Intent(CheckResultActivity.this, CheckStoreDetailActivity.class);
+                intent.putExtra("checkID", list.get(position).getId());
                 startActivity(intent);
             }
 
@@ -164,14 +199,14 @@ public class CheckResultActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void setData(CheckStoreList checkStoreList) {
-        if (checkStoreList==null) return;
-        if (checkStoreList.getPatrolShopList()==null) return;
+        if (checkStoreList == null) return;
+        if (checkStoreList.getPatrolShopList() == null) return;
 
-        List<CheckStoreList.PatrolShopListBean> beans=checkStoreList.getPatrolShopList();
-        if (beans.size()!=0){
+        List<CheckStoreList.PatrolShopListBean> beans = checkStoreList.getPatrolShopList();
+        if (beans.size() != 0) {
             list.addAll(beans);
             adapter.setUI(beans);
-        }else {
+        } else {
             list.clear();
             showToast(getString(R.string.load_list_erron));
         }

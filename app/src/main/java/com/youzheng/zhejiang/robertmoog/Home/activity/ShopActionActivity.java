@@ -3,6 +3,9 @@ package com.youzheng.zhejiang.robertmoog.Home.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -17,6 +20,8 @@ import com.youzheng.zhejiang.robertmoog.Model.Home.GetPromoListBean;
 import com.youzheng.zhejiang.robertmoog.Model.Home.GetPromoListDatas;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.utils.CommonAdapter;
+import com.youzheng.zhejiang.robertmoog.utils.View.MyFooter;
+import com.youzheng.zhejiang.robertmoog.utils.View.MyHeader;
 import com.youzheng.zhejiang.robertmoog.utils.ViewHolder;
 
 import java.io.IOException;
@@ -82,14 +87,24 @@ public class ShopActionActivity extends BaseActivity {
                         adapter.notifyDataSetChanged();
                     }else {
                         showToast(getString(R.string.load_list_erron));
-                        adapter.setData(new ArrayList<GetPromoListBean>());
+                     //   adapter.setData(new ArrayList<GetPromoListBean>());
+                        springView.onFinishFreshAndLoad();
                         adapter.notifyDataSetChanged();
                     }
                 }
             }
         });
     }
-
+    public SpannableStringBuilder setNumColor(String str) {
+        SpannableStringBuilder style = new SpannableStringBuilder(str);
+        for (int i = 0; i < str.length(); i++) {
+            char a = str.charAt(i);
+            if (a >= '0' && a <= '9') {
+                style.setSpan(new ForegroundColorSpan(this.getResources().getColor(R.color.text_golden2)), i, i + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        }
+        return style;
+    }
     private void initView() {
         ls = findViewById(R.id.ls);
         types=getIntent().getBooleanExtra("is_appear",false);
@@ -123,12 +138,17 @@ public class ShopActionActivity extends BaseActivity {
 
                 helper.setText(R.id.tv_name,item.getPromoName());
 
-                String regEx="[^0-9]";
-                Pattern p = Pattern.compile(regEx);
-                Matcher m = p.matcher(item.getPromoDes());
-                helper.setText(R.id.tv_day,m.replaceAll("").trim());
+//                String regEx="[^0-9]";
+//                Pattern p = Pattern.compile(regEx);
+//                Matcher m = p.matcher(item.getPromoDes());
+               // helper.setText(R.id.tv_day,m.replaceAll("").trim());
+
+                helper.setTexto(R.id.tv_day,setNumColor(item.getPromoDes()));
+
+
+
                 if (item.getPromoTime()!=null){
-                    String[] strings = item.getPromoTime().split("-");
+                    String[] strings = item.getPromoTime().split("/");
                     if (strings.length>1){
                         helper.setText(R.id.tv_start_time,strings[0]);
                         helper.setText(R.id.tv_end_time,strings[1]);
@@ -159,6 +179,8 @@ public class ShopActionActivity extends BaseActivity {
             }
         });
         springView = findViewById(R.id.sv);
+        springView.setHeader(new MyHeader(this));
+        springView.setFooter(new MyFooter(this));
 
         springView.setListener(new SpringView.OnFreshListener() {
             @Override

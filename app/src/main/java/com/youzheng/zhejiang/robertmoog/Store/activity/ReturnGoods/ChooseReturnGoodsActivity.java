@@ -86,6 +86,7 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
     private String id;
     private List<ChooseGoodsRequest.OrderProductListBean> requests=new ArrayList<>();
     private String orderid;
+    public static ChooseReturnGoodsActivity Instance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +94,7 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
         setContentView(R.layout.activity_choose_return_goods);
         id=getIntent().getStringExtra("returnGoodsId");
         isall=getIntent().getBooleanExtra("isAll",false);
+        Instance=this;
         initView();
         requests.clear();
         initData(id,isall);

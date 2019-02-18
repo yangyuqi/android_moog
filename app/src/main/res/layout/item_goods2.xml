@@ -16,7 +16,7 @@
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:gravity="center_vertical"
-        android:background="@color/bg_background_white">
+        android:background="@color/item_back">
 
         <ImageView
             android:id="@+id/iv_goods"

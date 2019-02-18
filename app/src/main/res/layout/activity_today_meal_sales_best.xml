@@ -41,12 +41,23 @@
             android:textColor="@color/text_main"/>
 
     </LinearLayout>
+<com.liaoinstan.springview.widget.SpringView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:type="follow"
+    android:layout_marginTop="1dp"
+    android:id="@+id/springView">
 
     <com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView
         android:id="@+id/pr_list"
         android:background="@color/bg_background_white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"></com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView>
+        ></com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView>
+
+
+
+</com.liaoinstan.springview.widget.SpringView>
+
 
 </LinearLayout>

@@ -93,6 +93,8 @@ public class StoreSaleInsideActivity extends BaseActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store_sale_inside);
         shopid=getIntent().getLongExtra("shopPersonalId",0);
+        startstr=getIntent().getStringExtra("start");
+        endstr=getIntent().getStringExtra("end");
         if (shopid==0){
             shopid=0;
         }

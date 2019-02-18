@@ -78,18 +78,18 @@ public class PeopleMangerAdapter extends RecyclerView.Adapter<PeopleMangerAdapte
 
         if (bean.getBusinessRole().getId().equals("SHOPKEEPER")){
             viewHolder.iv_manger.setImageResource(R.mipmap.group_100_2);
+            viewHolder.iv_already_stop.setVisibility(View.GONE);
+            viewHolder.tv_stop.setVisibility(View.GONE);
         }else {
             viewHolder.iv_manger.setImageResource(R.mipmap.group_90_3);
+            if (bean.getStatus().getId().equals("Use")){
+                viewHolder.iv_already_stop.setVisibility(View.GONE);
+                viewHolder.tv_stop.setVisibility(View.VISIBLE);
+            }else if (bean.getStatus().getId().equals("Stop")){
+                viewHolder.iv_already_stop.setVisibility(View.VISIBLE);
+                viewHolder.tv_stop.setVisibility(View.GONE);
+            }
         }
-
-        if (bean.getStatus().getId().equals("Use")){
-            viewHolder.iv_already_stop.setVisibility(View.GONE);
-            viewHolder.tv_stop.setVisibility(View.VISIBLE);
-        }else if (bean.getStatus().getId().equals("Stop")){
-           viewHolder.iv_already_stop.setVisibility(View.VISIBLE);
-           viewHolder.tv_stop.setVisibility(View.GONE);
-        }
-
     }
 
     @Override

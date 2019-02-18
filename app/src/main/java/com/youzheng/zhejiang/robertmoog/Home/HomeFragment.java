@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.jude.rollviewpager.RollPagerView;
 import com.youzheng.zhejiang.robertmoog.Base.BaseFragment;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
@@ -30,6 +31,7 @@ import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.Model.Home.CustomerBean;
 import com.youzheng.zhejiang.robertmoog.Model.Home.HomePageBean;
 import com.youzheng.zhejiang.robertmoog.R;
+import com.youzheng.zhejiang.robertmoog.Store.utils.SoftInputUtils;
 import com.youzheng.zhejiang.robertmoog.utils.CommonAdapter;
 import com.youzheng.zhejiang.robertmoog.utils.PhoneUtil;
 import com.youzheng.zhejiang.robertmoog.utils.SharedPreferencesUtils;
@@ -77,6 +79,12 @@ public class HomeFragment extends BaseFragment implements BaseFragment.ReloadInt
         return mView;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        initData();
+    }
+
     private void initView() {
         mView.findViewById(R.id.btnBack).setVisibility(View.GONE);
         gv = mView.findViewById(R.id.gv);
@@ -113,6 +121,7 @@ public class HomeFragment extends BaseFragment implements BaseFragment.ReloadInt
         mView.findViewById(R.id.iv_search).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SoftInputUtils.hideSoftInput(getActivity());
                 if (tv_search.getText().toString().equals("")) {
                     showToast(getString(R.string.phone_not_null));
                     return;
@@ -140,12 +149,14 @@ public class HomeFragment extends BaseFragment implements BaseFragment.ReloadInt
                                 intent.putExtra("identity",customerBean.getCustomer().getIdentity());
                                 startActivity(intent);
                             } else {
-                                showToast(baseModel.getMsg());
+                                //showToast(baseModel.getMsg());
                                 if (baseModel.getCode() == PublicUtils.no_exist) {
                                     final RemindDialog dialog = new RemindDialog(mContext, new RemindDialog.onSuccessClick() {
                                         @Override
                                         public void onSuccess() {
-                                            startActivity(new Intent(mContext, RegisterActivity.class));
+                                            Intent intent=new Intent(mContext, RegisterActivity.class);
+                                            intent.putExtra("no_phone",tv_search.getText().toString());
+                                            startActivity(intent);
                                         }
                                     }, "2");
                                     dialog.show();

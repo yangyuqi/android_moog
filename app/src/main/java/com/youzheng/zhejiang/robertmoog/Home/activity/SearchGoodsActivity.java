@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
@@ -77,6 +78,11 @@ public class SearchGoodsActivity extends BaseActivity {
                             if (scanDatas.getSelectProducts().size()>0){
                                 addapter.setDate(scanDatas.getSelectProducts(),mContext,"1",widWidth);
                             }
+                        }else {
+                            if (!TextUtils.isEmpty(baseModel.getMsg())){
+                                showToast(baseModel.getMsg());
+                            }
+
                         }
                     }
                 });

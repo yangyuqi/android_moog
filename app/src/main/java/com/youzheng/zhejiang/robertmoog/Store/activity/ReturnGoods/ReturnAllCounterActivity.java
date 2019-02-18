@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -44,6 +46,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import okhttp3.Request;
 
@@ -124,13 +128,14 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
     private int all;
     private int more_all;
     private EditText et_other_reason;
-
+    public static ReturnAllCounterActivity Instance;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_return_all_counter);
         returnId = getIntent().getStringExtra("orderID");
         isall = getIntent().getBooleanExtra("isAll", false);
+        Instance=this;
         initView();
         initGetDate();
         initData(returnId, isall);
@@ -260,6 +265,10 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
                                 List<EnumsDatasBeanDatas> list1 = new ArrayList<>();
                                 for (int i = 0; i < bean.getDatas().size(); i++) {
                                     list1.add(bean.getDatas().get(i));
+                                    if (bean.getDatas().get(i).getId().equals("NO_LIFT")){
+                                        tv_get_state.setText("未提");
+                                        pick_state = "NO_LIFT";
+                                    }
                                     type.add(bean.getDatas().get(i).getDes());
                                 }
                                 typelist = list1;
@@ -273,6 +282,10 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
                                 List<EnumsDatasBeanDatas> list2 = new ArrayList<>();
                                 for (int i = 0; i < bean.getDatas().size(); i++) {
                                     list2.add(bean.getDatas().get(i));
+                                    if (bean.getDatas().get(i).getId().equals("RETURN_CAME")){
+                                        tv_return_type.setText("原路返回");
+                                        paymentMethod="RETURN_CAME";
+                                    }
                                     returns.add(bean.getDatas().get(i).getDes());
                                 }
                                 returnlist = list2;
@@ -329,6 +342,25 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
         tv_confirm_return = (TextView) findViewById(R.id.tv_confirm_return);
         tv_confirm_return.setOnClickListener(this);
         et_other_reason = findViewById(R.id.et_other_reason);
+
+        InputFilter inputFilter=new InputFilter() {
+
+            Pattern pattern = Pattern.compile("[^a-zA-Z0-9\\u4E00-\\u9FA5_]");
+            @Override
+            public CharSequence filter(CharSequence charSequence, int i, int i1, Spanned spanned, int i2, int i3) {
+                Matcher matcher=  pattern.matcher(charSequence);
+                if(!matcher.find()){
+                    return null;
+                }else{
+                    showToast("只能输入汉字,英文,数字");
+                    return "";
+                }
+
+            }
+        };
+
+        et_other_reason.setFilters(new InputFilter[]{inputFilter,new InputFilter.LengthFilter(100)});
+
 
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rv_list_one.setLayoutManager(manager);
@@ -436,8 +468,8 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
             paymentMethod = "CASH";
         } else if (tv_return_type.getText().equals(getString(R.string.market_get))) {
             paymentMethod = "MARKET";
-        } else if (tv_return_type.getText().equals(getString(R.string.other))) {
-            paymentMethod = "OTHER";
+        } else if (tv_return_type.getText().equals(getString(R.string.yuan_lu))) {
+            paymentMethod="RETURN_CAME";
         }
 
         if (tv_get_state.getText().equals(getString(R.string.all_lift))) {
@@ -497,7 +529,10 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
                     ReturnGoodsSuccess success = gson.fromJson(gson.toJson(baseModel.getDatas()), ReturnGoodsSuccess.class);
                     toSuccess(success);
                 } else {
-                    showToast(getString(R.string.return_failure));
+                    //showToast(getString(R.string.return_failure));
+                    if (!TextUtils.isEmpty(baseModel.getMsg())){
+                        showToast(baseModel.getMsg());
+                    }
                     request.clear();
                 }
             }

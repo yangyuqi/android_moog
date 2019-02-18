@@ -2,6 +2,7 @@ package com.youzheng.zhejiang.robertmoog.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.text.SpannableStringBuilder;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -72,6 +73,12 @@ public class ViewHolder {
      * @return
      */
     public ViewHolder setText(int viewId, String text) {
+        TextView view = getView(viewId);
+        view.setText(text);
+        return this;
+    }
+
+    public ViewHolder setTexto(int viewId, SpannableStringBuilder text) {
         TextView view = getView(viewId);
         view.setText(text);
         return this;

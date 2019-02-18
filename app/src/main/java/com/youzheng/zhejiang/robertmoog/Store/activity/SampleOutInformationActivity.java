@@ -48,6 +48,7 @@ public class SampleOutInformationActivity extends BaseActivity implements View.O
     private String text;
     private List<CommitRequest.ProductSampleDataBean> request=new ArrayList<>();
     private LinearLayout lin_title;
+    private List<SampleOutList.SampleResDataBean.SampleSingleDataListBean> beans;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +110,7 @@ public class SampleOutInformationActivity extends BaseActivity implements View.O
     private void setData(SampleOutList sampleOutList) {
         if (sampleOutList.getSampleResData()==null) return;
         if (sampleOutList.getSampleResData().getSampleSingleDataList()==null) return;
-        List<SampleOutList.SampleResDataBean.SampleSingleDataListBean> beans=sampleOutList.getSampleResData().getSampleSingleDataList();
+         beans=sampleOutList.getSampleResData().getSampleSingleDataList();
         if (beans.size()!=0){
             for (int i = 0; i <beans.size() ; i++) {
                 if (beans.get(i).getSampleType().equals(getString(R.string.sample_out_information))){
@@ -124,10 +125,9 @@ public class SampleOutInformationActivity extends BaseActivity implements View.O
                     out2Adapter.notifyDataSetChanged();
                 }
             }
-
-
         }else {
             lin_title.setVisibility(View.GONE);
+            textHeadNext.setVisibility(View.GONE);
             showToast(getString(R.string.load_list_erron));
         }
 

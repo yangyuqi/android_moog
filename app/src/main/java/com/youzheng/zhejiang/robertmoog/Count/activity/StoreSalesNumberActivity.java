@@ -1,5 +1,6 @@
 package com.youzheng.zhejiang.robertmoog.Count.activity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -30,6 +31,7 @@ import com.youzheng.zhejiang.robertmoog.MainActivity;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.bean.CustomerList;
+import com.youzheng.zhejiang.robertmoog.Store.listener.OnRecyclerViewAdapterItemClickListener;
 import com.youzheng.zhejiang.robertmoog.Store.view.RecycleViewDivider;
 
 import java.io.IOException;
@@ -90,6 +92,7 @@ public class StoreSalesNumberActivity extends BaseActivity implements View.OnCli
     private String starstDate="";
     private String endsDate="";
     private String orderCount,orderAmountCount,customerTransaction;
+    private String shopid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,8 +109,10 @@ public class StoreSalesNumberActivity extends BaseActivity implements View.OnCli
         starstDate=dateFormater.format(cal.getTime()) + "";
         cal.set(Calendar.DAY_OF_MONTH,
                 cal.getActualMaximum(Calendar.DAY_OF_MONTH));
-        tv_endDate.setText(dateFormater.format(cal.getTime()));
-        endsDate=dateFormater.format(cal.getTime());
+        Date date = new Date(System.currentTimeMillis());
+
+        tv_endDate.setText(dateFormater.format(date));
+        endsDate = dateFormater.format(date);
 //        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");// HH:mm:ss
 //        Date date = new Date(System.currentTimeMillis());
 //        tv_startDate.setText(simpleDateFormat.format(date));
@@ -174,6 +179,22 @@ public class StoreSalesNumberActivity extends BaseActivity implements View.OnCli
         pr_list.setPullRefreshEnable(false);
         pr_list.setPushRefreshEnable(false);
 
+        adapter.setOnItemClickListener(new OnRecyclerViewAdapterItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent=new Intent(StoreSalesNumberActivity.this,StoreSaleInsideActivity.class);
+                intent.putExtra("shopPersonalId",list.get(position).getShopPersonalId());
+                intent.putExtra("start",starstDate);
+                intent.putExtra("end",endsDate);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onItemLongClick(View view, int position) {
+
+            }
+        });
+
     }
 
     private void initData(boolean isDay,String startDate,String endDate) {
@@ -229,6 +250,9 @@ public class StoreSalesNumberActivity extends BaseActivity implements View.OnCli
         }else {
             showToast(getString(R.string.load_list_erron));
         }
+
+
+
 
 
     }

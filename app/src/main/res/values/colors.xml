@@ -37,4 +37,6 @@
 
     <color name="transparent">#00000000</color>
 
+    <color name="item_back">#fffbfafa</color>
+
 </resources>

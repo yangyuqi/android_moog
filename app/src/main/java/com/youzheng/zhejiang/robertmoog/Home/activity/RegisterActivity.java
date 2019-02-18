@@ -1,10 +1,16 @@
 package com.youzheng.zhejiang.robertmoog.Home.activity;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +33,8 @@ import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.activity.PeopleMangerActivity;
 import com.youzheng.zhejiang.robertmoog.Store.bean.Code;
 import com.youzheng.zhejiang.robertmoog.Store.bean.UnqualifiedContent;
+import com.youzheng.zhejiang.robertmoog.Store.utils.PermissionUtils;
+import com.youzheng.zhejiang.robertmoog.utils.PhoneUtil;
 import com.youzheng.zhejiang.robertmoog.utils.View.MyCountDownTimer;
 import com.youzheng.zhejiang.robertmoog.utils.View.NoteInfoDialog;
 
@@ -36,16 +44,18 @@ import java.util.Map;
 
 import okhttp3.Request;
 
-public class RegisterActivity  extends BaseActivity {
+public class RegisterActivity  extends BaseActivity implements TextWatcher {
 
     EditText edt_phone ,edt_code;
     Button btn_send_code ;
     private MyCountDownTimer timer ;
+    private String phone;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register_layout);
+        phone=getIntent().getStringExtra("no_phone");
         initView();
     }
 
@@ -61,7 +71,13 @@ public class RegisterActivity  extends BaseActivity {
         ((ImageView)findViewById(R.id.iv_next)).setImageResource(R.mipmap.group_30_1);
         edt_phone = (EditText) findViewById(R.id.edt_phone);
         edt_code = (EditText) findViewById(R.id.edt_code);
+        if (!TextUtils.isEmpty(phone)){
+            edt_phone.setText(phone);
+        }else {
+            return;
+        }
         btn_send_code = (Button) findViewById(R.id.btn_send_code);
+        edt_phone.addTextChangedListener(this);
         timer = new MyCountDownTimer(btn_send_code,60000,1000);
         findViewById(R.id.tv_register).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,6 +108,7 @@ public class RegisterActivity  extends BaseActivity {
                             RegisterBean registerBean = gson.fromJson(gson.toJson(baseModel.getDatas()),RegisterBean.class);
                             Intent intent = new Intent(mContext,RegisterSuccessActivity.class);
                             intent.putExtra("register",registerBean);
+                            Log.e("customerid","注册"+registerBean.getCustomerId());
                             startActivity(intent);
                             finish();
                         }else {
@@ -109,28 +126,39 @@ public class RegisterActivity  extends BaseActivity {
                 if (edt_phone.getText().toString().equals("")){
                     showToast(getString(R.string.phone_not_null));
                     return;
-                }
-                Map<String,Object> map = new HashMap<>();
-                map.put("phone",edt_phone.getText().toString());
-                timer.start();
-                OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.SEND_CODE, new OkHttpClientManager.StringCallback() {
-                    @Override
-                    public void onFailure(Request request, IOException e) {
+                }else if (edt_phone.getText().toString().length()<11){
+                    showToast("手机号有误,请重新输入");
+                }else if (PhoneUtil.isCellphone(edt_phone.getText().toString())==false) {
+                    showToast("手机号格式错误,请重新输入");
+                }else {
+                    Map<String,Object> map = new HashMap<>();
+                    map.put("phone",edt_phone.getText().toString());
+                    timer.start();
+                    edt_code.requestFocus();
+                    OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.SEND_CODE, new OkHttpClientManager.StringCallback() {
+                        @Override
+                        public void onFailure(Request request, IOException e) {
 
-                    }
-
-                    @Override
-                    public void onResponse(String response) {
-                        BaseModel baseModel = gson.fromJson(response,BaseModel.class);
-                        if (baseModel.getCode()== PublicUtils.code){
-                            Code code = gson.fromJson(gson.toJson(baseModel.getDatas()),Code.class);
-                            showStopDialog(code.getCheckCode());
                         }
-                    }
-                });
-            }
-        });
 
+                        @Override
+                        public void onResponse(String response) {
+                            BaseModel baseModel = gson.fromJson(response,BaseModel.class);
+                            if (baseModel.getCode()== PublicUtils.code){
+                                Code code = gson.fromJson(gson.toJson(baseModel.getDatas()),Code.class);
+                                showStopDialog(code.getCheckCode());
+                            }else {
+                                if (!TextUtils.isEmpty(baseModel.getMsg())){
+                                    showToast(baseModel.getMsg());
+                                    timer.onFinish();
+                                    btn_send_code.setText("获取验证码");
+                                }
+                            }
+                        }
+                    });
+                }
+                }
+        });
 
         ((ImageView)findViewById(R.id.iv_next)).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,9 +174,36 @@ public class RegisterActivity  extends BaseActivity {
                         BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                         if (baseModel.getCode()==PublicUtils.code){
                             ShopQRCodeBean qrCodeBean = gson.fromJson(gson.toJson(baseModel.getDatas()),ShopQRCodeBean.class);
-                            if (qrCodeBean.getShopQRCode()!=null){
-                                NoteInfoDialog infoDialog = new NoteInfoDialog(mContext,qrCodeBean.getShopQRCode());
-                                infoDialog.show();
+                            if (!TextUtils.isEmpty(qrCodeBean.getShopQRCode())){
+
+
+                                if (Build.VERSION.SDK_INT >= 23) {
+                                    if (PermissionUtils.permissionIsOpen(RegisterActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                            ){
+
+
+                                        NoteInfoDialog infoDialog = new NoteInfoDialog(mContext,qrCodeBean.getShopQRCode());
+                                        infoDialog.show();
+                                    } else {
+
+                                        if (!shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE) ){
+                                            PermissionUtils.showCameraDialog(getString(R.string.content_str_read)
+                                                    ,RegisterActivity.this);
+                                        } else {
+
+                                            PermissionUtils.openSinglePermission(RegisterActivity.this
+                                                    , Manifest.permission.WRITE_EXTERNAL_STORAGE
+                                                    , PermissionUtils.CODE_MULTI);
+
+                                        }
+
+                                    }
+                                }else{
+                                    NoteInfoDialog infoDialog = new NoteInfoDialog(mContext,qrCodeBean.getShopQRCode());
+                                    infoDialog.show();
+                                }
+
+
                             }
                         }
                     }
@@ -199,5 +254,25 @@ public class RegisterActivity  extends BaseActivity {
         window.setAttributes(lp);
 
 
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+           if (!TextUtils.isEmpty(edt_phone.getText().toString().trim())){
+               btn_send_code.setTextColor(getResources().getColor(R.color.colorPrimary));
+           }else {
+               btn_send_code.setTextColor(getResources().getColor(R.color.color_air_blue));
+
+           }
     }
 }

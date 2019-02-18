@@ -1,6 +1,8 @@
 package com.youzheng.zhejiang.robertmoog.Store.activity;
 
+import android.Manifest;
 import android.app.Dialog;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
@@ -16,11 +18,14 @@ import android.widget.TextView;
 
 import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
 import com.youzheng.zhejiang.robertmoog.Base.utils.MyConstant;
+import com.youzheng.zhejiang.robertmoog.Home.activity.RegisterActivity;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.ImageAdapter;
 import com.youzheng.zhejiang.robertmoog.Store.listener.OnRecyclerViewAdapterItemClickListener;
 import com.youzheng.zhejiang.robertmoog.Store.utils.DepthPageTransformer;
 import com.youzheng.zhejiang.robertmoog.Store.utils.DonwloadSaveImg;
+import com.youzheng.zhejiang.robertmoog.Store.utils.PermissionUtils;
+import com.youzheng.zhejiang.robertmoog.utils.View.NoteInfoDialog;
 
 import java.util.List;
 
@@ -94,7 +99,7 @@ public class CheckPicActivity extends BaseActivity implements View.OnClickListen
 
             @Override
             public void onItemLongClick(View view, int position) {
-                String url=list.get(position);
+                  String url=list.get(position);
                   showDialog(url);
             }
         });
@@ -134,8 +139,33 @@ public class CheckPicActivity extends BaseActivity implements View.OnClickListen
         tv_save_photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DonwloadSaveImg.donwloadImg(CheckPicActivity.this,picUrl);
-                dialog.dismiss();
+                if (Build.VERSION.SDK_INT >= 23) {
+                    if (PermissionUtils.permissionIsOpen(CheckPicActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            ){
+
+
+                        DonwloadSaveImg.donwloadImg(CheckPicActivity.this,picUrl);
+                        dialog.dismiss();
+                    } else {
+
+                        if (!shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE) ){
+                            PermissionUtils.showCameraDialog(getString(R.string.content_str_read)
+                                    ,CheckPicActivity.this);
+                        } else {
+
+                            PermissionUtils.openSinglePermission(CheckPicActivity.this
+                                    , Manifest.permission.WRITE_EXTERNAL_STORAGE
+                                    , PermissionUtils.CODE_MULTI);
+
+                        }
+
+                    }
+                }else{
+                    DonwloadSaveImg.donwloadImg(CheckPicActivity.this,picUrl);
+                    dialog.dismiss();
+                }
+
+
             }
         });
         tv_cancel = (TextView) inflate.findViewById(R.id.tv_cancel);

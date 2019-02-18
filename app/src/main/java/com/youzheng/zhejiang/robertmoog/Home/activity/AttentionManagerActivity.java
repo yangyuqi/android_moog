@@ -6,6 +6,8 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.WindowManager;
@@ -23,6 +25,7 @@ import com.youzheng.zhejiang.robertmoog.Home.adapter.CommonAdapter;
 import com.youzheng.zhejiang.robertmoog.Home.adapter.CustomerGoodsAdapter;
 import com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider;
 import com.youzheng.zhejiang.robertmoog.Home.adapter.ViewHolder;
+import com.youzheng.zhejiang.robertmoog.Home.bean.MangerListener;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.Model.Home.CustomerIntentDatas;
 import com.youzheng.zhejiang.robertmoog.Model.Home.CustomerIntentListBean;
@@ -30,6 +33,8 @@ import com.youzheng.zhejiang.robertmoog.Model.Home.NotLabelList;
 import com.youzheng.zhejiang.robertmoog.Model.Home.ShopPersonalListBean;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.utils.PhoneUtil;
+import com.youzheng.zhejiang.robertmoog.utils.View.MyFooter;
+import com.youzheng.zhejiang.robertmoog.utils.View.MyHeader;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -41,7 +46,7 @@ import de.greenrobot.event.EventBus;
 import de.greenrobot.event.Subscribe;
 import okhttp3.Request;
 
-public class AttentionManagerActivity extends BaseActivity {
+public class AttentionManagerActivity extends BaseActivity implements MangerListener, TextWatcher {
 
     private ShopPersonalListBean listBean ;
     private TabLayout tabLayout ;
@@ -155,7 +160,7 @@ public class AttentionManagerActivity extends BaseActivity {
         });
     }
 
-    private void initData() {
+    public  void initData() {
         if (personalId!=null){
             map.put("personalId",personalId);
         }
@@ -187,13 +192,16 @@ public class AttentionManagerActivity extends BaseActivity {
                                 customerList.get(i).setSku(customerList.get(i).getProductList().get(0).getSku());
                                 customerList.get(i).setCreateDate(customerList.get(i).getProductList().get(0).getCreateDate());
                             }else {
-
+                                //showToast(getString(R.string.load_list_erron));
                             }
                         }
                         adapter.setData(customerList,mContext);
+                        if (customerList.size()==0){
+                            showToast(getString(R.string.load_list_erron));
+                        }
                     }else {
                         showToast(getString(R.string.load_list_erron));
-                        adapter.setData(new ArrayList<CustomerIntentListBean>(),mContext);
+                        //adapter.setData(new ArrayList<CustomerIntentListBean>(),mContext);
                     }
                 }
             }
@@ -216,10 +224,13 @@ public class AttentionManagerActivity extends BaseActivity {
         recyclerView = findViewById(R.id.recycler_view);
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(manager);
-        adapter = new CustomerGoodsAdapter(data,mContext ,widWidth);
+        adapter = new CustomerGoodsAdapter(data,mContext ,widWidth,this);
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new RecycleViewDivider(mContext, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
         springView = findViewById(R.id.sv);
+
+        springView.setHeader(new MyHeader(this));
+        springView.setFooter(new MyFooter(this));
         if (role.equals(PublicUtils.SHOP_SELLER)){
             tabLayout.setVisibility(View.VISIBLE);
         }else if (role.equals(PublicUtils.SHOP_LEADER)){
@@ -269,6 +280,8 @@ public class AttentionManagerActivity extends BaseActivity {
 
             }
         });
+
+        tv_search.addTextChangedListener(this);
     }
 
     @Subscribe
@@ -276,5 +289,29 @@ public class AttentionManagerActivity extends BaseActivity {
         if (refresh.equals("refresh")){
             initData();
         }
+    }
+
+    @Override
+    public void refresh(List<CustomerIntentListBean> lists) {
+        initData();
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+           if (tv_search.length()==0){
+               data.clear();
+               phone="";
+               initData();
+           }
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+
     }
 }

@@ -1,6 +1,7 @@
 package com.youzheng.zhejiang.robertmoog.Store.adapter;
 
 import android.content.Context;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -90,16 +91,33 @@ public class SmallChooseReturnGoodsAdapter extends BaseAdapter {
         final String num=viewHolder.tv_number.getText().toString();
         addnumber= Integer.parseInt(num);
         bean.setNum(addnumber+"");
+
         final ViewHolder finalViewHolder = viewHolder;
         viewHolder.tv_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                  if (addnumber==bean.getCount()){
+                   //  finalViewHolder.tv_add.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
                      Toast.makeText(context,"商品数量不能超过可退商品数量",Toast.LENGTH_SHORT).show();
                  }else {
+//                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                         finalViewHolder.tv_add.setBackground(context.getDrawable(R.drawable.bg_order));
+//                     }
                      addnumber++;
-                 }
+                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                         finalViewHolder.tv_cut.setBackground(context.getDrawable(R.drawable.bg_order));
 
+                     }
+                 }
+                if (addnumber==bean.getCount()){
+                    finalViewHolder.tv_add.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
+                }else {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        finalViewHolder.tv_add.setBackground(context.getDrawable(R.drawable.bg_order));
+
+                    }
+
+                }
 
                 finalViewHolder.tv_number.setText(addnumber+"");
                 bean.setNum(addnumber+"");
@@ -118,7 +136,18 @@ public class SmallChooseReturnGoodsAdapter extends BaseAdapter {
                     Toast.makeText(context,"商品数量不能小于0",Toast.LENGTH_SHORT).show();
                 }else {
                     addnumber--;
+
                 }
+                if (addnumber==0){
+                    finalViewHolder1.tv_cut.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
+                }else {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        finalViewHolder1.tv_cut.setBackground(context.getDrawable(R.drawable.bg_order));
+
+                    }
+
+                }
+
                 finalViewHolder1.tv_number.setText(addnumber+"");
                 bean.setNum(addnumber+"");
             }

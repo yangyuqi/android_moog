@@ -17,7 +17,6 @@ import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.ReturnGoodsDetailAdapter;
-import com.youzheng.zhejiang.robertmoog.Store.bean.OrderlistDetail;
 import com.youzheng.zhejiang.robertmoog.Store.bean.ReturnGoodsDetail;
 import com.youzheng.zhejiang.robertmoog.Store.view.RecycleViewDivider;
 
@@ -82,12 +81,16 @@ public class ReturnGoodsDetailActivity extends BaseActivity implements View.OnCl
      */
     private TextView tv_reason_content;
     private String regoodsid;
+    /**  */
+    private TextView tv_get_state;
+    /**  */
+    private TextView tv_return_type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_return_goods_detail);
-        regoodsid=getIntent().getStringExtra("returnGoodsId");
+        regoodsid = getIntent().getStringExtra("returnGoodsId");
         initView();
         initData(Integer.parseInt(regoodsid));
     }
@@ -122,6 +125,8 @@ public class ReturnGoodsDetailActivity extends BaseActivity implements View.OnCl
         adapter.notifyDataSetChanged();
 
 
+        tv_get_state = (TextView) findViewById(R.id.tv_get_state);
+        tv_return_type = (TextView) findViewById(R.id.tv_return_type);
     }
 
     @Override
@@ -134,8 +139,8 @@ public class ReturnGoodsDetailActivity extends BaseActivity implements View.OnCl
     private void initData(int returnID) {
 
 
-        HashMap<String,Object> map=new HashMap<>();
-        map.put("id",returnID);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("id", returnID);
 
         OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.RETURN_ORDERLIST_LIST_DETAIL + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
@@ -145,79 +150,82 @@ public class ReturnGoodsDetailActivity extends BaseActivity implements View.OnCl
 
             @Override
             public void onResponse(String response) {
-                Log.e("退货单详情",response);
-                BaseModel baseModel = gson.fromJson(response,BaseModel.class);
-                if (baseModel.getCode()==PublicUtils.code){
-                    ReturnGoodsDetail returnGoodsDetail = gson.fromJson(gson.toJson(baseModel.getDatas()),ReturnGoodsDetail.class);
+                Log.e("退货单详情", response);
+                BaseModel baseModel = gson.fromJson(response, BaseModel.class);
+                if (baseModel.getCode() == PublicUtils.code) {
+                    ReturnGoodsDetail returnGoodsDetail = gson.fromJson(gson.toJson(baseModel.getDatas()), ReturnGoodsDetail.class);
                     setData(returnGoodsDetail);
-                }else {
+                } else {
                     showToast(baseModel.getMsg());
                 }
             }
         });
 
 
-
-
-
     }
 
     private void setData(ReturnGoodsDetail returnGoodsDetail) {
 
-        if (returnGoodsDetail==null) return;
-        if (returnGoodsDetail.getReturnItem()==null) return;
-        if (returnGoodsDetail.getReturnItem().getProductList()==null) return;
+        if (returnGoodsDetail == null) return;
+        if (returnGoodsDetail.getReturnItem() == null) return;
+        if (returnGoodsDetail.getReturnItem().getProductList() == null) return;
 
-        if (!TextUtils.isEmpty(returnGoodsDetail.getReturnItem().getCode())){
+        if (!TextUtils.isEmpty(returnGoodsDetail.getReturnItem().getCode())) {
             tv_new_return_num.setText(returnGoodsDetail.getReturnItem().getCode());
         }
 
 
-        if (!TextUtils.isEmpty(returnGoodsDetail.getReturnItem().getOrderCode())){
+        if (!TextUtils.isEmpty(returnGoodsDetail.getReturnItem().getOrderCode())) {
             tv_old_order_num.setText(returnGoodsDetail.getReturnItem().getOrderCode());
         }
 
 
-        if (!TextUtils.isEmpty(returnGoodsDetail.getReturnItem().getUserName())){
-                tv_maker.setText(returnGoodsDetail.getReturnItem().getUserName());
+        if (!TextUtils.isEmpty(returnGoodsDetail.getReturnItem().getUserName())) {
+            tv_maker.setText(returnGoodsDetail.getReturnItem().getUserName());
         }
 
 
-
-        if (!TextUtils.isEmpty(returnGoodsDetail.getReturnItem().getCustCode())){
+        if (!TextUtils.isEmpty(returnGoodsDetail.getReturnItem().getCustCode())) {
             tv_customer.setText(returnGoodsDetail.getReturnItem().getCustCode());
         }
 
-        if (returnGoodsDetail.getReturnItem().getProductCount()!=0){
-            tv_goods_number.setText(returnGoodsDetail.getReturnItem().getProductCount()+"");
-        }else {
+        if (returnGoodsDetail.getReturnItem().getProductCount() != 0) {
+            tv_goods_number.setText(returnGoodsDetail.getReturnItem().getProductCount() + "");
+        } else {
             tv_goods_number.setText("0");
         }
 
 
-        if (!TextUtils.isEmpty(returnGoodsDetail.getReturnItem().getRefundAmount())){
-            tv_should_cut_money.setText(getString(R.string.label_money)+returnGoodsDetail.getReturnItem().getRefundAmount());
+        if (!TextUtils.isEmpty(returnGoodsDetail.getReturnItem().getRefundAmount())) {
+            tv_should_cut_money.setText(getString(R.string.label_money) + returnGoodsDetail.getReturnItem().getRefundAmount());
         }
 
-        if (!TextUtils.isEmpty(returnGoodsDetail.getReturnItem().getActualRefundAmount())){
-            tv_really_cut_money.setText(getString(R.string.label_money)+returnGoodsDetail.getReturnItem().getActualRefundAmount());
+        if (!TextUtils.isEmpty(returnGoodsDetail.getReturnItem().getActualRefundAmount())) {
+            tv_really_cut_money.setText(getString(R.string.label_money) + returnGoodsDetail.getReturnItem().getActualRefundAmount());
         }
 
-        if (!TextUtils.isEmpty(returnGoodsDetail.getReturnItem().getReason())){
+        if (!TextUtils.isEmpty(returnGoodsDetail.getReturnItem().getReason())) {
             tv_cut_reason.setText(returnGoodsDetail.getReturnItem().getReason());
         }
 
-        if (!TextUtils.isEmpty(returnGoodsDetail.getReturnItem().getOtherReson())){
+        if (!TextUtils.isEmpty(returnGoodsDetail.getReturnItem().getOtherReson())) {
             tv_reason_content.setVisibility(View.VISIBLE);
             tv_reason_content.setText(returnGoodsDetail.getReturnItem().getOtherReson());
-        }else {
+        } else {
             tv_reason_content.setVisibility(View.GONE);
         }
 
+        if (!TextUtils.isEmpty(returnGoodsDetail.getReturnItem().getPickUpStatus())) {
+            tv_get_state.setText(returnGoodsDetail.getReturnItem().getPickUpStatus());
+        }
 
-        List<ReturnGoodsDetail.ReturnItemBean.ProductListBean> beanList=returnGoodsDetail.getReturnItem().getProductList();
+        if (!TextUtils.isEmpty(returnGoodsDetail.getReturnItem().getPaymentMethod())) {
+            tv_return_type.setText(returnGoodsDetail.getReturnItem().getPaymentMethod());
+        }
 
-        if (beanList.size()!=0){
+        List<ReturnGoodsDetail.ReturnItemBean.ProductListBean> beanList = returnGoodsDetail.getReturnItem().getProductList();
+
+        if (beanList.size() != 0) {
             list.addAll(beanList);
             adapter.setRefreshUI(beanList);
         }

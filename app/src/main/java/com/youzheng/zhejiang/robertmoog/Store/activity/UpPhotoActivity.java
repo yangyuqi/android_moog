@@ -186,6 +186,7 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
     @Override
     protected void setPicList(List<PhotoInfo> resultList) {
         super.setPicList(resultList);
+
         for (final PhotoInfo photoInfo:resultList){
             if (list.size()<10){
                 list.add(photoInfo.getPhotoPath());
@@ -198,6 +199,8 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
 
                     }
                 }).start();
+             //   Log.e("www", picturePath + "");
+                Log.e("2131", list.size() + "");
             }else {
                 return;
             }
@@ -227,7 +230,12 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
                 finish();
                 break;
             case R.id.textHeadNext:
-                showStopDialog();
+                if (list.size()==0){
+                    showToast("请选择图片");
+                }else {
+                    showStopDialog();
+                }
+
                 break;
             case R.id.tv_take_photo:
                 skipCamera();
@@ -261,7 +269,7 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
 
                     @Override
                     public void onSuccess(File file) {
-                        Log.e("213", "压缩完成");
+                        Log.e("213", "压缩完成"+"--------------"+file.length()/1024+"k");
 //                        lin_show.setVisibility(View.GONE);
                         // TODO 压缩成功后调用，返回压缩后的图片文件
                         fileList.add(file);
@@ -277,7 +285,7 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
 
     private void upPic(List<File> pic) {
         lin_show.setVisibility(View.VISIBLE);
-        OkHttpClientManager.getInstance().sendMultipart(UrlUtils.UPLOAD_FILE + "?access_token=" + access_token, new HashMap<String, Object>(), "posters", pic)
+        OkHttpClientManager.getInstance().sendMultipart(UrlUtils.UPLOAD_FILE + "?access_token=" + access_token,"posters", pic)
                 .observeOn(AndroidScheduler.mainThread())
                 .subscribeOn(Schedulers.newThread())
                 .subscribe(new Subscriber<String>() {
@@ -295,14 +303,15 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
 
                     @Override
                     public void onNext(String s) {
-                        Log.e("图片上传成功", s);
                         lin_show.setVisibility(View.GONE);
                         BaseModel baseModel = gson.fromJson(s, BaseModel.class);
                         if (baseModel.getCode() == PublicUtils.code) {
+                            Log.e("图片上传成功", s);
                             showToast("图片上传成功");
                             startActivity(new Intent(UpPhotoActivity.this,SampleOutDetailActivity.class));
                             finish();
                         }else {
+                            Log.e("图片上传失败",s);
                             showToast(baseModel.getMsg());
                         }
                     }
