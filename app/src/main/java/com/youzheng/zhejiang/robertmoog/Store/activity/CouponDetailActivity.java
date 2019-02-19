@@ -2,6 +2,7 @@ package com.youzheng.zhejiang.robertmoog.Store.activity;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -39,7 +40,7 @@ public class CouponDetailActivity extends BaseActivity implements View.OnClickLi
     private TextView textHeadNext;
     private ImageView iv_next;
     private RelativeLayout layout_header;
-    private PullLoadMoreRecyclerView lv_list;
+    private RecyclerView lv_list;
     private String date;
     private List<CouponDetail.CouponUsageRecordDetailBean> list=new ArrayList<>();
     private CouponDetailAdapter adapter;
@@ -62,16 +63,12 @@ public class CouponDetailActivity extends BaseActivity implements View.OnClickLi
         textHeadNext = (TextView) findViewById(R.id.textHeadNext);
         iv_next = (ImageView) findViewById(R.id.iv_next);
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);
-        lv_list = (PullLoadMoreRecyclerView) findViewById(R.id.lv_list);
-        lv_list.setLinearLayout();
+        lv_list = (RecyclerView) findViewById(R.id.lv_list);
+        LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        lv_list.setLayoutManager(manager);
+        lv_list.setAdapter(adapter);
+        lv_list.addItemDecoration(new com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider(CouponDetailActivity.this, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
 
-        lv_list.addItemDecoration(new RecycleViewDivider(
-                this, LinearLayoutManager.VERTICAL, 20, getResources().getColor(R.color.divider_color_item)));
-        lv_list.setColorSchemeResources(R.color.colorPrimary);
-
-
-        lv_list.setPushRefreshEnable(false);
-        lv_list.setPullRefreshEnable(false);
 
         adapter=new CouponDetailAdapter(list,this);
         lv_list.setAdapter(adapter);
@@ -90,13 +87,13 @@ public class CouponDetailActivity extends BaseActivity implements View.OnClickLi
         OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.COUPON_RECORD_DETAIL + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
             public void onFailure(Request request, IOException e) {
-                lv_list.setPullLoadMoreCompleted();
+                //lv_list.setPullLoadMoreCompleted();
             }
 
             @Override
             public void onResponse(String response) {
                 Log.e("优惠券使用详情",response);
-                lv_list.setPullLoadMoreCompleted();
+                //lv_list.setPullLoadMoreCompleted();
                 BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                 if (baseModel.getCode()==PublicUtils.code){
                     CouponDetail couponDetail = gson.fromJson(gson.toJson(baseModel.getDatas()),CouponDetail.class);

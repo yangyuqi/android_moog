@@ -12,11 +12,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/pr_goods"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            ></com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView>
+          />
 
 
 

@@ -39,6 +39,13 @@
                 android:textSize="@dimen/text_size_13" />
 
             <ImageView
+                android:id="@+id/iv_clear"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@mipmap/clears"
+                android:visibility="gone"
+                android:layout_marginRight="5dp"/>
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/group_5_1" />

@@ -2,6 +2,7 @@ package com.youzheng.zhejiang.robertmoog.Count.activity;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -39,7 +40,7 @@ public class TodayRegisterNumberActivity extends BaseActivity implements View.On
     private TextView textHeadNext;
     private ImageView iv_next;
     private RelativeLayout layout_header;
-    private PullLoadMoreRecyclerView pr_list;
+    private RecyclerView pr_list;
     private List<TodayRegisterList.CustomerListBean> list=new ArrayList<>();
     private TodayRegisterAdapter adapter;
 
@@ -59,15 +60,13 @@ public class TodayRegisterNumberActivity extends BaseActivity implements View.On
         textHeadNext = (TextView) findViewById(R.id.textHeadNext);
         iv_next = (ImageView) findViewById(R.id.iv_next);
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);
-        pr_list = (PullLoadMoreRecyclerView) findViewById(R.id.pr_list);
+        pr_list = (RecyclerView) findViewById(R.id.pr_list);
 
-        pr_list.setLinearLayout();
-        pr_list.addItemDecoration(new RecycleViewDivider(
-                this, LinearLayoutManager.VERTICAL, 5, getResources().getColor(R.color.divider_color_item)));
-        pr_list.setColorSchemeResources(R.color.colorPrimary);
+        LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        pr_list.setLayoutManager(manager);
+        pr_list.setAdapter(adapter);
+        pr_list.addItemDecoration(new com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider(TodayRegisterNumberActivity.this, LinearLayoutManager.VERTICAL, 5, getResources().getColor(R.color.bg_all)));
 
-        pr_list.setPushRefreshEnable(false);
-        pr_list.setPullRefreshEnable(false);
 
         adapter=new TodayRegisterAdapter(list,this);
         pr_list.setAdapter(adapter);

@@ -29,12 +29,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import okhttp3.Request;
 
-public class ShopActionActivity extends BaseActivity {
+public class ShopActionHistoryActivity extends BaseActivity {
 
     ListView ls ;
     private String promoType = "current";
@@ -114,19 +112,20 @@ public class ShopActionActivity extends BaseActivity {
     }
     private void initView() {
         ls = findViewById(R.id.ls);
-        types=getIntent().getBooleanExtra("is_appear",false);
+        //types=getIntent().getBooleanExtra("is_appear",false);
         TextView  tv_title=findViewById(R.id.textHeadTitle);
         TextView tv_next=((TextView)findViewById(R.id.textHeadNext));
-        if (types==true){
-          tv_title.setText("门店活动");
-          tv_next.setVisibility(View.VISIBLE);
-          tv_next.setText("历史信息");
-
-        }else {
-            tv_title.setText("客户活动");
-            tv_next.setVisibility(View.GONE);
-            tv_next.setText("历史信息");
-        }
+        tv_title.setText("门店历史活动");
+//        if (types==true){
+//          tv_title.setText("门店活动");
+//          tv_next.setVisibility(View.VISIBLE);
+//          //tv_next.setText("历史信息");
+//
+//        }else {
+//            tv_title.setText("客户活动");
+//            tv_next.setVisibility(View.GONE);
+//           // tv_next.setText("历史信息");
+//        }
 
         findViewById(R.id.btnBack).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,6 +141,10 @@ public class ShopActionActivity extends BaseActivity {
          adapter = new CommonAdapter<GetPromoListBean>(mContext,data,R.layout.shop_action_otem) {
             @Override
             public void convert(ViewHolder helper, final GetPromoListBean item) {
+
+                if (promoType.equals("history")){
+                  helper.getView(R.id.lin_time).setVisibility(View.GONE);
+                }
 
                 helper.setText(R.id.tv_name,item.getPromoName());
 

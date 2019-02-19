@@ -58,6 +58,7 @@
             android:background="@color/bg_all"/>
 
         <LinearLayout
+            android:id="@+id/lin_one"
             android:overScrollMode="never"
             android:layout_width="match_parent"
             android:layout_height="145dp">

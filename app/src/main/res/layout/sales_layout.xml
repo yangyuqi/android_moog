@@ -668,7 +668,7 @@
                 android:paddingLeft="15dp"
                 android:layout_marginTop="5dp"
                 android:paddingTop="10dp"
-                android:paddingBottom="30dp"
+
                 android:background="@color/bg_background_white">
 
                 <EditText
@@ -678,22 +678,15 @@
                     android:hint="添加备注:"
                     android:textColor="@color/colorPrimary"
                     android:textSize="13sp"
+                    android:maxLength="100"
+                    android:text=""
+                    android:paddingBottom="30dp"
                     android:gravity="center_vertical"
                     android:layout_marginTop="2dp"
                     android:background="@color/bg_background_white"
                     />
 
-                <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:textColor="@color/text_main"
-                    android:textSize="13sp"
-                    android:gravity="center_vertical"
-                    android:layout_marginTop="2dp"
-                    android:paddingLeft="5dp"
-                    android:background="@color/bg_background_white"
-                    />
+
 
             </LinearLayout>
 

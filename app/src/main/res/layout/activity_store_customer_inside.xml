@@ -15,13 +15,13 @@
         app:type="follow"
         android:id="@+id/springView">
 
-        <com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/lv_list"
             android:layout_width="match_parent"
             android:divider="@color/divider_color_item"
             android:dividerHeight="1dp"
             android:scrollbars="none"
-            android:layout_height="match_parent"></com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView>
+            android:layout_height="match_parent"/>
 
 
 

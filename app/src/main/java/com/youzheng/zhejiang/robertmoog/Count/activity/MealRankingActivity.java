@@ -8,6 +8,7 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -80,7 +81,7 @@ public class MealRankingActivity extends BaseActivity implements View.OnClickLis
      */
     private TextView tv_rule;
     private ImageView iv_more;
-    private PullLoadMoreRecyclerView pr_list;
+    private RecyclerView pr_list;
     private PopupWindow window;
     private LinearLayout mLinTitle;
     private ListView listView;
@@ -188,16 +189,14 @@ public class MealRankingActivity extends BaseActivity implements View.OnClickLis
         tv_rule = (TextView) findViewById(R.id.tv_rule);
         iv_more = (ImageView) findViewById(R.id.iv_more);
         iv_more.setOnClickListener(this);
-        pr_list = (PullLoadMoreRecyclerView) findViewById(R.id.pr_list);
+        pr_list = (RecyclerView) findViewById(R.id.pr_list);
         mLinTitle = (LinearLayout) findViewById(R.id.lin_title);
 
-        pr_list.setLinearLayout();
-        pr_list.addItemDecoration(new RecycleViewDivider(
-                this, LinearLayoutManager.VERTICAL, 5, getResources().getColor(R.color.divider_color_item)));
-        pr_list.setColorSchemeResources(R.color.colorPrimary);
+        LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        pr_list.setLayoutManager(manager);
+        pr_list.setAdapter(adapter);
+        pr_list.addItemDecoration(new com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider(MealRankingActivity.this, LinearLayoutManager.VERTICAL, 5, getResources().getColor(R.color.bg_all)));
 
-        pr_list.setPushRefreshEnable(false);
-        pr_list.setPullRefreshEnable(false);
         adapter = new MealRankingAdapter(list, this);
         pr_list.setAdapter(adapter);
         adapter.notifyDataSetChanged();

@@ -50,11 +50,21 @@
                         android:background="@null"
                         android:cursorVisible="true"
                         android:hint="搜索退货单编号"
-                        android:inputType="phone"
+                        android:inputType="textEmailAddress"
+                        android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                        android:maxLength="20"
                         android:paddingLeft="10dp"
                         android:singleLine="true"
                         android:textColorHint="#B7B7B7"
                         android:textSize="@dimen/text_size_13" />
+
+                    <ImageView
+                        android:id="@+id/iv_clear"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@mipmap/clears"
+                        android:visibility="gone"
+                        android:layout_marginRight="5dp"/>
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -91,13 +101,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView
+                <android.support.v7.widget.RecyclerView
                     android:id="@+id/rv_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
 
                     android:background="@color/bg_background_white"
-                    android:scrollbars="none"></com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView>
+                    android:scrollbars="none"/>
 
 
             </com.liaoinstan.springview.widget.SpringView>

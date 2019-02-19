@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -50,7 +51,7 @@ public class PeopleMangerActivity extends BaseActivity implements View.OnClickLi
     private TextView textHeadNext;
     private ImageView iv_next;
     private RelativeLayout layout_header;
-    private PullLoadMoreRecyclerView lv_list;
+    private RecyclerView lv_list;
     /**
      * 添加导购
      */
@@ -114,18 +115,16 @@ public class PeopleMangerActivity extends BaseActivity implements View.OnClickLi
         textHeadNext = (TextView) findViewById(R.id.textHeadNext);
         iv_next = (ImageView) findViewById(R.id.iv_next);
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);
-        lv_list = (PullLoadMoreRecyclerView) findViewById(R.id.lv_list);
+        lv_list = (RecyclerView) findViewById(R.id.lv_list);
         tv_add = (TextView) findViewById(R.id.tv_add);
         tv_store_name = findViewById(R.id.tv_store_name);
         tv_add.setOnClickListener(this);
 
-        lv_list.setLinearLayout();
-        lv_list.addItemDecoration(new RecycleViewDivider(
-                this, LinearLayoutManager.VERTICAL, 5, getResources().getColor(R.color.divider_color_item)));
-        lv_list.setColorSchemeResources(R.color.colorPrimary);
+        LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        lv_list.setLayoutManager(manager);
+        lv_list.setAdapter(adapter);
+        lv_list.addItemDecoration(new com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider(PeopleMangerActivity.this, LinearLayoutManager.VERTICAL, 5, getResources().getColor(R.color.bg_all)));
 
-        lv_list.setPushRefreshEnable(false);
-        lv_list.setPullRefreshEnable(false);
 
         adapter = new PeopleMangerAdapter(list, this);
         lv_list.setAdapter(adapter);
@@ -284,6 +283,7 @@ public class PeopleMangerActivity extends BaseActivity implements View.OnClickLi
                 break;
             case R.id.tv_add:
                 startActivity(new Intent(this, AddStaffActivity.class));
+                finish();
                 break;
         }
     }

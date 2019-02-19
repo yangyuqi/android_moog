@@ -66,8 +66,8 @@ public class ShopActionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 CommonAdapter<ProductsBean> commonAdapter = new CommonAdapter<ProductsBean>(context,listBeanList,R.layout.common_goods_vh_item3) {
                     @Override
                     public void convert(ViewHolder helper, ProductsBean item) {
-                        helper.setText(R.id.tv_name,item.getProductName());
-                        helper.setText(R.id.tv_desc,item.getProductSku());
+                        helper.setText(R.id.tv_name,item.getProductSku());
+                        helper.setText(R.id.tv_desc,item.getProductName());
                         Glide.with(context).load(item.getProductImageUrl()).error(R.mipmap.type_icon).into((ImageView) helper.getView(R.id.iv_icon));
                     }
                 };

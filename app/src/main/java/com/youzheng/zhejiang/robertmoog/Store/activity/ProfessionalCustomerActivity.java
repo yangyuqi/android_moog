@@ -3,6 +3,7 @@ package com.youzheng.zhejiang.robertmoog.Store.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -46,7 +47,7 @@ public class ProfessionalCustomerActivity extends BaseActivity implements View.O
      * 3
      */
     private TextView tv_number;
-    private PullLoadMoreRecyclerView lv_list;
+    private RecyclerView lv_list;
     private List<ProfessionalCustomerList.SpecialtyCustomerListBean> list = new ArrayList<>();
     private ProfessionalCustomerAdapter adapter;
     private int page = 1;
@@ -118,17 +119,13 @@ public class ProfessionalCustomerActivity extends BaseActivity implements View.O
         iv_next.setOnClickListener(this);
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);
         tv_number = (TextView) findViewById(R.id.tv_number);
-        lv_list = (PullLoadMoreRecyclerView) findViewById(R.id.lv_list);
+        lv_list = (RecyclerView) findViewById(R.id.lv_list);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        lv_list.setLinearLayout();
-        lv_list.setColorSchemeResources(R.color.colorPrimary);
-        lv_list.addItemDecoration(new RecycleViewDivider(
-                this, LinearLayoutManager.VERTICAL, 5, getResources().getColor(R.color.divider_color_item)));
+        LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        lv_list.setLayoutManager(manager);
+        lv_list.setAdapter(adapter);
+        lv_list.addItemDecoration(new com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider(ProfessionalCustomerActivity.this, LinearLayoutManager.VERTICAL, 5, getResources().getColor(R.color.bg_all)));
 
-          lv_list.setPushRefreshEnable(false);
-          lv_list.setPullRefreshEnable(false);
         adapter = new ProfessionalCustomerAdapter(list, this);
         lv_list.setAdapter(adapter);
 

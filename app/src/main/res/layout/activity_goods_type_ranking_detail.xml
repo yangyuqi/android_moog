@@ -15,6 +15,7 @@
         android:layout_height="45dp"
         android:gravity="center_vertical"
         android:paddingLeft="15dp"
+        android:visibility="gone"
         android:background="@color/bg_background_white"
         android:orientation="horizontal">
 
@@ -118,12 +119,12 @@
         android:layout_marginTop="1dp"
         android:id="@+id/springView">
 
-        <com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/pr_list"
             android:background="@color/bg_background_white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            ></com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView>
+            />
 
 
     </com.liaoinstan.springview.widget.SpringView>

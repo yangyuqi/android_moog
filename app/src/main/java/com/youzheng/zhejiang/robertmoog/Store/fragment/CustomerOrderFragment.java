@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -62,7 +63,7 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
      * 时间
      */
     private TextView tv_time;
-    private PullLoadMoreRecyclerView rv_list;
+    private RecyclerView rv_list;
     private GridView gv_time;
     /**
      * 重置
@@ -90,6 +91,7 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
     private String token;
     private boolean isFirstLoad = false;
     private SpringView springView;
+    private ImageView iv_clear;
 
     @Nullable
     @Override
@@ -182,7 +184,7 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
         lin_search = (LinearLayout) view.findViewById(R.id.lin_search);
         tv_time = (TextView) view.findViewById(R.id.tv_time);
         tv_time.setOnClickListener(this);
-        rv_list = (PullLoadMoreRecyclerView) view.findViewById(R.id.rv_list);
+        rv_list = (RecyclerView) view.findViewById(R.id.rv_list);
         gv_time = (GridView) view.findViewById(R.id.gv_time);
         tv_again = (TextView) view.findViewById(R.id.tv_again);
         tv_confirm = (TextView) view.findViewById(R.id.tv_confirm);
@@ -192,16 +194,11 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
         tv_confirm.setOnClickListener(this);
         gv_time.setOnItemClickListener(this);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        rv_list.addItemDecoration(new RecycleViewDivider(
-                getActivity(), LinearLayoutManager.VERTICAL, 15, getResources().getColor(R.color.bg_all)));
-        rv_list.setLinearLayout();
-        rv_list.setColorSchemeResources(R.color.colorPrimary);
+        LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        rv_list.setLayoutManager(manager);
+        rv_list.setAdapter(adapter);
+        rv_list.addItemDecoration(new com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider(getActivity(), LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
 
-
-        rv_list.setPullRefreshEnable(false);
-        rv_list.setPushRefreshEnable(false);
         adapter = new ProfessionalCustomerOrderListAdapter(list, getActivity());
         rv_list.setAdapter(adapter);
 
@@ -218,6 +215,14 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
 
         springView.setHeader(new MyHeader(getActivity()));
         springView.setFooter(new MyFooter(getActivity()));
+        iv_clear = (ImageView) view.findViewById(R.id.iv_clear);
+        iv_clear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tv_search.setText("");
+            }
+        });
+
     }
 
     private void initGetDate() {
@@ -272,13 +277,13 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
             @Override
             public void onFailure(Request request, IOException e) {
                 //rv_list.setPullLoadMoreCompleted();
-               springView.onFinishFreshAndLoad();
+                springView.onFinishFreshAndLoad();
             }
 
             @Override
             public void onResponse(String response) {
                 Log.e("专业订单列表", response);
-              //  rv_list.setPullLoadMoreCompleted();
+                //  rv_list.setPullLoadMoreCompleted();
                 springView.onFinishFreshAndLoad();
                 BaseModel baseModel = gson.fromJson(response, BaseModel.class);
                 if (baseModel.getCode() == PublicUtils.code) {
@@ -328,6 +333,7 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
                 break;
             case R.id.tv_time:
                 drawer_layout.openDrawer(GravityCompat.END);
+                tv_search.setClickable(false);
                 break;
             case R.id.tv_again:
                 goodsTimeAdapter.setSelectItem(0);
@@ -337,6 +343,7 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
                 adapter.clear();
                 initData(page, pageSize, orderCode, timeQuantum, isCustomer, type);
                 drawer_layout.closeDrawer(GravityCompat.END);
+                tv_search.setClickable(true);
                 goodsTimeAdapter.setSelectItem(who);
                 timeQuantum = strlist.get(who).getId();
                 break;
@@ -375,9 +382,12 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
     @Override
     public void afterTextChanged(Editable s) {
         if (tv_search.length() == 0) {
+            iv_clear.setVisibility(View.GONE);
             list.clear();
             orderCode = "";
             initData(page, pageSize, orderCode, timeQuantum, isCustomer, type);
+        }else {
+            iv_clear.setVisibility(View.VISIBLE);
         }
     }
 }

@@ -14,6 +14,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="com.huawei.android.launcher.permission.CHANGE_BADGE"/>
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
@@ -318,6 +319,12 @@
             android:screenOrientation="portrait"
             android:launchMode="singleTask"
             android:configChanges="orientation|screenSize|keyboardHidden"  />
+        <activity
+            android:name=".Home.activity.ShopActionHistoryActivity"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"
+            android:configChanges="orientation|screenSize|keyboardHidden"  />
+
         <activity
             android:name=".Home.activity.ShopActionDetailsActivity"
             android:screenOrientation="portrait"

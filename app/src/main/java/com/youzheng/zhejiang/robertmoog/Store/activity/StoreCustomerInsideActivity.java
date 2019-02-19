@@ -2,6 +2,7 @@ package com.youzheng.zhejiang.robertmoog.Store.activity;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,6 +15,7 @@ import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
 import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
+import com.youzheng.zhejiang.robertmoog.Count.activity.StoreSaleInsideActivity;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.StoreCustomerInsideAdapter;
@@ -41,7 +43,7 @@ public class StoreCustomerInsideActivity extends BaseActivity implements View.On
     private TextView textHeadNext;
     private ImageView iv_next;
     private RelativeLayout layout_header;
-    private PullLoadMoreRecyclerView lv_list;
+    private RecyclerView lv_list;
     private List<StoreCustomerDetail.MonthCoustomerDetailBean> list = new ArrayList<>();
     private StoreCustomerInsideAdapter adapter;
     private String month;
@@ -100,14 +102,12 @@ public class StoreCustomerInsideActivity extends BaseActivity implements View.On
         textHeadNext = (TextView) findViewById(R.id.textHeadNext);
         iv_next = (ImageView) findViewById(R.id.iv_next);
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);
-        lv_list = (PullLoadMoreRecyclerView) findViewById(R.id.lv_list);
-        lv_list.setLinearLayout();
-        lv_list.addItemDecoration(new RecycleViewDivider(
-                this, LinearLayoutManager.VERTICAL, 5, getResources().getColor(R.color.divider_color_item)));
-        lv_list.setColorSchemeResources(R.color.colorPrimary);
+        lv_list = (RecyclerView) findViewById(R.id.lv_list);
+        LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        lv_list.setLayoutManager(manager);
+        lv_list.setAdapter(adapter);
+        lv_list.addItemDecoration(new com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider(StoreCustomerInsideActivity.this, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
 
-        lv_list.setPullRefreshEnable(false);
-        lv_list.setPushRefreshEnable(false);
 
         adapter = new StoreCustomerInsideAdapter(list, this);
         lv_list.setAdapter(adapter);

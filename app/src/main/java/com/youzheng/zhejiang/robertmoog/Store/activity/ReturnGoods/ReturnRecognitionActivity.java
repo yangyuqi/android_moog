@@ -2,7 +2,9 @@ package com.youzheng.zhejiang.robertmoog.Store.activity.ReturnGoods;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -13,7 +15,6 @@ import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
 import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
-import com.youzheng.zhejiang.robertmoog.Home.activity.RegisterSuccessActivity;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.Model.Home.CustomerBean;
 import com.youzheng.zhejiang.robertmoog.R;
@@ -26,7 +27,7 @@ import java.util.Map;
 
 import okhttp3.Request;
 
-public class ReturnRecognitionActivity extends BaseActivity implements View.OnClickListener {
+public class ReturnRecognitionActivity extends BaseActivity implements View.OnClickListener, TextWatcher {
 
     private ImageView btnBack;
     /**  */
@@ -40,6 +41,7 @@ public class ReturnRecognitionActivity extends BaseActivity implements View.OnCl
      */
     private EditText tv_search;
     private ImageView iv_search;
+    private ImageView iv_clear;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +61,15 @@ public class ReturnRecognitionActivity extends BaseActivity implements View.OnCl
         tv_search = (EditText) findViewById(R.id.tv_search);
         iv_search = (ImageView) findViewById(R.id.iv_search);
         iv_search.setOnClickListener(this);
+        iv_clear = (ImageView) findViewById(R.id.iv_clear);
+
+        iv_clear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tv_search.setText("");
+            }
+        });
+        tv_search.addTextChangedListener(this);
     }
 
     @Override
@@ -71,13 +82,13 @@ public class ReturnRecognitionActivity extends BaseActivity implements View.OnCl
                 break;
             case R.id.iv_search:
                 SoftInputUtils.hideSoftInput(ReturnRecognitionActivity.this);
-                if (tv_search.getText().toString().equals("")){
+                if (tv_search.getText().toString().equals("")) {
                     showToast(getString(R.string.phone_not_null));
-                }else if (tv_search.getText().toString().length()<11){
+                } else if (tv_search.getText().toString().length() < 11) {
                     showToast("手机号有误,请重新输入");
-                }else if (PhoneUtil.isCellphone(tv_search.getText().toString())==false){
+                } else if (PhoneUtil.isCellphone(tv_search.getText().toString()) == false) {
                     showToast("手机号格式错误,请重新输入");
-                }else {
+                } else {
                     Recognition();
                 }
 
@@ -85,31 +96,50 @@ public class ReturnRecognitionActivity extends BaseActivity implements View.OnCl
         }
     }
 
-    private void Recognition(){
-        Map<String,Object> map = new HashMap<>();
-        map.put("phone",tv_search.getText().toString());
-        OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.GET_CUSTOMER+"?access_token="+access_token, new OkHttpClientManager.StringCallback() {
+    private void Recognition() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("phone", tv_search.getText().toString());
+        OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.GET_CUSTOMER + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
             public void onFailure(Request request, IOException e) {
 
             }
 
             @Override
-            public void  onResponse(String response) {
-                BaseModel baseModel = gson.fromJson(response,BaseModel.class);
-                if (baseModel.getCode()==PublicUtils.code){
-                    CustomerBean customerBean = gson.fromJson(gson.toJson(baseModel.getDatas()),CustomerBean.class);
-                    if (!TextUtils.isEmpty(customerBean.getCustomer().getCustomerId())){
-                        Intent intent6 = new Intent(mContext,ChooseOrderListActivity.class);
-                        intent6.putExtra("customerId",customerBean.getCustomer().getCustomerId());
-                        intent6.putExtra("identifion",true);
+            public void onResponse(String response) {
+                BaseModel baseModel = gson.fromJson(response, BaseModel.class);
+                if (baseModel.getCode() == PublicUtils.code) {
+                    CustomerBean customerBean = gson.fromJson(gson.toJson(baseModel.getDatas()), CustomerBean.class);
+                    if (!TextUtils.isEmpty(customerBean.getCustomer().getCustomerId())) {
+                        Intent intent6 = new Intent(mContext, ChooseOrderListActivity.class);
+                        intent6.putExtra("customerId", customerBean.getCustomer().getCustomerId());
+                        intent6.putExtra("identifion", true);
                         startActivity(intent6);
                     }
 
-                }else {
+                } else {
                     showToast(baseModel.getMsg());
                 }
             }
         });
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        if (tv_search.length()==0){
+            iv_clear.setVisibility(View.GONE);
+        }else {
+            iv_clear.setVisibility(View.VISIBLE);
+        }
     }
 }

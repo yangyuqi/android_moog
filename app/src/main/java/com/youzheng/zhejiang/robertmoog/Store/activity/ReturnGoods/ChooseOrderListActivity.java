@@ -2,6 +2,7 @@ package com.youzheng.zhejiang.robertmoog.Store.activity.ReturnGoods;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -41,7 +42,7 @@ public class ChooseOrderListActivity extends BaseActivity implements View.OnClic
     private TextView textHeadNext;
     private ImageView iv_next;
     private RelativeLayout layout_header;
-    private PullLoadMoreRecyclerView pr_list;
+    private RecyclerView pr_list;
     private List<NewOrderListBean.OrderListBean> list = new ArrayList<>();
     private ChooseGoodsListAdapter adapter;
 
@@ -123,16 +124,12 @@ public class ChooseOrderListActivity extends BaseActivity implements View.OnClic
         textHeadTitle.setText(getString(R.string.choose_order));
         iv_next = (ImageView) findViewById(R.id.iv_next);
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);
-        pr_list = (PullLoadMoreRecyclerView) findViewById(R.id.pr_list);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        pr_list.addItemDecoration(new RecycleViewDivider(
-                this, LinearLayoutManager.VERTICAL, 15, getResources().getColor(R.color.bg_all)));
-        pr_list.setLinearLayout();
-        pr_list.setColorSchemeResources(R.color.colorPrimary);
+        pr_list = (RecyclerView) findViewById(R.id.pr_list);
+        LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        pr_list.setLayoutManager(manager);
+        pr_list.setAdapter(adapter);
+        pr_list.addItemDecoration(new com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider(ChooseOrderListActivity.this, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
 
-        pr_list.setPushRefreshEnable(false);
-        pr_list.setPullRefreshEnable(false);
         adapter = new ChooseGoodsListAdapter(list, this);
         pr_list.setAdapter(adapter);
         adapter.notifyDataSetChanged();

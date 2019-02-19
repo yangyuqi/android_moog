@@ -89,8 +89,10 @@ public class InPutCodeDialog extends Dialog implements View.OnClickListener{
                 break;
 
             case R.id.tv_no :
-                //dismiss();
-                confrim_dialog_tv_content.setText("");
+                remark.setCodePU("");
+                adapter.notifyDataSetChanged();
+                EventBus.getDefault().post(objects);
+                dismiss();
                 break;
         }
     }

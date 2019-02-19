@@ -13,6 +13,7 @@ import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
 import com.youzheng.zhejiang.robertmoog.Home.activity.LoginActivity;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.R;
+import com.youzheng.zhejiang.robertmoog.utils.SharedPreferencesUtils;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -86,6 +87,7 @@ public class AlterPasswordActivity extends BaseActivity {
                         BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                         if (baseModel.getCode()==PublicUtils.code){
                             showToast(getString(R.string.change_psd_success));
+                            SharedPreferencesUtils.clear(mContext);
                             startActivity(new Intent(mContext,LoginActivity.class));
                             finish();
                         }else {

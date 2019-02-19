@@ -48,21 +48,22 @@ import okhttp3.Request;
 
 public class AttentionManagerActivity extends BaseActivity implements MangerListener, TextWatcher {
 
-    private ShopPersonalListBean listBean ;
-    private TabLayout tabLayout ;
-    private String personalId ,phone;
-    private int pageNum = 1 ,pageSize=20 ,totalPage;
-    Map<String,Object> map = new HashMap<>();
-    RecyclerView recyclerView ;
-    ListView ls ;
+    private ShopPersonalListBean listBean;
+    private TabLayout tabLayout;
+    private String personalId, phone;
+    private int pageNum = 1, pageSize = 20, totalPage;
+    Map<String, Object> map = new HashMap<>();
+    RecyclerView recyclerView;
+    ListView ls;
     List<CustomerIntentListBean> data = new ArrayList<>();
-    CustomerGoodsAdapter adapter ;
-    int widWidth ;
-    EditText tv_search ;
-    CommonAdapter<ShopPersonalListBean> com_adapter ;
+    CustomerGoodsAdapter adapter;
+    int widWidth;
+    EditText tv_search;
+    CommonAdapter<ShopPersonalListBean> com_adapter;
     List<ShopPersonalListBean> da_list = new ArrayList<>();
-    ImageView iv_search ;
-    SpringView springView ;
+    ImageView iv_search;
+    SpringView springView;
+    private ImageView iv_clear;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -97,12 +98,12 @@ public class AttentionManagerActivity extends BaseActivity implements MangerList
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                if (tab.getPosition()==0){
+                if (tab.getPosition() == 0) {
                     springView.setVisibility(View.VISIBLE);
                     ls.setVisibility(View.GONE);
                     findViewById(R.id.rl_search).setVisibility(View.VISIBLE);
                     initData();
-                }else if (tab.getPosition()==1){
+                } else if (tab.getPosition() == 1) {
                     springView.setVisibility(View.GONE);
                     ls.setVisibility(View.VISIBLE);
                     findViewById(R.id.rl_search).setVisibility(View.GONE);
@@ -124,17 +125,17 @@ public class AttentionManagerActivity extends BaseActivity implements MangerList
         springView.setListener(new SpringView.OnFreshListener() {
             @Override
             public void onRefresh() {
-                pageNum=1 ;
+                pageNum = 1;
                 data.clear();
                 initData();
             }
 
             @Override
             public void onLoadmore() {
-                if (totalPage>pageNum){
+                if (totalPage > pageNum) {
                     pageNum++;
                     initData();
-                }else {
+                } else {
                     springView.onFinishFreshAndLoad();
                 }
             }
@@ -150,9 +151,9 @@ public class AttentionManagerActivity extends BaseActivity implements MangerList
 
             @Override
             public void onResponse(String response) {
-                BaseModel baseModel = gson.fromJson(response,BaseModel.class);
-                if (baseModel.getCode()== PublicUtils.code){
-                    NotLabelList list = gson.fromJson(gson.toJson(baseModel.getDatas()),NotLabelList.class);
+                BaseModel baseModel = gson.fromJson(response, BaseModel.class);
+                if (baseModel.getCode() == PublicUtils.code) {
+                    NotLabelList list = gson.fromJson(gson.toJson(baseModel.getDatas()), NotLabelList.class);
                     com_adapter.setData(list.getNotLabelList());
                     com_adapter.notifyDataSetChanged();
                 }
@@ -160,15 +161,15 @@ public class AttentionManagerActivity extends BaseActivity implements MangerList
         });
     }
 
-    public  void initData() {
-        if (personalId!=null){
-            map.put("personalId",personalId);
+    public void initData() {
+        if (personalId != null) {
+            map.put("personalId", personalId);
         }
-        if (phone!=null){
-            map.put("phone",phone);
+        if (phone != null) {
+            map.put("phone", phone);
         }
-        map.put("pageNum",pageNum);
-        map.put("pageSize",pageSize);
+        map.put("pageNum", pageNum);
+        map.put("pageSize", pageSize);
         OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.CUSTOMER_INTENT + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
             public void onFailure(Request request, IOException e) {
@@ -178,30 +179,33 @@ public class AttentionManagerActivity extends BaseActivity implements MangerList
             @Override
             public void onResponse(String response) {
                 springView.onFinishFreshAndLoad();
-                BaseModel baseModel = gson.fromJson(response,BaseModel.class);
-                if (baseModel.getCode()==PublicUtils.code){
-                    CustomerIntentDatas datas = gson.fromJson(gson.toJson(baseModel.getDatas()),CustomerIntentDatas.class);
-                    if (datas.getCustomerIntentList().size()>0){
+                BaseModel baseModel = gson.fromJson(response, BaseModel.class);
+                if (baseModel.getCode() == PublicUtils.code) {
+                    CustomerIntentDatas datas = gson.fromJson(gson.toJson(baseModel.getDatas()), CustomerIntentDatas.class);
+                    if (datas.getCustomerIntentList().size() > 0) {
                         totalPage = datas.getTotalPage();
                         List<CustomerIntentListBean> customerList = datas.getCustomerIntentList();
-                        for (int  i = 0 ; i<customerList.size();i++){
-                            if (customerList.get(i).getProductList().size()>0) {
+                        for (int i = 0; i < customerList.size(); i++) {
+                            if (customerList.get(i).getProductList().size() > 0) {
                                 customerList.get(i).setGoodsId(customerList.get(i).getProductList().get(0).getId());
                                 customerList.get(i).setPhoto(customerList.get(i).getProductList().get(0).getPhoto());
                                 customerList.get(i).setName(customerList.get(i).getProductList().get(0).getName());
                                 customerList.get(i).setSku(customerList.get(i).getProductList().get(0).getSku());
                                 customerList.get(i).setCreateDate(customerList.get(i).getProductList().get(0).getCreateDate());
-                            }else {
+
+                            } else {
+//                                adapter.clear();
+//                                adapter.setData(new ArrayList<CustomerIntentListBean>(),mContext);
                                 //showToast(getString(R.string.load_list_erron));
                             }
                         }
-                        adapter.setData(customerList,mContext);
-                        if (customerList.size()==0){
-                            showToast(getString(R.string.load_list_erron));
-                        }
-                    }else {
+                        adapter.setData(customerList, mContext);
+//                        if (customerList.size()==0){
+//                            showToast(getString(R.string.load_list_erron));
+//                        }
+                    } else {
                         showToast(getString(R.string.load_list_erron));
-                        //adapter.setData(new ArrayList<CustomerIntentListBean>(),mContext);
+                        adapter.setData(new ArrayList<CustomerIntentListBean>(), mContext);
                     }
                 }
             }
@@ -210,11 +214,11 @@ public class AttentionManagerActivity extends BaseActivity implements MangerList
 
     private void initView() {
         listBean = (ShopPersonalListBean) getIntent().getSerializableExtra("label");
-        if (listBean!=null){
+        if (listBean != null) {
             personalId = listBean.getId();
         }
         tabLayout = findViewById(R.id.tab);
-        ((TextView)findViewById(R.id.textHeadTitle)).setText(R.string.attention_intent_user);
+        ((TextView) findViewById(R.id.textHeadTitle)).setText(R.string.attention_intent_user);
         findViewById(R.id.btnBack).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -224,36 +228,36 @@ public class AttentionManagerActivity extends BaseActivity implements MangerList
         recyclerView = findViewById(R.id.recycler_view);
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(manager);
-        adapter = new CustomerGoodsAdapter(data,mContext ,widWidth,this);
+        adapter = new CustomerGoodsAdapter(data, mContext, widWidth, this);
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new RecycleViewDivider(mContext, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
         springView = findViewById(R.id.sv);
 
         springView.setHeader(new MyHeader(this));
         springView.setFooter(new MyFooter(this));
-        if (role.equals(PublicUtils.SHOP_SELLER)){
+        if (role.equals(PublicUtils.SHOP_SELLER)) {
             tabLayout.setVisibility(View.VISIBLE);
-        }else if (role.equals(PublicUtils.SHOP_LEADER)){
+        } else if (role.equals(PublicUtils.SHOP_LEADER)) {
             tabLayout.setVisibility(View.GONE);
         }
 
         ls = findViewById(R.id.ls);
 
-        com_adapter = new CommonAdapter<ShopPersonalListBean>(mContext,da_list, R.layout.attention_intent_layout_other_item) {
+        com_adapter = new CommonAdapter<ShopPersonalListBean>(mContext, da_list, R.layout.attention_intent_layout_other_item) {
             @Override
             public void convert(ViewHolder helper, final ShopPersonalListBean item) {
 
-                    helper.setText(R.id.tv_time,item.getCreateDate());
-                    helper.setText(R.id.tv_phone,item.getCustCode());
-                    helper.setText(R.id.tv_from,item.getChannel());
-                    helper.getView(R.id.iv_add).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(mContext,AttentionGoodsActivity.class);
-                            intent.putExtra("label",item);
-                            startActivity(intent);
-                        }
-                    });
+                helper.setText(R.id.tv_time, item.getCreateDate());
+                helper.setText(R.id.tv_phone, item.getCustCode());
+                helper.setText(R.id.tv_from, item.getChannel());
+                helper.getView(R.id.iv_add).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(mContext, AttentionGoodsActivity.class);
+                        intent.putExtra("label", item);
+                        startActivity(intent);
+                    }
+                });
 
             }
         };
@@ -268,11 +272,11 @@ public class AttentionManagerActivity extends BaseActivity implements MangerList
                 if (tv_search.getText().toString().equals("")) {
                     showToast(getString(R.string.phone_not_null));
                     return;
-                }else if (tv_search.getText().toString().length()<11){
+                } else if (tv_search.getText().toString().length() < 11) {
                     showToast("手机号有误,请重新输入");
-                }else if (PhoneUtil.isCellphone(tv_search.getText().toString())==false){
+                } else if (PhoneUtil.isCellphone(tv_search.getText().toString()) == false) {
                     showToast("手机号格式错误,请重新输入");
-                }else {
+                } else {
                     phone = tv_search.getText().toString();
                     initData();
                 }
@@ -282,11 +286,19 @@ public class AttentionManagerActivity extends BaseActivity implements MangerList
         });
 
         tv_search.addTextChangedListener(this);
+        iv_clear = (ImageView) findViewById(R.id.iv_clear);
+
+        iv_clear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tv_search.setText("");
+            }
+        });
     }
 
     @Subscribe
-    public void onEvent(String refresh){
-        if (refresh.equals("refresh")){
+    public void onEvent(String refresh) {
+        if (refresh.equals("refresh")) {
             initData();
         }
     }
@@ -303,11 +315,14 @@ public class AttentionManagerActivity extends BaseActivity implements MangerList
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-           if (tv_search.length()==0){
-               data.clear();
-               phone="";
-               initData();
-           }
+        if (tv_search.length() == 0) {
+            iv_clear.setVisibility(View.GONE);
+            data.clear();
+            phone = "";
+            initData();
+        }else {
+            iv_clear.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

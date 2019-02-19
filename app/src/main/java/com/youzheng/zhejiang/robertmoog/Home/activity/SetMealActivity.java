@@ -7,6 +7,8 @@ import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -31,7 +33,6 @@ import com.youzheng.zhejiang.robertmoog.Model.Home.MealMainDataBean;
 import com.youzheng.zhejiang.robertmoog.Model.Home.MealMainDataList;
 import com.youzheng.zhejiang.robertmoog.Model.Home.SetMealData;
 import com.youzheng.zhejiang.robertmoog.R;
-import com.youzheng.zhejiang.robertmoog.Store.adapter.GoodsTitleAdapter;
 import com.youzheng.zhejiang.robertmoog.Store.utils.SoftInputUtils;
 import com.youzheng.zhejiang.robertmoog.utils.CommonAdapter;
 import com.youzheng.zhejiang.robertmoog.utils.View.MyFooter;
@@ -46,20 +47,22 @@ import java.util.Map;
 
 import okhttp3.Request;
 
-public class SetMealActivity extends BaseActivity{
+public class SetMealActivity extends BaseActivity implements TextWatcher {
     private List<MealMainDataBean> MealMainData = new ArrayList<>();
-    ListView ls ;
-    TabLayout tab ;
+    ListView ls;
+    TabLayout tab;
     List<String> tab_str = new ArrayList<>();
     List<Integer> tab_id = new ArrayList<>();
-    SpringView springView ;
-    CommonAdapter<HomeListDataBean> adapter ;
+    SpringView springView;
+    CommonAdapter<HomeListDataBean> adapter;
     List<HomeListDataBean> data = new ArrayList<>();
     private GridView mGvTitle;
-    int pageNum = 1 ,pageSize = 20,typeId ,totalPage ;
+    int pageNum = 1, pageSize = 20, typeId, totalPage;
     private GoodsTitleAdapter2 goodsTitleAdapter;
-    EditText tv_search ;
+    EditText tv_search;
     private PopupWindow window;
+    private ImageView iv_clear;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,13 +73,13 @@ public class SetMealActivity extends BaseActivity{
         initEvent();
     }
 
-    public void refreshData(int typeId){
-        Map<String,Object> map = new HashMap<>();
-        map.put("pageNum",pageNum);
-        map.put("pageSize",pageSize);
-        map.put("skuCode",tv_search.getText().toString());
-        map.put("typeId",typeId);
-        OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.MEAL_USER_LIST+"?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
+    public void refreshData(int typeId) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("pageNum", pageNum);
+        map.put("pageSize", pageSize);
+        map.put("skuCode", tv_search.getText().toString());
+        map.put("typeId", typeId);
+        OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.MEAL_USER_LIST + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
             public void onFailure(Request request, IOException e) {
                 springView.onFinishFreshAndLoad();
@@ -85,13 +88,13 @@ public class SetMealActivity extends BaseActivity{
             @Override
             public void onResponse(String response) {
                 springView.onFinishFreshAndLoad();
-                BaseModel baseModel = gson.fromJson(response,BaseModel.class);
-                if (baseModel.getCode()==PublicUtils.code){
-                    SetMealData setMealData = gson.fromJson(gson.toJson(baseModel.getDatas()),SetMealData.class);
-                    if (setMealData.getListData().size()>0){
+                BaseModel baseModel = gson.fromJson(response, BaseModel.class);
+                if (baseModel.getCode() == PublicUtils.code) {
+                    SetMealData setMealData = gson.fromJson(gson.toJson(baseModel.getDatas()), SetMealData.class);
+                    if (setMealData.getListData().size() > 0) {
                         adapter.setData(setMealData.getListData());
                         adapter.notifyDataSetChanged();
-                    }else {
+                    } else {
                         adapter.setData(new ArrayList<HomeListDataBean>());
                         adapter.notifyDataSetChanged();
                     }
@@ -122,16 +125,16 @@ public class SetMealActivity extends BaseActivity{
         springView.setListener(new SpringView.OnFreshListener() {
             @Override
             public void onRefresh() {
-                pageNum=1;
+                pageNum = 1;
                 refreshData(typeId);
             }
 
             @Override
             public void onLoadmore() {
-                if (totalPage>pageNum){
+                if (totalPage > pageNum) {
                     pageNum++;
                     refreshData(typeId);
-                }else {
+                } else {
                     springView.onFinishFreshAndLoad();
                 }
             }
@@ -146,7 +149,7 @@ public class SetMealActivity extends BaseActivity{
     }
 
     private void initView() {
-        ((TextView)findViewById(R.id.textHeadTitle)).setText("套餐列表");
+        ((TextView) findViewById(R.id.textHeadTitle)).setText("套餐列表");
         findViewById(R.id.btnBack).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -159,19 +162,19 @@ public class SetMealActivity extends BaseActivity{
         springView = findViewById(R.id.sv);
         springView.setHeader(new MyHeader(this));
         springView.setFooter(new MyFooter(this));
-        adapter = new CommonAdapter<HomeListDataBean>(mContext,data,R.layout.set_meal_ls_item) {
+        adapter = new CommonAdapter<HomeListDataBean>(mContext, data, R.layout.set_meal_ls_item) {
             @Override
             public void convert(ViewHolder helper, final HomeListDataBean item) {
-                helper.setText(R.id.tv_name,item.getComboCode());
-                helper.setText(R.id.tv_desc,item.getComboName());
+                helper.setText(R.id.tv_name, item.getComboCode());
+                helper.setText(R.id.tv_desc, item.getComboName());
                 Glide.with(mContext).load(item.getImgUrl()).error(R.mipmap.type_icon).into((ImageView) helper.getView(R.id.iv_icon));
-                helper.setText(R.id.tv_golden,item.getComboDescribe());
+                helper.setText(R.id.tv_golden, item.getComboDescribe());
                 ListView listView = helper.getView(R.id.ls);
-                CommonAdapter<HomeListDataBeanBean> adapter = new CommonAdapter<HomeListDataBeanBean>(mContext,item.getList(),R.layout.shop_details_ls_item) {
+                CommonAdapter<HomeListDataBeanBean> adapter = new CommonAdapter<HomeListDataBeanBean>(mContext, item.getList(), R.layout.shop_details_ls_item) {
                     @Override
                     public void convert(ViewHolder helper, HomeListDataBeanBean item) {
-                        helper.setText(R.id.tv_activity,item.getName());
-                        helper.setText(R.id.tv_price,"¥"+item.getPrice());
+                        helper.setText(R.id.tv_activity, item.getName());
+                        helper.setText(R.id.tv_price, "¥" + item.getPrice());
                     }
                 };
                 listView.setAdapter(adapter);
@@ -179,8 +182,8 @@ public class SetMealActivity extends BaseActivity{
                 helper.getConvertView().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(mContext,SetMealDetailsActivity.class);
-                        intent.putExtra("id",item.getComId());
+                        Intent intent = new Intent(mContext, SetMealDetailsActivity.class);
+                        intent.putExtra("id", item.getComId());
                         startActivity(intent);
                     }
                 });
@@ -195,6 +198,15 @@ public class SetMealActivity extends BaseActivity{
                 refreshData(typeId);
             }
         });
+        iv_clear = (ImageView) findViewById(R.id.iv_clear);
+        iv_clear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tv_search.setText("");
+            }
+        });
+
+        tv_search.addTextChangedListener(this);
     }
 
     private void initData() {
@@ -205,13 +217,13 @@ public class SetMealActivity extends BaseActivity{
 
             @Override
             public void onResponse(String response) {
-                BaseModel baseModel = gson.fromJson(response,BaseModel.class);
+                BaseModel baseModel = gson.fromJson(response, BaseModel.class);
 
-                if (baseModel.getCode()== PublicUtils.code){
-                    MealMainDataList list = gson.fromJson(gson.toJson(baseModel.getDatas()),MealMainDataList.class);
-                    if (list.getMealMainData().size()>0){
+                if (baseModel.getCode() == PublicUtils.code) {
+                    MealMainDataList list = gson.fromJson(gson.toJson(baseModel.getDatas()), MealMainDataList.class);
+                    if (list.getMealMainData().size() > 0) {
                         MealMainData = list.getMealMainData();
-                        for (MealMainDataBean bean : list.getMealMainData()){
+                        for (MealMainDataBean bean : list.getMealMainData()) {
                             tab_str.add(bean.getName());
                             tab_id.add(bean.getId());
                             tab.addTab(tab.newTab().setText(bean.getName()));
@@ -252,5 +264,24 @@ public class SetMealActivity extends BaseActivity{
         ShapeDrawable bgdrawable = new ShapeDrawable(new OvalShape());
         bgdrawable.getPaint().setColor(this.getResources().getColor(android.R.color.transparent));
         return bgdrawable;
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+           if (tv_search.length()==0){
+               iv_clear.setVisibility(View.GONE);
+           }else {
+               iv_clear.setVisibility(View.VISIBLE);
+           }
     }
 }

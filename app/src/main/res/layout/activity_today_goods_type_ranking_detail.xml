@@ -112,11 +112,24 @@
 
     </LinearLayout>
 
-    <com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView
-        android:id="@+id/pr_list"
-        android:background="@color/bg_background_white"
+    <com.liaoinstan.springview.widget.SpringView
+        android:id="@+id/springView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"></com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView>
+        android:layout_height="match_parent"
+        app:type="follow"
+        android:layout_marginTop="1dp"
+        >
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/pr_list"
+            android:background="@color/bg_background_white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"/>
+
+
+    </com.liaoinstan.springview.widget.SpringView>
+
+
 
 </LinearLayout>

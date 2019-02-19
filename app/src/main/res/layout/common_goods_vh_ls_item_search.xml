@@ -72,7 +72,7 @@
                     android:layout_below="@+id/tv_name"
                     android:textColor="@color/bg_main"
                     android:layout_marginTop="@dimen/space_6"
-                    android:maxLines="1"
+                    android:maxLines="2"
                     android:paddingRight="15dp"
                     android:ellipsize="end"
                     android:text=""

@@ -2,6 +2,7 @@ package com.youzheng.zhejiang.robertmoog.Store.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +43,12 @@ public class StoreCustomerInsideAdapter extends RecyclerView.Adapter<StoreCustom
         holder.tv_date.setText(monthCoustomerDetailBean.getRegisterDate());
         holder.tv_way.setText(monthCoustomerDetailBean.getSourceChannelEnum());
         holder.tv_phone.setText(monthCoustomerDetailBean.getAccount());
-        holder.tv_people.setText(monthCoustomerDetailBean.getCustomerType()+":"+monthCoustomerDetailBean.getUpdateUserName());
+        if (TextUtils.isEmpty(monthCoustomerDetailBean.getCustomerType())&&TextUtils.isEmpty(monthCoustomerDetailBean.getUpdateUserName())){
+            holder.tv_people.setVisibility(View.GONE);
+        }else {
+            holder.tv_people.setText(monthCoustomerDetailBean.getCustomerType()+":"+monthCoustomerDetailBean.getUpdateUserName());
+        }
+
     }
 
     @Override

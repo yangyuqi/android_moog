@@ -131,13 +131,13 @@
 
     </LinearLayout>
 
-    <com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/pr_list"
         android:layout_width="match_parent"
         android:layout_weight="1"
         android:layout_marginTop="1dp"
         android:background="@color/bg_background_white"
-        android:layout_height="match_parent"></com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView>
+        android:layout_height="match_parent"/>
 
 
     <LinearLayout

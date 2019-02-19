@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -67,7 +68,7 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
      * 时间
      */
     private TextView tv_time;
-    private PullLoadMoreRecyclerView rv_list;
+    private RecyclerView rv_list;
     private GridView gv_time;
     /**
      * 重置
@@ -94,6 +95,7 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
     private String edit;
     private String type;
     private SpringView mSpringView;
+    private ImageView iv_clear;
 
 
     @Override
@@ -203,7 +205,7 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
         lin_search = (LinearLayout) findViewById(R.id.lin_search);
         tv_time = (TextView) findViewById(R.id.tv_time);
         tv_time.setOnClickListener(this);
-        rv_list = (PullLoadMoreRecyclerView) findViewById(R.id.rv_list);
+        rv_list = (RecyclerView) findViewById(R.id.rv_list);
         gv_time = (GridView) findViewById(R.id.gv_time);
         tv_again = (TextView) findViewById(R.id.tv_again);
         tv_confirm = (TextView) findViewById(R.id.tv_confirm);
@@ -213,15 +215,11 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
         drawer_layout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);//禁止手势滑动
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        rv_list.addItemDecoration(new RecycleViewDivider(
-                this, LinearLayoutManager.VERTICAL, 15, getResources().getColor(R.color.bg_all)));
-        rv_list.setLinearLayout();
-        rv_list.setColorSchemeResources(R.color.colorPrimary);
+        LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        rv_list.setLayoutManager(manager);
+        rv_list.setAdapter(adapter);
+        rv_list.addItemDecoration(new com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider(ReturnGoodsListActivity.this, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
 
-        rv_list.setPushRefreshEnable(false);
-        rv_list.setPullRefreshEnable(false);
 
         adapter = new ReturnGoodsListAdapter(list, this);
         rv_list.setAdapter(adapter);
@@ -238,6 +236,14 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
         mSpringView = (SpringView) findViewById(R.id.springView);
         mSpringView.setHeader(new MyHeader(this));
         mSpringView.setFooter(new MyFooter(this));
+        iv_clear = (ImageView) findViewById(R.id.iv_clear);
+        iv_clear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tv_search.setText("");
+            }
+        });
+
     }
 
     @Override
@@ -268,7 +274,7 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
             @Override
             public void onResponse(String response) {
                 Log.e("退货单列表", response);
-               // rv_list.setPullLoadMoreCompleted();
+                // rv_list.setPullLoadMoreCompleted();
                 mSpringView.onFinishFreshAndLoad();
                 BaseModel baseModel = gson.fromJson(response, BaseModel.class);
                 if (baseModel.getCode() == PublicUtils.code) {
@@ -308,6 +314,7 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
                 break;
             case R.id.tv_time:
                 drawer_layout.openDrawer(GravityCompat.END);
+                tv_search.setClickable(false);
                 break;
             case R.id.iv_search:
                 SoftInputUtils.hideSoftInput(ReturnGoodsListActivity.this);
@@ -333,6 +340,7 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
                 adapter.clear();
                 initData(page, pageSize, orderCode, timeQuantum, isCustomer);
                 drawer_layout.closeDrawer(GravityCompat.END);
+                tv_search.setClickable(true);
                 goodsTimeAdapter.setSelectItem(who);
                 timeQuantum = strlist.get(who).getId();
                 break;
@@ -365,15 +373,18 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        if (tv_search.length() == 0) {
-            list.clear();
-            orderCode = "";
-            initData(page, pageSize, orderCode, timeQuantum, isCustomer);
-        }
+
     }
 
     @Override
     public void afterTextChanged(Editable s) {
-
+        if (tv_search.length() == 0) {
+            iv_clear.setVisibility(View.GONE);
+            list.clear();
+            orderCode = "";
+            initData(page, pageSize, orderCode, timeQuantum, isCustomer);
+        }else {
+            iv_clear.setVisibility(View.VISIBLE);
+        }
     }
 }

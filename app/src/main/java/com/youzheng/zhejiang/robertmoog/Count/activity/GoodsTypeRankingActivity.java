@@ -7,6 +7,7 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -79,7 +80,7 @@ public class GoodsTypeRankingActivity extends BaseActivity implements View.OnCli
     private TextView tv_rule;
     private ImageView iv_more;
     private LinearLayout lin_title;
-    private PullLoadMoreRecyclerView pr_list;
+    private RecyclerView pr_list;
     private TimePickerView pvTime;
     private String time = "";
     private int who;
@@ -193,13 +194,12 @@ public class GoodsTypeRankingActivity extends BaseActivity implements View.OnCli
         iv_more = (ImageView) findViewById(R.id.iv_more);
         iv_more.setOnClickListener(this);
         lin_title = (LinearLayout) findViewById(R.id.lin_title);
-        pr_list = (PullLoadMoreRecyclerView) findViewById(R.id.pr_list);
-        pr_list.setLinearLayout();
-        pr_list.addItemDecoration(new RecycleViewDivider(
-                this, LinearLayoutManager.VERTICAL, 5, getResources().getColor(R.color.divider_color_item)));
-        pr_list.setColorSchemeResources(R.color.colorPrimary);
-        pr_list.setPullRefreshEnable(false);
-        pr_list.setPushRefreshEnable(false);
+        pr_list = (RecyclerView) findViewById(R.id.pr_list);
+        LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        pr_list.setLayoutManager(manager);
+        pr_list.setAdapter(adapter);
+        pr_list.addItemDecoration(new com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider(GoodsTypeRankingActivity.this, LinearLayoutManager.VERTICAL, 5, getResources().getColor(R.color.bg_all)));
+
 
         adapter = new GoodsTypeRankingAdapter(list, this);
         pr_list.setAdapter(adapter);

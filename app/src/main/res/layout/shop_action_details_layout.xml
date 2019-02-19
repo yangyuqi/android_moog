@@ -172,6 +172,7 @@
             android:background="@color/bg_background_white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:paddingBottom="5dp"
             ></com.youzheng.zhejiang.robertmoog.utils.View.NoScrollListView>
 
@@ -232,7 +233,6 @@
                     android:background="@color/bg_all"/>
 
                 <android.support.v7.widget.RecyclerView
-                    android:paddingLeft="@dimen/space_15"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:id="@+id/rv_coupon"

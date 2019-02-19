@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,9 +13,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.jude.rollviewpager.RollPagerView;
 import com.youzheng.zhejiang.robertmoog.Base.BaseFragment;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
@@ -21,7 +23,6 @@ import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
 import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
 import com.youzheng.zhejiang.robertmoog.Home.activity.AttentionIntentActivity;
 import com.youzheng.zhejiang.robertmoog.Home.activity.ClientViewActivity;
-import com.youzheng.zhejiang.robertmoog.Home.activity.LoginActivity;
 import com.youzheng.zhejiang.robertmoog.Home.activity.RegisterActivity;
 import com.youzheng.zhejiang.robertmoog.Home.activity.RegisterSuccessActivity;
 import com.youzheng.zhejiang.robertmoog.Home.activity.SetMealActivity;
@@ -46,7 +47,7 @@ import java.util.Map;
 
 import okhttp3.Request;
 
-public class HomeFragment extends BaseFragment implements BaseFragment.ReloadInterface {
+public class HomeFragment extends BaseFragment implements BaseFragment.ReloadInterface, TextWatcher {
 
     View mView, getmView;
     GridView gv;
@@ -59,6 +60,7 @@ public class HomeFragment extends BaseFragment implements BaseFragment.ReloadInt
     private TextView textHeadTitle;
     private boolean isnewCu;
     private boolean isNewMeal;
+    private ImageView iv_clear;
 
 
     @Override
@@ -102,14 +104,14 @@ public class HomeFragment extends BaseFragment implements BaseFragment.ReloadInt
                 helper.setText(R.id.tv_text, item.name);
                 helper.setImageResource(R.id.iv_icon, item.icon);
                 if (helper.getPosition() == 2) {
-                    if (isnewCu==true) {
+                    if (isnewCu == true) {
                         helper.getView(R.id.iv_emp).setVisibility(View.VISIBLE);
                     } else {
                         helper.getView(R.id.iv_emp).setVisibility(View.GONE);
                     }
                 }
                 if (helper.getPosition() == 4) {
-                    if (isNewMeal==true) {
+                    if (isNewMeal == true) {
                         helper.getView(R.id.iv_emp).setVisibility(View.VISIBLE);
                     } else {
                         helper.getView(R.id.iv_emp).setVisibility(View.GONE);
@@ -125,11 +127,11 @@ public class HomeFragment extends BaseFragment implements BaseFragment.ReloadInt
                 if (tv_search.getText().toString().equals("")) {
                     showToast(getString(R.string.phone_not_null));
                     return;
-                }else if (tv_search.getText().toString().length()<11){
+                } else if (tv_search.getText().toString().length() < 11) {
                     showToast("手机号有误,请重新输入");
-                }else if (PhoneUtil.isCellphone(tv_search.getText().toString())==false){
+                } else if (PhoneUtil.isCellphone(tv_search.getText().toString()) == false) {
                     showToast("手机号格式错误,请重新输入");
-                }else {
+                } else {
                     Map<String, Object> map = new HashMap<>();
                     map.put("phone", tv_search.getText().toString());
                     OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.GET_CUSTOMER + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
@@ -145,8 +147,8 @@ public class HomeFragment extends BaseFragment implements BaseFragment.ReloadInt
                                 CustomerBean customerBean = gson.fromJson(gson.toJson(baseModel.getDatas()), CustomerBean.class);
                                 Intent intent = new Intent(mContext, RegisterSuccessActivity.class);
                                 intent.putExtra("customer", customerBean.getCustomer());
-                                intent.putExtra("referee",customerBean.getCustomer().getReferee());
-                                intent.putExtra("identity",customerBean.getCustomer().getIdentity());
+                                intent.putExtra("referee", customerBean.getCustomer().getReferee());
+                                intent.putExtra("identity", customerBean.getCustomer().getIdentity());
                                 startActivity(intent);
                             } else {
                                 //showToast(baseModel.getMsg());
@@ -154,8 +156,8 @@ public class HomeFragment extends BaseFragment implements BaseFragment.ReloadInt
                                     final RemindDialog dialog = new RemindDialog(mContext, new RemindDialog.onSuccessClick() {
                                         @Override
                                         public void onSuccess() {
-                                            Intent intent=new Intent(mContext, RegisterActivity.class);
-                                            intent.putExtra("no_phone",tv_search.getText().toString());
+                                            Intent intent = new Intent(mContext, RegisterActivity.class);
+                                            intent.putExtra("no_phone", tv_search.getText().toString());
                                             startActivity(intent);
                                         }
                                     }, "2");
@@ -168,10 +170,36 @@ public class HomeFragment extends BaseFragment implements BaseFragment.ReloadInt
             }
         });
         textHeadTitle = (TextView) mView.findViewById(R.id.textHeadTitle);
-        String title= (String) SharedPreferencesUtils.getParam(getActivity(),PublicUtils.shop_title,"");
+        String title = (String) SharedPreferencesUtils.getParam(getActivity(), PublicUtils.shop_title, "");
         textHeadTitle.setText(title);
+        iv_clear = (ImageView) mView.findViewById(R.id.iv_clear);
+
+        tv_search.addTextChangedListener(this);
+        iv_clear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tv_search.setText("");
+            }
+        });
+    }
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
     }
 
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        if (tv_search.length()==0){
+            iv_clear.setVisibility(View.GONE);
+        }else {
+            iv_clear.setVisibility(View.VISIBLE);
+        }
+    }
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -190,21 +218,29 @@ public class HomeFragment extends BaseFragment implements BaseFragment.ReloadInt
 
                 @Override
                 public void onResponse(String response) {
-                    Log.e("首页信息",response);
+                    Log.e("首页信息", response);
                     BaseModel baseModel = gson.fromJson(response, BaseModel.class);
                     if (baseModel.getCode() == PublicUtils.code) {
                         HomePageBean homePageData = gson.fromJson(gson.toJson(baseModel.getDatas()), HomePageBean.class);
-                        if (homePageData.getHomePageData().isNewPromotion()) {
-                            isnewCu=true;
+                        if (homePageData.getHomePageData().isNewPromotion()==true) {
+                            isnewCu = true;
                             gv.setAdapter(adapter);
                             gv.notify();
                             //data.get(2).newPromotion = true;
+                        }else {
+                            isnewCu = false;
+                            gv.setAdapter(adapter);
+                            gv.notify();
                         }
-                        if (homePageData.getHomePageData().isNewCombo()) {
-                            isNewMeal=true;
+                        if (homePageData.getHomePageData().isNewCombo()==true) {
+                            isNewMeal = true;
                             gv.setAdapter(adapter);
                             gv.notify();
                             //ata.get(4).newCombo = true;
+                        }else {
+                            isNewMeal = false;
+                            gv.setAdapter(adapter);
+                            gv.notify();
                         }
                         if (homePageData.getHomePageData().getBannerImageData().size() > 0) {
                             rollPagerView.setAdapter(new BannerNormalAdapter(homePageData.getHomePageData().getBannerImageData(), access_token));
@@ -230,8 +266,8 @@ public class HomeFragment extends BaseFragment implements BaseFragment.ReloadInt
 
                     case 2:
 //                        startActivity(new Intent(mContext,LoginActivity.class));
-                        Intent intent=new Intent(mContext, ShopActionActivity.class);
-                        intent.putExtra("is_appear",true);
+                        Intent intent = new Intent(mContext, ShopActionActivity.class);
+                        intent.putExtra("is_appear", true);
                         startActivity(intent);
                         break;
 
@@ -252,6 +288,8 @@ public class HomeFragment extends BaseFragment implements BaseFragment.ReloadInt
     public void reloadClickListener() {
 
     }
+
+
 
     public class HomeBean {
         String name;

@@ -4,6 +4,7 @@ package com.youzheng.zhejiang.robertmoog.Count.activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -64,7 +65,7 @@ public class GoodsSaleActivity extends BaseActivity implements View.OnClickListe
      */
     private TextView tv_check;
     private LinearLayout lin_search;
-    private PullLoadMoreRecyclerView pr_list;
+    private RecyclerView pr_list;
     private TimePickerView pvTime;
     private String time = "";
     private int who;
@@ -150,15 +151,13 @@ public class GoodsSaleActivity extends BaseActivity implements View.OnClickListe
         tv_check = (TextView) findViewById(R.id.tv_check);
         tv_check.setOnClickListener(this);
         lin_search = (LinearLayout) findViewById(R.id.lin_search);
-        pr_list = (PullLoadMoreRecyclerView) findViewById(R.id.pr_list);
+        pr_list = (RecyclerView) findViewById(R.id.pr_list);
 
-        pr_list.setLinearLayout();
-        pr_list.addItemDecoration(new RecycleViewDivider(
-                this, LinearLayoutManager.VERTICAL, 5, getResources().getColor(R.color.divider_color_item)));
-        pr_list.setColorSchemeResources(R.color.colorPrimary);
+        LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        pr_list.setLayoutManager(manager);
+        pr_list.setAdapter(adapter);
+        pr_list.addItemDecoration(new com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider(GoodsSaleActivity.this, LinearLayoutManager.VERTICAL, 5, getResources().getColor(R.color.bg_all)));
 
-        pr_list.setPullRefreshEnable(false);
-        pr_list.setPushRefreshEnable(false);
         adapter = new GoodsSaleAdapter(list, this);
         pr_list.setAdapter(adapter);
         adapter.notifyDataSetChanged();
@@ -217,6 +216,7 @@ public class GoodsSaleActivity extends BaseActivity implements View.OnClickListe
             adapter.setUI(beanList);
         } else {
             showToast(getString(R.string.load_list_erron));
+
         }
 
 

@@ -85,6 +85,7 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
     private int page = 1;
     public static GoodsFragment goodsFragment;
     private int who;
+    private ImageView iv_clear;
 
 
     @Override
@@ -120,8 +121,15 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
 
         search_list.setOnItemClickListener(this);
 
-        searchAdapter=new GoodsSearchAdapter(searchlist,this);
+        searchAdapter = new GoodsSearchAdapter(searchlist, this);
         search_list.setAdapter(searchAdapter);
+        iv_clear = (ImageView) findViewById(R.id.iv_clear);
+        iv_clear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tv_search.setText("");
+            }
+        });
     }
 
     private void initData() {
@@ -139,7 +147,7 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
                 if (baseModel.getCode() == PublicUtils.code) {
                     GoodsType goodsType = gson.fromJson(gson.toJson(baseModel.getDatas()), GoodsType.class);
                     setData(goodsType);
-                }else {
+                } else {
                     showToast(baseModel.getMsg());
                 }
             }
@@ -158,7 +166,7 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
             adapter.setUI(listDataBeans);
 
             for (int i = 0; i < listDataBeans.size(); i++) {
-               goodsFragment=new GoodsFragment();
+                goodsFragment = new GoodsFragment();
                 Bundle bundle = new Bundle();
                 // bundle.putString(MyConstant.GOODS_LIST_TYPE,stringList.get(i).getName());
                 bundle.putInt(MyConstant.GOODS_ID, stringList.get(i).getId());
@@ -205,16 +213,17 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
                 break;
         }
     }
+
     //搜索之后的数据
     private void initSearch(String str) {
-        HashMap<String,Object> map=new HashMap<>();
-        map.put("pageNum",page);
-        map.put("pageSize",pageSize);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("pageNum", page);
+        map.put("pageSize", pageSize);
 //        map.put("sku",goodsName);
-        map.put("sku",str);//测试用
+        map.put("sku", str);//测试用
 //        map.put("firstCategoryId",0);
-        String token = (String) SharedPreferencesUtils.getParam(mContext, PublicUtils.access_token,"");
-        if (token!=null){
+        String token = (String) SharedPreferencesUtils.getParam(mContext, PublicUtils.access_token, "");
+        if (token != null) {
             OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.GOODS_LIST + "?access_token=" + token, new OkHttpClientManager.StringCallback() {
                 @Override
                 public void onFailure(Request request, IOException e) {
@@ -223,12 +232,12 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
 
                 @Override
                 public void onResponse(String response) {
-                    Log.e("商品列表",response);
-                    BaseModel baseModel = gson.fromJson(response,BaseModel.class);
-                    if (baseModel.getCode()==PublicUtils.code){
-                        GoodsList goodsList = gson.fromJson(gson.toJson(baseModel.getDatas()),GoodsList.class);
+                    Log.e("商品列表", response);
+                    BaseModel baseModel = gson.fromJson(response, BaseModel.class);
+                    if (baseModel.getCode() == PublicUtils.code) {
+                        GoodsList goodsList = gson.fromJson(gson.toJson(baseModel.getDatas()), GoodsList.class);
                         setSearchData(goodsList);
-                    }else {
+                    } else {
                         showToast(baseModel.getMsg());
                     }
                 }
@@ -237,10 +246,10 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void setSearchData(GoodsList goodsList) {
-        if (goodsList.getProductListDetailData()==null) return;
-        List<GoodsList.ProductListDetailDataBean> productListDetailDataBeans=goodsList.getProductListDetailData();
+        if (goodsList.getProductListDetailData() == null) return;
+        List<GoodsList.ProductListDetailDataBean> productListDetailDataBeans = goodsList.getProductListDetailData();
 
-        if (productListDetailDataBeans.size()!=0){
+        if (productListDetailDataBeans.size() != 0) {
             searchlist.addAll(productListDetailDataBeans);
             searchAdapter.setRefreshUI(productListDetailDataBeans);
         }
@@ -261,7 +270,7 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 goodsTitleAdapter.setSelectItem(position);
                 tab.getTabAt(position).select();
-                who=position;
+                who = position;
                 window.dismiss();
             }
         });
@@ -312,16 +321,19 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
     public void afterTextChanged(Editable s) {
         edit = tv_search.getText().toString();
         if (TextUtils.isEmpty(edit)) {
+            iv_clear.setVisibility(View.GONE);
             lin_tab.setVisibility(View.VISIBLE);
             pager.setVisibility(View.VISIBLE);
             search_list.setVisibility(View.GONE);
+        }else {
+            iv_clear.setVisibility(View.VISIBLE);
         }
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent=new Intent(this,GoodsDetailActivity.class);
-        intent.putExtra("goodsID",searchlist.get(position).getId());
+        Intent intent = new Intent(this, GoodsDetailActivity.class);
+        intent.putExtra("goodsID", searchlist.get(position).getId());
         startActivity(intent);
     }
 }

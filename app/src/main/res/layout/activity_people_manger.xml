@@ -52,7 +52,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView
+                <android.support.v7.widget.RecyclerView
                     android:id="@+id/lv_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

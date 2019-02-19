@@ -3,6 +3,7 @@ package com.youzheng.zhejiang.robertmoog.Count.activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -62,7 +63,7 @@ public class StoreSaleInsideActivity extends BaseActivity implements View.OnClic
      */
     private TextView tv_check;
     private LinearLayout lin_search;
-    private PullLoadMoreRecyclerView pr_list;
+    private RecyclerView pr_list;
     /**
      * 800
      */
@@ -88,6 +89,7 @@ public class StoreSaleInsideActivity extends BaseActivity implements View.OnClic
     private String orderCount,orderAmountCount,customerTransaction;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,30 +103,42 @@ public class StoreSaleInsideActivity extends BaseActivity implements View.OnClic
         initView();
         if (role.equals("SHOP_SELLER")) {
             lin_search.setVisibility(View.VISIBLE);
+            SimpleDateFormat dateFormater = new SimpleDateFormat("yyyy/MM/dd");
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.DAY_OF_MONTH, 1);
+            cal.getTime();
+            tv_startDate.setText(dateFormater.format(cal.getTime()) + "");
+            startstr=dateFormater.format(cal.getTime()) + "";
+            cal.set(Calendar.DAY_OF_MONTH,
+                    cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+            Date date = new Date(System.currentTimeMillis());
+            tv_endDate.setText(dateFormater.format(date));
+            endstr = dateFormater.format(date);
         }else {
             lin_search.setVisibility(View.GONE);
         }
         //setListener();
         initTimer();
+
         initData(shopid,startstr,endstr);
     }
 
     private void setListener() {
-        pr_list.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
-            @Override
-            public void onRefresh() {
-                page=1;
-                list.clear();
-                initData(shopid,startstr,endstr);
-            }
-
-            @Override
-            public void onLoadMore() {
-                list.clear();
-                page++;
-                initData(shopid,startstr,endstr);
-            }
-        });
+//        pr_list.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
+//            @Override
+//            public void onRefresh() {
+//                page=1;
+//                list.clear();
+//                initData(shopid,startstr,endstr);
+//            }
+//
+//            @Override
+//            public void onLoadMore() {
+//                list.clear();
+//                page++;
+//                initData(shopid,startstr,endstr);
+//            }
+//        });
 
 
     }
@@ -150,18 +164,16 @@ public class StoreSaleInsideActivity extends BaseActivity implements View.OnClic
         tv_check = (TextView) findViewById(R.id.tv_check);
         tv_check.setOnClickListener(this);
         lin_search = (LinearLayout) findViewById(R.id.lin_search);
-        pr_list = (PullLoadMoreRecyclerView) findViewById(R.id.pr_list);
+        pr_list = (RecyclerView) findViewById(R.id.pr_list);
         tv_order_total = (TextView) findViewById(R.id.tv_order_total);
         tv_order_money = (TextView) findViewById(R.id.tv_order_money);
         tv_order_value = (TextView) findViewById(R.id.tv_order_value);
 
-        pr_list.setLinearLayout();
-        pr_list.addItemDecoration(new RecycleViewDivider(
-                this, LinearLayoutManager.VERTICAL, 5, getResources().getColor(R.color.divider_color_item)));
-        pr_list.setColorSchemeResources(R.color.colorPrimary);
+        LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        pr_list.setLayoutManager(manager);
+        pr_list.setAdapter(adapter);
+        pr_list.addItemDecoration(new com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider(StoreSaleInsideActivity.this, LinearLayoutManager.VERTICAL, 5, getResources().getColor(R.color.bg_all)));
 
-        pr_list.setPushRefreshEnable(false);
-        pr_list.setPullRefreshEnable(false);
 
         adapter=new StoreSaleInsideAdapter(list,this);
         pr_list.setAdapter(adapter);
@@ -180,13 +192,13 @@ public class StoreSaleInsideActivity extends BaseActivity implements View.OnClic
         OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.SHOP_SALE_INSIDE + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
             public void onFailure(Request request, IOException e) {
-                pr_list.setPullLoadMoreCompleted();
+                //pr_list.setPullLoadMoreCompleted();
             }
 
             @Override
             public void onResponse(String response) {
                 Log.e("门店销量详情",response);
-                pr_list.setPullLoadMoreCompleted();
+                //pr_list.setPullLoadMoreCompleted();
                 BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                 if (baseModel.getCode()==PublicUtils.code){
                     ShopSaleDetail shopSaleDetail = gson.fromJson(gson.toJson(baseModel.getDatas()),ShopSaleDetail.class);
@@ -245,6 +257,7 @@ public class StoreSaleInsideActivity extends BaseActivity implements View.OnClic
                 break;
             case R.id.tv_check:
                 list.clear();
+                adapter.clear();
                 initData(shopid,startstr,endstr);
                 break;
         }

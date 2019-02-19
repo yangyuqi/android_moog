@@ -53,6 +53,7 @@ public class UnqualifiedActivity extends BaseActivity implements View.OnClickLis
     private int patrolShopId,questionId;
     private UnqualifiedAdapter adapter;
     private List<UnqualifiedContent.PatrolShopProblemDetailBean.QuestionImagesBean> list=new ArrayList<>();
+    private List<String> pic=new ArrayList<>();
 
 
     @Override
@@ -138,7 +139,9 @@ public class UnqualifiedActivity extends BaseActivity implements View.OnClickLis
             adapter.setPic(beans);
         }
 
-
+        for (int i = 0; i < beans.size(); i++) {
+            pic.add(list.get(i).getImageImgUrl());
+        }
 
     }
 
@@ -155,8 +158,8 @@ public class UnqualifiedActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent=new Intent(this,CheckPicActivity.class);
-        intent.putExtra(MyConstant.PRINT_GLANCE_OVER_LIST, (Serializable) list);
+        Intent intent=new Intent(UnqualifiedActivity.this,CheckPicActivity.class);
+        intent.putExtra(MyConstant.PRINT_GLANCE_OVER_LIST, (Serializable) pic);
         intent.putExtra(MyConstant.PRINT_GLANCE_OVER_POS,position);
         startActivity(intent);
     }

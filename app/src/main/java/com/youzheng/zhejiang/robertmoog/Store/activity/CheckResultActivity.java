@@ -4,6 +4,7 @@ package com.youzheng.zhejiang.robertmoog.Store.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -49,7 +50,7 @@ public class CheckResultActivity extends BaseActivity implements View.OnClickLis
      * 2018年
      */
     private TextView tv_title;
-    private PullLoadMoreRecyclerView pr_list;
+    private RecyclerView pr_list;
     private List<CheckStoreList.PatrolShopListBean> list = new ArrayList<>();
     private CheckResultAdapter adapter;
     private int year;
@@ -136,14 +137,12 @@ public class CheckResultActivity extends BaseActivity implements View.OnClickLis
         iv_next = (ImageView) findViewById(R.id.iv_next);
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);
         tv_title = (TextView) findViewById(R.id.tv_title);
-        pr_list = (PullLoadMoreRecyclerView) findViewById(R.id.pr_list);
-        pr_list.setLinearLayout();
-        pr_list.addItemDecoration(new RecycleViewDivider(
-                this, LinearLayoutManager.VERTICAL, 5, getResources().getColor(R.color.divider_color_item)));
-        pr_list.setColorSchemeResources(R.color.colorPrimary);
+        pr_list = (RecyclerView) findViewById(R.id.pr_list);
+        LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        pr_list.setLayoutManager(manager);
+        pr_list.setAdapter(adapter);
+        pr_list.addItemDecoration(new com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider(CheckResultActivity.this, LinearLayoutManager.VERTICAL, 5, getResources().getColor(R.color.bg_all)));
 
-        pr_list.setPullRefreshEnable(false);
-        pr_list.setPushRefreshEnable(false);
         adapter = new CheckResultAdapter(list, this);
         pr_list.setAdapter(adapter);
         adapter.notifyDataSetChanged();

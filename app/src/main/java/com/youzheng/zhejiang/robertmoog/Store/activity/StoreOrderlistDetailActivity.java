@@ -402,7 +402,7 @@ public class StoreOrderlistDetailActivity extends BaseActivity implements View.O
 
         if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getAmountPayable())) {
             amountPayable = orderlistDetail.getOrderItemData().getAmountPayable();
-            tv_should_money.setText(amountPayable);
+            tv_should_money.setText(getString(R.string.label_money)+amountPayable);
         }
 
         if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getCouponDerate())) {

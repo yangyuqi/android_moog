@@ -73,8 +73,6 @@ public class RegisterActivity  extends BaseActivity implements TextWatcher {
         edt_code = (EditText) findViewById(R.id.edt_code);
         if (!TextUtils.isEmpty(phone)){
             edt_phone.setText(phone);
-        }else {
-            return;
         }
         btn_send_code = (Button) findViewById(R.id.btn_send_code);
         edt_phone.addTextChangedListener(this);

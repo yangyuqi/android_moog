@@ -4,35 +4,30 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.CustomListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
-import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
+import com.liaoinstan.springview.widget.SpringView;
 import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
 import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
 import com.youzheng.zhejiang.robertmoog.Count.adapter.StoreSaleAdapter;
 import com.youzheng.zhejiang.robertmoog.Count.bean.ShopSale;
-import com.youzheng.zhejiang.robertmoog.MainActivity;
+import com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.R;
-import com.youzheng.zhejiang.robertmoog.Store.bean.CustomerList;
 import com.youzheng.zhejiang.robertmoog.Store.listener.OnRecyclerViewAdapterItemClickListener;
-import com.youzheng.zhejiang.robertmoog.Store.view.RecycleViewDivider;
+import com.youzheng.zhejiang.robertmoog.utils.View.MyFooter;
+import com.youzheng.zhejiang.robertmoog.utils.View.MyHeader;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -68,7 +63,7 @@ public class StoreSalesNumberActivity extends BaseActivity implements View.OnCli
      * 查询
      */
     private TextView tv_check;
-    private PullLoadMoreRecyclerView pr_list;
+    private RecyclerView pr_list;
     /**
      * 800
      */
@@ -82,17 +77,18 @@ public class StoreSalesNumberActivity extends BaseActivity implements View.OnCli
      */
     private TextView tv_order_value;
     private TimePickerView pvTime;
-    private String time="";
+    private String time = "";
     private int who;
     private StoreSaleAdapter adapter;
-    private List<ShopSale.ShopDataBean> list=new ArrayList<>();
-    private int page=1;
-    private int pageSize=10;
-    private boolean isDay=false;
-    private String starstDate="";
-    private String endsDate="";
-    private String orderCount,orderAmountCount,customerTransaction;
+    private List<ShopSale.ShopDataBean> list = new ArrayList<>();
+    private int page = 1;
+    private int pageSize = 10;
+    private boolean isDay = false;
+    private String starstDate = "";
+    private String endsDate = "";
+    private String orderCount, orderAmountCount, customerTransaction;
     private String shopid;
+    private SpringView springView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +102,7 @@ public class StoreSalesNumberActivity extends BaseActivity implements View.OnCli
         cal.set(Calendar.DAY_OF_MONTH, 1);
         cal.getTime();
         tv_startDate.setText(dateFormater.format(cal.getTime()) + "");
-        starstDate=dateFormater.format(cal.getTime()) + "";
+        starstDate = dateFormater.format(cal.getTime()) + "";
         cal.set(Calendar.DAY_OF_MONTH,
                 cal.getActualMaximum(Calendar.DAY_OF_MONTH));
         Date date = new Date(System.currentTimeMillis());
@@ -119,21 +115,36 @@ public class StoreSalesNumberActivity extends BaseActivity implements View.OnCli
 //        tv_endDate.setText(simpleDateFormat.format(date));
 
 
-        initData(isDay,starstDate,endsDate);
+        initData(isDay, starstDate, endsDate);
     }
 
     private void setListener() {
-        pr_list.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
+//        pr_list.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
+//            @Override
+//            public void onRefresh() {
+//               page=1;
+//               list.clear();
+//               initData(isDay,starstDate,endsDate);
+//            }
+//
+//            @Override
+//            public void onLoadMore() {
+//                list.clear();
+//                page++;
+//                initData(isDay,starstDate,endsDate);
+//            }
+//        });
+
+       springView .setListener(new SpringView.OnFreshListener() {
             @Override
             public void onRefresh() {
-               page=1;
-               list.clear();
-               initData(isDay,starstDate,endsDate);
+                page = 1;
+                list.clear();
+                initData(isDay,starstDate,endsDate);
             }
 
             @Override
-            public void onLoadMore() {
-                list.clear();
+            public void onLoadmore() {
                 page++;
                 initData(isDay,starstDate,endsDate);
             }
@@ -162,30 +173,29 @@ public class StoreSalesNumberActivity extends BaseActivity implements View.OnCli
         tv_endDate.setOnClickListener(this);
         tv_check = (TextView) findViewById(R.id.tv_check);
         tv_check.setOnClickListener(this);
-        pr_list = (PullLoadMoreRecyclerView) findViewById(R.id.pr_list);
+        pr_list = (RecyclerView) findViewById(R.id.pr_list);
         tv_order_total = (TextView) findViewById(R.id.tv_order_total);
         tv_order_money = (TextView) findViewById(R.id.tv_order_money);
         tv_order_value = (TextView) findViewById(R.id.tv_order_value);
 
-        pr_list.setLinearLayout();
-        pr_list.addItemDecoration(new RecycleViewDivider(
-                this, LinearLayoutManager.VERTICAL, 5, getResources().getColor(R.color.divider_color_item)));
-        pr_list.setColorSchemeResources(R.color.colorPrimary);
+        LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        pr_list.setLayoutManager(manager);
+        pr_list.setAdapter(adapter);
+        pr_list.addItemDecoration(new RecycleViewDivider(StoreSalesNumberActivity.this, LinearLayoutManager.VERTICAL, 5, getResources().getColor(R.color.bg_all)));
 
-        adapter=new StoreSaleAdapter(list,this);
+
+        adapter = new StoreSaleAdapter(list, this);
         pr_list.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
-        pr_list.setPullRefreshEnable(false);
-        pr_list.setPushRefreshEnable(false);
 
         adapter.setOnItemClickListener(new OnRecyclerViewAdapterItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Intent intent=new Intent(StoreSalesNumberActivity.this,StoreSaleInsideActivity.class);
-                intent.putExtra("shopPersonalId",list.get(position).getShopPersonalId());
-                intent.putExtra("start",starstDate);
-                intent.putExtra("end",endsDate);
+                Intent intent = new Intent(StoreSalesNumberActivity.this, StoreSaleInsideActivity.class);
+                intent.putExtra("shopPersonalId", list.get(position).getShopPersonalId());
+                intent.putExtra("start", starstDate);
+                intent.putExtra("end", endsDate);
                 startActivity(intent);
             }
 
@@ -195,29 +205,34 @@ public class StoreSalesNumberActivity extends BaseActivity implements View.OnCli
             }
         });
 
+        springView = (SpringView) findViewById(R.id.springView);
+        springView.setHeader(new MyHeader(this));
+        springView.setFooter(new MyFooter(this));
     }
 
-    private void initData(boolean isDay,String startDate,String endDate) {
-        HashMap<String,Object> map=new HashMap<>();
-        map.put("isDay",isDay);
-        map.put("startDate",startDate);
-        map.put("endDate",endDate);
+    private void initData(boolean isDay, String startDate, String endDate) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("isDay", isDay);
+        map.put("startDate", startDate);
+        map.put("endDate", endDate);
 
         OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.SHOP_SALE + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
             public void onFailure(Request request, IOException e) {
-                pr_list.setPullLoadMoreCompleted();
+                //  pr_list.setPullLoadMoreCompleted();
+                springView.onFinishFreshAndLoad();
             }
 
             @Override
             public void onResponse(String response) {
-                Log.e("门店销量",response);
-                pr_list.setPullLoadMoreCompleted();
-                BaseModel baseModel = gson.fromJson(response,BaseModel.class);
-                if (baseModel.getCode()==PublicUtils.code){
-                    ShopSale shopSale = gson.fromJson(gson.toJson(baseModel.getDatas()),ShopSale.class);
+                Log.e("门店销量", response);
+                // pr_list.setPullLoadMoreCompleted();
+                springView.onFinishFreshAndLoad();
+                BaseModel baseModel = gson.fromJson(response, BaseModel.class);
+                if (baseModel.getCode() == PublicUtils.code) {
+                    ShopSale shopSale = gson.fromJson(gson.toJson(baseModel.getDatas()), ShopSale.class);
                     setData(shopSale);
-                }else {
+                } else {
                     showToast(baseModel.getMsg());
                 }
 
@@ -226,33 +241,30 @@ public class StoreSalesNumberActivity extends BaseActivity implements View.OnCli
     }
 
     private void setData(ShopSale shopSale) {
-        if (shopSale.getShopData()==null) return;
-        orderCount=shopSale.getOrderCount();
-        orderAmountCount=shopSale.getOrderAmountCount();
-        customerTransaction=shopSale.getCustomerTransaction();
+        if (shopSale.getShopData() == null) return;
+        orderCount = shopSale.getOrderCount();
+        orderAmountCount = shopSale.getOrderAmountCount();
+        customerTransaction = shopSale.getCustomerTransaction();
 
-        if (!orderCount.equals("")||orderCount!=null){
+        if (!orderCount.equals("") || orderCount != null) {
             tv_order_total.setText(orderCount);
         }
 
-        if (!orderAmountCount.equals("")||orderAmountCount!=null){
+        if (!orderAmountCount.equals("") || orderAmountCount != null) {
             tv_order_money.setText(orderAmountCount);
         }
 
-        if (!customerTransaction.equals("")||customerTransaction!=null){
+        if (!customerTransaction.equals("") || customerTransaction != null) {
             tv_order_value.setText(customerTransaction);
         }
 
-        List<ShopSale.ShopDataBean> beans=shopSale.getShopData();
-        if (beans.size()!=0){
+        List<ShopSale.ShopDataBean> beans = shopSale.getShopData();
+        if (beans.size() != 0) {
             list.addAll(beans);
             adapter.setUI(beans);
-        }else {
+        } else {
             showToast(getString(R.string.load_list_erron));
         }
-
-
-
 
 
     }
@@ -266,18 +278,18 @@ public class StoreSalesNumberActivity extends BaseActivity implements View.OnCli
                 finish();
                 break;
             case R.id.tv_startDate:
-                who=1;
+                who = 1;
                 pvTime.show(v, false);
                 break;
             case R.id.tv_endDate:
-                who=2;
+                who = 2;
                 pvTime.show(v, false);
                 break;
             case R.id.tv_check:
                 list.clear();
                 adapter.clear();
-                isDay=false;
-                initData(isDay,starstDate,endsDate);
+                isDay = false;
+                initData(isDay, starstDate, endsDate);
                 break;
         }
     }
@@ -285,12 +297,12 @@ public class StoreSalesNumberActivity extends BaseActivity implements View.OnCli
 
     private void initTimer() {
         Calendar selectedDate = Calendar.getInstance();
-       //获取系统的日期
+        //获取系统的日期
         //年
         int year = selectedDate.get(Calendar.YEAR);
-         //月
+        //月
         int month = selectedDate.get(Calendar.MONTH) + 1;
-         //日
+        //日
         int day = selectedDate.get(Calendar.DAY_OF_MONTH);
 
         final Calendar startDate = Calendar.getInstance();
@@ -305,16 +317,16 @@ public class StoreSalesNumberActivity extends BaseActivity implements View.OnCli
             public void onTimeSelect(Date date, View v) {//选中事件回调
                 // 这里回调过来的v,就是show()方法里面所添加的 View 参数，如果show的时候没有添加参数，v则为null
                 /*btn_Time.setText(getTime(date));*/
-                 time=getTime(date);
-                 if (!time.equals("")){
-                     if (who==1){
-                         tv_startDate.setText(time);
-                         starstDate=time;
-                     }else {
-                         tv_endDate.setText(time);
-                         endsDate=time;
-                     }
-                 }
+                time = getTime(date);
+                if (!time.equals("")) {
+                    if (who == 1) {
+                        tv_startDate.setText(time);
+                        starstDate = time;
+                    } else {
+                        tv_endDate.setText(time);
+                        endsDate = time;
+                    }
+                }
 
             }
         })
@@ -328,7 +340,7 @@ public class StoreSalesNumberActivity extends BaseActivity implements View.OnCli
                             @Override
                             public void onClick(View v) {
                                 pvTime.returnData();
-                               pvTime.dismiss();
+                                pvTime.dismiss();
                             }
                         });
                         ivCancel.setOnClickListener(new View.OnClickListener() {
@@ -346,13 +358,12 @@ public class StoreSalesNumberActivity extends BaseActivity implements View.OnCli
                 .setDate(selectedDate)
                 .setRangDate(startDate, selectedDate)
                 .isDialog(true)
-              //  .setDecorView(pr_list)//非dialog模式下,设置ViewGroup, pickerView将会添加到这个ViewGroup中
+                //  .setDecorView(pr_list)//非dialog模式下,设置ViewGroup, pickerView将会添加到这个ViewGroup中
                 .setBackgroundId(Color.parseColor("#F5F5F5"))
                 .setOutSideCancelable(true)
                 .build();
 
         pvTime.setKeyBackCancelable(false);//系统返回键监听屏蔽掉
-
 
 
     }

@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -52,6 +53,11 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         notifyDataSetChanged();
         this.type = type ;
         this.widWidth = widWidth ;
+    }
+
+    public void clear(){
+        objects.clear();
+        notifyDataSetChanged();
     }
 
     @Override
@@ -132,7 +138,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     ((CommonGoodsViewHolder) holder).tv_specail.setVisibility(View.VISIBLE);
                     Log.e("13123123",objects.get(position).getSquare()+""+objects.get(position).getSquare__suffix()+"222222");
                     ((CommonGoodsViewHolder) holder).tv_specail.setText(""+objects.get(position).getSquare()+objects.get(position).getSquare__suffix());
-                    if (objects.get(position).getCodePU()==null){
+                    if (TextUtils.isEmpty(objects.get(position).getCodePU())){
                         ((CommonGoodsViewHolder) holder).tv_add_code.setVisibility(View.VISIBLE);
                         ((CommonGoodsViewHolder) holder).tv_pu_code.setVisibility(View.GONE);
                     }else {
@@ -142,7 +148,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         ((CommonGoodsViewHolder) holder).tv_add_code.setVisibility(View.GONE);
                     }
 
-                    if (objects.get(position).getAddPrice()==null){
+                    if (TextUtils.isEmpty(objects.get(position).getAddPrice())){
                         ((CommonGoodsViewHolder) holder).tv_add_price.setVisibility(View.VISIBLE);
                         ((CommonGoodsViewHolder) holder).tv_zengxiang.setVisibility(View.GONE);
                     }else {

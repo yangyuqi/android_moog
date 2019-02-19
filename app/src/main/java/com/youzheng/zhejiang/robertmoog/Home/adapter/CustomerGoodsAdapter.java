@@ -64,6 +64,11 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
         notifyDataSetChanged();
     }
 
+    public void clear(){
+        data.clear();
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -85,7 +90,7 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
                     @Override
                     public void onClick(View v) {
                         listBeanList = new ArrayList<>();
-                        if (data.get(i).getProductList().size()>0) {
+                        if (data.get(i).getProductList().size()!=0) {
                             if (data.get(i).isExpress()) {
                                 listBeanList.clear();
                                 ((CustomerIntentViewHolder) viewHolder).iv_show_more.setImageResource(R.mipmap.group_14_1);
@@ -99,10 +104,11 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
                         CommonAdapter<ProductListBean> commonAdapter = new CommonAdapter<ProductListBean>(context,listBeanList,R.layout.customer_nols_item) {
                             @Override
                             public void convert(ViewHolder helper, ProductListBean item) {
-                                helper.setText(R.id.tv_name,item.getSku());
-                                helper.setText(R.id.tv_time,item.getCreateDate());
-                                helper.setText(R.id.tv_desc,item.getName());
-                                Glide.with(context).load(item.getPhoto()).error(R.mipmap.type_icon).into((ImageView) helper.getView(R.id.iv_icon));
+
+                                    helper.setText(R.id.tv_name,item.getSku());
+                                    helper.setText(R.id.tv_time,item.getCreateDate());
+                                    helper.setText(R.id.tv_desc,item.getName());
+                                    Glide.with(context).load(item.getPhoto()).error(R.mipmap.type_icon).into((ImageView) helper.getView(R.id.iv_icon));
 //                                LinearLayout view = helper.getView(R.id.ll_width);
 //                                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
 //                                params.width = (int) PublicUtils.dip2px(PublicUtils.px2dip(widWidth));
@@ -143,18 +149,22 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
                                         });
                                     }
                                 });
-                                helper.getView(R.id.main_right_drawer_layout).setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-
-                                    }
-                                });
+//                                helper.getView(R.id.main_right_drawer_layout).setOnClickListener(new View.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(View v) {
+//
+//                                    }
+//                                });
                             }
                         };
                         ((CustomerIntentViewHolder) viewHolder).ls.setAdapter(commonAdapter);
+
                     }
                 });
 
+            }else  if (data.get(i).getProductList().size()==0) {
+                ((CustomerIntentViewHolder) viewHolder).rl_show.setVisibility(View.GONE);
+                ((CustomerIntentViewHolder) viewHolder).lin_one.setVisibility(View.GONE);
             }else {
                 ((CustomerIntentViewHolder) viewHolder).rl_show.setVisibility(View.GONE);
             }
@@ -319,7 +329,7 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
         TextView tv_phone ,tv_time ,tv_name ,tv_desc ,tv_num;
         ImageView iv_message , iv_delete ,iv_icon ,iv_show_more,iv_delete_item;
         NoScrollListView ls ;
-        LinearLayout ll_width ;
+        LinearLayout ll_width,lin_one ;
         HorizontalScrollView hsv ;
         public CustomerIntentViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -338,6 +348,7 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
             iv_show_more = itemView.findViewById(R.id.iv_show_more);
             iv_message = itemView.findViewById(R.id.iv_message);
             iv_delete_item=itemView.findViewById(R.id.iv_delete_item);
+            lin_one=itemView.findViewById(R.id.lin_one);
         }
     }
 }

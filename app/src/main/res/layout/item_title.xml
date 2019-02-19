@@ -6,15 +6,15 @@
 
     <TextView
         android:id="@+id/tv_title"
-        android:layout_width="70dp"
+        android:layout_width="100dp"
         android:layout_height="30dp"
         android:text=""
         android:gravity="center"
         android:textSize="13sp"
-        android:paddingLeft="10dp"
+        android:paddingLeft="15dp"
         android:singleLine="true"
         android:ellipsize="end"
-        android:paddingRight="10dp"
+        android:paddingRight="15dp"
         android:background="@drawable/title_off"
         android:textColor="@color/colorPrimary"/>
 

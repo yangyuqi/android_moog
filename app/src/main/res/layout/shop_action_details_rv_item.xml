@@ -98,11 +98,13 @@
             android:layout_height="@dimen/space_divider_2"
             android:background="@color/bg_all"/>
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/rl_show"
             android:layout_width="match_parent"
             android:background="@color/bg_background_white"
             android:layout_height="35dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
             >
                 <TextView
                     android:layout_width="wrap_content"
@@ -110,15 +112,16 @@
                     android:textColor="@color/text_drak_black"
                     android:textSize="@dimen/text_size_15"
                     android:id="@+id/tv_num"
-                    android:text="哈"
+                    android:layout_marginRight="5dp"
+                    android:text=""
                     android:layout_centerVertical="true"
+                    android:layout_weight="1"
                     android:layout_marginLeft="@dimen/space_5"
                     />
 
 
 
                 <ImageView
-
                     android:padding="@dimen/space_8"
                     android:layout_marginRight="15dp"
                     android:layout_centerVertical="true"
@@ -132,7 +135,7 @@
                     />
 
 
-        </RelativeLayout>
+        </LinearLayout>
 
         <com.youzheng.zhejiang.robertmoog.utils.View.NoScrollListView
             android:layout_width="match_parent"

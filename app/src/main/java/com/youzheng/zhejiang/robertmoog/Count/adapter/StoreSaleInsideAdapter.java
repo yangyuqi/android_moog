@@ -30,6 +30,11 @@ public class StoreSaleInsideAdapter extends RecyclerView.Adapter<StoreSaleInside
         notifyDataSetChanged();
     }
 
+    public void  clear(){
+        list.clear();
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public SaleHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int position) {

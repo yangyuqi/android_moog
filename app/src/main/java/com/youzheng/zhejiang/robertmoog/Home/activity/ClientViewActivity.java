@@ -4,6 +4,8 @@ import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -28,10 +30,11 @@ import java.util.Map;
 import okhttp3.Request;
 import rx.functions.Action1;
 
-public class ClientViewActivity extends BaseActivity {
+public class ClientViewActivity extends BaseActivity implements TextWatcher {
 
-    EditText tv_search ;
-    ImageView iv_click ;
+    EditText tv_search;
+    ImageView iv_click;
+    private ImageView iv_clear;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,10 +48,10 @@ public class ClientViewActivity extends BaseActivity {
         findViewById(R.id.iv_click).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(mContext,ScanSellerActivity.class));
+                startActivity(new Intent(mContext, ScanSellerActivity.class));
             }
         });
-        ((TextView)findViewById(R.id.textHeadTitle)).setText("客户识别");
+        ((TextView) findViewById(R.id.textHeadTitle)).setText("客户识别");
         findViewById(R.id.btnBack).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,16 +64,16 @@ public class ClientViewActivity extends BaseActivity {
         iv_click.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (tv_search.getText().toString().equals("")){
+                if (tv_search.getText().toString().equals("")) {
                     showToast(getString(R.string.phone_not_null));
                     return;
-                }else if (tv_search.getText().toString().length()<11){
+                } else if (tv_search.getText().toString().length() < 11) {
                     showToast("手机号有误,请重新输入");
-                }else if (PhoneUtil.isCellphone(tv_search.getText().toString())==false){
+                } else if (PhoneUtil.isCellphone(tv_search.getText().toString()) == false) {
                     showToast("手机号格式错误,请重新输入");
-                }else {
-                    Map<String,Object> map = new HashMap<>();
-                    map.put("phone",tv_search.getText().toString());
+                } else {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("phone", tv_search.getText().toString());
                     OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.GET_CUSTOMER + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
                         @Override
                         public void onFailure(Request request, IOException e) {
@@ -79,31 +82,31 @@ public class ClientViewActivity extends BaseActivity {
 
                         @Override
                         public void onResponse(String response) {
-                            final BaseModel baseModel = gson.fromJson(response,BaseModel.class);
-                            if (baseModel.getCode()== PublicUtils.code){
+                            final BaseModel baseModel = gson.fromJson(response, BaseModel.class);
+                            if (baseModel.getCode() == PublicUtils.code) {
 
                                 RxPermissions permissions = new RxPermissions(ClientViewActivity.this);
-                                permissions.request(Manifest.permission.CAMERA,Manifest.permission.VIBRATE ,Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe(new Action1<Boolean>() {
+                                permissions.request(Manifest.permission.CAMERA, Manifest.permission.VIBRATE, Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe(new Action1<Boolean>() {
                                     @Override
                                     public void call(Boolean aBoolean) {
-                                        if (aBoolean){
+                                        if (aBoolean) {
                                             Intent intent = new Intent(mContext, CaptureActivity.class);
-                                            CustomerBean customerBean = gson.fromJson(gson.toJson(baseModel.getDatas()),CustomerBean.class);
-                                            intent.putExtra("customerId",customerBean.getCustomer().getCustomerId());
+                                            CustomerBean customerBean = gson.fromJson(gson.toJson(baseModel.getDatas()), CustomerBean.class);
+                                            intent.putExtra("customerId", customerBean.getCustomer().getCustomerId());
                                             startActivity(intent);
                                         }
                                     }
                                 });
 
-                            }else {
+                            } else {
                                 showToast(baseModel.getMsg());
-                                if (baseModel.getCode()==PublicUtils.no_exist){
+                                if (baseModel.getCode() == PublicUtils.no_exist) {
                                     final RemindDialog dialog = new RemindDialog(mContext, new RemindDialog.onSuccessClick() {
                                         @Override
                                         public void onSuccess() {
-                                            startActivity(new Intent(mContext,RegisterActivity.class));
+                                            startActivity(new Intent(mContext, RegisterActivity.class));
                                         }
-                                    },"2");
+                                    }, "2");
                                     dialog.show();
                                 }
                             }
@@ -113,5 +116,32 @@ public class ClientViewActivity extends BaseActivity {
 
             }
         });
+        iv_clear = (ImageView) findViewById(R.id.iv_clear);
+        iv_clear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tv_search.setText("");
+            }
+        });
+        tv_search.addTextChangedListener(this);
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        if (tv_search.length()==0){
+            iv_clear.setVisibility(View.GONE);
+        }else {
+            iv_clear.setVisibility(View.VISIBLE);
+        }
     }
 }

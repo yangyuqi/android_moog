@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -35,6 +36,7 @@ import com.youzheng.zhejiang.robertmoog.Store.bean.NewOrderListBean;
 import com.youzheng.zhejiang.robertmoog.Store.listener.OnRecyclerViewAdapterItemClickListener;
 import com.youzheng.zhejiang.robertmoog.Store.utils.SoftInputUtils;
 import com.youzheng.zhejiang.robertmoog.Store.view.RecycleViewDivider;
+import com.youzheng.zhejiang.robertmoog.utils.QRcode.android.CaptureActivity;
 import com.youzheng.zhejiang.robertmoog.utils.View.MyFooter;
 import com.youzheng.zhejiang.robertmoog.utils.View.MyHeader;
 
@@ -68,7 +70,7 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
      * 时间
      */
     private TextView tv_time;
-    private PullLoadMoreRecyclerView rv_list;
+    private RecyclerView rv_list;
     private OrderListAdapter adapter;
     private List<NewOrderListBean.OrderListBean> list = new ArrayList<>();
     private GridView gv_time;
@@ -94,6 +96,7 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
     private String edit;
     private String type = "ALL";//订单类型（ALL:全部，GROOM:推荐订单，MAJOR:专业）默认是全部
     private SpringView mSpringView;
+    private ImageView iv_clear;
 
 
     @Override
@@ -194,7 +197,7 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
         lin_search = (LinearLayout) findViewById(R.id.lin_search);
         tv_time = (TextView) findViewById(R.id.tv_time);
         tv_time.setOnClickListener(this);
-        rv_list = (PullLoadMoreRecyclerView) findViewById(R.id.rv_list);
+        rv_list = (RecyclerView) findViewById(R.id.rv_list);
         gv_time = (GridView) findViewById(R.id.gv_time);
         tv_again = (TextView) findViewById(R.id.tv_again);
         tv_confirm = (TextView) findViewById(R.id.tv_confirm);
@@ -204,15 +207,21 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
         drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);//禁止手势滑动
         gv_time.setOnItemClickListener(this);
         btnBack.setOnClickListener(this);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        rv_list.addItemDecoration(new RecycleViewDivider(
-                this, LinearLayoutManager.VERTICAL, 15, getResources().getColor(R.color.bg_all)));
-        rv_list.setLinearLayout();
-        rv_list.setColorSchemeResources(R.color.colorPrimary);
 
-        rv_list.setPushRefreshEnable(false);
-        rv_list.setPullRefreshEnable(false);
+        LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        rv_list.setLayoutManager(manager);
+        rv_list.setAdapter(adapter);
+        rv_list.addItemDecoration(new com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider(OrderListActivity.this, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
+
+//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+//        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+//        rv_list.addItemDecoration(new RecycleViewDivider(
+//                this, LinearLayoutManager.VERTICAL, 15, getResources().getColor(R.color.bg_all)));
+//        rv_list.setLinearLayout();
+//        rv_list.setColorSchemeResources(R.color.colorPrimary);
+//
+//        rv_list.setPushRefreshEnable(false);
+//        rv_list.setPullRefreshEnable(false);
 
         adapter = new OrderListAdapter(list, this);
         rv_list.setAdapter(adapter);
@@ -230,6 +239,14 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
         mSpringView = (SpringView) findViewById(R.id.springView);
         mSpringView.setHeader(new MyHeader(this));
         mSpringView.setFooter(new MyFooter(this));
+        iv_clear = (ImageView) findViewById(R.id.iv_clear);
+        iv_clear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tv_search.setText("");
+            }
+        });
+
     }
 
     @Override
@@ -253,14 +270,14 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
         OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.ORDERLIST_LIST + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
             public void onFailure(Request request, IOException e) {
-               // rv_list.setPullLoadMoreCompleted();
+                // rv_list.setPullLoadMoreCompleted();
                 mSpringView.onFinishFreshAndLoad();
             }
 
             @Override
             public void onResponse(String response) {
                 Log.e("订单列表", response);
-               // rv_list.setPullLoadMoreCompleted();
+                // rv_list.setPullLoadMoreCompleted();
                 mSpringView.onFinishFreshAndLoad();
                 BaseModel baseModel = gson.fromJson(response, BaseModel.class);
                 if (baseModel.getCode() == PublicUtils.code) {
@@ -311,6 +328,7 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
                 break;
             case R.id.tv_time:
                 drawer_layout.openDrawer(GravityCompat.END);
+                tv_search.setClickable(false);
                 break;
 
             case R.id.btnBack:
@@ -328,6 +346,7 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
                 initData(page, pageSize, orderCode, timeQuantum, isCustomer, type);
                 drawer_layout.closeDrawer(GravityCompat.END);
                 goodsTimeAdapter.setSelectItem(who);
+                tv_search.setClickable(true);
                 timeQuantum = strlist.get(who).getId();
                 break;
         }
@@ -360,15 +379,18 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        if (tv_search.length() == 0) {
-            list.clear();
-            orderCode = "";
-            initData(page, pageSize, orderCode, timeQuantum, isCustomer, type);
-        }
+
     }
 
     @Override
     public void afterTextChanged(Editable s) {
-
+        if (tv_search.length() == 0) {
+            iv_clear.setVisibility(View.GONE);
+            list.clear();
+            orderCode = "";
+            initData(page, pageSize, orderCode, timeQuantum, isCustomer, type);
+        }else {
+            iv_clear.setVisibility(View.VISIBLE);
+        }
     }
 }

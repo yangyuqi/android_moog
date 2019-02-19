@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,7 +40,7 @@ public class GoodsFragment extends BaseFragment {
     private View view;
     private GoodsListAdapter adapter;
     private List<GoodsList.ProductListDetailDataBean> list = new ArrayList<>();
-    private PullLoadMoreRecyclerView pr_goods;
+    private RecyclerView pr_goods;
     private int pageSize = 10;
     private int page = 1;
     private String sku;
@@ -137,14 +138,12 @@ public class GoodsFragment extends BaseFragment {
     }
 
     private void initView() {
-        pr_goods = (PullLoadMoreRecyclerView) view.findViewById(R.id.pr_goods);
-        pr_goods.setLinearLayout();
-        pr_goods.setColorSchemeResources(R.color.colorPrimary);
-        pr_goods.addItemDecoration(new RecycleViewDivider(
-                getActivity(), LinearLayoutManager.VERTICAL, 15, getResources().getColor(R.color.bg_all)));
+        pr_goods = (RecyclerView) view.findViewById(R.id.pr_goods);
+        LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        pr_goods.setLayoutManager(manager);
+        pr_goods.setAdapter(adapter);
+        pr_goods.addItemDecoration(new com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider(getActivity(), LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
 
-        pr_goods.setPullRefreshEnable(false);
-        pr_goods.setPushRefreshEnable(false);
 
         adapter = new GoodsListAdapter(list, getActivity());
         pr_goods.setAdapter(adapter);
