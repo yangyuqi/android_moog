@@ -131,12 +131,13 @@ public class RegisterActivity  extends BaseActivity implements TextWatcher {
                 }else {
                     Map<String,Object> map = new HashMap<>();
                     map.put("phone",edt_phone.getText().toString());
-                    timer.start();
+
                     edt_code.requestFocus();
-                    OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.SEND_CODE, new OkHttpClientManager.StringCallback() {
+                    OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.CUSTOMER_REGESTER, new OkHttpClientManager.StringCallback() {
                         @Override
                         public void onFailure(Request request, IOException e) {
-
+                            timer.onFinish();
+                            btn_send_code.setText("获取验证码");
                         }
 
                         @Override
@@ -144,6 +145,7 @@ public class RegisterActivity  extends BaseActivity implements TextWatcher {
                             BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                             if (baseModel.getCode()== PublicUtils.code){
                                 Code code = gson.fromJson(gson.toJson(baseModel.getDatas()),Code.class);
+                                timer.start();
                                 showStopDialog(code.getCheckCode());
                             }else {
                                 if (!TextUtils.isEmpty(baseModel.getMsg())){

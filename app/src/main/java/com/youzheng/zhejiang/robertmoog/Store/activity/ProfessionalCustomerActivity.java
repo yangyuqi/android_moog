@@ -53,7 +53,7 @@ public class ProfessionalCustomerActivity extends BaseActivity implements View.O
     private int page = 1;
     private int pageSize = 10;
     private SpringView springView;
-
+    private View no_data;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,6 +107,8 @@ public class ProfessionalCustomerActivity extends BaseActivity implements View.O
     }
 
     private void initView() {
+
+        no_data=findViewById(R.id.no_data);
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
@@ -179,8 +181,15 @@ public class ProfessionalCustomerActivity extends BaseActivity implements View.O
         if (beanList.size() != 0) {
             list.addAll(beanList);
             adapter.setListRefreshUi(beanList);
+            no_data.setVisibility(View.GONE);
+            springView.setVisibility(View.VISIBLE);
         } else {
-            showToast(getString(R.string.load_list_erron));
+            if (page==1){
+                no_data.setVisibility(View.VISIBLE);
+                springView.setVisibility(View.GONE);
+            }else {
+                showToast(getString(R.string.load_list_erron));
+            }
         }
 
 

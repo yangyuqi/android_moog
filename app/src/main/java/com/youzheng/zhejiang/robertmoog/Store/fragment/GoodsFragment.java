@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,7 +48,7 @@ public class GoodsFragment extends BaseFragment {
     private int goodsId;
     private boolean isFirstLoad = false;
     private SpringView springView;
-
+    private View no_data;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -129,8 +130,15 @@ public class GoodsFragment extends BaseFragment {
         if (productListDetailDataBeans.size() != 0) {
             list.addAll(productListDetailDataBeans);
             adapter.setRefreshUI(productListDetailDataBeans);
+            no_data.setVisibility(View.GONE);
+            springView.setVisibility(View.VISIBLE);
         } else {
-            showToast(getString(R.string.load_list_erron));
+            if (page==1&&TextUtils.isEmpty(sku)){
+                no_data.setVisibility(View.VISIBLE);
+                springView.setVisibility(View.GONE);
+            }else {
+                showToast(getString(R.string.load_list_erron));
+            }
         }
         //list=goodsList.getProductListDetailData();
 
@@ -138,6 +146,7 @@ public class GoodsFragment extends BaseFragment {
     }
 
     private void initView() {
+        no_data=view.findViewById(R.id.no_data);
         pr_goods = (RecyclerView) view.findViewById(R.id.pr_goods);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         pr_goods.setLayoutManager(manager);

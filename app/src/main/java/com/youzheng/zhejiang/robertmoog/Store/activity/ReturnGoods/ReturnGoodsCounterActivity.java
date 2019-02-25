@@ -457,6 +457,8 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
         intent.putExtra("type","1");
         startActivity(intent);
         finish();
+        ChooseOrderListActivity.Instance.finish();
+        ChooseReturnGoodsActivity.Instance.finish();
     }
 
     public void showStopDialog() {

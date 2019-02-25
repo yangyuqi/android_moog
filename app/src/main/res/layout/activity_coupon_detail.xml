@@ -10,7 +10,9 @@
 
     <include layout="@layout/title_bar"/>
 
-
+    <include layout="@layout/layout_no_data"
+        android:id="@+id/no_data"
+        android:visibility="gone"/>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/lv_list"
         android:layout_width="match_parent"

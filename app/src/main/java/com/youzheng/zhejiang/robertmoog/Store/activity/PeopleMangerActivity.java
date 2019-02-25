@@ -61,7 +61,7 @@ public class PeopleMangerActivity extends BaseActivity implements View.OnClickLi
     private int page = 1;
     private int pageSize = 10;
     private SpringView mSpringView;
-
+    private View no_data;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,6 +108,7 @@ public class PeopleMangerActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void initView() {
+        no_data=findViewById(R.id.no_data);
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
@@ -129,6 +130,19 @@ public class PeopleMangerActivity extends BaseActivity implements View.OnClickLi
         adapter = new PeopleMangerAdapter(list, this);
         lv_list.setAdapter(adapter);
 
+
+        adapter.setOnItemClickListener(new OnRecyclerViewAdapterItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Log.e("下标", position + "");
+                showStopDialog(list.get(position).getId());
+            }
+
+            @Override
+            public void onItemLongClick(View view, int position) {
+
+            }
+        });
 //        mSpringView = (SpringView) findViewById(R.id.springView);
 //
 //        mSpringView.setHeader(new MyHeader(this));
@@ -255,21 +269,15 @@ public class PeopleMangerActivity extends BaseActivity implements View.OnClickLi
         if (listBeans.size() != 0) {
             list.addAll(listBeans);
             adapter.setUI(listBeans);
+            no_data.setVisibility(View.GONE);
+            mSpringView.setVisibility(View.VISIBLE);
         } else {
-            showToast(getString(R.string.load_list_erron));
+                no_data.setVisibility(View.VISIBLE);
+                mSpringView.setVisibility(View.GONE);
+
+
         }
-        adapter.setOnItemClickListener(new OnRecyclerViewAdapterItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Log.e("下标", position + "");
-                showStopDialog(list.get(position).getId());
-            }
 
-            @Override
-            public void onItemLongClick(View view, int position) {
-
-            }
-        });
 
     }
 
@@ -283,7 +291,6 @@ public class PeopleMangerActivity extends BaseActivity implements View.OnClickLi
                 break;
             case R.id.tv_add:
                 startActivity(new Intent(this, AddStaffActivity.class));
-                finish();
                 break;
         }
     }

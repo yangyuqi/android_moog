@@ -99,7 +99,10 @@ public class MealRankingActivity extends BaseActivity implements View.OnClickLis
     private String endstr = "";
     private String rulestr = "COUNT";//默认是数量
     private SpringView mSpringView;
-
+    SimpleDateFormat dateFormater;
+    Calendar cal;
+    Date date;
+    private View no_data;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,15 +111,15 @@ public class MealRankingActivity extends BaseActivity implements View.OnClickLis
         setListener();
         initTimer();
 
-        SimpleDateFormat dateFormater = new SimpleDateFormat("yyyy/MM/dd");
-        Calendar cal = Calendar.getInstance();
+         dateFormater = new SimpleDateFormat("yyyy/MM/dd");
+         cal = Calendar.getInstance();
         cal.set(Calendar.DAY_OF_MONTH, 1);
         cal.getTime();
         tv_startDate.setText(dateFormater.format(cal.getTime()) + "");
         startstr = dateFormater.format(cal.getTime()) + "";
         cal.set(Calendar.DAY_OF_MONTH,
                 cal.getActualMaximum(Calendar.DAY_OF_MONTH));
-        Date date = new Date(System.currentTimeMillis());
+         date = new Date(System.currentTimeMillis());
 
         tv_endDate.setText(dateFormater.format(date));
         endstr = dateFormater.format(date);
@@ -204,6 +207,8 @@ public class MealRankingActivity extends BaseActivity implements View.OnClickLis
         mSpringView = (SpringView) findViewById(R.id.springView);
         mSpringView.setHeader(new MyHeader(this));
         mSpringView.setFooter(new MyFooter(this));
+
+        no_data=findViewById(R.id.no_data);
     }
 
     @Override
@@ -254,8 +259,15 @@ public class MealRankingActivity extends BaseActivity implements View.OnClickLis
         if (beanList.size() != 0) {
             list.addAll(beanList);
             adapter.setUI(beanList);
+            no_data.setVisibility(View.GONE);
+            mSpringView.setVisibility(View.VISIBLE);
         } else {
-            showToast(getString(R.string.load_list_erron));
+            if (page==1){
+                no_data.setVisibility(View.VISIBLE);
+                mSpringView.setVisibility(View.GONE);
+            }else {
+                showToast(getString(R.string.load_list_erron));
+            }
         }
 
 

@@ -85,31 +85,34 @@ public class SmallChooseReturnGoodsAdapter extends BaseAdapter {
 
         if (bean.getCount()==0){
             viewHolder.tv_number.setText("0");
+            bean.setNum(0);
         }else {
             viewHolder.tv_number.setText("0");//默认为1
+            bean.setNum(0);
         }
-        final String num=viewHolder.tv_number.getText().toString();
-        addnumber= Integer.parseInt(num);
-        bean.setNum(addnumber+"");
+//        final String num=viewHolder.tv_number.getText().toString();
+//        addnumber= Integer.parseInt(num);
+
 
         final ViewHolder finalViewHolder = viewHolder;
         viewHolder.tv_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                 if (addnumber==bean.getCount()){
+                 if (bean.getNum()==bean.getCount()){
                    //  finalViewHolder.tv_add.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
                      Toast.makeText(context,"商品数量不能超过可退商品数量",Toast.LENGTH_SHORT).show();
                  }else {
 //                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //                         finalViewHolder.tv_add.setBackground(context.getDrawable(R.drawable.bg_order));
 //                     }
-                     addnumber++;
+                     //addnumber++;
+                     bean.setNum(bean.getNum()+1);
                      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                          finalViewHolder.tv_cut.setBackground(context.getDrawable(R.drawable.bg_order));
 
                      }
                  }
-                if (addnumber==bean.getCount()){
+                if (bean.getNum()==bean.getCount()){
                     finalViewHolder.tv_add.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
                 }else {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -119,8 +122,8 @@ public class SmallChooseReturnGoodsAdapter extends BaseAdapter {
 
                 }
 
-                finalViewHolder.tv_number.setText(addnumber+"");
-                bean.setNum(addnumber+"");
+                finalViewHolder.tv_number.setText(bean.getNum()+"");
+                bean.setNum(bean.getNum());
             }
         });
 
@@ -132,13 +135,17 @@ public class SmallChooseReturnGoodsAdapter extends BaseAdapter {
         viewHolder.tv_cut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (addnumber==0){
+                if (bean.getNum()==0){
                     Toast.makeText(context,"商品数量不能小于0",Toast.LENGTH_SHORT).show();
                 }else {
-                    addnumber--;
+                    //addnumber--;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        finalViewHolder1.tv_add.setBackground(context.getDrawable(R.drawable.bg_order));
+                    }
+                    bean.setNum(bean.getNum()-1);
 
                 }
-                if (addnumber==0){
+                if (bean.getNum()==0){
                     finalViewHolder1.tv_cut.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
                 }else {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -148,8 +155,8 @@ public class SmallChooseReturnGoodsAdapter extends BaseAdapter {
 
                 }
 
-                finalViewHolder1.tv_number.setText(addnumber+"");
-                bean.setNum(addnumber+"");
+                finalViewHolder1.tv_number.setText(bean.getNum()+"");
+                bean.setNum(bean.getNum());
             }
         });
 

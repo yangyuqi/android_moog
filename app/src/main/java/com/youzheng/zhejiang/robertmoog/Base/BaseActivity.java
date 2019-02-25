@@ -44,6 +44,7 @@ public class BaseActivity extends AppCompatActivity implements NetBroadcastRecei
      * 网络类型
      */
     private int netMobile;
+    private View no_data;
 
 
     @Override
@@ -125,6 +126,7 @@ public class BaseActivity extends AppCompatActivity implements NetBroadcastRecei
 
 
     public void initBaseView() {
+        no_data=findViewById(R.id.no_data);
         mRootBaseView = (LinearLayout) findViewById(R.id.activity_base_root);
         mStateLayout = findViewById(R.id.activity_base_state_layout);
         btReload = (Button) findViewById(R.id.state_layout_error_bt);
@@ -148,6 +150,7 @@ public class BaseActivity extends AppCompatActivity implements NetBroadcastRecei
             case NORMAL:
                 if (mStateLayout.getVisibility() == View.VISIBLE) {
                     mStateLayout.setVisibility(View.GONE);
+
                 }
                 break;
             case ERROR:
@@ -162,6 +165,7 @@ public class BaseActivity extends AppCompatActivity implements NetBroadcastRecei
                             //reloadInterface.reloadClickListener();
                         }
                     });
+
                     ll_page_state_empty.setVisibility(View.GONE);
                 }
                 break;

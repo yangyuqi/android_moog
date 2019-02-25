@@ -60,7 +60,7 @@ public class TodayGoodsTypeSalesBestDetailActivity extends BaseActivity implemen
     private int categoryId;
     private String type = "COUNT";
     private SpringView springView;
-
+    private View no_data;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,6 +136,8 @@ public class TodayGoodsTypeSalesBestDetailActivity extends BaseActivity implemen
         springView = (SpringView) findViewById(R.id.springView);
         springView.setHeader(new MyHeader(this));
         springView.setFooter(new MyFooter(this));
+        no_data=findViewById(R.id.no_data);
+
     }
 
     @Override
@@ -187,8 +189,15 @@ public class TodayGoodsTypeSalesBestDetailActivity extends BaseActivity implemen
         if (beanList.size() != 0) {
             list.addAll(beanList);
             adapter.setUI(beanList);
+            no_data.setVisibility(View.GONE);
+            springView.setVisibility(View.VISIBLE);
         } else {
-            showToast(getString(R.string.load_list_erron));
+            if (page==1){
+                no_data.setVisibility(View.VISIBLE);
+                springView.setVisibility(View.GONE);
+            }else {
+                showToast(getString(R.string.load_list_erron));
+            }
         }
 
 

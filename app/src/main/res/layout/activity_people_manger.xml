@@ -44,7 +44,9 @@
                     android:textColor="@color/text_main"/>
 
             </LinearLayout>
-
+            <include layout="@layout/layout_no_data"
+                android:id="@+id/no_data"
+                android:visibility="gone"/>
             <com.liaoinstan.springview.widget.SpringView
                 android:id="@+id/springView"
                 app:type="follow"

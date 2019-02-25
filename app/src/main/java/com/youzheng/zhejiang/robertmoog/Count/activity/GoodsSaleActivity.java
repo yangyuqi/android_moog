@@ -77,7 +77,10 @@ public class GoodsSaleActivity extends BaseActivity implements View.OnClickListe
     private String starstDate = "";
     private String endsDate = "";
     private SpringView mSpringView;
-
+    private View no_data;
+    SimpleDateFormat dateFormater;
+    Calendar cal;
+    Date date;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,15 +89,15 @@ public class GoodsSaleActivity extends BaseActivity implements View.OnClickListe
         setListener();
         initTimer();
 
-        SimpleDateFormat dateFormater = new SimpleDateFormat("yyyy/MM/dd");
-        Calendar cal = Calendar.getInstance();
+         dateFormater = new SimpleDateFormat("yyyy/MM/dd");
+         cal = Calendar.getInstance();
         cal.set(Calendar.DAY_OF_MONTH, 1);
         cal.getTime();
         tv_startDate.setText(dateFormater.format(cal.getTime()) + "");
         starstDate = dateFormater.format(cal.getTime()) + "";
         cal.set(Calendar.DAY_OF_MONTH,
                 cal.getActualMaximum(Calendar.DAY_OF_MONTH));
-        Date date = new Date(System.currentTimeMillis());
+         date = new Date(System.currentTimeMillis());
 
         tv_endDate.setText(dateFormater.format(date));
         endsDate = dateFormater.format(date);
@@ -165,6 +168,7 @@ public class GoodsSaleActivity extends BaseActivity implements View.OnClickListe
         mSpringView = (SpringView) findViewById(R.id.springView);
         mSpringView.setHeader(new MyHeader(this));
         mSpringView.setFooter(new MyFooter(this));
+        no_data=findViewById(R.id.no_data);
     }
 
     @Override
@@ -214,8 +218,17 @@ public class GoodsSaleActivity extends BaseActivity implements View.OnClickListe
         if (beanList.size() != 0) {
             list.addAll(beanList);
             adapter.setUI(beanList);
+            no_data.setVisibility(View.GONE);
+            mSpringView.setVisibility(View.VISIBLE);
         } else {
-            showToast(getString(R.string.load_list_erron));
+            Log.e("起点",dateFormater.format(cal.getTime()));
+            Log.e("终点",dateFormater.format(date));
+            if (page==1){
+                no_data.setVisibility(View.VISIBLE);
+                mSpringView.setVisibility(View.GONE);
+            }else {
+                showToast(getString(R.string.load_list_erron));
+            }
 
         }
 

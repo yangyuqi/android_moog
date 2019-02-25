@@ -136,10 +136,10 @@
             <!--android:background="@color/bg_all"/>-->
 
 
-        <!--<View-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="@dimen/space_5"-->
-            <!--android:background="@color/bg_all"/>-->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/space_5"
+            android:background="@color/bg_all"/>
 
         <ScrollView
 
@@ -159,11 +159,16 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/space_7"
             android:layout_marginLeft="@dimen/space_15"
-            android:text="订单促销"
-            android:visibility="gone"
+            android:text=""
+            android:visibility="visible"
             android:textColor="@color/text_main"
             android:textSize="@dimen/text_size_17"
             />
+
+                <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/space_5"
+                android:background="@color/bg_all"/>
 
         <com.youzheng.zhejiang.robertmoog.utils.View.NoScrollListView
             android:dividerHeight="@dimen/space_10"
@@ -177,10 +182,7 @@
             ></com.youzheng.zhejiang.robertmoog.utils.View.NoScrollListView>
 
 
-           <View
-               android:layout_width="match_parent"
-               android:layout_height="@dimen/space_5"
-               android:background="@color/bg_all"/>
+
 
                 <TextView
                     android:id="@+id/tv_meal"
@@ -195,10 +197,10 @@
                     android:layout_marginBottom="@dimen/space_7"
 
                     />
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/space_1"
-                    android:background="@color/bg_all"/>
+                <!--<View-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="@dimen/space_1"-->
+                    <!--android:background="@color/bg_all"/>-->
 
                 <android.support.v7.widget.RecyclerView
 
@@ -224,13 +226,14 @@
                     android:text="优惠券促销"
                     android:textColor="@color/text_main"
                     android:textSize="@dimen/text_size_17"
+                    android:visibility="gone"
                     android:layout_marginBottom="@dimen/space_7"
 
                     />
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/space_1"
-                    android:background="@color/bg_all"/>
+                <!--<View-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="@dimen/space_1"-->
+                    <!--android:background="@color/bg_all"/>-->
 
                 <android.support.v7.widget.RecyclerView
                     android:layout_width="match_parent"

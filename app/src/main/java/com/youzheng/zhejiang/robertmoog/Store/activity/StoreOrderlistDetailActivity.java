@@ -186,6 +186,7 @@ public class StoreOrderlistDetailActivity extends BaseActivity implements View.O
     private LinearLayout lin_juan;
     private LinearLayout lin_cuxiao;
     private LinearLayout lin_store;
+    private LinearLayout lin_address;
 
 
     @Override
@@ -262,6 +263,7 @@ public class StoreOrderlistDetailActivity extends BaseActivity implements View.O
         lin_juan = (LinearLayout) findViewById(R.id.lin_juan);
         lin_cuxiao = (LinearLayout) findViewById(R.id.lin_cuxiao);
         lin_store = (LinearLayout) findViewById(R.id.lin_store);
+        lin_address = (LinearLayout) findViewById(R.id.lin_address);
     }
 
     @Override
@@ -328,6 +330,8 @@ public class StoreOrderlistDetailActivity extends BaseActivity implements View.O
             tv_maker.setText(createUser);
         }
 
+
+
         if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getShipPerson())) {
             shipPerson = orderlistDetail.getOrderItemData().getShipPerson();
             tv_name.setText(shipPerson);
@@ -342,6 +346,13 @@ public class StoreOrderlistDetailActivity extends BaseActivity implements View.O
         if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getShipAddress())) {
             shipAddress = orderlistDetail.getOrderItemData().getShipAddress();
             tv_address.setText(shipAddress);
+        }
+
+
+        if (TextUtils.isEmpty(shipPerson)&&TextUtils.isEmpty(shipMobile)&&TextUtils.isEmpty(shipAddress)){
+            lin_address.setVisibility(View.GONE);
+        }else {
+            lin_address.setVisibility(View.VISIBLE);
         }
 
         if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getInstallStatus())) {
@@ -402,44 +413,44 @@ public class StoreOrderlistDetailActivity extends BaseActivity implements View.O
 
         if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getAmountPayable())) {
             amountPayable = orderlistDetail.getOrderItemData().getAmountPayable();
-            tv_should_money.setText(getString(R.string.label_money)+amountPayable);
+            tv_should_money.setText(getString(R.string.label_money) + amountPayable);
         }
 
         if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getCouponDerate())) {
-            if (orderlistDetail.getOrderItemData().getCouponDerate().equals("0")){
+            if (orderlistDetail.getOrderItemData().getCouponDerate().equals("0")) {
                 lin_juan.setVisibility(View.GONE);
-            }else {
+            } else {
                 couponDerate = orderlistDetail.getOrderItemData().getCouponDerate();
                 lin_juan.setVisibility(View.VISIBLE);
                 tv_cut_money_of_juan.setText("-" + getString(R.string.label_money) + couponDerate);
             }
-        }else {
+        } else {
             lin_juan.setVisibility(View.GONE);
         }
 
-        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getOrderDerate()) ) {
-            if (orderlistDetail.getOrderItemData().getOrderDerate().equals("0")){
+        if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getOrderDerate())) {
+            if (orderlistDetail.getOrderItemData().getOrderDerate().equals("0")) {
                 lin_cuxiao.setVisibility(View.GONE);
-            }else {
+            } else {
                 orderDerate = orderlistDetail.getOrderItemData().getOrderDerate();
                 lin_cuxiao.setVisibility(View.VISIBLE);
                 tv_cut_money_of_promotion.setText("-" + getString(R.string.label_money) + orderDerate);
             }
 
-        }else {
+        } else {
             lin_cuxiao.setVisibility(View.GONE);
         }
 
         if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getShopDerate())) {
-            if (orderlistDetail.getOrderItemData().getShopDerate().equals("0")){
+            if (orderlistDetail.getOrderItemData().getShopDerate().equals("0")) {
                 lin_store.setVisibility(View.GONE);
-            }else {
+            } else {
                 shopDerate = orderlistDetail.getOrderItemData().getShopDerate();
                 lin_store.setVisibility(View.VISIBLE);
                 tv_cut_money_of_store.setText("-" + getString(R.string.label_money) + shopDerate);
             }
 
-        }else {
+        } else {
             lin_store.setVisibility(View.GONE);
         }
 

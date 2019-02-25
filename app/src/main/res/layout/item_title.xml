@@ -11,10 +11,10 @@
         android:text=""
         android:gravity="center"
         android:textSize="13sp"
-        android:paddingLeft="15dp"
+        android:paddingLeft="10dp"
         android:singleLine="true"
         android:ellipsize="end"
-        android:paddingRight="15dp"
+        android:paddingRight="10dp"
         android:background="@drawable/title_off"
         android:textColor="@color/colorPrimary"/>
 

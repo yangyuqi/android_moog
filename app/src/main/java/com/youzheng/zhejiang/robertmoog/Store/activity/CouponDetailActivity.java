@@ -44,7 +44,7 @@ public class CouponDetailActivity extends BaseActivity implements View.OnClickLi
     private String date;
     private List<CouponDetail.CouponUsageRecordDetailBean> list=new ArrayList<>();
     private CouponDetailAdapter adapter;
-
+    private View no_data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +56,8 @@ public class CouponDetailActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void initView() {
+
+        no_data=findViewById(R.id.no_data);
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
@@ -115,8 +117,11 @@ public class CouponDetailActivity extends BaseActivity implements View.OnClickLi
         if (beans.size()!=0){
             list.addAll(beans);
             adapter.refreshUI(beans);
+            no_data.setVisibility(View.GONE);
+            lv_list.setVisibility(View.VISIBLE);
         }else {
-            showToast(getString(R.string.load_list_erron));
+            no_data.setVisibility(View.VISIBLE);
+            lv_list.setVisibility(View.GONE);
         }
 
 

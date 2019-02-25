@@ -29,7 +29,7 @@ public class CouponActivity extends BaseActivity {
     private RecyclerView recyclerView ;
     CouponAdapter addapter ;
     TextView tv_add ;
-
+    private View no_data;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +72,7 @@ public class CouponActivity extends BaseActivity {
     }
 
     private void initView() {
+        no_data=findViewById(R.id.no_data);
         tabLayout = findViewById(R.id.tab);
         useCouponList = (ArrayList<CouponListBean>) getIntent().getSerializableExtra("useCouponList");
         notUseCouponList = (ArrayList<CouponListBean>) getIntent().getSerializableExtra("notUseCouponList");

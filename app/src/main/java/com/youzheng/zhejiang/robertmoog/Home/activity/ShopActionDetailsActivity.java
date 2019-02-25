@@ -87,20 +87,23 @@ public class ShopActionDetailsActivity extends BaseActivity {
                     }
 
                     codeid=promoIdDetails.getData().getPromoId();
+                    if (!TextUtils.isEmpty(promoIdDetails.getData().getType())){
+                        tv_goods.setText(promoIdDetails.getData().getType());
+                    }
                     if (promoIdDetails.getData().getOrderPromo().size()>0){
                         adapter.setData(promoIdDetails.getData().getOrderPromo());
                         adapter.notifyDataSetChanged();
-                        tv_goods.setVisibility(View.VISIBLE);
+                       // tv_goods.setVisibility(View.VISIBLE);
                         ls.setVisibility(View.VISIBLE);
 
                     }else {
-                        tv_goods.setVisibility(View.GONE);
+                       // tv_goods.setVisibility(View.GONE);
                         ls.setVisibility(View.GONE);
 
                     }
                     if (promoIdDetails.getData().getComboPromo().size()>0){
                         findViewById(R.id.iv_next).setVisibility(View.VISIBLE);
-                        tv_meal.setVisibility(View.VISIBLE);
+                       // tv_meal.setVisibility(View.VISIBLE);
                         recycler_view.setVisibility(View.VISIBLE);
                         LinearLayoutManager manager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
                         recycler_view.setLayoutManager(manager);
@@ -108,13 +111,13 @@ public class ShopActionDetailsActivity extends BaseActivity {
                         recycler_view.setAdapter(shop_adapter);
                         recycler_view.addItemDecoration(new RecycleViewDivider(mContext, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
                     }else {
-                        tv_meal.setVisibility(View.GONE);
+                        //tv_meal.setVisibility(View.GONE);
                         recycler_view.setVisibility(View.VISIBLE);
                         findViewById(R.id.iv_next).setVisibility(View.GONE);
                     }
 
                     if (promoIdDetails.getData().getCouponPromo().size()>0){
-                        tv_coupon.setVisibility(View.VISIBLE);
+                        //tv_coupon.setVisibility(View.VISIBLE);
                         rv_coupon.setVisibility(View.VISIBLE);
                         LinearLayoutManager manager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
                         rv_coupon.setLayoutManager(manager);
@@ -122,7 +125,7 @@ public class ShopActionDetailsActivity extends BaseActivity {
                         rv_coupon.setAdapter(actionAdapter);
                         rv_coupon.addItemDecoration(new RecycleViewDivider(mContext, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
                     }else {
-                        tv_coupon.setVisibility(View.GONE);
+                        //tv_coupon.setVisibility(View.GONE);
                         rv_coupon.setVisibility(View.GONE);
                     }
                 }else {

@@ -3,6 +3,7 @@ package com.youzheng.zhejiang.robertmoog.utils.View;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
@@ -35,9 +37,11 @@ public class RemarkDialog extends Dialog implements View.OnClickListener{
     EditText confrim_dialog_tv_content ;
     TextView tv_no ,tv_ok ;
     String token ;
-    public RemarkDialog(Context context, String id, String remark){
+    boolean have_customerid;
+    public RemarkDialog(Context context, String id, String remark,boolean have_customerid){
         super(context, R.style.mydialog);
         mcontext = context;
+       this.have_customerid=have_customerid;
         token = (String) SharedPreferencesUtils.getParam(context, PublicUtils.access_token,"");
         if (id!=null){
             this.id = id ;
@@ -78,7 +82,12 @@ public class RemarkDialog extends Dialog implements View.OnClickListener{
                     return;
                 }
                 Map<String,Object> map = new HashMap<>();
-                map.put("id",id);
+                if (have_customerid==true){
+                    map.put("id",id);
+                }else {
+                    map.put("customerId",id);
+                }
+
                 map.put("remark",confrim_dialog_tv_content.getText().toString());
                 OkHttpClientManager.postAsynJson(new Gson().toJson(map), UrlUtils.UPDATE_INTENT_REMARK + "?access_token=" + token, new OkHttpClientManager.StringCallback() {
                     @Override
@@ -90,8 +99,14 @@ public class RemarkDialog extends Dialog implements View.OnClickListener{
                     public void onResponse(String response) {
                         BaseModel baseModel = new Gson().fromJson(response,BaseModel.class);
                         if (baseModel.getCode()==PublicUtils.code){
-                            EventBus.getDefault().post("refresh");
+
+                                EventBus.getDefault().post("refresh");
+
                             dismiss();
+                        }else {
+                            if (!TextUtils.isEmpty(baseModel.getMsg())){
+                                Toast.makeText(mcontext,baseModel.getMsg(),Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
                 });

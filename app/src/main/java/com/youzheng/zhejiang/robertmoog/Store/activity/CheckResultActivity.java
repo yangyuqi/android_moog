@@ -56,7 +56,7 @@ public class CheckResultActivity extends BaseActivity implements View.OnClickLis
     private int year;
     private Calendar selectedDate;
     private SpringView mSpringView;
-
+    private View no_data;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,6 +129,7 @@ public class CheckResultActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void initView() {
+        no_data=findViewById(R.id.no_data);
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
@@ -205,9 +206,13 @@ public class CheckResultActivity extends BaseActivity implements View.OnClickLis
         if (beans.size() != 0) {
             list.addAll(beans);
             adapter.setUI(beans);
+            no_data.setVisibility(View.GONE);
+            mSpringView.setVisibility(View.VISIBLE);
         } else {
-            list.clear();
-            showToast(getString(R.string.load_list_erron));
+            no_data.setVisibility(View.VISIBLE);
+            mSpringView.setVisibility(View.GONE);
+            //list.clear();
+            //showToast(getString(R.string.load_list_erron));
         }
 
     }

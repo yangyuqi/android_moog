@@ -50,6 +50,7 @@ public class StoreCustomerInsideActivity extends BaseActivity implements View.On
     private int pageSize = 10;
     private int page = 1;
     private SpringView mSpringView;
+    private View no_data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +96,7 @@ public class StoreCustomerInsideActivity extends BaseActivity implements View.On
     }
 
     private void initView() {
+        no_data=findViewById(R.id.no_data);
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
@@ -165,8 +167,15 @@ public class StoreCustomerInsideActivity extends BaseActivity implements View.On
         if (monthCoustomerDetailBeans.size() != 0) {
             list.addAll(monthCoustomerDetailBeans);
             adapter.refreshUI(monthCoustomerDetailBeans);
+            no_data.setVisibility(View.GONE);
+            mSpringView.setVisibility(View.VISIBLE);
         } else {
-            showToast(getString(R.string.load_list_erron));
+            if (page==1){
+                no_data.setVisibility(View.VISIBLE);
+                mSpringView.setVisibility(View.GONE);
+            }else {
+                showToast(getString(R.string.load_list_erron));
+            }
         }
 
 

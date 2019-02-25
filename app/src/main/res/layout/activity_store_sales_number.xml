@@ -130,7 +130,9 @@
 
 
     </LinearLayout>
-
+    <include layout="@layout/layout_no_data"
+        android:id="@+id/no_data"
+        android:visibility="gone"/>
     <com.liaoinstan.springview.widget.SpringView
         android:id="@+id/springView"
         android:layout_width="match_parent"
@@ -142,8 +144,6 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/pr_list"
             android:layout_width="match_parent"
-
-
             android:background="@color/bg_background_white"
             android:layout_height="match_parent"/>
 

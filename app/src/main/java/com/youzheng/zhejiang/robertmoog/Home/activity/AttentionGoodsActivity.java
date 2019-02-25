@@ -59,6 +59,8 @@ public class AttentionGoodsActivity extends BaseActivity {
     private LinearLayout lin_over;
     private String remark_id;
      CustomerData intentDataBean;
+    private View no_data;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -159,27 +161,35 @@ public class AttentionGoodsActivity extends BaseActivity {
                             adapter.setData(intentDataBean.getCustomerIntentData().getIntentProductList());
                             adapter.notifyDataSetChanged();
                             lin_over.setVisibility(View.VISIBLE);
+                            no_data.setVisibility(View.GONE);
+                            ls.setVisibility(View.VISIBLE);
                         }else {
-                            adapter.setData(new ArrayList<IntentProductList>());
+                            //adapter.setData(new ArrayList<IntentProductList>());
                             //lin_over.setVisibility(View.GONE);
                             //sendRemark(intentDataBean.getCustomerIntentData().getId());
+                            no_data.setVisibility(View.VISIBLE);
+                            ls.setVisibility(View.GONE);
                             adapter.notifyDataSetChanged();
-                            showToast(getString(R.string.load_list_erron));
+                            //showToast(getString(R.string.load_list_erron));
                         }
                     }else {
                         if (intentDataBean.getCustomerIntentData().getIntentProductList().size()!=0) {
                             lin_over.setVisibility(View.VISIBLE);
+                            no_data.setVisibility(View.GONE);
+                            ls.setVisibility(View.VISIBLE);
                         }else {
+                            no_data.setVisibility(View.VISIBLE);
+                            ls.setVisibility(View.GONE);
                             //lin_over.setVisibility(View.GONE);
                             //sendRemark(intentDataBean.getCustomerIntentData().getId());
-                            showToast(getString(R.string.load_list_erron));
+                            //showToast(getString(R.string.load_list_erron));
                         }
                     }
                     tv_update_intent.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             if (!TextUtils.isEmpty(intentDataBean.getCustomerIntentData().getId())) {
-                                RemarkDialog remarkDialog = new RemarkDialog(AttentionGoodsActivity.this, intentDataBean.getCustomerIntentData().getId(), intentDataBean.getCustomerIntentData().getRemark());
+                                RemarkDialog remarkDialog = new RemarkDialog(AttentionGoodsActivity.this, intentDataBean.getCustomerIntentData().getId(), intentDataBean.getCustomerIntentData().getRemark(),true);
                                 remarkDialog.show();
                             }else {
                                 if (bean!=null) {
@@ -192,7 +202,7 @@ public class AttentionGoodsActivity extends BaseActivity {
 
                                 }
                                 Log.e("remark_id",remark_id);
-                                RemarkDialog remarkDialog = new RemarkDialog(AttentionGoodsActivity.this,remark_id, intentDataBean.getCustomerIntentData().getRemark());
+                                RemarkDialog remarkDialog = new RemarkDialog(AttentionGoodsActivity.this,remark_id, intentDataBean.getCustomerIntentData().getRemark(),false);
                                 remarkDialog.show();
 
                             }
@@ -226,6 +236,7 @@ public class AttentionGoodsActivity extends BaseActivity {
     }
 
     private void initView() {
+        no_data=findViewById(R.id.no_data);
         ((TextView)findViewById(R.id.textHeadTitle)).setText("意向管理");
         findViewById(R.id.btnBack).setOnClickListener(new View.OnClickListener() {
             @Override

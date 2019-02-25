@@ -3,6 +3,7 @@ package com.youzheng.zhejiang.robertmoog.Home.activity;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -121,7 +122,15 @@ public class ForgetPwdActivity extends BaseActivity {
                     @Override
                     public void onResponse(String response) {
                         BaseModel baseModel = gson.fromJson(response,BaseModel.class);
-                        showToast(baseModel.getMsg());
+                        if (baseModel.getCode()==PublicUtils.code){
+                            showToast("密码修改成功");
+                        }else {
+                            if (!TextUtils.isEmpty(baseModel.getMsg())){
+                                showToast(baseModel.getMsg());
+                            }
+
+                        }
+
                     }
                 });
             }

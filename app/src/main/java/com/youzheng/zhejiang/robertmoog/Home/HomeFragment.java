@@ -92,6 +92,8 @@ public class HomeFragment extends BaseFragment implements BaseFragment.ReloadInt
         gv = mView.findViewById(R.id.gv);
         tv_search = mView.findViewById(R.id.tv_search);
         rollPagerView = mView.findViewById(R.id.rv);
+        rollPagerView.setPlayDelay(2000);
+        rollPagerView.setAnimationDurtion(500);
         data.clear();
         data.add(new HomeBean(getString(R.string.home_gv_one), R.mipmap.group_5_3));
         data.add(new HomeBean(getString(R.string.home_gv_two), R.mipmap.group_5_4));
@@ -222,29 +224,37 @@ public class HomeFragment extends BaseFragment implements BaseFragment.ReloadInt
                     BaseModel baseModel = gson.fromJson(response, BaseModel.class);
                     if (baseModel.getCode() == PublicUtils.code) {
                         HomePageBean homePageData = gson.fromJson(gson.toJson(baseModel.getDatas()), HomePageBean.class);
-                        if (homePageData.getHomePageData().isNewPromotion()==true) {
-                            isnewCu = true;
-                            gv.setAdapter(adapter);
-                            gv.notify();
-                            //data.get(2).newPromotion = true;
-                        }else {
-                            isnewCu = false;
-                            gv.setAdapter(adapter);
-                            gv.notify();
+                        if (homePageData.getHomePageData().getBannerImageData().size() > 0) {
+                            rollPagerView.setAdapter(new BannerNormalAdapter(homePageData.getHomePageData().getBannerImageData(), access_token));
+                            if (homePageData.getHomePageData().getBannerImageData().size()==1){
+                                rollPagerView.setPlayDelay(0);
+                            }else {
+                                rollPagerView.setPlayDelay(2000);
+                            }
                         }
+
                         if (homePageData.getHomePageData().isNewCombo()==true) {
                             isNewMeal = true;
                             gv.setAdapter(adapter);
-                            gv.notify();
+                           // gv.notify();
                             //ata.get(4).newCombo = true;
                         }else {
                             isNewMeal = false;
                             gv.setAdapter(adapter);
-                            gv.notify();
+                           // gv.notify();
                         }
-                        if (homePageData.getHomePageData().getBannerImageData().size() > 0) {
-                            rollPagerView.setAdapter(new BannerNormalAdapter(homePageData.getHomePageData().getBannerImageData(), access_token));
+                        if (homePageData.getHomePageData().isNewPromotion()==true) {
+                            isnewCu = true;
+                            gv.setAdapter(adapter);
+                          //  gv.notify();
+                            //data.get(2).newPromotion = true;
+                        }else {
+                            isnewCu = false;
+                            gv.setAdapter(adapter);
+                          //  gv.notify();
                         }
+
+
                     }
                 }
             });

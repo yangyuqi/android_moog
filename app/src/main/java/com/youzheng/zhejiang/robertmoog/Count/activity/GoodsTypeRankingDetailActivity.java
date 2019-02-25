@@ -83,7 +83,7 @@ public class GoodsTypeRankingDetailActivity extends BaseActivity implements View
      */
     private TextView tv_check;
     private SpringView mSpringView;
-
+    private View no_data;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,8 +92,9 @@ public class GoodsTypeRankingDetailActivity extends BaseActivity implements View
         if (categoryId == 0) {
             categoryId = 0;
         }
-        type = getIntent().getStringExtra("type");
-
+         type = getIntent().getStringExtra("type");
+          startstr=getIntent().getStringExtra("startdate");
+          endstr=getIntent().getStringExtra("enddate");
         initView();
         initTimer();
         swtListener();
@@ -175,7 +176,7 @@ public class GoodsTypeRankingDetailActivity extends BaseActivity implements View
         mSpringView = (SpringView) findViewById(R.id.springView);
         mSpringView.setHeader(new MyHeader(this));
         mSpringView.setFooter(new MyFooter(this));
-
+        no_data=findViewById(R.id.no_data);
     }
 
     @Override
@@ -225,8 +226,16 @@ public class GoodsTypeRankingDetailActivity extends BaseActivity implements View
         if (beanList.size() != 0) {
             list.addAll(beanList);
             adapter.setUI(beanList);
+            no_data.setVisibility(View.GONE);
+            mSpringView.setVisibility(View.VISIBLE);
         } else {
-            showToast(getString(R.string.load_list_erron));
+            if (page==1){
+                no_data.setVisibility(View.VISIBLE);
+                mSpringView.setVisibility(View.GONE);
+            }else {
+                showToast(getString(R.string.load_list_erron));
+            }
+
         }
 
 

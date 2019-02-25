@@ -58,7 +58,7 @@ public class ChooseOrderListActivity extends BaseActivity implements View.OnClic
     private SpringView mSpringView;
     //  private String type="ALL";//订单类型（ALL:全部，GROOM:推荐订单，MAJOR:专业）默认是全部
     public static ChooseOrderListActivity Instance;
-
+    private View no_data;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,6 +117,7 @@ public class ChooseOrderListActivity extends BaseActivity implements View.OnClic
     }
 
     private void initView() {
+        no_data=findViewById(R.id.no_data);
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
@@ -167,7 +168,6 @@ public class ChooseOrderListActivity extends BaseActivity implements View.OnClic
                 if (baseModel.getCode() == PublicUtils.code) {
                     NewOrderListBean listBean = gson.fromJson(gson.toJson(baseModel.getDatas()), NewOrderListBean.class);
                     setData(listBean);
-
                 } else {
                     showToast(baseModel.getMsg());
                 }
@@ -187,8 +187,15 @@ public class ChooseOrderListActivity extends BaseActivity implements View.OnClic
         if (orderListBeans.size() != 0) {
             list.addAll(orderListBeans);
             adapter.setUI(list);
+            no_data.setVisibility(View.GONE);
+            mSpringView.setVisibility(View.VISIBLE);
         } else {
-            showToast(getString(R.string.load_list_erron));
+            if (page==1){
+                no_data.setVisibility(View.VISIBLE);
+                mSpringView.setVisibility(View.GONE);
+            }else {
+                showToast(getString(R.string.load_list_erron));
+            }
         }
 
     }

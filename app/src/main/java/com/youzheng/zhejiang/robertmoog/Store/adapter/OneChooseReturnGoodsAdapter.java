@@ -28,7 +28,7 @@ public class OneChooseReturnGoodsAdapter extends RecyclerView.Adapter<OneChooseR
     private LayoutInflater layoutInflater;
     private Context context;
     private List<TextView> textlist;
-    private int addnumber;
+    private int addnumber=0;
 
     public OneChooseReturnGoodsAdapter(List<ChooseReturnGoodsDetail.ReturnOrderInfoBean.ProductListBean> list, Context context) {
         this.list = list;
@@ -74,40 +74,32 @@ public class OneChooseReturnGoodsAdapter extends RecyclerView.Adapter<OneChooseR
 
         if (bean.getCount()==0){
             oneHolder.tv_number.setText("0");
+            bean.setNum(0);
         }else {
             oneHolder.tv_number.setText("0");//默认为1
+            bean.setNum(0);
         }
 
-        final String num=oneHolder.tv_number.getText().toString();
-        addnumber= Integer.parseInt(num);
-        bean.setNum(addnumber+"");
-//        if (addnumber==bean.getCount()) {
-//            oneHolder.tv_add.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
-//        }else {
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                oneHolder.tv_add.setBackground(context.getDrawable(R.drawable.bg_order));
-//            }
-//        }
+
+//        final String num=oneHolder.tv_number.getText().toString();
+//        addnumber= Integer.parseInt(num);
+
+
         oneHolder.tv_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (addnumber==bean.getCount()){
-                   // oneHolder.tv_add.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
+
+                if (bean.getNum()==bean.getCount()){
                     Toast.makeText(context,"商品数量不能超过可退商品数量",Toast.LENGTH_SHORT).show();
-
                 }else {
-//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                        oneHolder.tv_add.setBackground(context.getDrawable(R.drawable.bg_order));
-//                    }
-
-                    addnumber++;
+                  bean.setNum(bean.getNum()+1);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         oneHolder.tv_cut.setBackground(context.getDrawable(R.drawable.bg_order));
 
                     }
                 }
 
-                if (addnumber==bean.getCount()){
+                if (bean.getNum()==bean.getCount()){
                     oneHolder.tv_add.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
                 }else {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -118,8 +110,8 @@ public class OneChooseReturnGoodsAdapter extends RecyclerView.Adapter<OneChooseR
                 }
 
 
-                oneHolder.tv_number.setText(addnumber+"");
-                bean.setNum(addnumber+"");
+                oneHolder.tv_number.setText(bean.getNum()+"");
+                bean.setNum(bean.getNum());
             }
         });
 
@@ -127,16 +119,16 @@ public class OneChooseReturnGoodsAdapter extends RecyclerView.Adapter<OneChooseR
         oneHolder.tv_cut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (addnumber==0){
+                if (bean.getNum()==0){
                     Toast.makeText(context,"商品数量不能小于0",Toast.LENGTH_SHORT).show();
                 }else {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         oneHolder.tv_add.setBackground(context.getDrawable(R.drawable.bg_order));
                     }
-                    addnumber--;
+                    bean.setNum(bean.getNum()-1);
                 }
 
-                if (addnumber==0){
+                if (bean.getNum()==0){
                     oneHolder.tv_cut.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
                 }else {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -145,8 +137,8 @@ public class OneChooseReturnGoodsAdapter extends RecyclerView.Adapter<OneChooseR
                     }
 
                 }
-                oneHolder.tv_number.setText(addnumber+"");
-                bean.setNum(addnumber+"");
+                oneHolder.tv_number.setText(bean.getNum()+"");
+                bean.setNum(bean.getNum());
             }
         });
     }

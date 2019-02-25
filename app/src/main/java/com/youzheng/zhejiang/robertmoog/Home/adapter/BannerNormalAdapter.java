@@ -2,6 +2,7 @@ package com.youzheng.zhejiang.robertmoog.Home.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,7 @@ public class BannerNormalAdapter extends StaticPagerAdapter {
     public View getView(final ViewGroup container, final int position) {
         View new_view = LayoutInflater.from(container.getContext()).inflate(R.layout.image_new_layout,null);
         ImageView view = (ImageView) new_view.findViewById(R.id.iv_new);
+        Log.e("图片",banner_date.get(position).getBannerImageUrl());
         Glide.with(container.getContext()).load(banner_date.get(position).getBannerImageUrl()).into(view);
         return new_view;
     }

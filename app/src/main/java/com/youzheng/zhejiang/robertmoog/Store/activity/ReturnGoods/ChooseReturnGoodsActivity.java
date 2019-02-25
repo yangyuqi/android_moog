@@ -250,8 +250,8 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
 
                     for (ChooseReturnGoodsDetail.ReturnOrderInfoBean.ProductListBean oneBean:onelist){
                         ChooseGoodsRequest.OrderProductListBean request=new ChooseGoodsRequest.OrderProductListBean();
-                        if (!oneBean.getNum().equals("0")){
-                            request.setCount(oneBean.getNum());
+                        if (oneBean.getNum()!=0){
+                            request.setCount(oneBean.getNum()+"");
                             request.setOrderItemProductId(oneBean.getOrderItemProductId());
                             requests.add(request);
                         }
@@ -271,7 +271,7 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
                     intent.putExtra("is_all",isall);
                     intent.putExtra("orderID",orderid);
                     startActivity(intent);
-                    finish();
+//                    finish();
                 }
 
 

@@ -8,7 +8,9 @@
     tools:context=".Store.activity.CheckResultActivity">
 
     <include layout="@layout/title_bar"/>
-
+    <include layout="@layout/layout_no_data"
+        android:id="@+id/no_data"
+        android:visibility="gone"/>
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="match_parent"
@@ -20,6 +22,9 @@
         android:text="2018年"
         android:paddingLeft="17dp"
         android:textStyle="bold"/>
+
+
+
     <com.liaoinstan.springview.widget.SpringView
         android:id="@+id/springView"
         app:type="follow"

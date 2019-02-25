@@ -35,6 +35,8 @@
                 android:hint="输入商品SKU/套餐号"
                 android:paddingLeft="10dp"
                 android:singleLine="true"
+                android:inputType="textEmailAddress"
+                android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
                 android:textColorHint="#B7B7B7"
                 android:textSize="@dimen/text_size_13" />
 
@@ -92,7 +94,9 @@
             android:src="@mipmap/group2" />
 
     </LinearLayout>
-
+    <include layout="@layout/layout_no_data"
+        android:id="@+id/no_data"
+        android:visibility="gone"/>
     <com.liaoinstan.springview.widget.SpringView
         android:background="@color/bg_all"
         android:layout_width="match_parent"

@@ -123,8 +123,8 @@ public class SearchGoodsActivity extends BaseActivity implements TextWatcher {
             @Override
             public void onClick(View v) {
                 tv_search.setText("");
-                data.clear();
-                addapter.clear();
+//                data.clear();
+//                addapter.clear();
                // search();
             }
         });

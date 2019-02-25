@@ -42,6 +42,7 @@ import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.activity.ReturnGoods.ReturnGoodsSuccessActivity;
 import com.youzheng.zhejiang.robertmoog.Store.listener.GetListener;
 import com.youzheng.zhejiang.robertmoog.Store.view.SingleOptionsPicker;
+import com.youzheng.zhejiang.robertmoog.utils.QRcode.android.CaptureActivity;
 import com.youzheng.zhejiang.robertmoog.utils.View.RemindDialog;
 
 import java.io.IOException;
@@ -86,6 +87,8 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
     private LinearLayout lin_juan;
     private LinearLayout lin_cuxiao;
     private LinearLayout lin_store;
+    private boolean is_have_adress;
+    private int no_adress;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -102,11 +105,37 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
         initView();
 
         initGetDate();
-
-
-        initData("0");
         initClick();
+
+//        initData("0");
+//        initClick();
     }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        no_adress=getIntent().getIntExtra("address_aa",0);
+        if (no_adress==1){
+            is_have_adress=true;
+        }else {
+            is_have_adress=false;
+            addressId="";
+        }
+        notUseCouponList .clear();
+        useCouponList.clear();
+        initData(edt_door_ticket.getText().toString(),is_have_adress);
+        Log.e("213213","1");
+
+    }
+
+
 
     private void initGetDate() {
         OkHttpClientManager.postAsynJson(gson.toJson(new HashMap<>()), UrlUtils.LIST_DATA + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
@@ -201,10 +230,10 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
                     return;
                 }
 
-                if (TextUtils.isEmpty(addressId)) {
-                    showToast("请添加收货地址");
-                    return;
-                }
+//                if (TextUtils.isEmpty(addressId)) {
+//                    showToast("请添加收货地址");
+//                    return;
+//                }
 
                 RemindDialog dialog = new RemindDialog(mContext, new RemindDialog.onSuccessClick() {
                     @Override
@@ -220,6 +249,7 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, LocationManageActivity.class);
                 intent.putExtra("type", "1");
+                intent.putExtra("use","1");
                 intent.putExtra("customerId", customerId);
                 startActivityForResult(intent, 2);
             }
@@ -271,7 +301,8 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
                     // tv_get_money_of_now.setText("¥"+old_pay);
                     try {
                         if (Integer.parseInt(s.toString()) <= Integer.parseInt(payAmount)) {
-                            initData(s.toString());
+                            initData(s.toString(),is_have_adress);
+                            Log.e("213213","2");
                             tv_cut_money_of_store.setText("-¥" + s.toString());
                         } else {
                             showToast("门店优惠金额不能大于实际需付金额");
@@ -284,7 +315,8 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
                     }
                 } else {
                     //edt_door_ticket.setText("");
-                    initData("0");
+                    initData("0",is_have_adress);
+                    Log.e("213213","3");
                 }
 
 
@@ -393,6 +425,7 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
                     intent.putExtra("type", "2");//卖货柜台
                     startActivity(intent);
                     finish();
+                    CaptureActivity.instance.finish();
                 } else {
                     showToast(baseModel.getMsg());
                 }
@@ -401,16 +434,12 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
 
-    }
 
-    private void initData(String num) {
+    private void initData(String num,boolean is_have_adress) {
 
         map.put("shopDerate", num);
-
+        map.put("isUse", is_have_adress);
 
         map.put("customerId", customerId);
         if (addressId != null) {
@@ -527,6 +556,10 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
                         tv_get_ticket.setText("无优惠券");
                         tv_get_ticket.setEnabled(false);
                     }
+                }else {
+                    if (!TextUtils.isEmpty(baseModel.getMsg())){
+                        showToast(baseModel.getMsg());
+                    }
                 }
             }
         });
@@ -552,6 +585,7 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
                 Intent intent = new Intent(mContext, LocationManageActivity.class);
                 intent.putExtra("customerId", customerId);
                 intent.putExtra("type", "1");
+                intent.putExtra("use","1");
                 startActivityForResult(intent, 2);
             }
         });
@@ -625,6 +659,8 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
             tv_name.setText(((AddressDatasBean) data.getSerializableExtra("address")).getShipPerson());
             tv_phone.setText(((AddressDatasBean) data.getSerializableExtra("address")).getShipMobile());
             tv_details.setText(((AddressDatasBean) data.getSerializableExtra("address")).getShipAddress());
+            initData(edt_door_ticket.getText().toString(),is_have_adress);
+            Log.e("213213","4");
         }
 
         if (requestCode == 3 && resultCode == 3) {
@@ -632,15 +668,21 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
             payValue = data.getStringExtra("payValue");
             tv_get_ticket.setText(payValue);
             clickTicket = "";
+            initData(edt_door_ticket.getText().toString(),is_have_adress);
+            Log.e("213213","5");
         }
-        initData("0");
+
+
+
+
     }
 
     @Subscribe
     public void onEvent(ArrayList<ScanDatasBean> beanArrayList) {
         if (beanArrayList != null) {
             data = beanArrayList;
-            initData("0");
+            initData(edt_door_ticket.getText().toString(),is_have_adress);
+            Log.e("213213","6");
         }
     }
 

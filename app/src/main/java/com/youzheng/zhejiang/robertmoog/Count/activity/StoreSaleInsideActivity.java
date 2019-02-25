@@ -87,7 +87,7 @@ public class StoreSaleInsideActivity extends BaseActivity implements View.OnClic
     private String startstr="";
     private String endstr="";
     private String orderCount,orderAmountCount,customerTransaction;
-
+    private View no_data;
 
 
     @Override
@@ -179,6 +179,7 @@ public class StoreSaleInsideActivity extends BaseActivity implements View.OnClic
         pr_list.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
+        no_data=findViewById(R.id.no_data);
     }
 
     private void initData(long shopPersonalId,String startDate,String endDate) {
@@ -233,8 +234,13 @@ public class StoreSaleInsideActivity extends BaseActivity implements View.OnClic
         if (shopDataBeans.size()!=0){
             list.addAll(shopDataBeans);
             adapter.setUI(shopDataBeans);
+            no_data.setVisibility(View.GONE);
+            pr_list.setVisibility(View.VISIBLE);
+
         }else {
-            showToast(getString(R.string.load_list_erron));
+            no_data.setVisibility(View.VISIBLE);
+            pr_list.setVisibility(View.GONE);
+            //showToast(getString(R.string.load_list_erron));
         }
 
     }

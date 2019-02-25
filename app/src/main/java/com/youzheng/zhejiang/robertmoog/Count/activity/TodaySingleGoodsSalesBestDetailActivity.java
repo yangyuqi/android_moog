@@ -57,6 +57,7 @@ public class TodaySingleGoodsSalesBestDetailActivity extends BaseActivity implem
     private String starstDate = "";
     private String endsDate = "";
     private SpringView springView;
+    private View no_data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,7 +132,7 @@ public class TodaySingleGoodsSalesBestDetailActivity extends BaseActivity implem
         adapter.notifyDataSetChanged();
 
         springView = (SpringView) findViewById(R.id.springView);
-
+        no_data=findViewById(R.id.no_data);
         springView.setHeader(new MyHeader(this));
         springView.setFooter(new MyFooter(this));
     }
@@ -177,8 +178,15 @@ public class TodaySingleGoodsSalesBestDetailActivity extends BaseActivity implem
         if (beanList.size() != 0) {
             list.addAll(beanList);
             adapter.setUI(beanList);
+            no_data.setVisibility(View.GONE);
+            springView.setVisibility(View.VISIBLE);
         } else {
-            showToast(getString(R.string.load_list_erron));
+            if (page==1){
+                no_data.setVisibility(View.VISIBLE);
+                springView.setVisibility(View.GONE);
+            }else {
+                showToast(getString(R.string.load_list_erron));
+            }
         }
 
 

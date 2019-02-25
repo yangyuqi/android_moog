@@ -92,7 +92,7 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
     private boolean isFirstLoad = false;
     private SpringView springView;
     private ImageView iv_clear;
-
+    private View no_data;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -178,6 +178,7 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
     }
 
     private void initView() {
+        no_data=view.findViewById(R.id.no_data);
         tv_search = (EditText) view.findViewById(R.id.tv_search);
         iv_search = (ImageView) view.findViewById(R.id.iv_search);
         iv_search.setOnClickListener(this);
@@ -308,8 +309,15 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
         if (orderListBeans.size() != 0) {
             list.addAll(orderListBeans);
             adapter.setUI(list);
+            no_data.setVisibility(View.GONE);
+            springView.setVisibility(View.VISIBLE);
         } else {
-            showToast(getString(R.string.load_list_erron));
+            if (page==1&&TextUtils.isEmpty(orderCode)&&TextUtils.isEmpty(timeQuantum)){
+                no_data.setVisibility(View.VISIBLE);
+                springView.setVisibility(View.GONE);
+            }else {
+                showToast(getString(R.string.load_list_erron));
+            }
         }
 
     }
@@ -334,6 +342,8 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
             case R.id.tv_time:
                 drawer_layout.openDrawer(GravityCompat.END);
                 tv_search.setClickable(false);
+                SoftInputUtils.hideSoftInput(getActivity());
+                tv_search.clearFocus();
                 break;
             case R.id.tv_again:
                 goodsTimeAdapter.setSelectItem(0);
@@ -385,6 +395,7 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
             iv_clear.setVisibility(View.GONE);
             list.clear();
             orderCode = "";
+            page=1;
             initData(page, pageSize, orderCode, timeQuantum, isCustomer, type);
         }else {
             iv_clear.setVisibility(View.VISIBLE);

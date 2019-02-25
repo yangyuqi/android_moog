@@ -46,7 +46,7 @@ public class SampleOutAdapter extends BaseAdapter {
     public void setAppear(Boolean isappear) {
         this.isappear = isappear;
         notifyDataSetChanged();
-        editTextList.clear();
+       // editTextList.clear();
     }
 
     @Override
@@ -87,6 +87,7 @@ public class SampleOutAdapter extends BaseAdapter {
             viewHolder.tv_number.setVisibility(View.GONE);
             viewHolder.et_number.setVisibility(View.VISIBLE);
             viewHolder.et_number.setText(bean.getSampleQuantity()+"");
+            bean.setSampleQuantity(bean.getSampleQuantity());
 
             final ViewHolder finalViewHolder1 = viewHolder;
             viewHolder.et_number.addTextChangedListener(new TextWatcher() {
@@ -105,21 +106,24 @@ public class SampleOutAdapter extends BaseAdapter {
                     if (TextUtils.isEmpty(s.toString())){
                         bean.setSampleQuantity(0);
                         // finalViewHolder.et_number.setText(bean.getSampleQuantity()+"");
-                        return;
                     }else {
                         long num= Long.parseLong(s.toString());
                         if (num>999){
                             Toast.makeText(context,"最大不超过999",Toast.LENGTH_SHORT).show();
                             finalViewHolder1.et_number.setText("999");
+                            bean.setSampleQuantity(999);
                         }
                     }
 
                 }
             });
+
         } else {
             viewHolder.tv_number.setVisibility(View.VISIBLE);
             viewHolder.et_number.setVisibility(View.GONE);
         }
+
+
 
         editTextList.add(viewHolder.et_number);
 

@@ -58,7 +58,7 @@ public class TodayGoodsTypeSaleBestActivity extends BaseActivity implements View
     private String endstr = "";
     private String rulestr = "COUNT";//默认是数量
     private SpringView mSpringView;
-
+    private View no_data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,6 +131,7 @@ public class TodayGoodsTypeSaleBestActivity extends BaseActivity implements View
 
         mSpringView.setHeader(new MyHeader(this));
         mSpringView.setFooter(new MyFooter(this));
+        no_data=findViewById(R.id.no_data);
     }
 
     @Override
@@ -179,8 +180,17 @@ public class TodayGoodsTypeSaleBestActivity extends BaseActivity implements View
         if (beanList.size() != 0) {
             list.addAll(beanList);
             adapter.setUI(beanList);
+            no_data.setVisibility(View.GONE);
+            mSpringView.setVisibility(View.VISIBLE);
         } else {
-            showToast(getString(R.string.load_list_erron));
+
+            if (page==1){
+                no_data.setVisibility(View.VISIBLE);
+                mSpringView.setVisibility(View.GONE);
+            }else {
+                showToast(getString(R.string.load_list_erron));
+            }
+
         }
 
     }

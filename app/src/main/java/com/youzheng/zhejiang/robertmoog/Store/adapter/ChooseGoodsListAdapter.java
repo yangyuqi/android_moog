@@ -122,7 +122,7 @@ public class ChooseGoodsListAdapter extends RecyclerView.Adapter {
                 intent.putExtra("orderID",list.get(positions).getId());
                 intent.putExtra("isAll",true);
                 context.startActivity(intent);
-                ChooseOrderListActivity.Instance.finish();
+               // ChooseOrderListActivity.Instance.finish();
 
             }
         });
@@ -134,7 +134,7 @@ public class ChooseGoodsListAdapter extends RecyclerView.Adapter {
                 intent.putExtra("returnGoodsId",list.get(positions).getId());
                 intent.putExtra("isAll",false);
                 context.startActivity(intent);
-                ChooseOrderListActivity.Instance.finish();
+                //ChooseOrderListActivity.Instance.finish();
             }
         });
 
@@ -166,7 +166,7 @@ public class ChooseGoodsListAdapter extends RecyclerView.Adapter {
                 intent.putExtra("orderID",list.get(position).getId());
                 intent.putExtra("isAll",true);
                 context.startActivity(intent);
-                ChooseOrderListActivity.Instance.finish();
+                //ChooseOrderListActivity.Instance.finish();
             }
         });
 
@@ -178,7 +178,7 @@ public class ChooseGoodsListAdapter extends RecyclerView.Adapter {
                 intent.putExtra("returnGoodsId",list.get(position).getId());
                 intent.putExtra("isAll",false);
                 context.startActivity(intent);
-                ChooseOrderListActivity.Instance.finish();
+                //ChooseOrderListActivity.Instance.finish();
             }
         });
 

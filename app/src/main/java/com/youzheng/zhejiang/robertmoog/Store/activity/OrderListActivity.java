@@ -97,7 +97,7 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
     private String type = "ALL";//订单类型（ALL:全部，GROOM:推荐订单，MAJOR:专业）默认是全部
     private SpringView mSpringView;
     private ImageView iv_clear;
-
+    private View no_data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,6 +185,7 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void initView() {
+        no_data=findViewById(R.id.no_data);
         btnBack = (ImageView) findViewById(R.id.btnBack);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
         textHeadTitle.setText(getString(R.string.order_list));
@@ -302,8 +303,15 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
         if (orderListBeans.size() != 0) {
             list.addAll(orderListBeans);
             adapter.setUI(list, this);
+            no_data.setVisibility(View.GONE);
+            mSpringView.setVisibility(View.VISIBLE);
         } else {
-            showToast(getString(R.string.load_list_erron));
+            if (page==1&&TextUtils.isEmpty(orderCode)&&TextUtils.isEmpty(timeQuantum)){
+                no_data.setVisibility(View.VISIBLE);
+                mSpringView.setVisibility(View.GONE);
+            }else {
+                showToast(getString(R.string.load_list_erron));
+            }
         }
 
     }
@@ -329,6 +337,8 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
             case R.id.tv_time:
                 drawer_layout.openDrawer(GravityCompat.END);
                 tv_search.setClickable(false);
+                SoftInputUtils.hideSoftInput(this);
+                tv_search.clearFocus();
                 break;
 
             case R.id.btnBack:
@@ -388,6 +398,7 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
             iv_clear.setVisibility(View.GONE);
             list.clear();
             orderCode = "";
+            page=1;
             initData(page, pageSize, orderCode, timeQuantum, isCustomer, type);
         }else {
             iv_clear.setVisibility(View.VISIBLE);

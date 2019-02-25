@@ -11,7 +11,9 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
+        <include layout="@layout/layout_no_data"
+            android:id="@+id/no_data"
+            android:visibility="gone"/>
 
 
         <ListView
@@ -19,6 +21,7 @@
             android:id="@+id/ls_location"
             android:layout_above="@+id/tv_add"
             android:dividerHeight="@dimen/space_divider_2"
+
             android:layout_width="match_parent"
             android:layout_height="match_parent"></ListView>
 

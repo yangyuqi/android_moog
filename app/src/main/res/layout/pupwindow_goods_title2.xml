@@ -12,7 +12,7 @@
         android:id="@+id/gv_title"
         android:layout_width="match_parent"
         android:layout_height="180dp"
-        android:numColumns="4"
+        android:numColumns="3"
         android:scrollbars="none"
         android:background="@color/bg_background_white"
         android:listSelector="@android:color/transparent"

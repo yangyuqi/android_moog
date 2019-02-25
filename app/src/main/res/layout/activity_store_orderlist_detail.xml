@@ -169,10 +169,12 @@
 
 
             <LinearLayout
+                android:id="@+id/lin_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:orientation="vertical"
+                android:visibility="visible"
                 android:background="@color/bg_background_white">
 
                 <LinearLayout
@@ -277,12 +279,14 @@
                 android:id="@+id/rv_list_one"
                 android:layout_width="match_parent"
                 android:layout_marginTop="5dp"
+
                 android:background="@color/bg_background_white"
                 android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_list_more"
                 android:layout_width="match_parent"
+                android:layout_marginTop="5dp"
                 android:background="@color/bg_background_white"
                 android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
 

@@ -9,7 +9,9 @@
     tools:context=".Store.activity.CheckStoreDetailActivity">
 
     <include layout="@layout/title_bar"/>
-
+    <include layout="@layout/layout_no_data"
+        android:id="@+id/no_data"
+        android:visibility="gone"/>
     <ListView
         android:id="@+id/lv_list"
         android:layout_width="match_parent"

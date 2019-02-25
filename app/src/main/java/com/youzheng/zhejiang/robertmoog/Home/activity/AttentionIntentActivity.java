@@ -36,7 +36,7 @@ public class AttentionIntentActivity extends BaseActivity {
     TabLayout tabLayout ;
 
     int layout_id ;
-
+    private View no_data;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +55,23 @@ public class AttentionIntentActivity extends BaseActivity {
         });
         tabLayout = (TabLayout) findViewById(R.id.tab);
         ls = (ListView) findViewById(R.id.ls);
+        no_data=findViewById(R.id.no_data);
+//        if (role.equals(PublicUtils.SHOP_SELLER)){
+//            tabLayout.setVisibility(View.GONE);
+//            startActivity(new Intent(mContext,AttentionManagerActivity.class));
+//            finish();
+//        }else if (role.equals(PublicUtils.SHOP_LEADER)){
+//            tabLayout.setVisibility(View.VISIBLE);
+//            initData(0);
+//        }
+        initEvent();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+
         if (role.equals(PublicUtils.SHOP_SELLER)){
             tabLayout.setVisibility(View.GONE);
             startActivity(new Intent(mContext,AttentionManagerActivity.class));
@@ -63,7 +80,6 @@ public class AttentionIntentActivity extends BaseActivity {
             tabLayout.setVisibility(View.VISIBLE);
             initData(0);
         }
-        initEvent();
     }
 
     private void initData(final int i) {
@@ -125,7 +141,12 @@ public class AttentionIntentActivity extends BaseActivity {
 
     private void initView(final int i , List<ShopPersonalListBean> list) {
         if (list.size()==0){
-            showToast(getString(R.string.load_list_erron));
+            no_data.setVisibility(View.VISIBLE);
+            ls.setVisibility(View.GONE);
+           // showToast(getString(R.string.load_list_erron));
+        }else {
+            no_data.setVisibility(View.GONE);
+            ls.setVisibility(View.VISIBLE);
         }
         if (i==0) {
             layout_id = R.layout.attention_intent_layout_item;

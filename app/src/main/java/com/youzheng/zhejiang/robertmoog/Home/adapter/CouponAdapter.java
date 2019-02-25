@@ -16,7 +16,10 @@ import com.youzheng.zhejiang.robertmoog.Model.Home.CouponListBean;
 import com.youzheng.zhejiang.robertmoog.Model.Home.CouponListBeanDetail;
 import com.youzheng.zhejiang.robertmoog.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.CouponViewHolder> {
@@ -70,10 +73,17 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.CouponView
             couponViewHolder.cb.setVisibility(View.GONE);
         }
 
+
+
+
         couponViewHolder.tv_money.setText(useCouponList.get(i).getPayValue());
         couponViewHolder.tv_use_money.setText("满"+useCouponList.get(i).getUseCondition()+"元可用");
         couponViewHolder.tv_name.setText(useCouponList.get(i).getCouponType());
-        couponViewHolder.tv_time.setText(useCouponList.get(i).getStartDate()+"-"+useCouponList.get(i).getEndDate());
+        try {
+            couponViewHolder.tv_time.setText(StringToDate(useCouponList.get(i).getStartDate())+" - "+StringToDate(useCouponList.get(i).getEndDate()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         if (useCouponList.get(i).getCouponType().equals("订单满减")){
             couponViewHolder.rl_bg.setBackgroundResource(R.mipmap.group_24_4);
@@ -125,6 +135,16 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.CouponView
         }else {
             couponViewHolder.tv_together.setVisibility(View.GONE);
         }
+    }
+    private String StringToDate(String time) throws ParseException {
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date;
+        date = format.parse(time);
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyy/MM/dd");
+        String s = format1.format(date);
+        return s;
+
     }
 
     @Override

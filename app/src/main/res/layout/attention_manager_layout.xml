@@ -89,7 +89,9 @@
 
         </LinearLayout>
     </RelativeLayout>
-
+    <include layout="@layout/layout_no_data"
+        android:id="@+id/no_data"
+        android:visibility="gone"/>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">

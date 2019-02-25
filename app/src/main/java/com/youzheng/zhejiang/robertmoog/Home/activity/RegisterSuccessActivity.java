@@ -59,14 +59,16 @@ public class RegisterSuccessActivity extends BaseActivity {
                     case 3 :
                         if (registerBean!=null){
                             Intent intent = new Intent(mContext,LocationManageActivity.class);
-                            intent.putExtra("customerId",registerBean.getCustomerId());
+                            intent.putExtra("customerId",registerBean.getCustomerId()+"");
+                            intent.putExtra("use","2");
                             Log.e("customerid","注册成功"+registerBean.getCustomerId());
                             startActivity(intent);
                         }
 
                         if (customer!=null){
                             Intent intent = new Intent(mContext,LocationManageActivity.class);
-                            intent.putExtra("customerId",customer.getCustomerId());
+                            intent.putExtra("use","2");
+                            intent.putExtra("customerId",customer.getCustomerId()+"");
                             startActivity(intent);
                         }
                         break;
@@ -106,7 +108,7 @@ public class RegisterSuccessActivity extends BaseActivity {
                                 if (aBoolean){
                                     Intent intent1 = new Intent(mContext, CaptureActivity.class);
                                     if (customer!=null){
-                                        intent1.putExtra("customerId",customer.getCustomerId());
+                                        intent1.putExtra("customerId",customer.getCustomerId()+"");
                                     }else {
                                         intent1.putExtra("customerId",String.valueOf(registerBean.getCustomerId()));
                                     }
@@ -120,9 +122,9 @@ public class RegisterSuccessActivity extends BaseActivity {
                     case 2 :
                         Intent intent2 = new Intent(mContext,ClientAccountActivity.class);
                         if (customer!=null){
-                            intent2.putExtra("customerId",customer.getCustomerId());
+                            intent2.putExtra("customerId",customer.getCustomerId()+"");
                         }else {
-                            intent2.putExtra("customerId",registerBean.getCustomerId());
+                            intent2.putExtra("customerId",registerBean.getCustomerId()+"");
                         }
                         startActivity(intent2);
                         break;

@@ -136,13 +136,21 @@ public class ReturnGoodsListAdapter extends RecyclerView.Adapter {
         holder.mTvOrderNum.setText(beans.getReturnOrderCode());
         holder.mTvCount.setText("共" + beans.getProductNum() + "件商品");
         holder.mTvMoney.setText(context.getString(R.string.label_money)+beans.getActualRefundAmount());
+        if (piclist.size()<4&&piclist.size()!=0){
+            holder.mRvListPic.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
 
-        holder.mRvListPic.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return holder.item.onTouchEvent(event);
-            }
-        });
+                    return holder.item.onTouchEvent(event);
+                }
+            });
+        }
+//        holder.mRvListPic.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                return holder.item.onTouchEvent(event);
+//            }
+//        });
 
     }
 

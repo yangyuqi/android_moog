@@ -9,7 +9,9 @@
     tools:context=".Store.activity.ReturnGoods.ChooseOrderListActivity">
 
     <include layout="@layout/title_bar" />
-
+    <include layout="@layout/layout_no_data"
+        android:id="@+id/no_data"
+        android:visibility="gone"/>
     <com.liaoinstan.springview.widget.SpringView
         android:id="@+id/springView"
         android:layout_width="match_parent"

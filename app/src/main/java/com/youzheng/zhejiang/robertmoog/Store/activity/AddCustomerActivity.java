@@ -2,6 +2,8 @@ package com.youzheng.zhejiang.robertmoog.Store.activity;
 
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -30,13 +32,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import okhttp3.Request;
 
 /**
  * 添加专业客户界面
  */
-public class AddCustomerActivity extends BaseActivity implements View.OnClickListener, TextWatcher, GetListener {
+public class AddCustomerActivity extends BaseActivity implements View.OnClickListener, GetListener {
 
     private ImageView btnBack;
     /**  */
@@ -124,8 +128,21 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
         lin_show=findViewById(R.id.lin_show);
         tv_add.setOnClickListener(this);
 
-        edt_name.addTextChangedListener(this);
-        edt_phone.addTextChangedListener(this);
+//        edt_name.addTextChangedListener(this);
+//        edt_phone.addTextChangedListener(this);
+
+        InputFilter typeFilter = new InputFilter() {
+            @Override
+            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+                Pattern p = Pattern.compile("[a-zA-Z|\u4e00-\u9fa5]+");
+                Matcher m = p.matcher(source.toString());
+                if (!m.matches()) return "";
+                return null;
+            }
+        };
+
+        edt_name.setFilters(new InputFilter[]{typeFilter});
+
     }
 
     @Override
@@ -208,28 +225,7 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
     }
 
 
-    @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-    }
-
-    @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-    }
-
-    @Override
-    public void afterTextChanged(Editable s) {
-
-        if (edt_phone.getText().toString().equals("")||edt_name.getText().toString().equals("")){
-
-
-        }else {
-
-
-        }
-
-    }
 
     @Override
     public void getTextStr(String str,String title) {

@@ -545,6 +545,8 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
         intent.putExtra("type", "1");
         startActivity(intent);
         finish();
+        ChooseOrderListActivity.Instance.finish();
+        ChooseReturnGoodsActivity.Instance.finish();
     }
 
 

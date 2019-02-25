@@ -7,6 +7,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -64,7 +65,7 @@ public class AttentionManagerActivity extends BaseActivity implements MangerList
     ImageView iv_search;
     SpringView springView;
     private ImageView iv_clear;
-
+    private View no_data;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,7 +102,7 @@ public class AttentionManagerActivity extends BaseActivity implements MangerList
                 if (tab.getPosition() == 0) {
                     springView.setVisibility(View.VISIBLE);
                     ls.setVisibility(View.GONE);
-                    findViewById(R.id.rl_search).setVisibility(View.VISIBLE);
+                   // findViewById(R.id.rl_search).setVisibility(View.VISIBLE);
                     initData();
                 } else if (tab.getPosition() == 1) {
                     springView.setVisibility(View.GONE);
@@ -154,8 +155,16 @@ public class AttentionManagerActivity extends BaseActivity implements MangerList
                 BaseModel baseModel = gson.fromJson(response, BaseModel.class);
                 if (baseModel.getCode() == PublicUtils.code) {
                     NotLabelList list = gson.fromJson(gson.toJson(baseModel.getDatas()), NotLabelList.class);
-                    com_adapter.setData(list.getNotLabelList());
-                    com_adapter.notifyDataSetChanged();
+                    if (list.getNotLabelList().size()!=0){
+                        com_adapter.setData(list.getNotLabelList());
+                        com_adapter.notifyDataSetChanged();
+                        no_data.setVisibility(View.GONE);
+                        ls.setVisibility(View.VISIBLE);
+                    }else {
+                        no_data.setVisibility(View.VISIBLE);
+                        ls.setVisibility(View.GONE);
+                    }
+
                 }
             }
         });
@@ -203,9 +212,19 @@ public class AttentionManagerActivity extends BaseActivity implements MangerList
 //                        if (customerList.size()==0){
 //                            showToast(getString(R.string.load_list_erron));
 //                        }
+                        no_data.setVisibility(View.GONE);
+                        springView.setVisibility(View.VISIBLE);
+                        findViewById(R.id.rl_search).setVisibility(View.VISIBLE);
                     } else {
-                        showToast(getString(R.string.load_list_erron));
-                        adapter.setData(new ArrayList<CustomerIntentListBean>(), mContext);
+                        if (pageNum==1&&TextUtils.isEmpty(tv_search.getText().toString())){
+                            no_data.setVisibility(View.VISIBLE);
+                            springView.setVisibility(View.GONE);
+                            findViewById(R.id.rl_search).setVisibility(View.GONE);
+                        }else {
+                            showToast(getString(R.string.load_list_erron));
+                        }
+
+                        //adapter.setData(new ArrayList<CustomerIntentListBean>(), mContext);
                     }
                 }
             }
@@ -213,6 +232,7 @@ public class AttentionManagerActivity extends BaseActivity implements MangerList
     }
 
     private void initView() {
+        no_data=findViewById(R.id.no_data);
         listBean = (ShopPersonalListBean) getIntent().getSerializableExtra("label");
         if (listBean != null) {
             personalId = listBean.getId();

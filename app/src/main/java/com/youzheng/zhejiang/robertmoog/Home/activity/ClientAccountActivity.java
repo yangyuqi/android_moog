@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
+import com.liaoinstan.springview.widget.SpringView;
 import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
@@ -18,6 +19,8 @@ import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.Model.Home.CouponListBean;
 import com.youzheng.zhejiang.robertmoog.Model.Home.CouponListClient;
 import com.youzheng.zhejiang.robertmoog.R;
+import com.youzheng.zhejiang.robertmoog.utils.View.MyFooter;
+import com.youzheng.zhejiang.robertmoog.utils.View.MyHeader;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -26,12 +29,14 @@ import java.util.Map;
 
 import okhttp3.Request;
 
-public class ClientAccountActivity extends BaseActivity{
-    private RecyclerView recyclerView ;
-    CouponAdapter addapter ;
-    String customerId ;
-    String pageNum = "1" , pageSize = "30";
+public class ClientAccountActivity extends BaseActivity {
+    private RecyclerView recyclerView;
+    CouponAdapter addapter;
+    String customerId;
+    String pageNum = "1", pageSize = "30";
     ArrayList<CouponListBean> data = new ArrayList<>();
+    private View no_data;
+   // private SpringView springView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,13 +46,16 @@ public class ClientAccountActivity extends BaseActivity{
         initView();
 
         initData();
+
     }
 
+
+
     private void initData() {
-        Map<String,Object> map = new HashMap<>();
-        map.put("pageNum",pageNum);
-        map.put("pageSize",pageSize);
-        map.put("customerId",customerId);
+        Map<String, Object> map = new HashMap<>();
+        map.put("pageNum", pageNum);
+        map.put("pageSize", pageSize);
+        map.put("customerId", customerId);
         OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.CLIENT_ACCOUNT + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
             public void onFailure(Request request, IOException e) {
@@ -56,16 +64,20 @@ public class ClientAccountActivity extends BaseActivity{
 
             @Override
             public void onResponse(String response) {
-                BaseModel baseModel = gson.fromJson(response,BaseModel.class);
-                if (baseModel.getCode()== PublicUtils.code){
-                    CouponListClient couponListClient = gson.fromJson(gson.toJson(baseModel.getDatas()),CouponListClient.class);
-                    if (couponListClient.getCouponList().size()>0){
-                        addapter.setData(couponListClient.getCouponList(),mContext,"3");
-                    }else {
-                        showToast(getString(R.string.load_list_erron));
+                BaseModel baseModel = gson.fromJson(response, BaseModel.class);
+                if (baseModel.getCode() == PublicUtils.code) {
+                    CouponListClient couponListClient = gson.fromJson(gson.toJson(baseModel.getDatas()), CouponListClient.class);
+                    if (couponListClient.getCouponList().size() > 0) {
+                        addapter.setData(couponListClient.getCouponList(), mContext, "3");
+                        no_data.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
+                    } else {
+                        no_data.setVisibility(View.VISIBLE);
+                        recyclerView.setVisibility(View.GONE);
+                       // showToast(getString(R.string.load_list_erron));
                     }
-                }else {
-                    if (!TextUtils.isEmpty(baseModel.getMsg())){
+                } else {
+                    if (!TextUtils.isEmpty(baseModel.getMsg())) {
                         showToast(baseModel.getMsg());
                     }
                 }
@@ -74,7 +86,8 @@ public class ClientAccountActivity extends BaseActivity{
     }
 
     private void initView() {
-        ((TextView)findViewById(R.id.textHeadTitle)).setText("客户账户");
+        no_data = findViewById(R.id.no_data);
+        ((TextView) findViewById(R.id.textHeadTitle)).setText("客户账户");
         findViewById(R.id.btnBack).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,6 +103,7 @@ public class ClientAccountActivity extends BaseActivity{
         addapter = new CouponAdapter();
         recyclerView.setAdapter(addapter);
         recyclerView.addItemDecoration(new RecycleViewDivider(mContext, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
-        addapter.setData(data,ClientAccountActivity.this,"3");
+        addapter.setData(data, ClientAccountActivity.this, "3");
+
     }
 }

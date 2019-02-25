@@ -56,6 +56,7 @@ public class StoreCustomerActivity extends BaseActivity implements View.OnClickL
     private int year;
     private Calendar calendar;
     private SpringView mSpringView;
+    private View no_data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +122,7 @@ public class StoreCustomerActivity extends BaseActivity implements View.OnClickL
 
 
     private void initView() {
+        no_data=findViewById(R.id.no_data);
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
@@ -197,9 +199,12 @@ public class StoreCustomerActivity extends BaseActivity implements View.OnClickL
         if (coustomerListBeans.size() != 0) {
             list.addAll(coustomerListBeans);
             adapter.setListRefreshUi(coustomerListBeans);
+            no_data.setVisibility(View.GONE);
+            lv_list.setVisibility(View.VISIBLE);
         } else {
-            showToast(getString(R.string.load_list_erron));
-            year = year + 1;
+            //showToast(getString(R.string.load_list_erron));
+            no_data.setVisibility(View.VISIBLE);
+            lv_list.setVisibility(View.GONE);
         }
 
 

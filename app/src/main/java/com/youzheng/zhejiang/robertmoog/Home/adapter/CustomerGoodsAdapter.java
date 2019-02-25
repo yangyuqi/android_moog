@@ -195,16 +195,16 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
 //            }else {
 //                ((CustomerIntentViewHolder) viewHolder).hsv.setVisibility(View.GONE);
 //            }
-              if (TextUtils.isEmpty(data.get(i).getRemark())){
-                  ((CustomerIntentViewHolder) viewHolder).iv_message.setVisibility(View.GONE);
-              }else {
-                  ((CustomerIntentViewHolder) viewHolder).iv_message.setVisibility(View.VISIBLE);
-              }
+//              if (TextUtils.isEmpty(data.get(i).getRemark())){
+//                  ((CustomerIntentViewHolder) viewHolder).iv_message.setVisibility(View.GONE);
+//              }else {
+//                  ((CustomerIntentViewHolder) viewHolder).iv_message.setVisibility(View.VISIBLE);
+//              }
             ((CustomerIntentViewHolder) viewHolder).iv_message.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (data.get(i).getId()!=null) {
-                        RemarkDialog remarkDialog = new RemarkDialog(context, data.get(i).getId(), data.get(i).getRemark());
+                        RemarkDialog remarkDialog = new RemarkDialog(context, data.get(i).getId(), data.get(i).getRemark(),true);
                         remarkDialog.show();
                     }
                 }

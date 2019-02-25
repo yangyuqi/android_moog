@@ -26,7 +26,6 @@
                 android:id="@+id/rv"
                 android:layout_width="match_parent"
                 android:layout_height="170dp"
-                android:background="@color/bg_main"
                 ></com.jude.rollviewpager.RollPagerView>
 
             <RelativeLayout

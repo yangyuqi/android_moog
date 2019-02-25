@@ -2,16 +2,10 @@ package com.youzheng.zhejiang.robertmoog.utils.QRcode.android;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.pm.FeatureInfo;
-import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
-import android.support.v7.widget.AppCompatImageView;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -36,14 +30,12 @@ import com.youzheng.zhejiang.robertmoog.Home.activity.SearchGoodsActivity;
 import com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider;
 import com.youzheng.zhejiang.robertmoog.Home.adapter.SearchResultAdapter;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
-
 import com.youzheng.zhejiang.robertmoog.Model.Home.IntentProductsBeanAdd;
-
 import com.youzheng.zhejiang.robertmoog.Model.Home.ScanDatas;
 import com.youzheng.zhejiang.robertmoog.Model.Home.ScanDatasBean;
 import com.youzheng.zhejiang.robertmoog.R;
-
 import com.youzheng.zhejiang.robertmoog.Store.utils.SoftInputUtils;
+import com.youzheng.zhejiang.robertmoog.utils.ClickUtils;
 import com.youzheng.zhejiang.robertmoog.utils.QRcode.bean.ZxingConfig;
 import com.youzheng.zhejiang.robertmoog.utils.QRcode.camera.CameraManager;
 import com.youzheng.zhejiang.robertmoog.utils.QRcode.common.Constant;
@@ -53,11 +45,9 @@ import com.youzheng.zhejiang.robertmoog.utils.QRcode.decode.ImageUtil;
 import com.youzheng.zhejiang.robertmoog.utils.QRcode.view.ViewfinderView;
 import com.youzheng.zhejiang.robertmoog.utils.SharedPreferencesUtils;
 
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import java.util.Map;
 
 import okhttp3.Request;
@@ -81,21 +71,30 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
     private CameraManager cameraManager;
     private CaptureActivityHandler handler;
     private SurfaceHolder surfaceHolder;
-    private RecyclerView recycler_view ;
-    private String token ;
+    private RecyclerView recycler_view;
+    private String token;
     private Gson gson = new Gson();
-    SearchResultAdapter addapter ;
+    SearchResultAdapter addapter;
     private ArrayList<ScanDatasBean> datasBeanList = new ArrayList<>();
+    /**
+     * 开始扫描
+     */
+    private TextView tv_start;
+
     public ViewfinderView getViewfinderView() {
         return viewfinderView;
     }
-    private TextView tv_confrim ,tv_mm;
-    private String customerId ,type ;
+
+    private TextView tv_confrim, tv_mm;
+    private String customerId, type;
+    public static CaptureActivity instance;
+
     public Handler getHandler() {
         return handler;
     }
-    int widWidth ;
-    private ImageView iv_preview ;
+
+    int widWidth;
+    private ImageView iv_preview;
     private boolean isPreview = true;
 
     public CameraManager getCameraManager() {
@@ -114,6 +113,7 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        instance=this;
         // 保持Activity处于唤醒状态
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -137,7 +137,7 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
             config.setScanLineColor(R.color.color_air_blue);//设置扫描线的颜色 默认白色
         }
         getWindow().setSoftInputMode
-                (WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN|
+                (WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN |
                         WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         setContentView(R.layout.activity_capture);
 
@@ -146,7 +146,7 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
         manager.getDefaultDisplay().getMetrics(outMetrics);
         widWidth = outMetrics.widthPixels;
 
-        token = (String) SharedPreferencesUtils.getParam(this, PublicUtils.access_token,"");
+        token = (String) SharedPreferencesUtils.getParam(this, PublicUtils.access_token, "");
         initView();
 
         hasSurface = false;
@@ -178,45 +178,56 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
                         surfaceHolder.removeCallback(CaptureActivity.this);
                     }
                     tv_mm.setText("展开扫描区");
-                }else {
+                } else {
 
                     tv_mm.setText("收起扫描区");
                     iv_preview.setImageResource(R.mipmap.group_12_3);
                     findViewById(R.id.largeLabel).setVisibility(View.VISIBLE);
                     isPreview = true;
+                    if (tv_start.getVisibility()==View.VISIBLE){
+                        if (handler != null) {
+                            handler.quitSynchronously();
+                            handler = null;
+                        }
+                        inactivityTimer.onPause();
+                        beepManager.close();
+                        cameraManager.closeDriver();
 
+                        if (!hasSurface) {
 
-                    cameraManager = new CameraManager(getApplication(), config);
+                            surfaceHolder.removeCallback(CaptureActivity.this);
+                        }
+                    }else {
+                        cameraManager = new CameraManager(getApplication(), config);
 
-                    viewfinderView.setCameraManager(cameraManager);
-                    handler = null;
-                    surfaceHolder = previewView.getHolder();
-                    if (hasSurface) {
+                        viewfinderView.setCameraManager(cameraManager);
+                        handler = null;
+                        surfaceHolder = previewView.getHolder();
+                        if (hasSurface) {
 
-                        initCamera(surfaceHolder);
-                    } else {
-                        // 重置callback，等待surfaceCreated()来初始化camera
-                        surfaceHolder.addCallback(CaptureActivity.this);
+                            initCamera(surfaceHolder);
+                        } else {
+                            // 重置callback，等待surfaceCreated()来初始化camera
+                            surfaceHolder.addCallback(CaptureActivity.this);
+                        }
+
+                        beepManager.updatePrefs();
+                        inactivityTimer.onResume();
                     }
-
-                    beepManager.updatePrefs();
-                    inactivityTimer.onResume();
-
                 }
             }
         });
     }
 
 
-
     private void initView() {
         previewView = findViewById(R.id.preview_view);
-        tv_mm=findViewById(R.id.tv_mm);
+        tv_mm = findViewById(R.id.tv_mm);
         previewView.setOnClickListener(this);
 
         viewfinderView = findViewById(R.id.viewfinder_view);
         viewfinderView.setZxingConfig(config);
-        ((TextView)findViewById(R.id.textHeadTitle)).setText(this.getResources().getString(R.string.home_gv_two));
+        ((TextView) findViewById(R.id.textHeadTitle)).setText(this.getResources().getString(R.string.home_gv_two));
         findViewById(R.id.btnBack).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -228,8 +239,8 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
         tv_confrim = findViewById(R.id.tv_confrim);
         customerId = getIntent().getStringExtra("customerId");
         type = getIntent().getStringExtra("type");
-        if (type!=null){
-            ((TextView)findViewById(R.id.textHeadTitle)).setText("添加意向商品");
+        if (type != null) {
+            ((TextView) findViewById(R.id.textHeadTitle)).setText("添加意向商品");
         }
         addapter = new SearchResultAdapter();
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -240,7 +251,12 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
         findViewById(R.id.iv_next).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivityForResult(new Intent(CaptureActivity.this, SearchGoodsActivity.class),2);
+                if (ClickUtils.isFastDoubleClick()) {
+                    return;
+                }else {
+                    startActivityForResult(new Intent(CaptureActivity.this, SearchGoodsActivity.class), 2);
+
+                }
             }
         });
 
@@ -249,57 +265,92 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
         tv_confrim.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for (ScanDatasBean scanDatasBean:datasBeanList){
-                    if (scanDatasBean.getNum()==0){
+                for (ScanDatasBean scanDatasBean : datasBeanList) {
+                    if (scanDatasBean.getNum() == 0) {
                         showToast("商品数量不能为空");
                         return;
                     }
                 }
 
-                    if (datasBeanList.size() > 0) {
-                        if (type==null) {
-                            Intent intent = new Intent(CaptureActivity.this, SalesActivity.class);
-                            intent.putExtra("customerId", customerId);
-                            intent.putExtra("data", datasBeanList);
-                            startActivity(intent);
-                            finish();
-                        }else {
-                            addIntention();
-                        }
+                if (datasBeanList.size() > 0) {
+                    if (type == null) {
+                        Intent intent = new Intent(CaptureActivity.this, SalesActivity.class);
+                        intent.putExtra("customerId", customerId);
+                        intent.putExtra("data", datasBeanList);
+                        intent.putExtra("address_aa",1);
+                        Log.e("传过去的集合", String.valueOf(datasBeanList));
+                        startActivity(intent);
+                       // finish();
                     } else {
-                        showToast("请添加商品");
+                        addIntention();
                     }
+                } else {
+                    showToast("请添加商品");
+                }
+            }
+        });
+        tv_start = (TextView) findViewById(R.id.tv_start);
+        tv_start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isPreview = true;
+                cameraManager = new CameraManager(getApplication(), config);
+                viewfinderView.setCameraManager(cameraManager);
+                handler = null;
+                surfaceHolder = previewView.getHolder();
+                if (hasSurface) {
+
+                    initCamera(surfaceHolder);
+                } else {
+                    // 重置callback，等待surfaceCreated()来初始化camera
+                    surfaceHolder.addCallback(CaptureActivity.this);
+                }
+
+                beepManager.updatePrefs();
+                inactivityTimer.onResume();
+                previewView.setBackgroundColor(getResources().getColor(R.color.transparent));
+                viewfinderView.setVisibility(View.VISIBLE);
+                tv_start.setVisibility(View.GONE);
             }
         });
     }
 
     private void addIntention() {
 
-        Map<String,Object> map = new HashMap<>();
-        map.put("customerId",customerId);
+        Map<String, Object> map = new HashMap<>();
+        map.put("customerId", customerId);
         ArrayList<IntentProductsBeanAdd> beanAdds = new ArrayList<>();
-        for (ScanDatasBean bean :datasBeanList){
+        for (ScanDatasBean bean : datasBeanList) {
             IntentProductsBeanAdd beanAdd = new IntentProductsBeanAdd();
             beanAdd.setDealerProductId(bean.getId());
             beanAdd.setSetMeal(bean.isSetMeal());
             beanAdds.add(beanAdd);
         }
-        map.put("intentProducts",beanAdds);
+        map.put("intentProducts", beanAdds);
         OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.ADD_INTENTION_GOODS + "?access_token=" + token, new OkHttpClientManager.StringCallback() {
             @Override
             public void onFailure(Request request, IOException e) {
 
+                previewView.setBackgroundColor(getResources().getColor(R.color.text_drak_gray));
+                viewfinderView.setVisibility(View.GONE);
+                tv_start.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onResponse(String response) {
-                BaseModel baseModel = gson.fromJson(response,BaseModel.class);
-                if (baseModel.getCode()==PublicUtils.code){
+                BaseModel baseModel = gson.fromJson(response, BaseModel.class);
+                if (baseModel.getCode() == PublicUtils.code) {
                     showToast("添加意向商品成功");
+                    previewView.setBackgroundColor(getResources().getColor(R.color.text_drak_gray));
+                    viewfinderView.setVisibility(View.GONE);
+                    tv_start.setVisibility(View.VISIBLE);
                     finish();
-                }else {
+                } else {
                     showToast(baseModel.getMsg());
                 }
+
+
+
             }
         });
     }
@@ -319,9 +370,29 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
         setResult(RESULT_OK, intent);
 //        this.finish();
         addData(rawResult.getText());
+
+
+
+        previewView.setBackgroundColor(getResources().getColor(R.color.text_drak_gray));
+        viewfinderView.setVisibility(View.GONE);
+        tv_start.setVisibility(View.VISIBLE);
+
+        isPreview = false;
+
+        if (handler != null) {
+            handler.quitSynchronously();
+            handler = null;
+        }
+        inactivityTimer.onPause();
+        beepManager.close();
+        cameraManager.closeDriver();
+
+        if (!hasSurface) {
+
+            surfaceHolder.removeCallback(CaptureActivity.this);
+        }
 //        Toast.makeText(this,rawResult.getText(),Toast.LENGTH_SHORT).show();
     }
-
 
 
     @Override
@@ -382,7 +453,7 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
     @Override
     protected void onPause() {
 
-        Log.i("CaptureActivity","onPause");
+        Log.i("CaptureActivity", "onPause");
         if (handler != null) {
             handler.quitSynchronously();
             handler = null;
@@ -439,47 +510,84 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
             new DecodeImgThread(path, new DecodeImgCallback() {
                 @Override
                 public void onImageDecodeSuccess(Result result) {
-                        handleDecode(result);
+                    handleDecode(result);
+                    previewView.setBackgroundColor(getResources().getColor(R.color.text_drak_gray));
+                    viewfinderView.setVisibility(View.GONE);
+                    tv_start.setVisibility(View.VISIBLE);
+
+                    isPreview = false;
+
+                    if (handler != null) {
+                        handler.quitSynchronously();
+                        handler = null;
+                    }
+                    inactivityTimer.onPause();
+                    beepManager.close();
+                    cameraManager.closeDriver();
+
+                    if (!hasSurface) {
+
+                        surfaceHolder.removeCallback(CaptureActivity.this);
+                    }
 
                 }
 
                 @Override
                 public void onImageDecodeFailed() {
+                    previewView.setBackgroundColor(getResources().getColor(R.color.text_drak_gray));
+                    viewfinderView.setVisibility(View.GONE);
+                    tv_start.setVisibility(View.VISIBLE);
+
+                    isPreview = false;
+
+                    if (handler != null) {
+                        handler.quitSynchronously();
+                        handler = null;
+                    }
+                    inactivityTimer.onPause();
+                    beepManager.close();
+                    cameraManager.closeDriver();
+
+                    if (!hasSurface) {
+
+                        surfaceHolder.removeCallback(CaptureActivity.this);
+                    }
+
                     Toast.makeText(CaptureActivity.this, "条形码识别失败.", Toast.LENGTH_SHORT).show();
                 }
             }).run();
 
         }
 
-        if (requestCode==2&&resultCode==2){
+        if (requestCode == 2 && resultCode == 2) {
             ScanDatasBean scanDatasBean = (ScanDatasBean) data.getSerializableExtra("data");
-            if (scanDatasBean!=null){
+            if (scanDatasBean != null) {
                 datasBeanList.add(scanDatasBean);
 
-                Map<String,ScanDatasBean> map = new HashMap<>();
-                for (ScanDatasBean bean : datasBeanList){
+                Map<String, ScanDatasBean> map = new HashMap<>();
+                for (ScanDatasBean bean : datasBeanList) {
                     String id = bean.getId();
-                    if (map.containsKey(id)){
+                    if (map.containsKey(id)) {
                         ScanDatasBean datasBean = map.get(id);
-                        bean.setNum(datasBean.getNum()+bean.getNum());
+                        bean.setNum(datasBean.getNum() + bean.getNum());
                     }
                     map.put(id, bean);
                 }
                 datasBeanList.clear();
                 datasBeanList.addAll(map.values());
-                if (type==null) {
+                if (type == null) {
                     addapter.setDate(datasBeanList, mContext, "2", widWidth);
-                }else {
-                    addapter.setDate(datasBeanList,mContext,"4",widWidth);
+                } else {
+                    addapter.setDate(datasBeanList, mContext, "4", widWidth);
                 }
             }
         }
     }
 
-    public void addData(String code){
-        Map<String,Object> map = new HashMap<>();
-        map.put("code",code);
-        OkHttpClientManager.postAsynJson(new Gson().toJson(map), UrlUtils.SCAN_GOODS+"?access_token="+token, new OkHttpClientManager.StringCallback() {
+    public void addData(String code) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("code", code);
+        OkHttpClientManager.postAsynJson(new Gson().toJson(map), UrlUtils.SCAN_GOODS + "?access_token=" + token, new OkHttpClientManager.StringCallback() {
             @Override
             public void onFailure(Request request, IOException e) {
 
@@ -487,35 +595,34 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
 
             @Override
             public void onResponse(String response) {
-                BaseModel baseModel = gson.fromJson(response,BaseModel.class);
-                if (baseModel.getCode()==PublicUtils.code){
-                    ScanDatas scanDatas = gson.fromJson(gson.toJson(baseModel.getDatas()),ScanDatas.class);
-                    if (scanDatas.getSelectProducts().size()>0){
+                BaseModel baseModel = gson.fromJson(response, BaseModel.class);
+                if (baseModel.getCode() == PublicUtils.code) {
+                    ScanDatas scanDatas = gson.fromJson(gson.toJson(baseModel.getDatas()), ScanDatas.class);
+                    if (scanDatas.getSelectProducts().size() > 0) {
                         datasBeanList.addAll(scanDatas.getSelectProducts());
-                        Map<String,ScanDatasBean> map = new HashMap<>();
-                        for (ScanDatasBean bean : datasBeanList){
+                        Map<String, ScanDatasBean> map = new HashMap<>();
+                        for (ScanDatasBean bean : datasBeanList) {
                             String id = bean.getId();
-                            if (map.containsKey(id)){
+                            if (map.containsKey(id)) {
                                 ScanDatasBean datasBean = map.get(id);
-                                bean.setNum(datasBean.getNum()+bean.getNum());
+                                bean.setNum(datasBean.getNum() + bean.getNum());
                             }
                             map.put(id, bean);
                         }
                         datasBeanList.clear();
                         datasBeanList.addAll(map.values());
-                        if (type==null) {
+                        if (type == null) {
                             addapter.setDate(datasBeanList, mContext, "2", widWidth);
-                        }else {
-                            addapter.setDate(datasBeanList,mContext,"4",widWidth);
+                        } else {
+                            addapter.setDate(datasBeanList, mContext, "4", widWidth);
                         }
                     }
-                }else {
+                } else {
                     showToast("条形码识别失败");
                 }
             }
         });
     }
-
 
 
 }

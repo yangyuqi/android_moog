@@ -49,7 +49,7 @@ public class SampleOutInformationActivity extends BaseActivity implements View.O
     private List<CommitRequest.ProductSampleDataBean> request=new ArrayList<>();
     private LinearLayout lin_title;
     private List<SampleOutList.SampleResDataBean.SampleSingleDataListBean> beans;
-
+    private View no_data;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +59,8 @@ public class SampleOutInformationActivity extends BaseActivity implements View.O
     }
 
     private void initView() {
+
+        no_data=findViewById(R.id.no_data);
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
@@ -125,10 +127,15 @@ public class SampleOutInformationActivity extends BaseActivity implements View.O
                     out2Adapter.notifyDataSetChanged();
                 }
             }
+            no_data.setVisibility(View.GONE);
+            lv_rain_information .setVisibility(View.VISIBLE);
+            lv_information .setVisibility(View.VISIBLE);
         }else {
             lin_title.setVisibility(View.GONE);
             textHeadNext.setVisibility(View.GONE);
-            showToast(getString(R.string.load_list_erron));
+            no_data.setVisibility(View.VISIBLE);
+            lv_rain_information .setVisibility(View.GONE);
+            lv_information .setVisibility(View.GONE);
         }
 
 

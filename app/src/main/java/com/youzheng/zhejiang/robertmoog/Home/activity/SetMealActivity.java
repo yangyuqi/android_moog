@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
@@ -62,7 +63,8 @@ public class SetMealActivity extends BaseActivity implements TextWatcher {
     EditText tv_search;
     private PopupWindow window;
     private ImageView iv_clear;
-
+    private View no_data;
+    private String SKU;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,10 +76,11 @@ public class SetMealActivity extends BaseActivity implements TextWatcher {
     }
 
     public void refreshData(int typeId) {
+
         Map<String, Object> map = new HashMap<>();
         map.put("pageNum", pageNum);
         map.put("pageSize", pageSize);
-        map.put("skuCode", tv_search.getText().toString());
+        map.put("skuCode", SKU);
         map.put("typeId", typeId);
         OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.MEAL_USER_LIST + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
@@ -94,9 +97,16 @@ public class SetMealActivity extends BaseActivity implements TextWatcher {
                     if (setMealData.getListData().size() > 0) {
                         adapter.setData(setMealData.getListData());
                         adapter.notifyDataSetChanged();
+                        no_data.setVisibility(View.GONE);
+                        springView.setVisibility(View.VISIBLE);
                     } else {
-                        adapter.setData(new ArrayList<HomeListDataBean>());
-                        adapter.notifyDataSetChanged();
+                        showToast(getString(R.string.load_list_erron));
+                        if (pageNum==1&&TextUtils.isEmpty(SKU)){
+                            no_data.setVisibility(View.VISIBLE);
+                            springView.setVisibility(View.GONE);
+                        }else {
+                            showToast(getString(R.string.load_list_erron));
+                        }
                     }
                 }
             }
@@ -149,6 +159,7 @@ public class SetMealActivity extends BaseActivity implements TextWatcher {
     }
 
     private void initView() {
+        no_data=findViewById(R.id.no_data);
         ((TextView) findViewById(R.id.textHeadTitle)).setText("套餐列表");
         findViewById(R.id.btnBack).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -195,7 +206,13 @@ public class SetMealActivity extends BaseActivity implements TextWatcher {
             @Override
             public void onClick(View v) {
                 SoftInputUtils.hideSoftInput(SetMealActivity.this);
-                refreshData(typeId);
+                if (TextUtils.isEmpty(tv_search.getText().toString())){
+                    showToast("请输入商品sku/套餐号");
+                }else {
+                    SKU=tv_search.getText().toString().trim();
+                    refreshData(typeId);
+                }
+
             }
         });
         iv_clear = (ImageView) findViewById(R.id.iv_clear);
@@ -222,12 +239,16 @@ public class SetMealActivity extends BaseActivity implements TextWatcher {
                 if (baseModel.getCode() == PublicUtils.code) {
                     MealMainDataList list = gson.fromJson(gson.toJson(baseModel.getDatas()), MealMainDataList.class);
                     if (list.getMealMainData().size() > 0) {
+
                         MealMainData = list.getMealMainData();
                         for (MealMainDataBean bean : list.getMealMainData()) {
                             tab_str.add(bean.getName());
                             tab_id.add(bean.getId());
                             tab.addTab(tab.newTab().setText(bean.getName()));
                         }
+                    }else {
+                       showToast(getString(R.string.load_list_erron));
+
                     }
                 }
             }
@@ -280,6 +301,10 @@ public class SetMealActivity extends BaseActivity implements TextWatcher {
     public void afterTextChanged(Editable s) {
            if (tv_search.length()==0){
                iv_clear.setVisibility(View.GONE);
+               data.clear();
+               adapter.clear();
+               SKU = "";
+               refreshData(typeId);
            }else {
                iv_clear.setVisibility(View.VISIBLE);
            }

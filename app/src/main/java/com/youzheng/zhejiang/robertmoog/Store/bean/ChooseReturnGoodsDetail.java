@@ -142,7 +142,7 @@ public class ChooseReturnGoodsDetail {
                 private String orderItemProductId;
                 private int square;
                 private boolean isSpecial;
-                private String num;
+                private int num;
                 private int money;
 
                 public int getMoney() {
@@ -153,11 +153,11 @@ public class ChooseReturnGoodsDetail {
                     this.money = money;
                 }
 
-                public String getNum() {
+                public int getNum() {
                     return num;
                 }
 
-                public void setNum(String num) {
+                public void setNum(int num) {
                     this.num = num;
                 }
 
@@ -316,7 +316,7 @@ public class ChooseReturnGoodsDetail {
                     private String photo;
                     private int count;
                     private String orderItemProductId;
-                    private String num;
+                    private int num;
                     private int money;
                     private int should;
 
@@ -336,11 +336,11 @@ public class ChooseReturnGoodsDetail {
                         this.money = money;
                     }
 
-                    public String getNum() {
+                    public int getNum() {
                         return num;
                     }
 
-                    public void setNum(String num) {
+                    public void setNum(int num) {
                         this.num = num;
                     }
 

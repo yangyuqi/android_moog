@@ -136,12 +136,17 @@ public class OrderListAdapter extends RecyclerView.Adapter {
         holder.mTvCount.setText("共" + beans.getProductNum() + "件商品");
         holder.mTvMoney.setText(context.getString(R.string.label_money)+beans.getPayAmount());
 
-        holder.mRvListPic.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return holder.item.onTouchEvent(event);
-            }
-        });
+        if (piclist.size()<4&&piclist.size()!=0){
+            holder.mRvListPic.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+
+                    return holder.item.onTouchEvent(event);
+                }
+            });
+        }
+
+
 
 //        holder.mRvListPic.setOnClickListener(new View.OnClickListener() {
 //            @Override

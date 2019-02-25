@@ -137,7 +137,6 @@ public class AddStaffActivity extends BaseActivity implements View.OnClickListen
                 BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                 if (baseModel!=null){
                     if (baseModel.getCode()==PublicUtils.code){
-                        startActivity(new Intent(AddStaffActivity.this,PeopleMangerActivity.class));
                         finish();
                         tv_add.setClickable(true);
                     }else {

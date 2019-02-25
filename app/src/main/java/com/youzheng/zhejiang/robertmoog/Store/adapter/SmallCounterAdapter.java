@@ -106,7 +106,7 @@ public class SmallCounterAdapter extends RecyclerView.Adapter<SmallCounterAdapte
             public void afterTextChanged(Editable s) {
 
                if (s.length()==0){
-                   viewHolder.tv_item_total.setText("0");
+                   //viewHolder.tv_item_total.setText("0");
                    bean.setMoney(0);
                    //viewHolder.et_money.setText("0");
                }else {
@@ -118,12 +118,12 @@ public class SmallCounterAdapter extends RecyclerView.Adapter<SmallCounterAdapte
 
                    if (edit>num){
                        Toast.makeText(context, "实退金额不能大于退货金额", Toast.LENGTH_SHORT).show();
-                       viewHolder.tv_item_total.setText(num+"");
+                     //  viewHolder.tv_item_total.setText(num+"");
                        viewHolder.et_money.setText(num + "");
                        bean.setMoney(num);
 //                       ReturnAllCounterActivity.more_total = num;
                    }else {
-                       viewHolder.tv_item_total.setText(s.toString());
+                      // viewHolder.tv_item_total.setText(s.toString());
 
                        bean.setMoney(edit);
 //                       ReturnAllCounterActivity.more_total = edit;

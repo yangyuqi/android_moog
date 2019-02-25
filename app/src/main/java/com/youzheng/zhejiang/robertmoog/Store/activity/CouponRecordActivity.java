@@ -53,7 +53,7 @@ public class CouponRecordActivity extends BaseActivity implements View.OnClickLi
     private int year;
     private Calendar selectedDate;
     private SpringView mSpringView;
-
+    private View no_data;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,6 +113,7 @@ public class CouponRecordActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void initView() {
+        no_data=findViewById(R.id.no_data);
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
@@ -187,9 +188,19 @@ public class CouponRecordActivity extends BaseActivity implements View.OnClickLi
         if (beanList.size() != 0) {
             list.addAll(beanList);
             adapter.setListRefreshUi(beanList);
+            no_data.setVisibility(View.GONE);
+            mSpringView.setVisibility(View.VISIBLE);
         } else {
-            showToast(getString(R.string.load_list_erron));
-            year = year + 1;
+            if (year ==selectedDate.get(Calendar.YEAR)){
+                no_data.setVisibility(View.VISIBLE);
+                mSpringView.setVisibility(View.GONE);
+            }else {
+                showToast(getString(R.string.load_list_erron));
+                year = year + 1;
+            }
+
+
+
         }
 
 

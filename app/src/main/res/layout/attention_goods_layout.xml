@@ -43,7 +43,9 @@
 
 
     </LinearLayout>
-
+    <include layout="@layout/layout_no_data"
+        android:id="@+id/no_data"
+        android:visibility="gone"/>
     <ListView
         android:layout_marginTop="@dimen/space_10"
         android:layout_width="match_parent"

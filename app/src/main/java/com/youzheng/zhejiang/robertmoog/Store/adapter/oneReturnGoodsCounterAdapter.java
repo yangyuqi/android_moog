@@ -114,7 +114,7 @@ public class oneReturnGoodsCounterAdapter extends RecyclerView.Adapter<oneReturn
             @Override
             public void afterTextChanged(Editable s) {
                 if (TextUtils.isEmpty(s.toString())){
-                    oneHolder.tv_item_total.setText("0");
+                   // oneHolder.tv_item_total.setText("0");
                     bean.setMoney(0);
                 }else {
                     money=s.toString();
@@ -124,12 +124,12 @@ public class oneReturnGoodsCounterAdapter extends RecyclerView.Adapter<oneReturn
 
                     if (edit>num){
                         Toast.makeText(context, "实退金额不能大于退货金额", Toast.LENGTH_SHORT).show();
-                        oneHolder.tv_item_total.setText(num+"");
+                       // oneHolder.tv_item_total.setText(num+"");
                         oneHolder.et_money.setText(num + "");
                         bean.setMoney(num);
 //                       ReturnAllCounterActivity.more_total = num;
                     }else {
-                        oneHolder.tv_item_total.setText(s.toString());
+                        //oneHolder.tv_item_total.setText(s.toString());
 
                         bean.setMoney(edit);
                     }

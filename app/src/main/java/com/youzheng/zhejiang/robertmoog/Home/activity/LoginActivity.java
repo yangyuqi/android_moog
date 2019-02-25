@@ -26,6 +26,7 @@ import com.youzheng.zhejiang.robertmoog.Model.login.LoginBean;
 import com.youzheng.zhejiang.robertmoog.Model.login.UserConfigDataBean;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.bean.Code;
+import com.youzheng.zhejiang.robertmoog.utils.ClickUtils;
 import com.youzheng.zhejiang.robertmoog.utils.QRcode.android.CaptureActivity;
 import com.youzheng.zhejiang.robertmoog.utils.SharedPreferencesUtils;
 import com.youzheng.zhejiang.robertmoog.utils.View.MyCountDownLoginTimer;
@@ -112,11 +113,16 @@ public class LoginActivity extends BaseActivity {
                         return;
                     }
                 }
-                if (type!=null) {
-                    initLogin(edt_password.getText().toString(),type); //code 密码 验证码
+                if (ClickUtils.isFastDoubleClick()){
+                    return;
                 }else {
-                    initLogin(edt_code.getText().toString(),type);
+                    if (type!=null) {
+                        initLogin(edt_password.getText().toString(),type); //code 密码 验证码
+                    }else {
+                        initLogin(edt_code.getText().toString(),type);
+                    }
                 }
+
             }
         });
 

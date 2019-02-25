@@ -40,6 +40,7 @@ public class MainActivity extends BaseActivity  {
         initData(savedInstanceState);
         showFragment();
         initEvent();
+        //initTitle();
     }
 
     private void initView() {

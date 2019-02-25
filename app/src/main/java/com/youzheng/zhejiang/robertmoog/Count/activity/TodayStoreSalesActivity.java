@@ -77,7 +77,7 @@ public class TodayStoreSalesActivity extends BaseActivity implements View.OnClic
     private String endsDate = "";
     private String orderCount, orderAmountCount, customerTransaction;
     private SpringView springView;
-
+    private View no_data;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -133,9 +133,10 @@ public class TodayStoreSalesActivity extends BaseActivity implements View.OnClic
         pr_list.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
-        springView = (SpringView) findViewById(R.id.springView);
-        springView.setHeader(new MyHeader(this));
-        springView.setFooter(new MyFooter(this));
+//        springView = (SpringView) findViewById(R.id.springView);
+//        springView.setHeader(new MyHeader(this));
+//        springView.setFooter(new MyFooter(this));
+        no_data=findViewById(R.id.no_data);
     }
 
     @Override
@@ -156,14 +157,14 @@ public class TodayStoreSalesActivity extends BaseActivity implements View.OnClic
             @Override
             public void onFailure(Request request, IOException e) {
               //  pr_list.setPullLoadMoreCompleted();
-                springView.onFinishFreshAndLoad();
+               // springView.onFinishFreshAndLoad();
             }
 
             @Override
             public void onResponse(String response) {
                 Log.e("今日门店销量", response);
                // pr_list.setPullLoadMoreCompleted();
-                springView.onFinishFreshAndLoad();
+                //springView.onFinishFreshAndLoad();
                 BaseModel baseModel = gson.fromJson(response, BaseModel.class);
                 if (baseModel.getCode() == PublicUtils.code) {
                     ShopSale shopSale = gson.fromJson(gson.toJson(baseModel.getDatas()), ShopSale.class);
@@ -198,8 +199,15 @@ public class TodayStoreSalesActivity extends BaseActivity implements View.OnClic
         if (beans.size() != 0) {
             list.addAll(beans);
             adapter.setUI(beans);
+            no_data.setVisibility(View.GONE);
+            pr_list.setVisibility(View.VISIBLE);
         } else {
-            showToast(getString(R.string.load_list_erron));
+
+            no_data.setVisibility(View.VISIBLE);
+            pr_list.setVisibility(View.GONE);
+
+                //showToast(getString(R.string.load_list_erron));
+
         }
 
 

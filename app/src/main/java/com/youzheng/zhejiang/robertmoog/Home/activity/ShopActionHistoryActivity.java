@@ -44,7 +44,7 @@ public class ShopActionHistoryActivity extends BaseActivity {
     CommonAdapter<GetPromoListBean> adapter ;
     private List<GetPromoListBean> data = new ArrayList<>();
     private boolean types;
-
+    private View no_data;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,8 +90,15 @@ public class ShopActionHistoryActivity extends BaseActivity {
                         data.addAll(getPromoListDatas.getGetPromoList());
                         adapter.setData(data);
                         adapter.notifyDataSetChanged();
+                        no_data.setVisibility(View.GONE);
+                        springView.setVisibility(View.VISIBLE);
                     }else {
-                        showToast(getString(R.string.load_list_erron));
+                        if (pageNum==1){
+                            no_data.setVisibility(View.VISIBLE);
+                            springView.setVisibility(View.GONE);
+                        }else {
+                            showToast(getString(R.string.load_list_erron));
+                        }
                      //   adapter.setData(new ArrayList<GetPromoListBean>());
                        // springView.onFinishFreshAndLoad();
                        // adapter.notifyDataSetChanged();
@@ -111,6 +118,8 @@ public class ShopActionHistoryActivity extends BaseActivity {
         return style;
     }
     private void initView() {
+
+        no_data=findViewById(R.id.no_data);
         ls = findViewById(R.id.ls);
         //types=getIntent().getBooleanExtra("is_appear",false);
         TextView  tv_title=findViewById(R.id.textHeadTitle);

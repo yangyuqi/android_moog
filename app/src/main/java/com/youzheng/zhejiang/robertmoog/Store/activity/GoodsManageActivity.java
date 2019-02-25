@@ -252,6 +252,8 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
         if (productListDetailDataBeans.size() != 0) {
             searchlist.addAll(productListDetailDataBeans);
             searchAdapter.setRefreshUI(productListDetailDataBeans);
+        }else {
+            showToast(getString(R.string.load_list_erron));
         }
         //searchlist=goodsList.getProductListDetailData();
 
