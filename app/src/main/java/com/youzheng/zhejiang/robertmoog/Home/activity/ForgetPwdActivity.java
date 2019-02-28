@@ -63,7 +63,7 @@ public class ForgetPwdActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (edt_phone.getText().toString().equals("")){
-                    showToast(getString(R.string.phone_not_null));
+                    showToasts(getString(R.string.phone_not_null));
                     return;
                 }
                 timer.start();
@@ -92,19 +92,19 @@ public class ForgetPwdActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (edt_phone.getText().toString().equals("")){
-                    showToast(getString(R.string.phone_not_null));
+                    showToasts(getString(R.string.phone_not_null));
                     return;
                 }
                 if (edt_code.getText().toString().equals("")){
-                    showToast("验证码不能为空");
+                    showToasts("验证码不能为空");
                     return;
                 }
                 if (edt_password.getText().toString().equals("")) {
-                    showToast(getString(R.string.pwd_not_null));
+                    showToasts(getString(R.string.pwd_not_null));
                     return;
                 }
                 if (!edt_password.getText().toString().equals(edt_again_password.getText().toString())){
-                    showToast("两次密码不一致");
+                    showToasts("两次密码不一致");
                     return;
                 }
 
@@ -123,10 +123,11 @@ public class ForgetPwdActivity extends BaseActivity {
                     public void onResponse(String response) {
                         BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                         if (baseModel.getCode()==PublicUtils.code){
-                            showToast("密码修改成功");
+                            showToasts("密码修改成功");
+                            finish();
                         }else {
                             if (!TextUtils.isEmpty(baseModel.getMsg())){
-                                showToast(baseModel.getMsg());
+                                showToasts(baseModel.getMsg());
                             }
 
                         }

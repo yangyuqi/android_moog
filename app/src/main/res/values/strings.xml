@@ -21,7 +21,7 @@
     <string name="store_customer_number">门店拓展客户（人数）</string>
     <string name="order_number">订单编号：</string>
     <string name="disbursements">实付款：</string>
-    <string name="phone_not_null">手机号不能为空</string>
+    <string name="phone_not_null">手机号码不能为空</string>
     <string name="code_not_null">验证码不能为空</string>
     <string name="order_time">下单时间</string>
     <string name="again">重置</string>
@@ -158,5 +158,10 @@
     <string name="get_type">提货方式</string>
     <string name="send_type">配送方式</string>
     <string name="get_money_type">收款方式</string>
+
+    <string name="write_customer_phone">请输入客户手机号码</string>
+    <string name="write_sku_meal">请输入商品SKU/套餐号</string>
+    <string name="return_goods_code">退货单编号:</string>
+    <string name="already_get">已提</string>
 
 </resources>

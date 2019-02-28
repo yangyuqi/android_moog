@@ -11,7 +11,7 @@
     <GridView
         android:id="@+id/gv_title"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="200dp"
         android:numColumns="3"
         android:scrollbars="none"
         android:background="@color/bg_background_white"
@@ -19,13 +19,20 @@
         android:verticalSpacing="10dp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         ></GridView>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:background="@color/colorPrimary"/>
+
+
+     <View
+         android:id="@+id/view_dowm"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+        />
 
 </LinearLayout>

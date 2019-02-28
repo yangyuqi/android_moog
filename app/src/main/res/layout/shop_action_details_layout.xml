@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+
         android:background="@color/bg_background_white"
         >
         <LinearLayout
@@ -147,6 +148,7 @@
             android:layout_height="wrap_content">
 
             <LinearLayout
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -178,6 +180,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
+            android:paddingTop="5dp"
             android:paddingBottom="5dp"
             ></com.youzheng.zhejiang.robertmoog.utils.View.NoScrollListView>
 
@@ -239,12 +242,27 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:id="@+id/rv_coupon"
+
                     ></android.support.v7.widget.RecyclerView>
+
+
+
     </LinearLayout>
+
+
 
 
 </ScrollView>
 
     </LinearLayout>
-
+    <TextView
+        android:id="@+id/tv_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center|bottom"
+        android:visibility="gone"
+        android:background="@color/bg_all"
+        android:paddingBottom="10dp"
+        android:text="请店员引导消费者到店扫描门店张贴二维码领取"
+        android:textColor="@color/colorPrimary"/>
 </LinearLayout>

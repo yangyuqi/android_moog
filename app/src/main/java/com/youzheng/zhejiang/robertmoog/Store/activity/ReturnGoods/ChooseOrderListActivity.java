@@ -169,7 +169,7 @@ public class ChooseOrderListActivity extends BaseActivity implements View.OnClic
                     NewOrderListBean listBean = gson.fromJson(gson.toJson(baseModel.getDatas()), NewOrderListBean.class);
                     setData(listBean);
                 } else {
-                    showToast(baseModel.getMsg());
+                    showToasts(baseModel.getMsg());
                 }
             }
 
@@ -194,7 +194,7 @@ public class ChooseOrderListActivity extends BaseActivity implements View.OnClic
                 no_data.setVisibility(View.VISIBLE);
                 mSpringView.setVisibility(View.GONE);
             }else {
-                showToast(getString(R.string.load_list_erron));
+                showToasts(getString(R.string.load_list_erron));
             }
         }
 

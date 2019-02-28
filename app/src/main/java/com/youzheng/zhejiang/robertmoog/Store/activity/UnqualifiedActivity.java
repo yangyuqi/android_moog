@@ -111,7 +111,7 @@ public class UnqualifiedActivity extends BaseActivity implements View.OnClickLis
                     UnqualifiedContent unqualifiedContent = gson.fromJson(gson.toJson(baseModel.getDatas()),UnqualifiedContent.class);
                     setData(unqualifiedContent);
                 }else {
-                    showToast(baseModel.getMsg());
+                    showToasts(baseModel.getMsg());
                 }
             }
 

@@ -18,10 +18,8 @@ import com.google.gson.Gson;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
 import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
-import com.youzheng.zhejiang.robertmoog.Home.activity.AttentionGoodsActivity;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.R;
-import com.youzheng.zhejiang.robertmoog.utils.QRcode.android.CaptureActivity;
 import com.youzheng.zhejiang.robertmoog.utils.SharedPreferencesUtils;
 
 import java.io.IOException;
@@ -32,15 +30,15 @@ import de.greenrobot.event.EventBus;
 import okhttp3.Request;
 
 
-public class RemarkDialog extends Dialog implements View.OnClickListener{
+public class CheckDialog extends Dialog implements View.OnClickListener{
 
     Context mcontext ;
     private String id , remark ;
-    EditText confrim_dialog_tv_content ;
+    TextView confrim_dialog_tv_content ;
     TextView tv_no ,tv_ok ;
     String token ;
     boolean have_customerid;
-    public RemarkDialog(Context context, String id, String remark,boolean have_customerid){
+    public CheckDialog(Context context, String id, String remark, boolean have_customerid){
         super(context, R.style.mydialog);
         mcontext = context;
        this.have_customerid=have_customerid;
@@ -61,10 +59,15 @@ public class RemarkDialog extends Dialog implements View.OnClickListener{
 
     private void init() {
         LayoutInflater inflater = LayoutInflater.from(mcontext);
-        View view =inflater.inflate(R.layout.remark_dialog, null);
+        View view =inflater.inflate(R.layout.check_dialog, null);
         setContentView(view);
         confrim_dialog_tv_content = view.findViewById(R.id.confrim_dialog_tv_content);
-        confrim_dialog_tv_content.setText(remark);
+        if (!TextUtils.isEmpty(remark)){
+            confrim_dialog_tv_content.setText(remark);
+        }else {
+            confrim_dialog_tv_content.setText("暂无备注信息");
+        }
+
         tv_ok = view.findViewById(R.id.tv_ok);
         tv_no = view.findViewById(R.id.tv_no);
         tv_no.setOnClickListener(this);
@@ -107,8 +110,8 @@ public class RemarkDialog extends Dialog implements View.OnClickListener{
                             dismiss();
                         }else {
                             if (!TextUtils.isEmpty(baseModel.getMsg())){
-                                Toast toast = Toast.makeText(mcontext,null, Toast.LENGTH_SHORT);
-                                toast.setText( baseModel.getMsg());
+                                Toast toast = Toast.makeText(mcontext, null, Toast.LENGTH_SHORT);
+                                toast.setText(baseModel.getMsg());
                                 toast.setGravity(Gravity.CENTER, 0, 0);
                                 toast.show();
                                 //Toast.makeText(mcontext,baseModel.getMsg(),Toast.LENGTH_SHORT).show();

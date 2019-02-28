@@ -176,7 +176,7 @@ public class CheckResultActivity extends BaseActivity implements View.OnClickLis
                     CheckStoreList checkStoreList = gson.fromJson(gson.toJson(baseModel.getDatas()), CheckStoreList.class);
                     setData(checkStoreList);
                 } else {
-                    showToast(baseModel.getMsg());
+                    showToasts(baseModel.getMsg());
                 }
             }
         });
@@ -209,8 +209,16 @@ public class CheckResultActivity extends BaseActivity implements View.OnClickLis
             no_data.setVisibility(View.GONE);
             mSpringView.setVisibility(View.VISIBLE);
         } else {
-            no_data.setVisibility(View.VISIBLE);
-            mSpringView.setVisibility(View.GONE);
+            if (year == selectedDate.get(Calendar.YEAR)){
+                no_data.setVisibility(View.VISIBLE);
+                mSpringView.setVisibility(View.GONE);
+            }else {
+                list.clear();
+                adapter.clear();
+                showToast(getString(R.string.load_list_erron));
+            }
+
+
             //list.clear();
             //showToast(getString(R.string.load_list_erron));
         }

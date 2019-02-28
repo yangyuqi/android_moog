@@ -173,7 +173,7 @@ public class TodayGoodsTypeSalesBestDetailActivity extends BaseActivity implemen
                     GoodsTypeDetail goodsTypeDetail = gson.fromJson(gson.toJson(baseModel.getDatas()), GoodsTypeDetail.class);
                     setData(goodsTypeDetail);
                 } else {
-                    showToast(baseModel.getMsg());
+                    showToasts(baseModel.getMsg());
                 }
             }
         });
@@ -196,7 +196,7 @@ public class TodayGoodsTypeSalesBestDetailActivity extends BaseActivity implemen
                 no_data.setVisibility(View.VISIBLE);
                 springView.setVisibility(View.GONE);
             }else {
-                showToast(getString(R.string.load_list_erron));
+                showToasts(getString(R.string.load_list_erron));
             }
         }
 

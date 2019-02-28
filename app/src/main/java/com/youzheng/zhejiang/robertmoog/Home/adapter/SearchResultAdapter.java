@@ -9,6 +9,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -95,7 +96,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 Log.e("走到1里面","11111");
                 ((CommonGoodsViewHolder) holder).tv_get_num.setVisibility(View.GONE);
                 ((CommonGoodsViewHolder) holder).tv_confirm.setVisibility(View.VISIBLE);
-                ((CommonGoodsViewHolder) holder).tv_confirm.setOnClickListener(new View.OnClickListener() {
+                ((CommonGoodsViewHolder) holder).rl_width.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent();
@@ -214,7 +215,11 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         if (type.equals("2")) {
                             if (objects.get(position).isSpecial()){
                                 if (objects.get(position).getSquare_num()==999){
-                                    Toast.makeText(context,"不能大于999",Toast.LENGTH_SHORT).show();
+                                    Toast toast = Toast.makeText(context, null, Toast.LENGTH_SHORT);
+                                    toast.setText("不能大于999");
+                                    toast.setGravity(Gravity.CENTER, 0, 0);
+                                    toast.show();
+                                    //Toast.makeText(context,"不能大于999",Toast.LENGTH_SHORT).show();
                                    // ((CommonGoodsViewHolder) holder).tv_add.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
                                 }else {
                                     int num=Integer.parseInt(((CommonGoodsViewHolder) holder).edt_num.getText().toString());
@@ -243,7 +248,11 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                             }else {
 
                                 if (objects.get(position).getNum()==999){
-                                    Toast.makeText(context,"不能大于999",Toast.LENGTH_SHORT).show();
+                                    Toast toast = Toast.makeText(context, null, Toast.LENGTH_SHORT);
+                                    toast.setText("不能大于999");
+                                    toast.setGravity(Gravity.CENTER, 0, 0);
+                                    toast.show();
+                                   // Toast.makeText(context,"不能大于999",Toast.LENGTH_SHORT).show();
                                     //((CommonGoodsViewHolder) holder).tv_add.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
                                 }else {
                                     objects.get(position).setNum(objects.get(position).getNum() + 1);
@@ -268,7 +277,11 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                         } else if (type.equals("3")) {
                             if (objects.get(position).getNum()==999){
-                                Toast.makeText(context,"不能大于999",Toast.LENGTH_SHORT).show();
+                                Toast toast = Toast.makeText(context, null, Toast.LENGTH_SHORT);
+                                toast.setText("不能大于999");
+                                toast.setGravity(Gravity.CENTER, 0, 0);
+                                toast.show();
+                                //Toast.makeText(context,"不能大于999",Toast.LENGTH_SHORT).show();
                                 //((CommonGoodsViewHolder) holder).tv_add.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
                             }else {
                                 objects.get(position).setNum(objects.get(position).getNum() + 1);
@@ -299,7 +312,11 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     @Override
                     public void onClick(View v) {
                         if (objects.get(position).getNum()==999){
-                            Toast.makeText(context,"不能大于999",Toast.LENGTH_SHORT).show();
+                            Toast toast = Toast.makeText(context, null, Toast.LENGTH_SHORT);
+                            toast.setText("不能大于999");
+                            toast.setGravity(Gravity.CENTER, 0, 0);
+                            toast.show();
+                           // Toast.makeText(context,"不能大于999",Toast.LENGTH_SHORT).show();
                             //((CommonGoodsViewHolder) holder).tv_add.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
                         }else {
                             objects.get(position).setNum(objects.get(position).getNum() + 1);
@@ -347,7 +364,11 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 //                            e.printStackTrace();
 //                        }
                     //((CommonGoodsTypeViewHolder) holder).edt_num.setText("1");
-                    Toast.makeText(context,"最小值不能小于1",Toast.LENGTH_SHORT).show();
+                    Toast toast = Toast.makeText(context, null, Toast.LENGTH_SHORT);
+                    toast.setText("最小值不能小于1");
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+                    //Toast.makeText(context,"最小值不能小于1",Toast.LENGTH_SHORT).show();
                     //((CommonGoodsTypeViewHolder) holder).edt_num.setText(objects.get(position).getNum()+"");
                     return;
                 }else {
@@ -394,7 +415,11 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         objects.get(position).setSquare_num(999);
                         ((CommonGoodsViewHolder) holder).edt_num.setText("999");
                         ((CommonGoodsViewHolder) holder).tv_add.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
-                        Toast.makeText(context,"不能大于999",Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(context,"不能大于999",Toast.LENGTH_SHORT).show();
+                        Toast toast = Toast.makeText(context, null, Toast.LENGTH_SHORT);
+                        toast.setText("不能大于999");
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
                          return;
                     }else {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -407,7 +432,11 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         objects.get(position).setNum(999);
                         ((CommonGoodsViewHolder) holder).edt_num.setText("999");
                         ((CommonGoodsViewHolder) holder).tv_add.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
-                        Toast.makeText(context,"不能大于999",Toast.LENGTH_SHORT).show();
+                       // Toast.makeText(context,"不能大于999",Toast.LENGTH_SHORT).show();
+                        Toast toast = Toast.makeText(context, null, Toast.LENGTH_SHORT);
+                        toast.setText("不能大于999");
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
                          return;
                     }else {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -560,7 +589,11 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                             if (type.equals("2")) {
 
                                     if (objects.get(position).getSquare_num()==1){
-                                        Toast.makeText(context, "最小不能小于1", Toast.LENGTH_SHORT).show();
+                                        Toast toast = Toast.makeText(context, null, Toast.LENGTH_SHORT);
+                                        toast.setText("最小不能小于1");
+                                        toast.setGravity(Gravity.CENTER, 0, 0);
+                                        toast.show();
+                                        //Toast.makeText(context, "最小不能小于1", Toast.LENGTH_SHORT).show();
                                       //  ((CommonGoodsViewHolder) holder).tv_reduce.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
                                     }else {
                                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -590,7 +623,11 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                             } else if (type.equals("3")) {
                                 if (objects.get(position).getNum() == 1) {
-                                    Toast.makeText(context,"最小不能小于1",Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(context,"最小不能小于1",Toast.LENGTH_SHORT).show();
+                                    Toast toast = Toast.makeText(context, null, Toast.LENGTH_SHORT);
+                                    toast.setText("最小不能小于1");
+                                    toast.setGravity(Gravity.CENTER, 0, 0);
+                                    toast.show();
                                 }else {
                                     objects.get(position).setNum(objects.get(position).getNum() - 1);
                                     EventBus.getDefault().post(objects);
@@ -639,7 +676,11 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     public void onClick(View v) {
 
                         if (objects.get(position).getNum() == 1) {
-                            Toast.makeText(context,"最小不能小于1",Toast.LENGTH_SHORT).show();
+                            Toast toast = Toast.makeText(context, null, Toast.LENGTH_SHORT);
+                            toast.setText("最小不能小于1");
+                            toast.setGravity(Gravity.CENTER, 0, 0);
+                            toast.show();
+                          //  Toast.makeText(context,"最小不能小于1",Toast.LENGTH_SHORT).show();
                         }else {
                             objects.get(position).setNum(objects.get(position).getNum() - 1);
                             EventBus.getDefault().post(objects);
@@ -694,7 +735,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             params.width = (int) PublicUtils.dip2px(PublicUtils.px2dip(widWidth));
             view.setLayoutParams(params);
             ((CommonGoodsTypeViewHolder) holder).tv_name.setText(objects.get(position).getCode());
-            ((CommonGoodsTypeViewHolder) holder).iv_show.setOnClickListener(new View.OnClickListener() {
+            ((CommonGoodsTypeViewHolder) holder).lin_on.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
              List<ProductListBean> productListBeanList = new ArrayList<>();
@@ -730,10 +771,10 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             });
 
             if (objects.get(position).getActivityName()!=null){
-                ((CommonGoodsTypeViewHolder) holder).rl_activity.setVisibility(View.VISIBLE);
+               // ((CommonGoodsTypeViewHolder) holder).rl_activity.setVisibility(View.VISIBLE);
                 ((CommonGoodsTypeViewHolder) holder).tv_activity.setText(objects.get(position).getActivityName());
             }else {
-                ((CommonGoodsTypeViewHolder) holder).rl_activity.setVisibility(View.GONE);
+               // ((CommonGoodsTypeViewHolder) holder).rl_activity.setVisibility(View.GONE);
             }
 
             ((CommonGoodsTypeViewHolder) holder).tv_price.setText("¥"+objects.get(position).getPrice());
@@ -743,7 +784,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             if (type.equals("1")){
                 ((CommonGoodsTypeViewHolder) holder).tv_get_num.setVisibility(View.GONE);
                 ((CommonGoodsTypeViewHolder) holder).tv_confirm.setVisibility(View.VISIBLE);
-                ((CommonGoodsTypeViewHolder) holder).tv_confirm.setOnClickListener(new View.OnClickListener() {
+                ((CommonGoodsTypeViewHolder) holder).rv_choose.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent();
@@ -811,7 +852,11 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 public void onClick(View v) {
 
                     if (objects.get(position).getNum()==999){
-                        Toast.makeText(context,"最大不能超过999",Toast.LENGTH_SHORT).show();
+                        Toast toast = Toast.makeText(context, null, Toast.LENGTH_SHORT);
+                        toast.setText("最大不能超过999");
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
+                        //Toast.makeText(context,"最大不能超过999",Toast.LENGTH_SHORT).show();
                        // ((CommonGoodsTypeViewHolder) holder).tv_add.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
                     }else {
                         objects.get(position).setNum(objects.get(position).getNum()+1) ;
@@ -841,7 +886,11 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 public void onClick(View v) {
                     if (objects.get(position).getNum()==1){
                        // ((CommonGoodsTypeViewHolder) holder).tv_reduce.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
-                        Toast.makeText(context,"最小不能小于1",Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(context,"最小不能小于1",Toast.LENGTH_SHORT).show();
+                        Toast toast = Toast.makeText(context, null, Toast.LENGTH_SHORT);
+                        toast.setText("最小不能小于1");
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
                     }else {
                         objects.get(position).setNum(objects.get(position).getNum()-1) ;
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -929,7 +978,11 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         objects.get(position).setNum(999);
                         ((CommonGoodsTypeViewHolder) holder).edt_num.setText("999");
                         ((CommonGoodsTypeViewHolder) holder).tv_add.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
-                        Toast.makeText(context,"不能大于999",Toast.LENGTH_SHORT).show();
+                      //  Toast.makeText(context,"不能大于999",Toast.LENGTH_SHORT).show();
+                        Toast toast=  Toast.makeText(context, null, Toast.LENGTH_SHORT);
+                        toast.setText("不能大于999");
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
                         return;
                     }else {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -1078,9 +1131,10 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         NoScrollListView ls ;
         View rl_activity ,ll_num ,main_right_drawer_layout;
         ImageView iv_show ,iv_icon ;
-        LinearLayout ll_width ;
+        LinearLayout ll_width ,lin_on;
         HorizontalScrollView hsv ;
         EditText edt_num ;
+        RelativeLayout rv_show,rv_choose;
         public CommonGoodsTypeViewHolder(View itemView) {
             super(itemView);
             tv_count=itemView.findViewById(R.id.tv_count);
@@ -1102,6 +1156,9 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             tv_reduce = itemView.findViewById(R.id.tv_reduce);
             tv_add = itemView.findViewById(R.id.tv_add);
             main_right_drawer_layout = itemView.findViewById(R.id.main_right_drawer_layout);
+            rv_show=itemView.findViewById(R.id.rv_show);
+            rv_choose=itemView.findViewById(R.id.rv_choose);
+            lin_on=itemView.findViewById(R.id.lin_on);
         }
     }
 

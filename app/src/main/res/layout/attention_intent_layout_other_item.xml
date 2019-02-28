@@ -4,6 +4,7 @@
     android:layout_height="match_parent">
 
     <RelativeLayout
+        android:id="@+id/rv_click"
         android:paddingBottom="@dimen/space_15"
         android:paddingTop="@dimen/space_15"
         android:paddingLeft="@dimen/space_20"

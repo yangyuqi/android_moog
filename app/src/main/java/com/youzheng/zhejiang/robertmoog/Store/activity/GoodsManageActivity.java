@@ -32,6 +32,7 @@ import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
 import com.youzheng.zhejiang.robertmoog.Base.utils.MyConstant;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
 import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
+import com.youzheng.zhejiang.robertmoog.Count.activity.MealRankingActivity;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.GoodsPagerAdapter;
@@ -86,7 +87,7 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
     public static GoodsFragment goodsFragment;
     private int who;
     private ImageView iv_clear;
-
+    private View view_dowm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,7 +149,7 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
                     GoodsType goodsType = gson.fromJson(gson.toJson(baseModel.getDatas()), GoodsType.class);
                     setData(goodsType);
                 } else {
-                    showToast(baseModel.getMsg());
+                    showToasts(baseModel.getMsg());
                 }
             }
         });
@@ -195,7 +196,7 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
                 searchlist.clear();
                 edit = tv_search.getText().toString().trim();
                 if (TextUtils.isEmpty(edit)) {
-                    showToast(getString(R.string.please_write_sku));
+                    showToasts(getString(R.string.please_write_sku));
                 } else {
                     initSearch(edit);
                     lin_tab.setVisibility(View.GONE);
@@ -238,7 +239,7 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
                         GoodsList goodsList = gson.fromJson(gson.toJson(baseModel.getDatas()), GoodsList.class);
                         setSearchData(goodsList);
                     } else {
-                        showToast(baseModel.getMsg());
+                        showToasts(baseModel.getMsg());
                     }
                 }
             });
@@ -253,7 +254,7 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
             searchlist.addAll(productListDetailDataBeans);
             searchAdapter.setRefreshUI(productListDetailDataBeans);
         }else {
-            showToast(getString(R.string.load_list_erron));
+            showToasts(getString(R.string.load_list_erron));
         }
         //searchlist=goodsList.getProductListDetailData();
 
@@ -263,10 +264,10 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
     private void showPopuWindow() {
         View inflate = getLayoutInflater().inflate(R.layout.popuwindow_goods_title, null);
         mGvTitle = (GridView) inflate.findViewById(R.id.gv_title);
-
+         view_dowm=inflate.findViewById(R.id.view_dowm);
         goodsTitleAdapter = new GoodsTitleAdapter(stringList, this);
         mGvTitle.setAdapter(goodsTitleAdapter);
-
+        iv_more.setImageResource(R.mipmap.group_12_3);
         mGvTitle.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -276,17 +277,38 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
                 window.dismiss();
             }
         });
+
+        view_dowm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                window.dismiss();
+            }
+        });
         window = new PopupWindow(inflate, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, true);
         window.setAnimationStyle(R.style.ActionDialogStyle);
 
         window.setBackgroundDrawable(getDrawable());
+
+        view_dowm.setBackgroundColor(getResources().getColor(R.color.text_drak_black));
+        view_dowm.setAlpha(0.5f);
+
+        window.setOnDismissListener(new poponDismissListener());
         window.setTouchable(true); // 设置popupwindow可点击
         window.setOutsideTouchable(true); // 设置popupwindow外部可点击
         window.showAsDropDown(tab);
         window.update();
 
     }
+    class poponDismissListener implements PopupWindow.OnDismissListener{
+        @Override
+        public void onDismiss() {
+            // TODO Auto-generated method stub
+            iv_more.setImageResource(R.mipmap.group_14_1);
+            view_dowm.setBackgroundColor(getResources().getColor(R.color.bg_background_white));
+            view_dowm.setAlpha(1f);
 
+        }
+    }
     //获取屏幕的高度
     public static int getScreenHeight(Activity context) {
         WindowManager manager = context.getWindowManager();

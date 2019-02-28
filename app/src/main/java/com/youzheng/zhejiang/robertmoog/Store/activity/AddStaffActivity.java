@@ -104,9 +104,9 @@ public class AddStaffActivity extends BaseActivity implements View.OnClickListen
                  name=mEtName.getText().toString().trim();
 
                  if (TextUtils.isEmpty(phone)){
-                     showToast(getString(R.string.no_phone));
+                     showToasts(getString(R.string.no_phone));
                  }else if (TextUtils.isEmpty(name)){
-                     showToast(getString(R.string.no_name));
+                     showToasts(getString(R.string.no_name));
                  }else {
                      addStaff(name,phone);
 
@@ -141,7 +141,7 @@ public class AddStaffActivity extends BaseActivity implements View.OnClickListen
                         tv_add.setClickable(true);
                     }else {
                         if (!baseModel.getMsg().equals("")){
-                            showToast(baseModel.getMsg());
+                            showToasts(baseModel.getMsg());
                             tv_add.setClickable(true);
                         }
                     }

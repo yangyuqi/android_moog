@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -214,8 +215,16 @@ public class BaseActivity extends AppCompatActivity implements NetBroadcastRecei
         ActivityStack.getScreenManager().popActivity(this);
         super.onDestroy();
     }
-
+    protected void showToasts(String msg) {
+        Toast toast = Toast.makeText(mContext, null, Toast.LENGTH_SHORT);
+        toast.setText(msg);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
+    }
     protected void showToast(String msg) {
         Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
+
+
+
     }
 }

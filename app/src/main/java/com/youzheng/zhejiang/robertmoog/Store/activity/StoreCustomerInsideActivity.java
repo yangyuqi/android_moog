@@ -153,7 +153,7 @@ public class StoreCustomerInsideActivity extends BaseActivity implements View.On
                     setData(storeCustomerDetail);
                    // lv_list.setPullLoadMoreCompleted();
                 } else {
-                    showToast(baseModel.getMsg());
+                    showToasts(baseModel.getMsg());
                 }
             }
 
@@ -174,7 +174,7 @@ public class StoreCustomerInsideActivity extends BaseActivity implements View.On
                 no_data.setVisibility(View.VISIBLE);
                 mSpringView.setVisibility(View.GONE);
             }else {
-                showToast(getString(R.string.load_list_erron));
+                showToasts(getString(R.string.load_list_erron));
             }
         }
 

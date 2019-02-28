@@ -162,7 +162,7 @@ public class ProfessionalCustomerActivity extends BaseActivity implements View.O
                     ProfessionalCustomerList professionalCustomerList = gson.fromJson(gson.toJson(baseModel.getDatas()), ProfessionalCustomerList.class);
                     setData(professionalCustomerList);
                 } else {
-                    showToast(baseModel.getMsg());
+                    showToasts(baseModel.getMsg());
                 }
             }
 
@@ -188,7 +188,7 @@ public class ProfessionalCustomerActivity extends BaseActivity implements View.O
                 no_data.setVisibility(View.VISIBLE);
                 springView.setVisibility(View.GONE);
             }else {
-                showToast(getString(R.string.load_list_erron));
+                showToasts(getString(R.string.load_list_erron));
             }
         }
 

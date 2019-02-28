@@ -2,6 +2,7 @@ package com.youzheng.zhejiang.robertmoog.Store.adapter;
 
 import android.content.Context;
 import android.os.Build;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.bean.ChooseReturnGoodsDetail;
 import com.youzheng.zhejiang.robertmoog.Store.bean.OrderlistDetail;
+import com.youzheng.zhejiang.robertmoog.Store.listener.GetMore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,11 +29,13 @@ public class SmallChooseReturnGoodsAdapter extends BaseAdapter {
     private LayoutInflater layoutInflater;
     private List<TextView> textViews;
     private int addnumber;
+    GetMore listtener;
 
 
-    public SmallChooseReturnGoodsAdapter(List<ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean.ProductListBeanX> list, Context context) {
+    public SmallChooseReturnGoodsAdapter(List<ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean.ProductListBeanX> list, Context context,GetMore listtener) {
         this.list = list;
         this.context = context;
+        this.listtener=listtener;
         layoutInflater = LayoutInflater.from(context);
         textViews=new ArrayList<>();
     }
@@ -99,8 +103,14 @@ public class SmallChooseReturnGoodsAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                  if (bean.getNum()==bean.getCount()){
+
+                     Toast toast=  Toast.makeText(context,null , Toast.LENGTH_SHORT);
+                     toast.setText("商品数量不能超过可退商品数量");
+                     toast.setGravity(Gravity.CENTER, 0, 0);
+                     toast.show();
+
                    //  finalViewHolder.tv_add.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
-                     Toast.makeText(context,"商品数量不能超过可退商品数量",Toast.LENGTH_SHORT).show();
+                   //  Toast.makeText(context,"商品数量不能超过可退商品数量",Toast.LENGTH_SHORT).show();
                  }else {
 //                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //                         finalViewHolder.tv_add.setBackground(context.getDrawable(R.drawable.bg_order));
@@ -124,6 +134,8 @@ public class SmallChooseReturnGoodsAdapter extends BaseAdapter {
 
                 finalViewHolder.tv_number.setText(bean.getNum()+"");
                 bean.setNum(bean.getNum());
+
+                listtener.getMeal(list);
             }
         });
 
@@ -136,7 +148,12 @@ public class SmallChooseReturnGoodsAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 if (bean.getNum()==0){
-                    Toast.makeText(context,"商品数量不能小于0",Toast.LENGTH_SHORT).show();
+                    Toast toast=  Toast.makeText(context, null, Toast.LENGTH_SHORT);
+                    toast.setText("商品数量不能小于0");
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+
+                    //Toast.makeText(context,"商品数量不能小于0",Toast.LENGTH_SHORT).show();
                 }else {
                     //addnumber--;
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -157,6 +174,7 @@ public class SmallChooseReturnGoodsAdapter extends BaseAdapter {
 
                 finalViewHolder1.tv_number.setText(bean.getNum()+"");
                 bean.setNum(bean.getNum());
+                listtener.getMeal(list);
             }
         });
 

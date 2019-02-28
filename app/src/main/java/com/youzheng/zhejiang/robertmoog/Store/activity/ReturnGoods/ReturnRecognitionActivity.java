@@ -83,11 +83,11 @@ public class ReturnRecognitionActivity extends BaseActivity implements View.OnCl
             case R.id.iv_search:
                 SoftInputUtils.hideSoftInput(ReturnRecognitionActivity.this);
                 if (tv_search.getText().toString().equals("")) {
-                    showToast(getString(R.string.phone_not_null));
+                    showToasts(getString(R.string.login_input_phone));
                 } else if (tv_search.getText().toString().length() < 11) {
-                    showToast("手机号有误,请重新输入");
+                    showToasts("手机号码不正确");
                 } else if (PhoneUtil.isCellphone(tv_search.getText().toString()) == false) {
-                    showToast("手机号格式错误,请重新输入");
+                    showToasts("手机号码格式不正确");
                 } else {
                     Recognition();
                 }
@@ -118,7 +118,7 @@ public class ReturnRecognitionActivity extends BaseActivity implements View.OnCl
                     }
 
                 } else {
-                    showToast(baseModel.getMsg());
+                    showToasts(baseModel.getMsg());
                 }
             }
         });

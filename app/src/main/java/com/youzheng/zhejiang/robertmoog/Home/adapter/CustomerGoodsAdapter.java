@@ -28,6 +28,7 @@ import com.youzheng.zhejiang.robertmoog.Model.Home.CustomerIntentListBean;
 import com.youzheng.zhejiang.robertmoog.Model.Home.ProductListBean;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.utils.SharedPreferencesUtils;
+import com.youzheng.zhejiang.robertmoog.utils.View.CheckDialog;
 import com.youzheng.zhejiang.robertmoog.utils.View.DeleteDialog;
 import com.youzheng.zhejiang.robertmoog.utils.View.DeleteDialogInterface;
 import com.youzheng.zhejiang.robertmoog.utils.View.NoScrollListView;
@@ -119,7 +120,7 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
                                         if (token.equals("")){
                                             return;
                                         }
-                                        DeleteDialog dialog = new DeleteDialog(context,"提示","是否删除此意向商品","确定");
+                                        DeleteDialog dialog = new DeleteDialog(context,"提示","确认要删除意向信息吗?","确定");
                                         dialog.show();
                                         dialog.OnDeleteBtn(new DeleteDialogInterface() {
                                             @Override
@@ -204,8 +205,8 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
                 @Override
                 public void onClick(View v) {
                     if (data.get(i).getId()!=null) {
-                        RemarkDialog remarkDialog = new RemarkDialog(context, data.get(i).getId(), data.get(i).getRemark(),true);
-                        remarkDialog.show();
+                        CheckDialog checkDialog = new CheckDialog(context, data.get(i).getId(), data.get(i).getRemark(),true);
+                        checkDialog.show();
                     }
                 }
             });
@@ -220,7 +221,7 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
                         return;
                     }
 
-                    DeleteDialog dialog = new DeleteDialog(context,"提示","是否删除此意向","确定");
+                    DeleteDialog dialog = new DeleteDialog(context,"提示","确认要删除意向信息吗?","确定");
                     dialog.show();
                     dialog.OnDeleteBtn(new DeleteDialogInterface() {
                         @Override
@@ -253,7 +254,7 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
                     if (token.equals("")){
                         return;
                     }
-                    DeleteDialog dialog = new DeleteDialog(context,"提示","是否删除此意向商品","确定");
+                    DeleteDialog dialog = new DeleteDialog(context,"提示","确认要删除意向信息吗?","确定");
                     dialog.show();
                     dialog.OnDeleteBtn(new DeleteDialogInterface() {
                         @Override

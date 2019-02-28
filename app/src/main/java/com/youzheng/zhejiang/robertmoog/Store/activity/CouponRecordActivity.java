@@ -166,7 +166,7 @@ public class CouponRecordActivity extends BaseActivity implements View.OnClickLi
                     CouponRecord couponRecord = gson.fromJson(gson.toJson(baseModel.getDatas()), CouponRecord.class);
                     setData(couponRecord);
                 } else {
-                    showToast(baseModel.getMsg());
+                    showToasts(baseModel.getMsg());
 
                 }
             }
@@ -195,7 +195,7 @@ public class CouponRecordActivity extends BaseActivity implements View.OnClickLi
                 no_data.setVisibility(View.VISIBLE);
                 mSpringView.setVisibility(View.GONE);
             }else {
-                showToast(getString(R.string.load_list_erron));
+                showToasts(getString(R.string.load_list_erron));
                 year = year + 1;
             }
 

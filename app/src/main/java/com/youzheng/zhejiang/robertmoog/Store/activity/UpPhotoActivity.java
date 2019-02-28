@@ -29,6 +29,7 @@ import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
 import com.youzheng.zhejiang.robertmoog.Count.bean.ShopSale;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.R;
+import com.youzheng.zhejiang.robertmoog.Store.activity.ReturnGoods.ReturnAllCounterActivity;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.AddphotoAdapter;
 import com.youzheng.zhejiang.robertmoog.Store.bean.SampleOutPic;
 import com.youzheng.zhejiang.robertmoog.Store.listener.DeleteListener;
@@ -217,21 +218,67 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
 
     }
 
+    public void stopfinish() {
+        final AlertDialog dialogBuilder = new AlertDialog.Builder(UpPhotoActivity.this, R.style.mydialog).create();
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_confirm_finish, null);
+        dialogBuilder.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogBuilder.show();
+        dialogBuilder.setContentView(dialogView);
 
+        TextView tv_no = dialogView.findViewById(R.id.tv_no);
+        TextView tv_ok = dialogView.findViewById(R.id.tv_ok);
+
+        tv_no.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogBuilder.dismiss();
+            }
+        });
+
+        tv_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                list.clear();
+                fileList.clear();
+                adapter.clear();
+                finish();
+                dialogBuilder.dismiss();
+            }
+        });
+
+        Window window = dialogBuilder.getWindow();
+        //这句设置我们dialog在底部
+        window.setGravity(Gravity.CENTER);
+        WindowManager.LayoutParams lp = window.getAttributes();
+        //这句就是设置dialog横向满屏了。
+        DisplayMetrics d = this.getResources().getDisplayMetrics(); // 获取屏幕宽、高用
+        lp.width = (int) (d.widthPixels * 0.9); // 高度设置为屏幕的0.6
+        // lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        window.setAttributes(lp);
+
+
+    }
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             default:
                 break;
             case R.id.btnBack:
-                list.clear();
-                fileList.clear();
-//                addlist.clear();
-                finish();
+                if (list.size()!=0){
+                    stopfinish();
+                }else {
+                    list.clear();
+                    fileList.clear();
+                    adapter.clear();
+                    finish();
+                }
+
                 break;
             case R.id.textHeadNext:
                 if (list.size()==0){
-                    showToast("请选择图片");
+                    showToasts("请选择图片");
                 }else {
                     showStopDialog();
                 }
@@ -307,12 +354,12 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
                         BaseModel baseModel = gson.fromJson(s, BaseModel.class);
                         if (baseModel.getCode() == PublicUtils.code) {
                             Log.e("图片上传成功", s);
-                            showToast("图片上传成功");
+                            showToasts("图片上传成功");
                             startActivity(new Intent(UpPhotoActivity.this,SampleOutDetailActivity.class));
                             finish();
                         }else {
                             Log.e("图片上传失败",s);
-                            showToast(baseModel.getMsg());
+                            showToasts(baseModel.getMsg());
                         }
                     }
                 });
@@ -342,7 +389,7 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
                 if (fileList.size()==list.size()){
                     upPic(fileList);
                 }else {
-                    showToast(getString(R.string.pic_not_finish_yas));
+                    showToasts(getString(R.string.pic_not_finish_yas));
                 }
                 //showToast("正在上传图片，请稍候！");
                 dialogBuilder.dismiss();

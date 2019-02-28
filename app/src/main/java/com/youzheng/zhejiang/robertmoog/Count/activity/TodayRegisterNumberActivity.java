@@ -97,7 +97,7 @@ public class TodayRegisterNumberActivity extends BaseActivity implements View.On
                     TodayRegisterList registerList = gson.fromJson(gson.toJson(baseModel.getDatas()), TodayRegisterList.class);
                     setData(registerList);
                 } else {
-                    showToast(baseModel.getMsg());
+                    showToasts(baseModel.getMsg());
                 }
             }
         });
@@ -118,7 +118,7 @@ public class TodayRegisterNumberActivity extends BaseActivity implements View.On
             no_data.setVisibility(View.GONE);
             pr_list.setVisibility(View.VISIBLE);
         } else {
-            showToast(getString(R.string.load_list_erron));
+            showToasts(getString(R.string.load_list_erron));
             no_data.setVisibility(View.VISIBLE);
             pr_list.setVisibility(View.GONE);
             //initTitle();

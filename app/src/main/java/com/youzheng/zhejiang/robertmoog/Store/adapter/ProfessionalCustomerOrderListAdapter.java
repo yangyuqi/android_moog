@@ -65,7 +65,7 @@ public class ProfessionalCustomerOrderListAdapter extends RecyclerView.Adapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_ONE_IMAGE) {
-            View view = layoutInflater.inflate(R.layout.item_orderlist, parent,false);
+            View view = layoutInflater.inflate(R.layout.item_orderlist1, parent,false);
             final OneImageHolder oneImageHolder=new OneImageHolder(view);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -94,7 +94,7 @@ public class ProfessionalCustomerOrderListAdapter extends RecyclerView.Adapter {
             });
             return oneImageHolder;
         } else {
-            View view = layoutInflater.inflate(R.layout.item_order_style, parent,false);
+            View view = layoutInflater.inflate(R.layout.item_order_style1, parent,false);
             final MoreImageHolder moreImageHolder=new MoreImageHolder(view);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override

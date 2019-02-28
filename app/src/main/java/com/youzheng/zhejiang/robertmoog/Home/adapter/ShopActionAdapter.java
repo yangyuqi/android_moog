@@ -47,7 +47,7 @@ public class ShopActionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         ((ShoptViewHolder) viewHolder).tv_desc.setText(comboPromo.get(i).getComboName());
         ((ShoptViewHolder) viewHolder).tv_price.setText("¥"+comboPromo.get(i).getComboPrice());
         ((ShoptViewHolder) viewHolder).tv_num.setText(comboPromo.get(i).getComboDes());
-        ((ShoptViewHolder) viewHolder).iv_show_more.setOnClickListener(new View.OnClickListener() {
+        ((ShoptViewHolder) viewHolder).rl_show.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 listBeanList = new ArrayList<>();
@@ -86,7 +86,7 @@ public class ShopActionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         public ImageView iv_icon ,iv_show_more;
         public TextView tv_name ,tv_desc ,tv_price ,tv_num ;
         NoScrollListView no_ls ;
-
+        private LinearLayout rl_show;
         public ShoptViewHolder(@NonNull View itemView) {
             super(itemView);
             tv_num = itemView.findViewById(R.id.tv_num);
@@ -96,6 +96,7 @@ public class ShopActionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             tv_price = itemView.findViewById(R.id.tv_price);
             no_ls = itemView.findViewById(R.id.no_ls);
             iv_show_more = itemView.findViewById(R.id.iv_show_more);
+            rl_show=itemView.findViewById(R.id.rl_show);
         }
     }
 }

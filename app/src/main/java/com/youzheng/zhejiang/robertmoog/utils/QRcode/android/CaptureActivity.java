@@ -8,8 +8,10 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -189,7 +191,7 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
                             handler.quitSynchronously();
                             handler = null;
                         }
-                        inactivityTimer.onPause();
+                        inactivityTimer.shutdown();
                         beepManager.close();
                         cameraManager.closeDriver();
 
@@ -267,7 +269,7 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
             public void onClick(View v) {
                 for (ScanDatasBean scanDatasBean : datasBeanList) {
                     if (scanDatasBean.getNum() == 0) {
-                        showToast("商品数量不能为空");
+                        showToasts("商品数量不能为空");
                         return;
                     }
                 }
@@ -285,7 +287,7 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
                         addIntention();
                     }
                 } else {
-                    showToast("请添加商品");
+                    showToasts("请添加商品");
                 }
             }
         });
@@ -340,13 +342,16 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
             public void onResponse(String response) {
                 BaseModel baseModel = gson.fromJson(response, BaseModel.class);
                 if (baseModel.getCode() == PublicUtils.code) {
-                    showToast("添加意向商品成功");
+                    showToasts("添加意向商品成功");
                     previewView.setBackgroundColor(getResources().getColor(R.color.text_drak_gray));
                     viewfinderView.setVisibility(View.GONE);
                     tv_start.setVisibility(View.VISIBLE);
                     finish();
                 } else {
-                    showToast(baseModel.getMsg());
+                    if (!TextUtils.isEmpty(baseModel.getMsg())){
+                        showToasts(baseModel.getMsg());
+                    }
+
                 }
 
 
@@ -365,11 +370,16 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
 
         beepManager.playBeepSoundAndVibrate();
 
-        Intent intent = getIntent();
-        intent.putExtra(Constant.CODED_CONTENT, rawResult.getText());
-        setResult(RESULT_OK, intent);
-//        this.finish();
-        addData(rawResult.getText());
+        if (tv_start.getVisibility()==View.VISIBLE){
+            return;
+        }else {
+
+            Intent intent = getIntent();
+            intent.putExtra(Constant.CODED_CONTENT, rawResult.getText());
+            setResult(RESULT_OK, intent);
+            addData(rawResult.getText());
+        }
+
 
 
 
@@ -383,7 +393,7 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
             handler.quitSynchronously();
             handler = null;
         }
-        inactivityTimer.onPause();
+        inactivityTimer.shutdown();
         beepManager.close();
         cameraManager.closeDriver();
 
@@ -399,6 +409,9 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
     protected void onResume() {
         super.onResume();
 
+        previewView.setBackgroundColor(getResources().getColor(R.color.text_drak_gray));
+        viewfinderView.setVisibility(View.GONE);
+        tv_start.setVisibility(View.VISIBLE);
         cameraManager = new CameraManager(getApplication(), config);
 
         viewfinderView.setCameraManager(cameraManager);
@@ -415,6 +428,8 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
 
         beepManager.updatePrefs();
         inactivityTimer.onResume();
+
+
 
     }
 
@@ -510,50 +525,19 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
             new DecodeImgThread(path, new DecodeImgCallback() {
                 @Override
                 public void onImageDecodeSuccess(Result result) {
+                    Log.e("扫码","扫码成功");
                     handleDecode(result);
-                    previewView.setBackgroundColor(getResources().getColor(R.color.text_drak_gray));
-                    viewfinderView.setVisibility(View.GONE);
-                    tv_start.setVisibility(View.VISIBLE);
 
-                    isPreview = false;
-
-                    if (handler != null) {
-                        handler.quitSynchronously();
-                        handler = null;
-                    }
-                    inactivityTimer.onPause();
-                    beepManager.close();
-                    cameraManager.closeDriver();
-
-                    if (!hasSurface) {
-
-                        surfaceHolder.removeCallback(CaptureActivity.this);
-                    }
 
                 }
 
                 @Override
                 public void onImageDecodeFailed() {
-                    previewView.setBackgroundColor(getResources().getColor(R.color.text_drak_gray));
-                    viewfinderView.setVisibility(View.GONE);
-                    tv_start.setVisibility(View.VISIBLE);
-
-                    isPreview = false;
-
-                    if (handler != null) {
-                        handler.quitSynchronously();
-                        handler = null;
-                    }
-                    inactivityTimer.onPause();
-                    beepManager.close();
-                    cameraManager.closeDriver();
-
-                    if (!hasSurface) {
-
-                        surfaceHolder.removeCallback(CaptureActivity.this);
-                    }
-
-                    Toast.makeText(CaptureActivity.this, "条形码识别失败.", Toast.LENGTH_SHORT).show();
+                    Log.e("扫码","扫码失败");
+                    Toast toast=  Toast.makeText(CaptureActivity.this, null, Toast.LENGTH_SHORT);
+                    toast.setText("条形码识别失败");
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
                 }
             }).run();
 
@@ -590,11 +574,12 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
         OkHttpClientManager.postAsynJson(new Gson().toJson(map), UrlUtils.SCAN_GOODS + "?access_token=" + token, new OkHttpClientManager.StringCallback() {
             @Override
             public void onFailure(Request request, IOException e) {
-
+                Log.e("接口","失败111"+e);
             }
 
             @Override
             public void onResponse(String response) {
+                Log.e("接口",response);
                 BaseModel baseModel = gson.fromJson(response, BaseModel.class);
                 if (baseModel.getCode() == PublicUtils.code) {
                     ScanDatas scanDatas = gson.fromJson(gson.toJson(baseModel.getDatas()), ScanDatas.class);
@@ -618,7 +603,12 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
                         }
                     }
                 } else {
-                    showToast("条形码识别失败");
+                    if (!TextUtils.isEmpty(baseModel.getMsg())){
+                       // showToast("条形码识别失败");
+                        Log.e("接口","失败222");
+                        showToasts(baseModel.getMsg());
+                    }
+
                 }
             }
         });

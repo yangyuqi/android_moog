@@ -12,6 +12,7 @@ import android.os.Message;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.widget.Toast;
 
 import java.io.BufferedOutputStream;
@@ -70,7 +71,11 @@ public class DonwloadSaveImg {
         public void handleMessage(Message msg) {
             mSaveDialog.dismiss();
             Log.d(TAG, mSaveMessage);
-            Toast.makeText(context, mSaveMessage, Toast.LENGTH_SHORT).show();
+            Toast toast=  Toast.makeText(context, null, Toast.LENGTH_SHORT);
+            toast.setText(mSaveMessage);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+            //Toast.makeText(context, mSaveMessage, Toast.LENGTH_SHORT).show();
         }
     };
     /**

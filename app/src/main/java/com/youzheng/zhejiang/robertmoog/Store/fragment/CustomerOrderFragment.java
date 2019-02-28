@@ -291,7 +291,7 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
                     NewOrderListBean listBean = gson.fromJson(gson.toJson(baseModel.getDatas()), NewOrderListBean.class);
                     setData(listBean);
                 } else {
-                    showToast(baseModel.getMsg());
+                    showToasts(baseModel.getMsg());
                 }
             }
 
@@ -316,7 +316,7 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
                 no_data.setVisibility(View.VISIBLE);
                 springView.setVisibility(View.GONE);
             }else {
-                showToast(getString(R.string.load_list_erron));
+                showToasts(getString(R.string.load_list_erron));
             }
         }
 
@@ -332,7 +332,7 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
                 edit = tv_search.getText().toString();
                 //tv_search.setText("D1548784201901070011");
                 if (TextUtils.isEmpty(edit)) {
-                    showToast(getString(R.string.please_write_order_number));
+                    showToasts(getString(R.string.please_write_order_number));
                 } else {
                     orderCode = edit;
                     adapter.clear();

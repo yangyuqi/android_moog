@@ -89,6 +89,7 @@ public class AttentionGoodsActivity extends BaseActivity {
     public void onEvent(String d){
         if (d.equals("refresh")){
             adapter.clear();
+
             initData();
         }
     }
@@ -147,10 +148,11 @@ public class AttentionGoodsActivity extends BaseActivity {
                 if (baseModel.getCode()== PublicUtils.code){
                      intentDataBean = gson.fromJson(gson.toJson(baseModel.getDatas()),CustomerData.class);
                     if (!TextUtils.isEmpty(intentDataBean.getCustomerIntentData().getRemark())){
-                        //tv_update_intent.setVisibility(View.VISIBLE);
+                        tv_update_intent.setText("修改备注");
                         tv_attention.setText(intentDataBean.getCustomerIntentData().getRemark());
                     }else {
                         tv_attention.setText("");
+                        tv_update_intent.setText("添加备注");
                         //tv_update_intent.setVisibility(View.GONE);
                     }
 

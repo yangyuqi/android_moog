@@ -205,7 +205,7 @@ public class StoreSaleInsideActivity extends BaseActivity implements View.OnClic
                     ShopSaleDetail shopSaleDetail = gson.fromJson(gson.toJson(baseModel.getDatas()),ShopSaleDetail.class);
                     setData(shopSaleDetail);
                 }else {
-                    showToast(baseModel.getMsg());
+                    showToasts(baseModel.getMsg());
                 }
             }
         });

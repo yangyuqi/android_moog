@@ -177,7 +177,7 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
                     }
 
                 } else {
-                    showToast(baseModel.getMsg());
+                    showToasts(baseModel.getMsg());
                 }
             }
         });
@@ -283,7 +283,7 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
                     setData(returnGoodsList);
 
                 } else {
-                    showToast(baseModel.getMsg());
+                    showToasts(baseModel.getMsg());
                 }
             }
 
@@ -305,7 +305,7 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
                 no_data.setVisibility(View.VISIBLE);
                 mSpringView.setVisibility(View.GONE);
             }else {
-                showToast(getString(R.string.load_list_erron));
+                showToasts(getString(R.string.load_list_erron));
             }
         }
 
@@ -331,7 +331,7 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
                 edit = tv_search.getText().toString();
                 //tv_search.setText("D1548784201901070011");
                 if (TextUtils.isEmpty(edit)) {
-                    showToast(getString(R.string.please_write_return_number));
+                    showToasts(getString(R.string.please_write_return_number));
                 } else {
                     orderCode = edit;
                     list.clear();

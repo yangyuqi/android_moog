@@ -22,6 +22,7 @@ import com.youzheng.zhejiang.robertmoog.Model.Home.ProvinceList;
 import com.youzheng.zhejiang.robertmoog.Model.Home.StreetList;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.utils.SoftInputUtils;
+import com.youzheng.zhejiang.robertmoog.utils.PhoneUtil;
 import com.youzheng.zhejiang.robertmoog.utils.View.RemindDialog;
 
 import java.io.IOException;
@@ -38,13 +39,13 @@ public class AddNewAddressActivity extends BaseActivity {
     private EditText edt_name ,edt_phone ,edt_address ;
     private TextView edt_provice ,edt_city ,edt_town ,edt_street;
     private OptionsPickerView pvCustomTime;
-    private long customerId ;
+    private String customerId ;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_new_address_layout);
-        customerId = getIntent().getLongExtra("customerId",0);
+        customerId = getIntent().getStringExtra("customerId");
         initView();
     }
 
@@ -157,7 +158,7 @@ public class AddNewAddressActivity extends BaseActivity {
             public void onClick(View v) {
                 SoftInputUtils.hideSoftInput(AddNewAddressActivity.this);
                 if (provinceList_id==null){
-                    showToast("请先获取省份");
+                    showToasts("请先获取省份");
                     return;
                 }
                 edt_town.setText("");
@@ -207,11 +208,11 @@ public class AddNewAddressActivity extends BaseActivity {
             public void onClick(View v) {
                 SoftInputUtils.hideSoftInput(AddNewAddressActivity.this);
                 if (provinceList_id==null){
-                    showToast("请先获取省份");
+                    showToasts("请先获取省份");
                     return;
                 }
                 if (cityList_id==null){
-                    showToast("请先获取城市");
+                    showToasts("请先获取城市");
                     return;
                 }
                 Map<String,Object> map = new HashMap<>();
@@ -258,15 +259,15 @@ public class AddNewAddressActivity extends BaseActivity {
             public void onClick(View v) {
                 SoftInputUtils.hideSoftInput(AddNewAddressActivity.this);
                 if (provinceList_id==null){
-                    showToast("请先获取省份");
+                    showToasts("请先获取省份");
                     return;
                 }
                 if (cityList_id==null){
-                    showToast("请先获取城市");
+                    showToasts("请先获取城市");
                     return;
                 }
                 if (districtList_id==null){
-                    showToast("请先选择县/区");
+                    showToasts("请先选择县/区");
                     return;
                 }
                 Map<String,Object> map = new HashMap<>();
@@ -311,32 +312,38 @@ public class AddNewAddressActivity extends BaseActivity {
 
     private void addAddress() {
         if (edt_name.getText().toString().equals("")){
-            showToast("请先填写姓名");
+            showToasts("请先填写姓名");
             return;
         }
         if (edt_phone.getText().toString().equals("")){
-            showToast("请先填写手机号");
+            showToasts("请先填写手机号");
+            return;
+        }else if (edt_phone.getText().toString().length() < 11) {
+            showToasts("手机号码不正确");
+            return;
+        } else if (PhoneUtil.isCellphone(edt_phone.getText().toString()) == false) {
+            showToasts("手机号码格式不正确");
             return;
         }
 
         if (provinceList_id==null){
-            showToast("请先获取省份");
+            showToasts("请先获取省份");
             return;
         }
         if (cityList_id==null){
-            showToast("请先获取城市");
+            showToasts("请先获取城市");
             return;
         }
         if (districtList_id==null){
-            showToast("请先获取县／区");
+            showToasts("请先获取县／区");
             return;
         }
         if (streetList==null){
-            showToast("请先获取街道");
+            showToasts("请先获取街道");
             return;
         }
         if (edt_address.getText().toString().equals("")){
-            showToast("请先填写详细地址");
+            showToasts("请先填写详细地址");
             return;
         }
 
@@ -361,7 +368,7 @@ public class AddNewAddressActivity extends BaseActivity {
                 if (baseModel.getCode()==PublicUtils.code){
                     finish();
                 }else {
-                    showToast(baseModel.getMsg());
+                    showToasts(baseModel.getMsg());
                 }
             }
         });

@@ -92,7 +92,7 @@ public class SampleOutDetailActivity extends BaseActivity implements View.OnClic
                     SampleOutPic sampleOutPic = gson.fromJson(gson.toJson(baseModel.getDatas()),SampleOutPic.class);
                     setData(sampleOutPic);
                 }else {
-                    showToast(baseModel.getMsg());
+                    showToasts(baseModel.getMsg());
                 }
             }
         });

@@ -244,7 +244,7 @@ public class MealRankingActivity extends BaseActivity implements View.OnClickLis
                     MealRankingList mealRankingList = gson.fromJson(gson.toJson(baseModel.getDatas()), MealRankingList.class);
                     setData(mealRankingList);
                 } else {
-                    showToast(baseModel.getMsg());
+                    showToasts(baseModel.getMsg());
                 }
             }
         });
@@ -266,7 +266,7 @@ public class MealRankingActivity extends BaseActivity implements View.OnClickLis
                 no_data.setVisibility(View.VISIBLE);
                 mSpringView.setVisibility(View.GONE);
             }else {
-                showToast(getString(R.string.load_list_erron));
+                showToasts(getString(R.string.load_list_erron));
             }
         }
 
@@ -314,7 +314,7 @@ public class MealRankingActivity extends BaseActivity implements View.OnClickLis
 
         ruleAdapter = new CheckRuleAdapter(lists, this);
         listView.setAdapter(ruleAdapter);
-
+        iv_more.setImageResource(R.mipmap.group_12_3);
         if (who == 0) {
             ruleAdapter.setSelectItem(0);
         } else {
@@ -346,8 +346,11 @@ public class MealRankingActivity extends BaseActivity implements View.OnClickLis
 
         window.setBackgroundDrawable(getDrawable());
         //backgroundAlpha(0.5f);
-        pr_list.setBackgroundColor(getResources().getColor(R.color.text_drak_black));
-        pr_list.setAlpha(0.5f);
+        mSpringView.setBackgroundColor(getResources().getColor(R.color.text_drak_black));
+        mSpringView.setAlpha(0.5f);
+        pr_list.setVisibility(View.GONE);
+//        pr_list.setBackgroundColor(getResources().getColor(R.color.contents_text));
+//        pr_list.setAlpha(0.5f);
 
         window.setOnDismissListener(new poponDismissListener());
         window.setTouchable(true); // 设置popupwindow可点击
@@ -363,8 +366,12 @@ public class MealRankingActivity extends BaseActivity implements View.OnClickLis
             // TODO Auto-generated method stub
             //Log.v("List_noteTypeActivity:", "我是关闭事件");
             //backgroundAlpha(1f);
-            pr_list.setBackgroundColor(getResources().getColor(R.color.bg_background_white));
-            pr_list.setAlpha(1f);
+            iv_more.setImageResource(R.mipmap.group_14_1);
+            mSpringView.setBackgroundColor(getResources().getColor(R.color.bg_background_white));
+            mSpringView.setAlpha(1f);
+            pr_list.setVisibility(View.VISIBLE);
+//            pr_list.setBackgroundColor(getResources().getColor(R.color.bg_background_white));
+//            pr_list.setAlpha(1f);
         }
     }
 

@@ -156,7 +156,7 @@ public class ReturnGoodsDetailActivity extends BaseActivity implements View.OnCl
                     ReturnGoodsDetail returnGoodsDetail = gson.fromJson(gson.toJson(baseModel.getDatas()), ReturnGoodsDetail.class);
                     setData(returnGoodsDetail);
                 } else {
-                    showToast(baseModel.getMsg());
+                    showToasts(baseModel.getMsg());
                 }
             }
         });

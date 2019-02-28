@@ -89,6 +89,7 @@
                      android:layout_height="wrap_content"
                      android:layout_alignParentRight="true"
                      android:text="182983102312"
+                     android:layout_marginRight="25dp"
                      android:textColor="@color/text_drak_black"
                      />
 
@@ -102,6 +103,15 @@
                      android:textSize="@dimen/text_size_15"
                      android:text="烦烦烦方法   发士大夫"
                      />
+                 <ImageView
+                     android:layout_alignParentRight="true"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:src="@mipmap/group_9_4"
+                     android:layout_marginRight="5dp"
+                     android:layout_centerInParent="true"
+                     />
+
 
              </RelativeLayout>
 
@@ -374,6 +384,7 @@
                 <TextView
                     android:layout_weight="1"
                     android:hint="未使用"
+                    android:textColorHint="@color/text_main"
                     android:drawablePadding="@dimen/space_10"
                     android:drawableRight="@mipmap/group_9_4"
                     android:id="@+id/tv_get_ticket"

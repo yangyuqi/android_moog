@@ -89,7 +89,7 @@ public class SearchMealInfoActivity extends BaseActivity implements View.OnClick
             list.addAll(beans);
             adapter.setUI(beans);
         } else {
-            showToast(getString(R.string.load_list_erron));
+            showToasts(getString(R.string.load_list_erron));
         }
     }
 
@@ -97,7 +97,7 @@ public class SearchMealInfoActivity extends BaseActivity implements View.OnClick
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
-        textHeadTitle.setText("搜索套餐");
+        textHeadTitle.setText("查找套餐");
         textHeadNext = (TextView) findViewById(R.id.textHeadNext);
         iv_next = (ImageView) findViewById(R.id.iv_next);
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);
@@ -136,7 +136,7 @@ public class SearchMealInfoActivity extends BaseActivity implements View.OnClick
                 SoftInputUtils.hideSoftInput(SearchMealInfoActivity.this);
                 code = tv_search.getText().toString().trim();
                 if (TextUtils.isEmpty(code)) {
-                    showToast("请输入套餐号");
+                    showToasts(getString(R.string.write_sku_meal));
                 } else {
                     adapter.clear();
                     initData(code, promoId);

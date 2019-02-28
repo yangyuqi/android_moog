@@ -205,7 +205,7 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
                     }
 
                 } else {
-                    showToast(baseModel.getMsg());
+                    showToasts(baseModel.getMsg());
                 }
             }
         });
@@ -218,7 +218,7 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
             @Override
             public void onClick(View v) {
                 if (TextUtils.isEmpty(tv_get_state.getText().toString())) {
-                    showToast("选择提货方式");
+                    showToasts("选择提货方式");
                     return;
                 }
 //                if (TextUtils.isEmpty(tv_dispatching_type.getText().toString())) {
@@ -226,7 +226,7 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
 //                    return;
 //                }
                 if (TextUtils.isEmpty(tv_get_money_type.getText().toString())) {
-                    showToast("选择收款方式");
+                    showToasts("选择收款方式");
                     return;
                 }
 
@@ -305,7 +305,7 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
                             Log.e("213213","2");
                             tv_cut_money_of_store.setText("-¥" + s.toString());
                         } else {
-                            showToast("门店优惠金额不能大于实际需付金额");
+                            showToasts("门店优惠金额不能大于实际需付金额");
                             edt_door_ticket.setText("");
                         }
 
@@ -427,7 +427,7 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
                     finish();
                     CaptureActivity.instance.finish();
                 } else {
-                    showToast(baseModel.getMsg());
+                    showToasts(baseModel.getMsg());
                 }
             }
         });
@@ -558,7 +558,7 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
                     }
                 }else {
                     if (!TextUtils.isEmpty(baseModel.getMsg())){
-                        showToast(baseModel.getMsg());
+                        showToasts(baseModel.getMsg());
                     }
                 }
             }
@@ -631,7 +631,7 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
                 if (!matcher.find()) {
                     return null;
                 } else {
-                    showToast("只能输入汉字,英文,数字");
+                    showToasts("只能输入汉字,英文,数字");
                     return "";
                 }
 
@@ -666,7 +666,7 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
         if (requestCode == 3 && resultCode == 3) {
             assetId = data.getStringExtra("assetId");
             payValue = data.getStringExtra("payValue");
-            tv_get_ticket.setText(payValue);
+            tv_get_ticket.setText(getString(R.string.label_money)+payValue);
             clickTicket = "";
             initData(edt_door_ticket.getText().toString(),is_have_adress);
             Log.e("213213","5");

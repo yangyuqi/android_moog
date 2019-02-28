@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -87,7 +88,7 @@ public class MoreReturnCounterAdapter extends RecyclerView.Adapter<MoreReturnCou
         adapter.setRefreshUI(productListBeanList);
 
         //productListBeanList = list.get(position).getProductList();
-        moreHolder.iv_isShow.setOnClickListener(new View.OnClickListener() {
+        moreHolder.lin_show.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 productListBeanList=new ArrayList<>();
@@ -146,7 +147,7 @@ public class MoreReturnCounterAdapter extends RecyclerView.Adapter<MoreReturnCou
         private TextView tv_goods_code, tv_goods_content,
                 tv_money, tv_meal_name;
         private RecyclerView listView;
-
+        private LinearLayout lin_show;
 
         public MoreHolder(@NonNull View itemView) {
             super(itemView);
@@ -157,7 +158,7 @@ public class MoreReturnCounterAdapter extends RecyclerView.Adapter<MoreReturnCou
             tv_money = itemView.findViewById(R.id.tv_money);
             tv_meal_name = itemView.findViewById(R.id.tv_meal_name);
             listView = itemView.findViewById(R.id.listView);
-
+            lin_show = itemView.findViewById(R.id.lin_show);
 
         }
     }

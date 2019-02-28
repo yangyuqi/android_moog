@@ -7,11 +7,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:background="@color/bg_background_white"
         >
 
     <RelativeLayout
+        android:id="@+id/rv_select"
         android:layout_width="match_parent"
-        android:layout_height="88dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:background="@color/bg_background_white"
         >
         
@@ -66,7 +70,6 @@
                 android:text="嘎嘎嘎"
                 />
 
-
             <TextView
                 android:singleLine="true"
                 android:id="@+id/tv_time"
@@ -78,28 +81,43 @@
                 android:text="嘎嘎嘎"
                 />
 
-            <TextView
-                android:layout_alignParentBottom="true"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/lin_show"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/text_main"
-                android:textSize="13sp"
-                android:text="详细信息"
-                />
-
-
-            <ImageView
-                android:paddingRight="@dimen/space_5"
+                android:layout_below="@id/tv_time"
+                android:layout_alignParentBottom="true"
+                android:gravity="center_vertical"
                 android:paddingTop="@dimen/space_6"
-                android:paddingLeft="@dimen/space_20"
-                android:id="@+id/iv_show"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentBottom="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/group_24_3"
+                android:orientation="horizontal">
 
-                />
+
+                <TextView
+                    android:layout_alignParentBottom="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_main"
+                    android:textSize="13sp"
+                    android:layout_weight="1"
+                    android:text="详细信息"
+                    />
+
+
+                <ImageView
+                    android:paddingRight="@dimen/space_5"
+                    android:paddingLeft="@dimen/space_20"
+                    android:id="@+id/iv_show"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/group_24_3"
+
+                    />
+
+
+            </LinearLayout>
+
 
             <ImageView
                 android:id="@+id/cb"
@@ -110,13 +128,52 @@
                 />
 
         </RelativeLayout>
-        
     </RelativeLayout>
 
+
+        <LinearLayout
+            android:id="@+id/lin_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="5dp"
+            android:background="@drawable/bg_order"
+            android:layout_marginLeft="@dimen/space_15"
+            android:layout_marginRight="@dimen/space_15"
+            android:padding="5dp"
+            android:gravity="center_vertical"
+            android:visibility="gone"
+
+
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="[参考]"
+                android:textSize="12sp"
+                android:textColor="@color/text_golden2"/>
+
+            <TextView
+                android:id="@+id/tv_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="安徽省问问"
+                android:singleLine="true"
+                android:textSize="12sp"
+                android:layout_marginLeft="5dp"
+                android:textColor="@color/text_main"/>
+
+
+        </LinearLayout>
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/space_divider_1"
+            android:layout_marginTop="5dp"
             android:background="@color/bg_all"/>
+
+
+
 
      <TextView
          android:visibility="gone"
@@ -126,6 +183,8 @@
          android:textColor="@color/text_main"
          android:paddingBottom="@dimen/space_10"
          android:paddingTop="@dimen/space_5"
+         android:text=""
+         android:gravity="center_vertical"
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
          android:paddingLeft="@dimen/space_15"
@@ -146,6 +205,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/space_5"
+            android:visibility="gone"
             android:background="@color/bg_background_white"/>
 
      <com.youzheng.zhejiang.robertmoog.utils.View.NoScrollListView

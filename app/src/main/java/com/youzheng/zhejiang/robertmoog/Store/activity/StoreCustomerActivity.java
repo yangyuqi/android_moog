@@ -179,7 +179,7 @@ public class StoreCustomerActivity extends BaseActivity implements View.OnClickL
                     CustomerList customerList = gson.fromJson(gson.toJson(baseModel.getDatas()), CustomerList.class);
                     setData(customerList);
                 } else {
-                    showToast(baseModel.getMsg());
+                    showToasts(baseModel.getMsg());
                 }
             }
         });
@@ -203,8 +203,14 @@ public class StoreCustomerActivity extends BaseActivity implements View.OnClickL
             lv_list.setVisibility(View.VISIBLE);
         } else {
             //showToast(getString(R.string.load_list_erron));
-            no_data.setVisibility(View.VISIBLE);
-            lv_list.setVisibility(View.GONE);
+
+            if (year == calendar.get(Calendar.YEAR)){
+                no_data.setVisibility(View.VISIBLE);
+                lv_list.setVisibility(View.GONE);
+            }else {
+                showToasts(getString(R.string.load_list_erron));
+            }
+
         }
 
 

@@ -221,7 +221,7 @@ public class AttentionManagerActivity extends BaseActivity implements MangerList
                             springView.setVisibility(View.GONE);
                             findViewById(R.id.rl_search).setVisibility(View.GONE);
                         }else {
-                            showToast(getString(R.string.load_list_erron));
+                            showToasts(getString(R.string.load_list_erron));
                         }
 
                         //adapter.setData(new ArrayList<CustomerIntentListBean>(), mContext);
@@ -290,12 +290,12 @@ public class AttentionManagerActivity extends BaseActivity implements MangerList
             @Override
             public void onClick(View v) {
                 if (tv_search.getText().toString().equals("")) {
-                    showToast(getString(R.string.phone_not_null));
+                    showToasts(getString(R.string.write_customer_phone));
                     return;
                 } else if (tv_search.getText().toString().length() < 11) {
-                    showToast("手机号有误,请重新输入");
+                    showToasts("手机号码不正确");
                 } else if (PhoneUtil.isCellphone(tv_search.getText().toString()) == false) {
-                    showToast("手机号格式错误,请重新输入");
+                    showToasts("手机号码格式不正确");
                 } else {
                     phone = tv_search.getText().toString();
                     initData();

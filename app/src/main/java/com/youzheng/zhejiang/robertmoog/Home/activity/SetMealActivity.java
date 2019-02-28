@@ -65,6 +65,8 @@ public class SetMealActivity extends BaseActivity implements TextWatcher {
     private ImageView iv_clear;
     private View no_data;
     private String SKU;
+    private View view_down;
+    private ImageView iv_more;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,12 +102,11 @@ public class SetMealActivity extends BaseActivity implements TextWatcher {
                         no_data.setVisibility(View.GONE);
                         springView.setVisibility(View.VISIBLE);
                     } else {
-                        showToast(getString(R.string.load_list_erron));
-                        if (pageNum==1&&TextUtils.isEmpty(SKU)){
+                        if (pageNum==1){
                             no_data.setVisibility(View.VISIBLE);
                             springView.setVisibility(View.GONE);
                         }else {
-                            showToast(getString(R.string.load_list_erron));
+                            showToasts(getString(R.string.load_list_erron));
                         }
                     }
                 }
@@ -150,15 +151,18 @@ public class SetMealActivity extends BaseActivity implements TextWatcher {
             }
         });
 
-        findViewById(R.id.iv_more).setOnClickListener(new View.OnClickListener() {
+        iv_more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showPopuWindow();
+
+
             }
         });
     }
 
     private void initView() {
+        iv_more=findViewById(R.id.iv_more);
         no_data=findViewById(R.id.no_data);
         ((TextView) findViewById(R.id.textHeadTitle)).setText("套餐列表");
         findViewById(R.id.btnBack).setOnClickListener(new View.OnClickListener() {
@@ -207,7 +211,7 @@ public class SetMealActivity extends BaseActivity implements TextWatcher {
             public void onClick(View v) {
                 SoftInputUtils.hideSoftInput(SetMealActivity.this);
                 if (TextUtils.isEmpty(tv_search.getText().toString())){
-                    showToast("请输入商品sku/套餐号");
+                    showToasts("请输入商品sku/套餐号");
                 }else {
                     SKU=tv_search.getText().toString().trim();
                     refreshData(typeId);
@@ -247,7 +251,7 @@ public class SetMealActivity extends BaseActivity implements TextWatcher {
                             tab.addTab(tab.newTab().setText(bean.getName()));
                         }
                     }else {
-                       showToast(getString(R.string.load_list_erron));
+                       showToasts(getString(R.string.load_list_erron));
 
                     }
                 }
@@ -258,11 +262,12 @@ public class SetMealActivity extends BaseActivity implements TextWatcher {
     private void showPopuWindow() {
         View inflate = getLayoutInflater().inflate(R.layout.pupwindow_goods_title2, null);
         mGvTitle = (GridView) inflate.findViewById(R.id.gv_title);
-
+        view_down=inflate.findViewById(R.id.view_down);
         goodsTitleAdapter = new GoodsTitleAdapter2(MealMainData, this);
         mGvTitle.setAdapter(goodsTitleAdapter);
         goodsTitleAdapter.notifyDataSetChanged();
 
+        iv_more.setImageResource(R.mipmap.group_12_3);
         mGvTitle.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -271,14 +276,36 @@ public class SetMealActivity extends BaseActivity implements TextWatcher {
                 window.dismiss();
             }
         });
+
+        view_down.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                window.dismiss();
+            }
+        });
         window = new PopupWindow(inflate, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, true);
         window.setAnimationStyle(R.style.ActionDialogStyle);
 
         window.setBackgroundDrawable(getDrawable());
+        view_down.setBackgroundColor(getResources().getColor(R.color.contents_text));
+        view_down.setAlpha(0.5f);
+        window.setOnDismissListener(new poponDismissListener());
         window.setTouchable(true); // 设置popupwindow可点击
         window.setOutsideTouchable(true); // 设置popupwindow外部可点击
         window.showAsDropDown(tab);
         window.update();
+    }
+
+    class poponDismissListener implements PopupWindow.OnDismissListener{
+        @Override
+        public void onDismiss() {
+            // TODO Auto-generated method stub
+            //Log.v("List_noteTypeActivity:", "我是关闭事件");
+            iv_more.setImageResource(R.mipmap.group_14_1);
+            view_down.setBackgroundColor(getResources().getColor(R.color.bg_background_white));
+            view_down.setAlpha(1f);
+
+        }
     }
 
     private Drawable getDrawable() {

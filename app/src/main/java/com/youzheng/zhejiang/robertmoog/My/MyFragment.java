@@ -211,7 +211,7 @@ public class MyFragment extends BaseFragment implements BaseFragment.ReloadInter
                                         SharedPreferencesUtils.clear(mContext);
                                         getActivity().finish();
                                         startActivity(new Intent(mContext,LoginActivity.class));
-                                        showToast(baseModel.getMsg());
+                                        showToasts(baseModel.getMsg());
                                     }
                                 }
                             });

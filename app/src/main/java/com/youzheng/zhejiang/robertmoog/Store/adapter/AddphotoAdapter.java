@@ -38,6 +38,11 @@ public class AddphotoAdapter extends BaseAdapter {
         layoutInflater=LayoutInflater.from(context);
     }
 
+    public void clear(){
+        list.clear();
+        notifyDataSetChanged();
+    }
+
 
     @Override
     public int getCount() {

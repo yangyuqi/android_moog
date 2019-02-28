@@ -29,6 +29,7 @@ import com.youzheng.zhejiang.robertmoog.Store.bean.ChooseReturnGoodsDetail;
 import com.youzheng.zhejiang.robertmoog.Store.bean.CommitRequest;
 import com.youzheng.zhejiang.robertmoog.Store.bean.CustomerList;
 import com.youzheng.zhejiang.robertmoog.Store.bean.OrderlistDetail;
+import com.youzheng.zhejiang.robertmoog.Store.listener.GetMore;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -41,7 +42,7 @@ import okhttp3.Request;
 /**
  * 选择退货商品界面ss
  */
-public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnClickListener {
+public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnClickListener, GetMore {
 
     private ImageView btnBack;
     /**  */
@@ -136,7 +137,7 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
         rv_list_one.setAdapter(oneOrderDetailAdapter);
 
 
-        moreChooseReturnGoodsAdapter=new MoreChooseReturnGoodsAdapter(morelist,this);
+        moreChooseReturnGoodsAdapter=new MoreChooseReturnGoodsAdapter(morelist,this,this);
         rv_list_more.setAdapter(moreChooseReturnGoodsAdapter);
 
 
@@ -175,7 +176,7 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
                     ChooseReturnGoodsDetail chooseReturnGoodsDetail = gson.fromJson(gson.toJson(baseModel.getDatas()),ChooseReturnGoodsDetail.class);
                     setData(chooseReturnGoodsDetail);
                 }else {
-                    showToast(baseModel.getMsg());
+                    showToasts(baseModel.getMsg());
                 }
             }
         });
@@ -244,10 +245,10 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
                 finish();
                 break;
             case R.id.tv_confirm:
-                requests.clear();
+
 
                 if (onelist.size()!=0){
-
+                    requests.clear();
                     for (ChooseReturnGoodsDetail.ReturnOrderInfoBean.ProductListBean oneBean:onelist){
                         ChooseGoodsRequest.OrderProductListBean request=new ChooseGoodsRequest.OrderProductListBean();
                         if (oneBean.getNum()!=0){
@@ -258,19 +259,21 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
                     }
                 }
 
-                if (morelist.size()!=0){
-                        requests.addAll(moreChooseReturnGoodsAdapter.getRequests());
-                }
+//                if (morelist.size()!=0){
+//                        requests.addAll(moreChooseReturnGoodsAdapter.getRequests());
+//
+//                }
 
 
                 if (requests.size()==0){
-                    showToast("暂无可退商品");
+                    showToasts("暂无可退商品");
                 }else {
                     Intent intent=new Intent(this,ReturnGoodsCounterActivity.class);
                     intent.putExtra("request", (Serializable) requests);
                     intent.putExtra("is_all",isall);
                     intent.putExtra("orderID",orderid);
                     startActivity(intent);
+
 //                    finish();
                 }
 
@@ -280,5 +283,19 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
                 break;
         }
     }
+
+    @Override
+    public void getMeal(List<ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean.ProductListBeanX> list) {
+        requests.clear();
+        for (ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean.ProductListBeanX beanX:list){
+            ChooseGoodsRequest.OrderProductListBean request=new ChooseGoodsRequest.OrderProductListBean();
+                if (beanX.getNum()!=0){
+                    request.setCount(beanX.getNum()+"");
+                    request.setOrderItemProductId(beanX.getOrderItemProductId());
+                    requests.add(request);
+                }
+
+        }
     }
+}
 

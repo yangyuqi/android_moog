@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -17,6 +18,7 @@ import com.youzheng.zhejiang.robertmoog.Store.bean.ChooseGoodsRequest;
 import com.youzheng.zhejiang.robertmoog.Store.bean.ChooseReturnGoodsDetail;
 import com.youzheng.zhejiang.robertmoog.Store.bean.OrderlistDetail;
 import com.youzheng.zhejiang.robertmoog.Store.bean.ReturnGoodsDetail;
+import com.youzheng.zhejiang.robertmoog.Store.listener.GetMore;
 import com.youzheng.zhejiang.robertmoog.Store.view.MyListView;
 
 import java.util.ArrayList;
@@ -33,12 +35,14 @@ public class MoreChooseReturnGoodsAdapter extends RecyclerView.Adapter<MoreChoos
     public static List<ChooseGoodsRequest.OrderProductListBean> requests=new ArrayList<>();
     public static List<ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean.ProductListBeanX> productListBeanList;
     public  static boolean isShow=false;
+    GetMore listener;
    // private List<OrderlistDetail.OrderItemDataBean.OrderSetMealListBean.ProductListBean> smalllist;
 
     public MoreChooseReturnGoodsAdapter(List<ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean> list,
-                                        Context context) {
+                                        Context context,  GetMore listener) {
         this.list = list;
         this.context = context;
+        this.listener=listener;
         layoutInflater = LayoutInflater.from(context);
 
 
@@ -71,13 +75,13 @@ public class MoreChooseReturnGoodsAdapter extends RecyclerView.Adapter<MoreChoos
         list.get(position).setIsexpress(true);
         moreHolder.iv_isShow.setImageResource(R.mipmap.group_12_3);
 
-        adapter = new SmallChooseReturnGoodsAdapter(productListBeanList, context);
+        adapter = new SmallChooseReturnGoodsAdapter(productListBeanList, context,listener);
         moreHolder.listView.setAdapter(adapter);
 
         adapter.setRefreshUI(productListBeanList);
 
         //productListBeanList = list.get(position).getProductList();
-        moreHolder.iv_isShow.setOnClickListener(new View.OnClickListener() {
+        moreHolder.lin_show.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 productListBeanList=new ArrayList<>();
@@ -95,7 +99,7 @@ public class MoreChooseReturnGoodsAdapter extends RecyclerView.Adapter<MoreChoos
                     }
                 }
 
-                adapter = new SmallChooseReturnGoodsAdapter(productListBeanList, context);
+                adapter = new SmallChooseReturnGoodsAdapter(productListBeanList, context,listener);
                 moreHolder.listView.setAdapter(adapter);
 
                 adapter.setRefreshUI(productListBeanList);
@@ -116,11 +120,10 @@ public class MoreChooseReturnGoodsAdapter extends RecyclerView.Adapter<MoreChoos
         for (ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean.ProductListBeanX beanX:productListBeanList){
             ChooseGoodsRequest.OrderProductListBean request=new ChooseGoodsRequest.OrderProductListBean();
             if (beanX.getNum()!=0){
-                if (productListBeanList.size()!=0){
                     request.setCount(beanX.getNum()+"");
                     request.setOrderItemProductId(beanX.getOrderItemProductId());
                     requests.add(request);
-                }
+
 
             }
         }
@@ -138,7 +141,7 @@ public class MoreChooseReturnGoodsAdapter extends RecyclerView.Adapter<MoreChoos
         private TextView tv_goods_code, tv_goods_content,
                 tv_money, tv_meal_name;
         private MyListView listView;
-
+        private LinearLayout lin_show;
 
         public MoreHolder(@NonNull View itemView) {
             super(itemView);
@@ -150,7 +153,7 @@ public class MoreChooseReturnGoodsAdapter extends RecyclerView.Adapter<MoreChoos
             tv_meal_name = itemView.findViewById(R.id.tv_meal_name);
             listView = itemView.findViewById(R.id.listView);
 
-
+            lin_show = itemView.findViewById(R.id.lin_show);
         }
     }
 

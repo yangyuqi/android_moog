@@ -17,7 +17,7 @@
     <TextView
         android:id="@+id/version"
         android:layout_width="match_parent"
-        android:text=" 确定提交退货信息吗？"
+        android:text=" 出样信息未提交，是否确认返回？"
         android:gravity="center"
         android:textSize="14sp"
         android:paddingBottom="25dp"

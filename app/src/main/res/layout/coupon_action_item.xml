@@ -32,13 +32,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="30sp"
+                android:singleLine="true"
                 android:text="80"
+                android:paddingLeft="8dp"
                 />
 
             <TextView
                 android:id="@+id/tv_use_money"
                 android:layout_marginBottom="@dimen/space_5"
                 android:text="满200元可用"
+                android:singleLine="true"
+                android:paddingLeft="5dp"
                 android:textColor="@color/bg_background_white"
                 android:layout_width="wrap_content"
                 android:layout_centerHorizontal="true"
@@ -78,28 +82,45 @@
                 android:text="嘎嘎嘎"
                 />
 
-            <TextView
-                android:layout_alignParentBottom="true"
-                android:layout_width="wrap_content"
+
+            <LinearLayout
+                android:id="@+id/lin_show"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/text_main"
-                android:textSize="13sp"
-                android:text="详细信息"
-                />
-
-
-            <ImageView
-                android:paddingRight="@dimen/space_5"
+                android:layout_below="@id/tv_time"
+                android:gravity="center_vertical"
                 android:paddingTop="@dimen/space_6"
-                android:paddingLeft="@dimen/space_20"
-                android:id="@+id/iv_show"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentBottom="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/group_24_3"
+                android:orientation="horizontal">
 
-                />
+
+                <TextView
+                    android:layout_alignParentBottom="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_main"
+                    android:textSize="13sp"
+                    android:layout_weight="1"
+                    android:text="详细信息"
+                    />
+
+
+                <ImageView
+                    android:paddingRight="@dimen/space_5"
+                    android:paddingLeft="@dimen/space_20"
+                    android:id="@+id/iv_show"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/group_24_3"
+
+                    />
+
+
+            </LinearLayout>
+
+
+
 
             <ImageView
                 android:id="@+id/cb"
@@ -144,10 +165,7 @@
             android:text="活动门店"
             />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/space_5"
-            android:background="@color/bg_background_white"/>
+
 
      <com.youzheng.zhejiang.robertmoog.utils.View.NoScrollListView
          android:id="@+id/ls"

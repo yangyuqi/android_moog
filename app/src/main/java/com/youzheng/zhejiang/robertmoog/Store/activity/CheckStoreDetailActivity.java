@@ -94,7 +94,7 @@ public class CheckStoreDetailActivity extends BaseActivity implements View.OnCli
                     CheckStoreDetail checkStoreDetail = gson.fromJson(gson.toJson(baseModel.getDatas()),CheckStoreDetail.class);
                     setData(checkStoreDetail);
                 }else {
-                    showToast(baseModel.getMsg());
+                    showToasts(baseModel.getMsg());
                 }
             }
 

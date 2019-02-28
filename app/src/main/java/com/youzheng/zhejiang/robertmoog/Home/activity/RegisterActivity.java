@@ -71,22 +71,24 @@ public class RegisterActivity  extends BaseActivity implements TextWatcher {
         ((ImageView)findViewById(R.id.iv_next)).setImageResource(R.mipmap.group_30_1);
         edt_phone = (EditText) findViewById(R.id.edt_phone);
         edt_code = (EditText) findViewById(R.id.edt_code);
+
+        btn_send_code = (Button) findViewById(R.id.btn_send_code);
+        edt_phone.addTextChangedListener(this);
+
         if (!TextUtils.isEmpty(phone)){
             edt_phone.setText(phone);
         }
-        btn_send_code = (Button) findViewById(R.id.btn_send_code);
-        edt_phone.addTextChangedListener(this);
         timer = new MyCountDownTimer(btn_send_code,60000,1000);
         findViewById(R.id.tv_register).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 if (edt_phone.getText().toString().equals("")){
-                    showToast(getString(R.string.phone_not_null));
+                    showToasts(getString(R.string.login_input_phone));
                     return;
                 }
                 if (edt_code.getText().toString().equals("")){
-                    showToast(getString(R.string.code_not_null));
+                    showToasts(getString(R.string.code_not_null));
                     return;
                 }
                 Map<String,Object> map = new HashMap<>();
@@ -110,7 +112,7 @@ public class RegisterActivity  extends BaseActivity implements TextWatcher {
                             startActivity(intent);
                             finish();
                         }else {
-                            showToast(baseModel.getMsg());
+                            showToasts(baseModel.getMsg());
                         }
                     }
                 });
@@ -122,12 +124,12 @@ public class RegisterActivity  extends BaseActivity implements TextWatcher {
             @Override
             public void onClick(View v) {
                 if (edt_phone.getText().toString().equals("")){
-                    showToast(getString(R.string.phone_not_null));
+                    showToasts(getString(R.string.login_input_phone));
                     return;
                 }else if (edt_phone.getText().toString().length()<11){
-                    showToast("手机号有误,请重新输入");
+                    showToasts("手机号码不正确");
                 }else if (PhoneUtil.isCellphone(edt_phone.getText().toString())==false) {
-                    showToast("手机号格式错误,请重新输入");
+                    showToasts("手机号码格式不正确");
                 }else {
                     Map<String,Object> map = new HashMap<>();
                     map.put("phone",edt_phone.getText().toString());
@@ -149,7 +151,7 @@ public class RegisterActivity  extends BaseActivity implements TextWatcher {
                                 showStopDialog(code.getCheckCode());
                             }else {
                                 if (!TextUtils.isEmpty(baseModel.getMsg())){
-                                    showToast(baseModel.getMsg());
+                                    showToasts(baseModel.getMsg());
                                     timer.onFinish();
                                     btn_send_code.setText("获取验证码");
                                 }
@@ -268,10 +270,17 @@ public class RegisterActivity  extends BaseActivity implements TextWatcher {
 
     @Override
     public void afterTextChanged(Editable s) {
-           if (!TextUtils.isEmpty(edt_phone.getText().toString().trim())){
-               btn_send_code.setTextColor(getResources().getColor(R.color.colorPrimary));
+           if (edt_phone.getText().length()!=0){
+               if (edt_phone.getText().length()<11){
+                   btn_send_code.setTextColor(getResources().getColor(R.color.color_air_blue));
+                   btn_send_code.setClickable(false);
+               }else {
+                   btn_send_code.setTextColor(getResources().getColor(R.color.colorPrimary));
+                   btn_send_code.setClickable(true);
+               }
            }else {
                btn_send_code.setTextColor(getResources().getColor(R.color.color_air_blue));
+               btn_send_code.setClickable(false);
 
            }
     }

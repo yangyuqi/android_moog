@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Gravity;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -81,7 +82,11 @@ public class PermissionPageUtils {
                 intent.setComponent(comp);
                 mContext.startActivity(intent);
             } catch (Exception e) {
-                Toast.makeText(mContext, "跳转失败", Toast.LENGTH_LONG).show();
+                Toast toast=  Toast.makeText(mContext, null, Toast.LENGTH_SHORT);
+                toast.setText("跳转失败");
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
+                //Toast.makeText(mContext, "跳转失败", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
                 goIntentSetting();
             }
@@ -93,7 +98,11 @@ public class PermissionPageUtils {
                 intent.setComponent(comp);
                 mContext.startActivity(intent);
             } catch (Exception e) {
-                Toast.makeText(mContext, "跳转失败", Toast.LENGTH_LONG).show();
+                Toast toast=  Toast.makeText(mContext, null, Toast.LENGTH_SHORT);
+                toast.setText("跳转失败");
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
+               // Toast.makeText(mContext, "跳转失败", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
                 goIntentSetting();
             }
@@ -107,7 +116,11 @@ public class PermissionPageUtils {
                 intent.setComponent(comp);
                 mContext.startActivity(intent);
             } catch (Exception e) {
-                Toast.makeText(mContext, "跳转失败", Toast.LENGTH_LONG).show();
+                Toast toast=  Toast.makeText(mContext, null, Toast.LENGTH_SHORT);
+                toast.setText("跳转失败");
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
+                //Toast.makeText(mContext, "跳转失败", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
                 goIntentSetting();
             }

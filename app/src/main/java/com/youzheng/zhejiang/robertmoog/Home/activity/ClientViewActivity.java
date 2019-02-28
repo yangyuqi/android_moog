@@ -65,12 +65,12 @@ public class ClientViewActivity extends BaseActivity implements TextWatcher {
             @Override
             public void onClick(View v) {
                 if (tv_search.getText().toString().equals("")) {
-                    showToast(getString(R.string.phone_not_null));
+                    showToasts(getString(R.string.login_input_phone));
                     return;
                 } else if (tv_search.getText().toString().length() < 11) {
-                    showToast("手机号有误,请重新输入");
+                    showToasts("手机号码不正确");
                 } else if (PhoneUtil.isCellphone(tv_search.getText().toString()) == false) {
-                    showToast("手机号格式错误,请重新输入");
+                    showToasts("手机号码格式不正确");
                 } else {
                     Map<String, Object> map = new HashMap<>();
                     map.put("phone", tv_search.getText().toString());
@@ -99,7 +99,7 @@ public class ClientViewActivity extends BaseActivity implements TextWatcher {
                                 });
 
                             } else {
-                                showToast(baseModel.getMsg());
+                                showToasts(baseModel.getMsg());
                                 if (baseModel.getCode() == PublicUtils.no_exist) {
                                     final RemindDialog dialog = new RemindDialog(mContext, new RemindDialog.onSuccessClick() {
                                         @Override

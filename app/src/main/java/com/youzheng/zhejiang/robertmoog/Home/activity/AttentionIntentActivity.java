@@ -71,7 +71,7 @@ public class AttentionIntentActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
 
-
+        tabLayout.getTabAt(0).select();
         if (role.equals(PublicUtils.SHOP_SELLER)){
             tabLayout.setVisibility(View.GONE);
             startActivity(new Intent(mContext,AttentionManagerActivity.class));
@@ -172,7 +172,7 @@ public class AttentionIntentActivity extends BaseActivity {
                     helper.setText(R.id.tv_time,item.getCreateDate());
                     helper.setText(R.id.tv_phone,item.getCustCode());
                     helper.setText(R.id.tv_from,item.getChannel());
-                    helper.getView(R.id.iv_add).setOnClickListener(new View.OnClickListener() {
+                    helper.getView(R.id.rv_click).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             Intent intent = new Intent(mContext,AttentionGoodsActivity.class);

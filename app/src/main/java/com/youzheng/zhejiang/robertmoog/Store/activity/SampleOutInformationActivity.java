@@ -102,7 +102,7 @@ public class SampleOutInformationActivity extends BaseActivity implements View.O
                     SampleOutList sampleOutList = gson.fromJson(gson.toJson(baseModel.getDatas()),SampleOutList.class);
                     setData(sampleOutList);
                 }else {
-                    showToast(baseModel.getMsg());
+                    showToasts(baseModel.getMsg());
                 }
             }
         });
@@ -233,7 +233,7 @@ public class SampleOutInformationActivity extends BaseActivity implements View.O
                     Log.e("门店客户列表",response);
                     BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                     if (baseModel.getCode()==PublicUtils.code){
-                        showToast(getString(R.string.commit_success));
+                        showToasts(getString(R.string.commit_success));
                        // finish();
                         list.clear();
                         list2.clear();

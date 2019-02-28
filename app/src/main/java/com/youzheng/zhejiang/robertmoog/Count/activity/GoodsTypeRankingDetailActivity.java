@@ -212,7 +212,7 @@ public class GoodsTypeRankingDetailActivity extends BaseActivity implements View
                     GoodsTypeDetail goodsTypeDetail = gson.fromJson(gson.toJson(baseModel.getDatas()), GoodsTypeDetail.class);
                     setData(goodsTypeDetail);
                 } else {
-                    showToast(baseModel.getMsg());
+                    showToasts(baseModel.getMsg());
                 }
             }
         });
@@ -233,7 +233,7 @@ public class GoodsTypeRankingDetailActivity extends BaseActivity implements View
                 no_data.setVisibility(View.VISIBLE);
                 mSpringView.setVisibility(View.GONE);
             }else {
-                showToast(getString(R.string.load_list_erron));
+                showToasts(getString(R.string.load_list_erron));
             }
 
         }

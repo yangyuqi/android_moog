@@ -286,7 +286,7 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
                     setData(listBean);
 
                 } else {
-                    showToast(baseModel.getMsg());
+                    showToasts(baseModel.getMsg());
                 }
             }
 
@@ -310,7 +310,7 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
                 no_data.setVisibility(View.VISIBLE);
                 mSpringView.setVisibility(View.GONE);
             }else {
-                showToast(getString(R.string.load_list_erron));
+                showToasts(getString(R.string.load_list_erron));
             }
         }
 
@@ -326,7 +326,7 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
                 edit = tv_search.getText().toString();
                 //tv_search.setText("D1548784201901070011");
                 if (TextUtils.isEmpty(edit)) {
-                    showToast(getString(R.string.please_write_order_number));
+                    showToasts(getString(R.string.please_write_order_number));
                 } else {
                     orderCode = edit;
                     //list.clear();
@@ -336,7 +336,6 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
                 break;
             case R.id.tv_time:
                 drawer_layout.openDrawer(GravityCompat.END);
-                tv_search.setClickable(false);
                 SoftInputUtils.hideSoftInput(this);
                 tv_search.clearFocus();
                 break;

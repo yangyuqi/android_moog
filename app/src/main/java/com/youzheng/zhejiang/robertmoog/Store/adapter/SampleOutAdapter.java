@@ -5,6 +5,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -109,7 +110,11 @@ public class SampleOutAdapter extends BaseAdapter {
                     }else {
                         long num= Long.parseLong(s.toString());
                         if (num>999){
-                            Toast.makeText(context,"最大不超过999",Toast.LENGTH_SHORT).show();
+                            Toast toast=  Toast.makeText(context, null, Toast.LENGTH_SHORT);
+                            toast.setText("最大不超过999");
+                            toast.setGravity(Gravity.CENTER, 0, 0);
+                            toast.show();
+                         //   Toast.makeText(context,"最大不超过999",Toast.LENGTH_SHORT).show();
                             finalViewHolder1.et_number.setText("999");
                             bean.setSampleQuantity(999);
                         }

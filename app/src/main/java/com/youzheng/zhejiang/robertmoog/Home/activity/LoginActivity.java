@@ -99,17 +99,17 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (edt_phone.getText().toString().equals("")){
-                    showToast(getString(R.string.phone_not_null));
+                    showToasts(getString(R.string.phone_not_null));
                     return;
                 }
                 if (type!=null) {
                     if (edt_password.getText().toString().equals("")) {
-                        showToast(getString(R.string.pwd_not_null));
+                        showToasts(getString(R.string.pwd_not_null));
                         return;
                     }
                 }else {
                     if (edt_code.getText().toString().equals("")){
-                        showToast("验证码不能为空");
+                        showToasts("验证码不能为空");
                         return;
                     }
                 }
@@ -130,7 +130,7 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (edt_phone.getText().toString().equals("")){
-                    showToast(getString(R.string.phone_not_null));
+                    showToasts(getString(R.string.phone_not_null));
                     return;
                 }
                 timer.start();
@@ -199,6 +199,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void initLogin(String code ,String type) {
+
         String name , password ;
         if (type!=null){
             name = edt_phone.getText().toString();
@@ -211,13 +212,15 @@ public class LoginActivity extends BaseActivity {
        OkHttpClientManager.getAsyn(UrlUtils.LOGIN+"?grant_type=password&username="+name+"&password="+ password+"&client_id=app&client_secret=appSecret", new OkHttpClientManager.StringCallback() {
            @Override
            public void onFailure(Request request, IOException e) {
-
+               findViewById(R.id.tv_login).setClickable(true);
            }
 
            @Override
            public void onResponse(String response) {
                BaseModel model = gson.fromJson(response,BaseModel.class);
+
                if (model.getCode()==PublicUtils.code){
+
                    LoginBean loginBean = gson.fromJson(gson.toJson(model.getDatas()), LoginBean.class);
                    SharedPreferencesUtils.setParam(mContext,PublicUtils.access_token,loginBean.getAccess_token());
                    OkHttpClientManager.postAsynJson(gson.toJson(new HashMap<>()), UrlUtils.GET_USER_ONFO + "?access_token=" + loginBean.getAccess_token(), new OkHttpClientManager.StringCallback() {
@@ -229,6 +232,7 @@ public class LoginActivity extends BaseActivity {
                        @Override
                        public void onResponse(String response) {
                            BaseModel baseModel = gson.fromJson(response,BaseModel.class);
+
                            if (baseModel.getCode()==PublicUtils.code){
                                UserConfigDataBean dataBean = gson.fromJson(gson.toJson(baseModel.getDatas()),UserConfigDataBean.class);
                                SharedPreferencesUtils.setParam(mContext,PublicUtils.role,dataBean.getUserConfigData().getUserRole());
@@ -236,12 +240,18 @@ public class LoginActivity extends BaseActivity {
                                SharedPreferencesUtils.setParam(mContext,PublicUtils.shop_phone,edt_phone.getText().toString());
                                startActivity(new Intent(mContext, MainActivity.class));
                                finish();
+                           }else {
+                               if (!TextUtils.isEmpty(baseModel.getMsg())){
+                                   showToasts(baseModel.getMsg());
+                               }
                            }
                        }
                    });
-
                }else {
-                   showToast(model.getMsg());
+                   if (!TextUtils.isEmpty(model.getMsg())){
+                       showToasts(model.getMsg());
+                   }
+
                }
            }
        });

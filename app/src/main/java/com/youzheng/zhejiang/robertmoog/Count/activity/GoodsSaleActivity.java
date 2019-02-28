@@ -202,7 +202,7 @@ public class GoodsSaleActivity extends BaseActivity implements View.OnClickListe
                     GoodsSale goodsSale = gson.fromJson(gson.toJson(baseModel.getDatas()), GoodsSale.class);
                     setData(goodsSale);
                 } else {
-                    showToast(baseModel.getMsg());
+                    showToasts(baseModel.getMsg());
                 }
             }
         });
@@ -227,7 +227,7 @@ public class GoodsSaleActivity extends BaseActivity implements View.OnClickListe
                 no_data.setVisibility(View.VISIBLE);
                 mSpringView.setVisibility(View.GONE);
             }else {
-                showToast(getString(R.string.load_list_erron));
+                showToasts(getString(R.string.load_list_erron));
             }
 
         }

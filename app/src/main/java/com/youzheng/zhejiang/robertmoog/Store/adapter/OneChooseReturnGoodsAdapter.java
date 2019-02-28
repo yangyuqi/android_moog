@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -90,7 +91,11 @@ public class OneChooseReturnGoodsAdapter extends RecyclerView.Adapter<OneChooseR
             public void onClick(View v) {
 
                 if (bean.getNum()==bean.getCount()){
-                    Toast.makeText(context,"商品数量不能超过可退商品数量",Toast.LENGTH_SHORT).show();
+                    Toast toast=  Toast.makeText(context, null, Toast.LENGTH_SHORT);
+                    toast.setText("商品数量不能超过可退商品数量");
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+                   // Toast.makeText(context,"商品数量不能超过可退商品数量",Toast.LENGTH_SHORT).show();
                 }else {
                   bean.setNum(bean.getNum()+1);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -120,7 +125,11 @@ public class OneChooseReturnGoodsAdapter extends RecyclerView.Adapter<OneChooseR
             @Override
             public void onClick(View v) {
                 if (bean.getNum()==0){
-                    Toast.makeText(context,"商品数量不能小于0",Toast.LENGTH_SHORT).show();
+                    Toast toast=  Toast.makeText(context, null, Toast.LENGTH_SHORT);
+                    toast.setText("商品数量不能小于0");
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+                  //  Toast.makeText(context,"商品数量不能小于0",Toast.LENGTH_SHORT).show();
                 }else {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         oneHolder.tv_add.setBackground(context.getDrawable(R.drawable.bg_order));

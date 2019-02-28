@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jude.rollviewpager.RollPagerView;
+import com.jude.rollviewpager.hintview.IconHintView;
 import com.youzheng.zhejiang.robertmoog.Base.BaseFragment;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
@@ -94,6 +95,8 @@ public class HomeFragment extends BaseFragment implements BaseFragment.ReloadInt
         rollPagerView = mView.findViewById(R.id.rv);
         rollPagerView.setPlayDelay(2000);
         rollPagerView.setAnimationDurtion(500);
+        //自定义指示器图片
+        rollPagerView.setHintView(new IconHintView(getActivity(), R.mipmap.group_72_2, R.mipmap.group_72_1));
         data.clear();
         data.add(new HomeBean(getString(R.string.home_gv_one), R.mipmap.group_5_3));
         data.add(new HomeBean(getString(R.string.home_gv_two), R.mipmap.group_5_4));
@@ -127,12 +130,12 @@ public class HomeFragment extends BaseFragment implements BaseFragment.ReloadInt
             public void onClick(View v) {
                 SoftInputUtils.hideSoftInput(getActivity());
                 if (tv_search.getText().toString().equals("")) {
-                    showToast(getString(R.string.phone_not_null));
+                    showToasts(getString(R.string.login_input_phone));
                     return;
                 } else if (tv_search.getText().toString().length() < 11) {
-                    showToast("手机号有误,请重新输入");
+                    showToasts("手机号码不正确");
                 } else if (PhoneUtil.isCellphone(tv_search.getText().toString()) == false) {
-                    showToast("手机号格式错误,请重新输入");
+                    showToasts("手机号码格式不正确");
                 } else {
                     Map<String, Object> map = new HashMap<>();
                     map.put("phone", tv_search.getText().toString());

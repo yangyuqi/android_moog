@@ -36,6 +36,11 @@ public class CheckResultAdapter extends RecyclerView.Adapter<CheckResultAdapter.
         notifyDataSetChanged();
     }
 
+    public void clear(){
+        list.clear();
+        notifyDataSetChanged();
+    }
+
 
     @NonNull
     @Override

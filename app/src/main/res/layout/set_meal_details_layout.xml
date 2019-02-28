@@ -25,7 +25,7 @@
         android:paddingTop="@dimen/space_10"
         android:paddingBottom="@dimen/space_10"
         android:layout_width="match_parent"
-        android:layout_height="75dp">
+        android:layout_height="wrap_content">
 
         <TextView
             android:singleLine="true"
@@ -33,6 +33,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tv_name"
+            android:textSize="@dimen/text_size_16"
+            android:textColor="@color/text_main"
+            />
+        <TextView
+            android:singleLine="true"
+            android:text=""
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_como_name"
+            android:layout_below="@id/tv_name"
             android:textSize="@dimen/text_size_16"
             android:textColor="@color/text_main"
             />
@@ -44,6 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tv_des"
+            android:layout_below="@id/tv_como_name"
             android:textSize="@dimen/text_size_16"
             android:textColor="@color/text_drak_black"
             />

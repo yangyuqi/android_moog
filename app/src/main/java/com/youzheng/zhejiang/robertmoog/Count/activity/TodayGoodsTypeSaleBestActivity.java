@@ -166,7 +166,7 @@ public class TodayGoodsTypeSaleBestActivity extends BaseActivity implements View
                     GoodsTypeRankingList goodsTypeRankingList = gson.fromJson(gson.toJson(baseModel.getDatas()), GoodsTypeRankingList.class);
                     setData(goodsTypeRankingList);
                 } else {
-                    showToast(baseModel.getMsg());
+                    showToasts(baseModel.getMsg());
                 }
             }
         });
@@ -188,7 +188,7 @@ public class TodayGoodsTypeSaleBestActivity extends BaseActivity implements View
                 no_data.setVisibility(View.VISIBLE);
                 mSpringView.setVisibility(View.GONE);
             }else {
-                showToast(getString(R.string.load_list_erron));
+                showToasts(getString(R.string.load_list_erron));
             }
 
         }

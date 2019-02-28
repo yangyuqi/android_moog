@@ -78,7 +78,7 @@ public class ClientAccountActivity extends BaseActivity {
                     }
                 } else {
                     if (!TextUtils.isEmpty(baseModel.getMsg())) {
-                        showToast(baseModel.getMsg());
+                        showToasts(baseModel.getMsg());
                     }
                 }
             }

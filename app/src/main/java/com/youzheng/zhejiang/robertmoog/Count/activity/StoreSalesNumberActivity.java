@@ -238,7 +238,7 @@ public class StoreSalesNumberActivity extends BaseActivity implements View.OnCli
                     ShopSale shopSale = gson.fromJson(gson.toJson(baseModel.getDatas()), ShopSale.class);
                     setData(shopSale);
                 } else {
-                    showToast(baseModel.getMsg());
+                    showToasts(baseModel.getMsg());
                 }
 
             }
@@ -274,7 +274,7 @@ public class StoreSalesNumberActivity extends BaseActivity implements View.OnCli
                 no_data.setVisibility(View.VISIBLE);
                 springView.setVisibility(View.GONE);
             }else {
-                showToast(getString(R.string.load_list_erron));
+                showToasts(getString(R.string.load_list_erron));
             }
 
         }

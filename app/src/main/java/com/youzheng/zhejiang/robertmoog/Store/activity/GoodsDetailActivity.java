@@ -103,7 +103,7 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
                     GoodsListDetail goodsListDetail = gson.fromJson(gson.toJson(baseModel.getDatas()),GoodsListDetail.class);
                     setData(goodsListDetail);
                 }else {
-                    showToast(baseModel.getMsg());
+                    showToasts(baseModel.getMsg());
                 }
             }
         });

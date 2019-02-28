@@ -46,6 +46,10 @@ public class RemindDialog extends Dialog {
         });
         confrim_dialog_tv_title = view.findViewById(R.id.confrim_dialog_tv_title);
         confrim_dialog_tv_content = view.findViewById(R.id.confrim_dialog_tv_content);
+        if (type.equals("1")){
+            confrim_dialog_tv_content.setText("确认提交订单吗?");
+        }
+
         if (type.equals("3")){
             confrim_dialog_tv_content.setText("确认退出当前账号");
         }

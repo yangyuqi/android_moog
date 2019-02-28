@@ -263,7 +263,7 @@ public class GoodsTypeRankingActivity extends BaseActivity implements View.OnCli
                     GoodsTypeRankingList goodsTypeRankingList = gson.fromJson(gson.toJson(baseModel.getDatas()), GoodsTypeRankingList.class);
                     setData(goodsTypeRankingList);
                 } else {
-                    showToast(baseModel.getMsg());
+                    showToasts(baseModel.getMsg());
                 }
             }
         });
@@ -286,7 +286,7 @@ public class GoodsTypeRankingActivity extends BaseActivity implements View.OnCli
                 no_data.setVisibility(View.VISIBLE);
                 mSpringView.setVisibility(View.GONE);
             }else {
-                showToast(getString(R.string.load_list_erron));
+                showToasts(getString(R.string.load_list_erron));
             }
 
         }
@@ -363,11 +363,16 @@ public class GoodsTypeRankingActivity extends BaseActivity implements View.OnCli
         });
         window = new PopupWindow(inflate, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, true);
         window.setAnimationStyle(R.style.ActionDialogStyle);
-
+        iv_more.setImageResource(R.mipmap.group_12_3);
         window.setBackgroundDrawable(getDrawable());
-       // backgroundAlpha(0.5f);
-        pr_list.setBackgroundColor(getResources().getColor(R.color.text_drak_black));
-        pr_list.setAlpha(0.5f);
+        //backgroundAlpha(0.5f);
+//        pr_list.setBackgroundColor(getResources().getColor(R.color.contents_text));
+//        pr_list.setAlpha(0.5f);
+
+        mSpringView.setBackgroundColor(getResources().getColor(R.color.contents_text));
+        mSpringView.setAlpha(0.5f);
+         pr_list.setVisibility(View.GONE);
+
         window.setOnDismissListener(new poponDismissListener());
         window.setTouchable(true); // 设置popupwindow可点击
         window.setOutsideTouchable(true); // 设置popupwindow外部可点击
@@ -380,8 +385,12 @@ public class GoodsTypeRankingActivity extends BaseActivity implements View.OnCli
         public void onDismiss() {
             // TODO Auto-generated method stub
             //Log.v("List_noteTypeActivity:", "我是关闭事件");
-            pr_list.setBackgroundColor(getResources().getColor(R.color.bg_background_white));
-            pr_list.setAlpha(1f);
+//            pr_list.setBackgroundColor(getResources().getColor(R.color.bg_background_white));
+//            pr_list.setAlpha(1f);
+            iv_more.setImageResource(R.mipmap.group_14_1);
+            pr_list.setVisibility(View.VISIBLE);
+            mSpringView.setBackgroundColor(getResources().getColor(R.color.bg_background_white));
+            mSpringView.setAlpha(1f);
           //  backgroundAlpha(1f);
         }
     }

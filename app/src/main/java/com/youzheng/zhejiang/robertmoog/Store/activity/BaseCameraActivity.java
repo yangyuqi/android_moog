@@ -140,7 +140,7 @@ public class BaseCameraActivity extends BaseActivity {
                 }
             } else {
 
-                showToast(getString(R.string.null_sd));
+                showToasts(getString(R.string.null_sd));
             }
         } catch (Exception e) {
         }

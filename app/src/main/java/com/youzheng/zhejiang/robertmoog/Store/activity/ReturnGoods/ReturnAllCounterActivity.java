@@ -162,7 +162,7 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
                     ChooseReturnGoodsDetail chooseReturnGoodsDetail = gson.fromJson(gson.toJson(baseModel.getDatas()), ChooseReturnGoodsDetail.class);
                     setData(chooseReturnGoodsDetail);
                 } else {
-                    showToast(baseModel.getMsg());
+                    showToasts(baseModel.getMsg());
                 }
             }
         });
@@ -261,13 +261,13 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
                     EnumsDatas enumsDatas = gson.fromJson(gson.toJson(baseModel.getDatas()), EnumsDatas.class);
                     if (enumsDatas.getEnums().size() > 0) {
                         for (final EnumsDatasBean bean : enumsDatas.getEnums()) {
-                            if (bean.getClassName().equals("PickUpStatus")) {//  TimeQuantum
+                            if (bean.getClassName().equals("ReturnPickUpStatus")) {//  TimeQuantum
                                 List<EnumsDatasBeanDatas> list1 = new ArrayList<>();
                                 for (int i = 0; i < bean.getDatas().size(); i++) {
                                     list1.add(bean.getDatas().get(i));
-                                    if (bean.getDatas().get(i).getId().equals("NO_LIFT")){
-                                        tv_get_state.setText("未提");
-                                        pick_state = "NO_LIFT";
+                                    if (bean.getDatas().get(i).getId().equals("ALL_LIFT")){
+                                        tv_get_state.setText("已提");
+                                        pick_state = "ALL_LIFT";
                                     }
                                     type.add(bean.getDatas().get(i).getDes());
                                 }
@@ -308,7 +308,7 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
                     }
 
                 } else {
-                    showToast(baseModel.getMsg());
+                    showToasts(baseModel.getMsg());
                 }
             }
         });
@@ -352,7 +352,7 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
                 if(!matcher.find()){
                     return null;
                 }else{
-                    showToast("只能输入汉字,英文,数字");
+                    showToasts("只能输入汉字,英文,数字");
                     return "";
                 }
 
@@ -400,15 +400,15 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
                 break;
             case R.id.tv_confirm_return:
                 if (tv_really_cut_money.getText().toString().equals("0")) {
-                    showToast("商品不可退");
+                    showToasts("商品不可退");
                 } else if (tv_get_state.getText().equals(getString(R.string.please_choose))) {
-                    showToast(getString(R.string.please_choose_get_type));
+                    showToasts(getString(R.string.please_choose_get_type));
                 } else if (tv_return_type.getText().equals(getString(R.string.please_choose))) {
-                    showToast(getString(R.string.please_choose_return_type));
+                    showToasts(getString(R.string.please_choose_return_type));
                 } else if (tv_return_reason.getText().equals(getString(R.string.please_choose))) {
-                    showToast(getString(R.string.please_choose_return_reason));
+                    showToasts(getString(R.string.please_choose_return_reason));
                 } else if (et_other_reason.getVisibility() == View.VISIBLE && et_other_reason.getText().toString().equals("")) {
-                    showToast(getString(R.string.please_write_reason));
+                    showToasts(getString(R.string.please_write_reason));
                 } else {
                     showStopDialog();
                 }
@@ -472,10 +472,8 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
             paymentMethod="RETURN_CAME";
         }
 
-        if (tv_get_state.getText().equals(getString(R.string.all_lift))) {
+        if (tv_get_state.getText().equals(getString(R.string.already_get))) {
             pick_state = "ALL_LIFT";
-        } else if (tv_get_state.getText().equals(getString(R.string.limit_lift))) {
-            pick_state = "LIMIT_LIFT";
         } else if (tv_get_state.getText().equals(getString(R.string.no_lift))) {
             pick_state = "NO_LIFT";
         }
@@ -531,7 +529,7 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
                 } else {
                     //showToast(getString(R.string.return_failure));
                     if (!TextUtils.isEmpty(baseModel.getMsg())){
-                        showToast(baseModel.getMsg());
+                        showToasts(baseModel.getMsg());
                     }
                     request.clear();
                 }

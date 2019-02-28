@@ -105,6 +105,7 @@
 
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/lin_show"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -139,7 +140,8 @@
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:background="@color/bg_background_white"
-        android:divider="@null"
+        android:divider="@color/bg_background_white"
+        android:dividerHeight="2dp"
         android:layout_height="wrap_content"></com.youzheng.zhejiang.robertmoog.Store.view.MyListView>
 
 

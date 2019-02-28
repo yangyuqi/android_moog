@@ -101,7 +101,7 @@ public class ShopActionActivity extends BaseActivity {
                             no_data.setVisibility(View.VISIBLE);
                             springView.setVisibility(View.GONE);
                         }else {
-                            showToast(getString(R.string.load_list_erron));
+                            showToasts(getString(R.string.load_list_erron));
                         }
                     }
                 }

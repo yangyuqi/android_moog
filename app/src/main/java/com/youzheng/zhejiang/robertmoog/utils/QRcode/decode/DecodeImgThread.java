@@ -40,7 +40,7 @@ public class DecodeImgThread extends Thread {
         }
 
 
-        Bitmap scanBitmap = getBitmap(imgPath,400,400);
+        Bitmap scanBitmap = getBitmap(imgPath,480,480);
 
         MultiFormatReader multiFormatReader = new MultiFormatReader();
         // 解码的参数
@@ -55,6 +55,7 @@ public class DecodeImgThread extends Thread {
             decodeFormats.addAll(DecodeFormatManager.DATA_MATRIX_FORMATS);
         }
         hints.put(DecodeHintType.POSSIBLE_FORMATS, decodeFormats);
+        hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);//设置尽量识别
         // 设置解析的字符编码格式为UTF8
       //  hints.put(DecodeHintType.CHARACTER_SET, "UTF8");
         // 设置解析配置参数

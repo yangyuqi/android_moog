@@ -102,7 +102,7 @@ public class CouponDetailActivity extends BaseActivity implements View.OnClickLi
                     setData(couponDetail);
 
                 }else {
-                    showToast(baseModel.getMsg());
+                    showToasts(baseModel.getMsg());
                 }
             }
 

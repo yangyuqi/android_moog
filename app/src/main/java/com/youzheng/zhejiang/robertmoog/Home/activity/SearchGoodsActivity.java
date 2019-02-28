@@ -24,6 +24,7 @@ import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.Model.Home.ScanDatas;
 import com.youzheng.zhejiang.robertmoog.Model.Home.ScanDatasBean;
 import com.youzheng.zhejiang.robertmoog.R;
+import com.youzheng.zhejiang.robertmoog.Store.utils.SoftInputUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -59,9 +60,9 @@ public class SearchGoodsActivity extends BaseActivity implements TextWatcher {
         iv_click.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                SoftInputUtils.hideSoftInput(SearchGoodsActivity.this);
                 if (tv_search.getText().toString().equals("")) {
-                    showToast("请输入搜索条件");
+                    showToasts("请输入搜索条件");
                     return;
                 }
 
@@ -90,7 +91,7 @@ public class SearchGoodsActivity extends BaseActivity implements TextWatcher {
                     }
                 } else {
                     if (!TextUtils.isEmpty(baseModel.getMsg())) {
-                        showToast(baseModel.getMsg());
+                        showToasts(baseModel.getMsg());
                     }
 
                 }
@@ -101,7 +102,7 @@ public class SearchGoodsActivity extends BaseActivity implements TextWatcher {
     SearchResultAdapter addapter;
 
     private void initView() {
-        ((TextView) findViewById(R.id.textHeadTitle)).setText("查找商品套餐");
+        ((TextView) findViewById(R.id.textHeadTitle)).setText("查找商品/套餐");
         findViewById(R.id.btnBack).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

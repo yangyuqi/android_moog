@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -125,16 +126,7 @@ public class ShopActionHistoryActivity extends BaseActivity {
         TextView  tv_title=findViewById(R.id.textHeadTitle);
         TextView tv_next=((TextView)findViewById(R.id.textHeadNext));
         tv_title.setText("门店历史活动");
-//        if (types==true){
-//          tv_title.setText("门店活动");
-//          tv_next.setVisibility(View.VISIBLE);
-//          //tv_next.setText("历史信息");
-//
-//        }else {
-//            tv_title.setText("客户活动");
-//            tv_next.setVisibility(View.GONE);
-//           // tv_next.setText("历史信息");
-//        }
+
 
         findViewById(R.id.btnBack).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,18 +143,15 @@ public class ShopActionHistoryActivity extends BaseActivity {
             @Override
             public void convert(ViewHolder helper, final GetPromoListBean item) {
 
-                if (promoType.equals("history")){
-                  helper.getView(R.id.lin_time).setVisibility(View.GONE);
-                }
+//                if (promoType.equals("history")){
+//                  helper.getView(R.id.lin_time).setVisibility(View.GONE);
+//                }
 
                 helper.setText(R.id.tv_name,item.getPromoName());
+                helper.setText(R.id.tv_day,item.getPromoDes());
 
-//                String regEx="[^0-9]";
-//                Pattern p = Pattern.compile(regEx);
-//                Matcher m = p.matcher(item.getPromoDes());
-               // helper.setText(R.id.tv_day,m.replaceAll("").trim());
 
-                helper.setTexto(R.id.tv_day,setNumColor(item.getPromoDes()));
+                Log.e("123131",item.getPromoDes());
 
 
 

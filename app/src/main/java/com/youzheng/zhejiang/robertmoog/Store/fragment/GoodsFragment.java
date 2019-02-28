@@ -47,7 +47,7 @@ public class GoodsFragment extends BaseFragment {
     private String sku;
     private int goodsId;
     private boolean isFirstLoad = false;
-    private SpringView springView;
+    public static SpringView springView;
     private View no_data;
     @Nullable
     @Override
@@ -137,7 +137,7 @@ public class GoodsFragment extends BaseFragment {
                 no_data.setVisibility(View.VISIBLE);
                 springView.setVisibility(View.GONE);
             }else {
-                showToast(getString(R.string.load_list_erron));
+                showToasts(getString(R.string.load_list_erron));
             }
         }
         //list=goodsList.getProductListDetailData();

@@ -165,11 +165,11 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
                 phone=edt_phone.getText().toString().trim();
                 name=edt_name.getText().toString().trim();
                 if (phone.equals("")){
-                    showToast(getString(R.string.no_phone));
+                    showToasts(getString(R.string.no_phone));
                 }else if (name.equals("")){
-                    showToast(getString(R.string.no_name));
+                    showToasts(getString(R.string.no_name));
                 }else if (tv_degree.getText().toString().equals(getString(R.string.please_choose_rule))||tv_degree.getText().toString().equals("")){
-                    showToast(getString(R.string.have_no_rule));
+                    showToasts(getString(R.string.have_no_rule));
                 }else {
                     if (tv_degree.getText().toString().equals(getString(R.string.gong_zhang))){
                         id="FOREMAN";
@@ -213,7 +213,7 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
                         finish();
                     }else {
                         if (!baseModel.getMsg().equals("")){
-                            showToast(baseModel.getMsg());
+                            showToasts(baseModel.getMsg());
                             tv_add.setClickable(true);
                         }
                     }

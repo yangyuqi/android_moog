@@ -166,7 +166,7 @@ public class TodayMealSalesBestActivity extends BaseActivity implements View.OnC
                     MealRankingList mealRankingList = gson.fromJson(gson.toJson(baseModel.getDatas()), MealRankingList.class);
                     setData(mealRankingList);
                 } else {
-                    showToast(baseModel.getMsg());
+                    showToasts(baseModel.getMsg());
                 }
             }
         });
@@ -187,7 +187,7 @@ public class TodayMealSalesBestActivity extends BaseActivity implements View.OnC
                 no_data.setVisibility(View.VISIBLE);
                 mSpringView.setVisibility(View.GONE);
             }else {
-                showToast(getString(R.string.load_list_erron));
+                showToasts(getString(R.string.load_list_erron));
             }
         }
        // pr_list.setPullLoadMoreCompleted();

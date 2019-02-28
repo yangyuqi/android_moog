@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -56,7 +57,7 @@ public class MoreOrderDetailAdapter extends RecyclerView.Adapter<MoreOrderDetail
         moreHolder.tv_number.setText("X"+bean.getCount()+"");
         moreHolder.tv_meal_name.setText(bean.getComboDescribe());
 
-        moreHolder.iv_isShow.setOnClickListener(new View.OnClickListener() {
+        moreHolder.lin_show.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 List<OrderlistDetail.OrderItemDataBean.OrderSetMealListBean.ProductListBean> productListBeanList = new ArrayList<>();
@@ -90,6 +91,7 @@ public class MoreOrderDetailAdapter extends RecyclerView.Adapter<MoreOrderDetail
         private TextView tv_goods_code, tv_goods_content,
                 tv_money, tv_number, tv_meal_name;
         private MyListView listView;
+        private LinearLayout lin_show;
 
 
         public MoreHolder(@NonNull View itemView) {
@@ -102,6 +104,7 @@ public class MoreOrderDetailAdapter extends RecyclerView.Adapter<MoreOrderDetail
             tv_number = itemView.findViewById(R.id.tv_number);
             tv_meal_name = itemView.findViewById(R.id.tv_meal_name);
             listView = itemView.findViewById(R.id.listView);
+            lin_show = itemView.findViewById(R.id.lin_show);
 
 
         }

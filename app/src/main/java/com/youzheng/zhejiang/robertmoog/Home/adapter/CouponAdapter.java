@@ -3,11 +3,13 @@ package com.youzheng.zhejiang.robertmoog.Home.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -48,7 +50,7 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.CouponView
 
         if (type.equals("1")){
             couponViewHolder.cb.setVisibility(View.VISIBLE);
-            couponViewHolder.cb.setOnClickListener(new View.OnClickListener() {
+            couponViewHolder.rv_select.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                         for (CouponListBean bean : useCouponList){
@@ -98,8 +100,8 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.CouponView
         }
 
         if (useCouponList.get(i).getShopList().size()>0){
-            couponViewHolder.iv_show.setVisibility(View.VISIBLE);
-            couponViewHolder.iv_show.setOnClickListener(new View.OnClickListener() {
+            couponViewHolder.lin_show.setVisibility(View.VISIBLE);
+            couponViewHolder.lin_show.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                      List<CouponListBeanDetail> shop_List = new ArrayList<>();
@@ -126,7 +128,14 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.CouponView
             });
         }else {
 
-            couponViewHolder.iv_show.setVisibility(View.GONE);
+            couponViewHolder.lin_show.setVisibility(View.GONE);
+        }
+
+        if (!TextUtils.isEmpty(useCouponList.get(i).getInfo())){
+            couponViewHolder.lin_info.setVisibility(View.VISIBLE);
+            couponViewHolder.tv_info.setText(useCouponList.get(i).getInfo());
+        }else {
+            couponViewHolder.lin_info.setVisibility(View.GONE);
         }
 
         if (useCouponList.get(i).getCouponCategory()!=null){
@@ -154,11 +163,12 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.CouponView
 
     public class CouponViewHolder extends RecyclerView.ViewHolder{
 
-        TextView tv_money ,tv_use_money ,tv_name ,tv_time,tv_show,tv_together ;
-        RelativeLayout rl_bg ;
+        TextView tv_money ,tv_use_money ,tv_name ,tv_time,tv_show,tv_together,tv_info ;
+        RelativeLayout rl_bg,rv_select ;
         ImageView cb ;
         ListView ls ;
         ImageView iv_show ;
+        LinearLayout lin_show,lin_info;
         public CouponViewHolder(@NonNull View itemView) {
             super(itemView);
             tv_money = itemView.findViewById(R.id.tv_money);
@@ -171,6 +181,10 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.CouponView
             ls = itemView.findViewById(R.id.ls);
             tv_show = itemView.findViewById(R.id.tv_show);
             tv_together = itemView.findViewById(R.id.tv_together);
+            lin_show= itemView.findViewById(R.id.lin_show);
+            rv_select= itemView.findViewById(R.id.rv_select);
+            lin_info=itemView.findViewById(R.id.lin_info);
+            tv_info=itemView.findViewById(R.id.tv_info);
         }
     }
 }

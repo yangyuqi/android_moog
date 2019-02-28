@@ -170,7 +170,7 @@ public class TodayStoreSalesActivity extends BaseActivity implements View.OnClic
                     ShopSale shopSale = gson.fromJson(gson.toJson(baseModel.getDatas()), ShopSale.class);
                     setData(shopSale);
                 } else {
-                    showToast(baseModel.getMsg());
+                    showToasts(baseModel.getMsg());
                 }
 
             }

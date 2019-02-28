@@ -49,26 +49,26 @@ public class AlterPasswordActivity extends BaseActivity {
             public void onClick(View v) {
 
                 if (edt_phone.getText().toString().equals("")){
-                    showToast("请输入原密码");
+                    showToasts("请输入原密码");
                     return;
                 }
 
                 if (edt_phone.getText().toString().length()<6){
-                    showToast("密码不能小于6位");
+                    showToasts("密码不能小于6位");
                     return;
                 }
 
                 if (edt_password.getText().toString().equals("")){
-                    showToast(mContext.getResources().getString(R.string.login_new_pwd));
+                    showToasts(mContext.getResources().getString(R.string.login_new_pwd));
                     return;
                 }
 
                 if (edt_again_password.getText().toString().equals("")){
-                    showToast(mContext.getResources().getString(R.string.login_pwd_again));
+                    showToasts(mContext.getResources().getString(R.string.login_pwd_again));
                     return;
                 }
                 if (edt_phone.getText().toString().equals(edt_again_password.getText().toString())){
-                    showToast("新密不能与原密码重复");
+                    showToasts("新密不能与原密码重复");
                     return;
                 }
 
@@ -86,12 +86,12 @@ public class AlterPasswordActivity extends BaseActivity {
                     public void onResponse(String response) {
                         BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                         if (baseModel.getCode()==PublicUtils.code){
-                            showToast(getString(R.string.change_psd_success));
+                            showToasts(getString(R.string.change_psd_success));
                             SharedPreferencesUtils.clear(mContext);
                             startActivity(new Intent(mContext,LoginActivity.class));
                             finish();
                         }else {
-                            showToast(baseModel.getMsg());
+                            showToasts(baseModel.getMsg());
                         }
                     }
                 });

@@ -9,7 +9,9 @@
     tools:context=".Store.activity.StoreCustomerActivity">
 
     <include layout="@layout/title_bar"/>
-
+    <include layout="@layout/layout_no_data"
+        android:id="@+id/no_data"
+        android:visibility="gone"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="104dp"
@@ -38,9 +40,7 @@
             android:layout_marginTop="10dp"/>
 
     </LinearLayout>
-    <include layout="@layout/layout_no_data"
-        android:id="@+id/no_data"
-        android:visibility="gone"/>
+
     <com.liaoinstan.springview.widget.SpringView
         android:id="@+id/springView"
         android:layout_width="match_parent"

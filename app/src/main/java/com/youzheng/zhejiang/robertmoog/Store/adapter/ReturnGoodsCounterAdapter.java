@@ -7,6 +7,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -162,7 +163,12 @@ public class ReturnGoodsCounterAdapter extends RecyclerView.Adapter<ReturnGoodsC
                     int num= Integer.parseInt(bean.getRefundAmount());
 
                     if (edit>num){
-                        Toast.makeText(context, "实退金额不能大于退货金额", Toast.LENGTH_SHORT).show();
+                        Toast toast = Toast.makeText(context, null, Toast.LENGTH_SHORT);
+                        toast.setText("实退金额不能大于退货金额");
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
+
+                      //  Toast.makeText(context, "实退金额不能大于退货金额", Toast.LENGTH_SHORT).show();
                         //oneHolder.tv_item_total.setText(num+"");
                         oneHolder.et_money.setText(num + "");
                         bean.setMoney(num);

@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:id="@+id/item"
     android:background="@color/bg_background_white"
     >
 
@@ -33,13 +34,13 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/return_goods_code"
+                android:text="@string/order_name"
                 android:textColor="@color/text_main"
                 android:textSize="13sp"/>
 
             <TextView
                 android:id="@+id/tv_order_num"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text=""
                 android:textColor="@color/text_main"
@@ -50,52 +51,24 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="115dp"
             android:orientation="horizontal"
             android:layout_marginTop="5dp"
-            android:paddingLeft="15dp"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
             android:gravity="center_vertical"
             android:background="@color/bg_all">
 
-            <ImageView
-                android:id="@+id/iv_goods"
-                android:layout_width="88dp"
-                android:layout_height="88dp"
-                android:src="@mipmap/ic_launcher"/>
-
-            <LinearLayout
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_list_pic"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tv_goods_number"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:textColor="@color/text_main"
-                    android:textStyle="bold"
-                    android:textSize="16sp"
-                    android:layout_marginLeft="10dp"/>
-
-                <TextView
-                    android:id="@+id/tv_goods_content"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text=""
-                    android:textColor="@color/text_main"
-                    android:maxLines="3"
-                    android:ellipsize="end"
-                    android:textSize="13sp"
-                    android:layout_marginRight="18dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginLeft="10dp"/>
+                android:paddingLeft="15dp"
+                android:layout_height="88dp"></android.support.v7.widget.RecyclerView>
 
 
-            </LinearLayout>
         </LinearLayout>
+
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -104,7 +77,6 @@
             android:gravity="center_vertical"
             android:paddingTop="10dp"
             android:paddingBottom="10dp">
-
 
             <TextView
                 android:id="@+id/tv_people"
@@ -116,8 +88,6 @@
                 android:text=""
                 android:paddingLeft="15dp"
                 />
-
-
             <TextView
                 android:id="@+id/tv_count"
                 android:layout_width="wrap_content"
@@ -148,8 +118,11 @@
 
 
 
-    </LinearLayout>
 
+
+
+
+    </LinearLayout>
 
 
 

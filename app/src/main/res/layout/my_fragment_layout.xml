@@ -42,7 +42,7 @@
                 >
                 <TextView
                     android:id="@+id/tv_shop_name"
-                    android:text="13213213214"
+                    android:text=""
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/text_drak_black"
@@ -56,7 +56,7 @@
                     android:textSize="@dimen/text_size_13"
                     android:layout_alignParentBottom="true"
                     android:textColor="@color/text_main"
-                    android:text="店主"
+                    android:text=""
                     />
 
             </RelativeLayout>
