@@ -19,7 +19,8 @@ public class PublicUtils {
     public static String is_recognition ="is_recognition" ;
     public static String SHOP_SELLER ="SHOP_SELLER";
     public static String SHOP_LEADER = "SHOP_LEADER";//店主
-
+    public static String EMPLOYEDID
+            = "EMPLOYEDID";//店员ID
 
     public static String getSHA256StrJava(String str) {
         MessageDigest messageDigest;

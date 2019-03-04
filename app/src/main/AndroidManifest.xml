@@ -14,7 +14,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
-    <uses-permission android:name="com.huawei.android.launcher.permission.CHANGE_BADGE"/>
+    <uses-permission android:name="com.huawei.android.launcher.permission.CHANGE_BADGE" />
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
@@ -27,28 +27,30 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/app_logo"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
-
-        <activity android:name=".Home.activity.WelcomeActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|screenSize|keyboardHidden">
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Home.activity.WelcomeActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <receiver android:name=".utils.NetBroadcastReceiver" >
+
+        <receiver android:name=".utils.NetBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="huizhi_buff_com.buff.fileprovider"
@@ -64,326 +66,344 @@
 
         <activity
             android:name=".Home.activity.LoginActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Home.activity.ForgetPwdActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Home.activity.ClientViewActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Home.activity.ScanSellerActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden"  />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Home.activity.SearchGoodsActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Home.activity.RegisterActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden"  />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Home.activity.RegisterSuccessActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden"  />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Home.activity.LocationManageActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden"  />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Home.activity.AddNewAddressActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Store.activity.StoreCustomerActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Store.activity.StoreCustomerInsideActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden"  />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Store.activity.OrderListActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden"  />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Store.activity.GoodsManageActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Store.activity.GoodsDetailActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden"  />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Store.activity.ProfessionalCustomerActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Store.activity.AddCustomerActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Store.activity.ProfessionalCustomerOrderActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Home.activity.AttentionManagerActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden"  />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Home.activity.SalesActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden"  />
-        <activity android:name=".utils.QRcode.android.CaptureActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".utils.QRcode.android.CaptureActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Store.activity.ProfessionalOrderDetailActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Home.activity.AttentionIntentActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Home.activity.AttentionGoodsActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden"  />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Store.activity.SampleOutInformationActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Store.activity.SampleOutEditActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden"  />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Store.activity.PeopleMangerActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden"  />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Store.activity.SampleOutMangerActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Store.activity.UpPhotoActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden"  />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Store.activity.SampleOutDetailActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden"  />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Store.activity.AddStaffActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden"  />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Store.activity.CheckResultActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden"  />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Store.activity.ReturnGoodsManger.ReturnGoodsListActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden"  />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Store.activity.CheckStoreDetailActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden"  />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Count.activity.StoreSalesNumberActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Count.activity.StoreSaleInsideActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Count.activity.GoodsSaleActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden"  />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Count.activity.MealRankingActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden"  />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Count.activity.GoodsTypeRankingActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden"  />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Count.activity.GoodsTypeRankingDetailActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden"  />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Count.activity.TodayStoreSalesActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden"  />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Count.activity.TodayMealSalesBestActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden"  />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Count.activity.TodayGoodsTypeSaleBestActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden"  />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Count.activity.TodayRegisterNumberActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden"  />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Count.activity.TodaySingleGoodsSalesBestDetailActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden"  />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Count.activity.TodayGoodsTypeSalesBestDetailActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Store.activity.UnqualifiedActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden"  />
-        <activity android:name=".Store.activity.CouponRecordActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Store.activity.CouponRecordActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
-        <activity android:name=".Store.activity.CouponDetailActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Store.activity.CouponDetailActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
-        <activity android:name=".Store.activity.ReturnGoodsManger.ReturnGoodsDetailActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Store.activity.ReturnGoodsManger.ReturnGoodsDetailActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
-        <activity android:name=".Store.activity.ReturnGoods.ReturnGoodsSuccessActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Store.activity.ReturnGoods.ReturnGoodsSuccessActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
-        <activity android:name=".Store.activity.ReturnGoods.ChooseOrderListActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Store.activity.ReturnGoods.ChooseOrderListActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
-        <activity android:name=".Store.activity.CheckPicActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Store.activity.CheckPicActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Home.activity.ShopActionActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden"  />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Home.activity.ShopActionHistoryActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden"  />
-
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Home.activity.ShopActionDetailsActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden"  />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Home.activity.SetMealActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Home.activity.CouponActivity"
-            android:theme="@style/MyDialogStyleBottom"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
-        <activity android:name=".Store.activity.StoreOrderlistDetailActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/MyDialogStyleBottom" />
+        <activity
+            android:name=".Store.activity.StoreOrderlistDetailActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Home.activity.SetMealDetailsActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Home.activity.ClientAccountActivity"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
-        <activity android:name=".Store.activity.ReturnGoods.ChooseReturnGoodsActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Store.activity.ReturnGoods.ChooseReturnGoodsActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
-        <activity android:name=".Store.activity.ReturnGoods.ReturnGoodsCounterActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Store.activity.ReturnGoods.ReturnGoodsCounterActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
-        <activity android:name=".Store.activity.ReturnGoods.ReturnRecognitionActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Store.activity.ReturnGoods.ReturnRecognitionActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
-        <activity android:name=".My.AboutAppActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".My.AboutAppActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
-        <activity android:name=".My.AlterPasswordActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".My.AlterPasswordActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
-        <activity android:name=".Store.activity.ReturnGoods.ReturnAllCounterActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Store.activity.ReturnGoods.ReturnAllCounterActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
-        <activity android:name=".Home.activity.SearchMealInfoActivity"
-            android:screenOrientation="portrait"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Home.activity.SearchMealInfoActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|keyboardHidden" ></activity>
+            android:screenOrientation="portrait" />
+        <activity android:name=".Home.activity.VipAttentionMangerActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" ></activity>
     </application>
 
 </manifest>

@@ -28,6 +28,16 @@ public class ScanDatasBean implements Serializable{
     private String activityName;
     private String comboDescribe;
     private boolean isSpecial;
+    private String minNum;
+
+    public String getMinNum() {
+        return minNum;
+    }
+
+    public void setMinNum(String minNum) {
+        this.minNum = minNum;
+    }
+
     private int num = 1;//添加数量
 
     private String addPrice ;//特殊单品

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,7 +65,7 @@ public class OneChooseReturnGoodsAdapter extends RecyclerView.Adapter<OneChooseR
 
         if (bean.isIsSpecial()==true){
             oneHolder.tv_area.setVisibility(View.VISIBLE);
-            if (bean.getSquare()!=0){
+            if (!TextUtils.isEmpty(bean.getSquare())){
                 oneHolder.tv_area.setText(bean.getSquare()+"平方");
             }
 

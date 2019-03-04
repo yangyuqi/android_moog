@@ -77,6 +77,7 @@ public class BaseActivity extends AppCompatActivity implements NetBroadcastRecei
         checkNet();
     }
 
+
     private boolean checkNet() {
         this.netMobile = NetUtil.getNetWorkState(BaseActivity.this);
         if (!isNetConnect()) {
@@ -213,6 +214,13 @@ public class BaseActivity extends AppCompatActivity implements NetBroadcastRecei
     @Override
     protected void onDestroy() {
         ActivityStack.getScreenManager().popActivity(this);
+        try{
+            if(netBroadcastReceiver!=null)
+                unregisterReceiver(netBroadcastReceiver);
+        }catch(Exception e)
+        {
+
+        }
         super.onDestroy();
     }
     protected void showToasts(String msg) {
@@ -227,4 +235,5 @@ public class BaseActivity extends AppCompatActivity implements NetBroadcastRecei
 
 
     }
+
 }

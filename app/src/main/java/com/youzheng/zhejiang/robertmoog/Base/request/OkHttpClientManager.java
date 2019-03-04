@@ -22,8 +22,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.net.FileNameMap;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -117,20 +119,7 @@ public class OkHttpClientManager
                 {
                     final String string = response.body().string();
                     sendSuccessStringCallback(string, callback);
-//                   long startMobileRx = TrafficStats.getMobileRxBytes();
-//                    long  startMobileTx = TrafficStats.getMobileTxBytes();
-//                    long startTotalRx = TrafficStats.getTotalRxBytes();
-//                    long startTotalTx = TrafficStats.getTotalTxBytes();
-//
-//                    long totalRx = (TrafficStats.getTotalRxBytes() - startTotalRx) / 1000;
-//                    long totalTx = (TrafficStats.getTotalTxBytes() - startTotalTx) / 1000;
-//                    long mobileRx = (TrafficStats.getMobileRxBytes() - startMobileRx) / 1000;
-//                    long mobileTx = (TrafficStats.getMobileTxBytes() - startMobileTx) / 1000;
-//
-//                    Log.i("流量", "所有网络方式接收的字节流量总数=" + totalRx + "KB"
-//                            + "\n所有网络方式发送的字节流量总数=" + totalTx + "KB"
-//                            + "\n手机通过 2G/3G/4G 接收的字节流量总数=" + mobileRx + "KB"
-//                            + "\n获取手机通过 2G/3G/4G  发出的字节流量总数=" + mobileTx + "KB");
+
 
                 } catch (IOException e)
                 {
@@ -382,7 +371,16 @@ public class OkHttpClientManager
                            // Toast.makeText(RMApp.mContext,"登录失效,请重新登录",Toast.LENGTH_SHORT).show();
                         }
                     }catch (Exception e){
-
+//                        BaseModel baseModel = new Gson().fromJson(string,BaseModel.class);
+//                        if (baseModel.getCode()==401){
+//                            RMApp.mContext.startActivity(new Intent(RMApp.mContext, LoginActivity.class));
+//                            SharedPreferencesUtils.clear(RMApp.mContext);
+//                            Toast toast=  Toast.makeText(RMApp.mContext, null, Toast.LENGTH_SHORT);
+//                            toast.setText("登录失效,请重新登录");
+//                            toast.setGravity(Gravity.CENTER, 0, 0);
+//                            toast.show();
+//                            // Toast.makeText(RMApp.mContext,"登录失效,请重新登录",Toast.LENGTH_SHORT).show();
+//                        }
                     }
                     Log.e("http--response--",string);
             }
@@ -475,7 +473,7 @@ public class OkHttpClientManager
 
     private static final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/jpg");
     MediaType MutilPart_Form_Data = MediaType.parse("multipart/form-data; charset=utf-8");
-    public  Observable<String> sendMultipart(final String reqUrl, final String pic_key, final List<File> files){
+    public  Observable<String> sendMultipart(final String reqUrl, final String pic_key, final ArrayList<File> files){
         return Observable.create(new Observable.OnSubscribe<String>(){
 
             @Override

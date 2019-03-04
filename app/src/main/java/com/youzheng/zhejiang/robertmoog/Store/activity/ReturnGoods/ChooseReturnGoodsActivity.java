@@ -97,8 +97,7 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
         isall=getIntent().getBooleanExtra("isAll",false);
         Instance=this;
         initView();
-        requests.clear();
-        initData(id,isall);
+
     }
 
     private void initView() {
@@ -147,7 +146,10 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
     @Override
     protected void onResume() {
         super.onResume();
-
+//        requests.clear();
+        onelist.clear();
+        morelist.clear();
+        initData(id,isall);
     }
 
     private void initData(String id, boolean isAll){
@@ -185,7 +187,7 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
     }
 
     private void setData(ChooseReturnGoodsDetail chooseReturnGoodsDetail) {
-          if (chooseReturnGoodsDetail.getReturnOrderInfo()==null) return;
+        if (chooseReturnGoodsDetail.getReturnOrderInfo()==null) return;
         ChooseReturnGoodsDetail.ReturnOrderInfoBean infoBean=chooseReturnGoodsDetail.getReturnOrderInfo();
 
         orderid=infoBean.getId();
@@ -194,12 +196,12 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
             tv_time.setText(infoBean.getCreateDate());
         }
 
-          if (!TextUtils.isEmpty(infoBean.getCode())){
-              tv_num.setText(infoBean.getCode());
-          }
+        if (!TextUtils.isEmpty(infoBean.getCode())){
+            tv_num.setText(infoBean.getCode());
+        }
 
         if (!TextUtils.isEmpty(infoBean.getCreateUser())){
-                tv_maker.setText(infoBean.getCreateUser());
+            tv_maker.setText(infoBean.getCreateUser());
         }
 
 
@@ -212,7 +214,7 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
         if (one.size()!=0){
             onelist.addAll(one);
             oneOrderDetailAdapter.setUI(one);
-            requests.clear();
+//            requests.clear();
         }else {
             rv_list_one.setVisibility(View.GONE);
         }
@@ -224,7 +226,7 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
             morelist.addAll(more);
             moreChooseReturnGoodsAdapter.setUI(more);
 //            requests.addAll(moreChooseReturnGoodsAdapter.getRequests());
-            Log.e("sada",requests+"");
+//            Log.e("sada",requests+"");
         }else {
             rv_list_more.setVisibility(View.GONE);
         }
@@ -246,9 +248,8 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
                 break;
             case R.id.tv_confirm:
 
-
+                requests.clear();
                 if (onelist.size()!=0){
-                    requests.clear();
                     for (ChooseReturnGoodsDetail.ReturnOrderInfoBean.ProductListBean oneBean:onelist){
                         ChooseGoodsRequest.OrderProductListBean request=new ChooseGoodsRequest.OrderProductListBean();
                         if (oneBean.getNum()!=0){
@@ -259,22 +260,40 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
                     }
                 }
 
-//                if (morelist.size()!=0){
+                if (morelist.size()!=0){
 //                        requests.addAll(moreChooseReturnGoodsAdapter.getRequests());
-//
-//                }
+                    for (int i = 0; i < morelist.size(); i++) {
+                        ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean setMealListBean = morelist.get(i);
+                        if (setMealListBean!=null&&setMealListBean.getProductList()!=null){
+                            for (int i1 = 0; i1 < setMealListBean.getProductList().size(); i1++) {
+                                List<ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean.ProductListBeanX> productList = setMealListBean.getProductList();
+                                ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean.ProductListBeanX productListBeanX = productList.get(i1);
+                                if (productListBeanX!=null&&productListBeanX.getNum()!=0){
+                                    ChooseGoodsRequest.OrderProductListBean request=new ChooseGoodsRequest.OrderProductListBean();
+                                    if (productListBeanX.getNum()!=0){
+                                        request.setCount(productListBeanX.getNum()+"");
+                                        request.setOrderItemProductId(productListBeanX.getOrderItemProductId());
+                                        requests.add(request);
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+
+                }
 
 
                 if (requests.size()==0){
                     showToasts("暂无可退商品");
                 }else {
+
                     Intent intent=new Intent(this,ReturnGoodsCounterActivity.class);
                     intent.putExtra("request", (Serializable) requests);
                     intent.putExtra("is_all",isall);
                     intent.putExtra("orderID",orderid);
                     startActivity(intent);
 
-//                    finish();
                 }
 
 
@@ -286,16 +305,16 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
 
     @Override
     public void getMeal(List<ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean.ProductListBeanX> list) {
-        requests.clear();
-        for (ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean.ProductListBeanX beanX:list){
-            ChooseGoodsRequest.OrderProductListBean request=new ChooseGoodsRequest.OrderProductListBean();
-                if (beanX.getNum()!=0){
-                    request.setCount(beanX.getNum()+"");
-                    request.setOrderItemProductId(beanX.getOrderItemProductId());
-                    requests.add(request);
-                }
-
-        }
+//        requests.clear();
+//        for (ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean.ProductListBeanX beanX:list){
+//            ChooseGoodsRequest.OrderProductListBean request=new ChooseGoodsRequest.OrderProductListBean();
+//                if (beanX.getNum()!=0){
+//                    request.setCount(beanX.getNum()+"");
+//                    request.setOrderItemProductId(beanX.getOrderItemProductId());
+//                    requests.add(request);
+//                }
+//
+//        }
     }
 }
 

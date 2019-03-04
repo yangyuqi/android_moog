@@ -7,8 +7,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -22,31 +20,21 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
 import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
-import com.youzheng.zhejiang.robertmoog.Count.bean.ShopSale;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.R;
-import com.youzheng.zhejiang.robertmoog.Store.activity.ReturnGoods.ReturnAllCounterActivity;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.AddphotoAdapter;
-import com.youzheng.zhejiang.robertmoog.Store.bean.SampleOutPic;
 import com.youzheng.zhejiang.robertmoog.Store.listener.DeleteListener;
 import com.youzheng.zhejiang.robertmoog.Store.listener.OnRecyclerViewAdapterItemClickListener;
 import com.youzheng.zhejiang.robertmoog.Store.utils.AndroidScheduler;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import cn.finalteam.galleryfinal.model.PhotoInfo;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Request;
-import okhttp3.Response;
 import rx.Subscriber;
 import rx.schedulers.Schedulers;
 import top.zibin.luban.Luban;
@@ -83,7 +71,7 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
      */
     private TextView tv_cancel;
     private List<String> addlist = new ArrayList<>();
-    private List<File> fileList = new ArrayList<>();
+    private ArrayList<File> fileList = new ArrayList<>();
     private String response;
     private LinearLayout lin_show;
 
@@ -330,7 +318,7 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
 
     }
 
-    private void upPic(List<File> pic) {
+    private void upPic(ArrayList<File> pic) {
         lin_show.setVisibility(View.VISIBLE);
         OkHttpClientManager.getInstance().sendMultipart(UrlUtils.UPLOAD_FILE + "?access_token=" + access_token,"posters", pic)
                 .observeOn(AndroidScheduler.mainThread())
@@ -345,6 +333,7 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
                     public void onError(Throwable throwable) {
                         Log.e("图片上传失败", throwable.getMessage());
 //                        showToast("图片上传失败");
+                        showToasts("服务器忙,请稍候重试");
                         lin_show.setVisibility(View.GONE);
                     }
 

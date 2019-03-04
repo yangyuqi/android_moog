@@ -140,7 +140,7 @@ public class ChooseReturnGoodsDetail {
                 private String refundAmount;
                 private String photo;
                 private String orderItemProductId;
-                private int square;
+                private String square;
                 private boolean isSpecial;
                 private int num;
                 private int money;
@@ -209,11 +209,11 @@ public class ChooseReturnGoodsDetail {
                     this.orderItemProductId = orderItemProductId;
                 }
 
-                public int getSquare() {
+                public String getSquare() {
                     return square;
                 }
 
-                public void setSquare(int square) {
+                public void setSquare(String square) {
                     this.square = square;
                 }
 

@@ -6,6 +6,7 @@
     android:layout_height="wrap_content">
 
     <HorizontalScrollView
+        android:id="@+id/hsv"
         android:scrollbars="none"
         android:overScrollMode="never"
         android:layout_width="match_parent"

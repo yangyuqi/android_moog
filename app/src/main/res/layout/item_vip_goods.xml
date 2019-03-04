@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/bg_all"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+ <LinearLayout
+     android:layout_width="match_parent"
+     android:layout_height="50dp"
+     android:orientation="horizontal"
+     android:gravity="center_vertical"
+     android:paddingLeft="15dp"
+     android:background="@color/color_air_blue">
+
+     <TextView
+         android:id="@+id/tv_name"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:text="李磊"
+         android:textSize="15sp"
+         android:textColor="@color/text_drak_black"
+         android:textStyle="bold"/>
+
+
+     <TextView
+         android:id="@+id/tv_role"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:text="李磊"
+         android:textSize="15sp"
+         android:textColor="@color/text_drak_black"
+         android:textStyle="bold"/>
+
+
+
+ </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lin_over"
+        android:padding="@dimen/space_15"
+        android:paddingBottom="@dimen/space_10"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/bg_background_white"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_attention"
+            android:textSize="@dimen/text_size_14"
+            android:textColor="@color/text_main"
+            android:layout_above="@+id/tv_update_intent"
+
+            />
+
+        <TextView
+            android:layout_marginTop="@dimen/space_10"
+            android:id="@+id/tv_update_intent"
+            android:drawablePadding="@dimen/space_10"
+            android:textColor="@color/text_blue"
+            android:gravity="center_vertical"
+            android:text="@string/xiugai_note"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:drawableLeft="@mipmap/group_75_2"
+            />
+
+
+    </LinearLayout>
+
+    <com.youzheng.zhejiang.robertmoog.utils.View.NoScrollListView
+        android:layout_marginTop="@dimen/space_10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ls"
+        android:dividerHeight="@dimen/space_divider_2"
+       />
+
+</LinearLayout>

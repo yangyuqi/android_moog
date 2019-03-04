@@ -135,7 +135,8 @@
                             android:paddingBottom="@dimen/space_1"
                             android:paddingLeft="@dimen/space_12"
                             android:paddingRight="@dimen/space_12"
-                            android:text="—"
+                            android:text="-"
+                            android:background="@drawable/bg_order"
                             android:textSize="@dimen/text_size_17"
                             />
                         <View
@@ -146,7 +147,7 @@
                         <EditText
                             android:maxLength="10"
                             android:textColor="@color/text_main"
-                            android:inputType="number"
+                            android:inputType="number|numberDecimal"
                             android:id="@+id/edt_num"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
@@ -168,8 +169,8 @@
                             android:layout_height="wrap_content"
                             android:paddingTop="1dp"
                             android:paddingBottom="@dimen/space_1"
-                            android:paddingLeft="@dimen/space_12"
-                            android:paddingRight="@dimen/space_12"
+                            android:paddingLeft="@dimen/space_10"
+                            android:paddingRight="@dimen/space_10"
                             android:text="+"
                             android:textSize="@dimen/text_size_17"
                             />

@@ -66,6 +66,7 @@ public class AttentionManagerActivity extends BaseActivity implements MangerList
     SpringView springView;
     private ImageView iv_clear;
     private View no_data;
+    private int tabpos;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,8 +86,17 @@ public class AttentionManagerActivity extends BaseActivity implements MangerList
     @Override
     protected void onResume() {
         super.onResume();
-        data.clear();
-        initData();
+
+        if (tabpos==0){
+            tabLayout.getTabAt(0).select();
+            data.clear();
+            initData();
+        }else {
+            tabLayout.getTabAt(1).select();
+            da_list.clear();
+            refreshData();
+        }
+
     }
 
     @Override
@@ -99,10 +109,11 @@ public class AttentionManagerActivity extends BaseActivity implements MangerList
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                tabpos=tab.getPosition();
                 if (tab.getPosition() == 0) {
                     springView.setVisibility(View.VISIBLE);
                     ls.setVisibility(View.GONE);
-                   // findViewById(R.id.rl_search).setVisibility(View.VISIBLE);
+                    // findViewById(R.id.rl_search).setVisibility(View.VISIBLE);
                     initData();
                 } else if (tab.getPosition() == 1) {
                     springView.setVisibility(View.GONE);
@@ -270,7 +281,7 @@ public class AttentionManagerActivity extends BaseActivity implements MangerList
                 helper.setText(R.id.tv_time, item.getCreateDate());
                 helper.setText(R.id.tv_phone, item.getCustCode());
                 helper.setText(R.id.tv_from, item.getChannel());
-                helper.getView(R.id.iv_add).setOnClickListener(new View.OnClickListener() {
+                helper.getView(R.id.rv_click).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(mContext, AttentionGoodsActivity.class);

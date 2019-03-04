@@ -89,6 +89,19 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
     private LinearLayout lin_store;
     private boolean is_have_adress;
     private int no_adress;
+    /**
+     * 订单促销
+     */
+    private TextView tv_order_promotion;
+    /**
+     * 1000
+     */
+    private TextView tv_over_money;
+    /**
+     * ￥100
+     */
+    private TextView tv_cut_money;
+    private LinearLayout mLinIsCut;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -121,20 +134,19 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
     protected void onResume() {
         super.onResume();
 
-        no_adress=getIntent().getIntExtra("address_aa",0);
-        if (no_adress==1){
-            is_have_adress=true;
-        }else {
-            is_have_adress=false;
-            addressId="";
+        no_adress = getIntent().getIntExtra("address_aa", 0);
+        if (no_adress == 1) {
+            is_have_adress = true;
+        } else {
+            is_have_adress = false;
+            addressId = "";
         }
-        notUseCouponList .clear();
+        notUseCouponList.clear();
         useCouponList.clear();
-        initData(edt_door_ticket.getText().toString(),is_have_adress);
-        Log.e("213213","1");
+        initData(edt_door_ticket.getText().toString(), is_have_adress);
+        Log.e("213213", "1");
 
     }
-
 
 
     private void initGetDate() {
@@ -249,7 +261,7 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, LocationManageActivity.class);
                 intent.putExtra("type", "1");
-                intent.putExtra("use","1");
+                intent.putExtra("use", "1");
                 intent.putExtra("customerId", customerId);
                 startActivityForResult(intent, 2);
             }
@@ -301,8 +313,8 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
                     // tv_get_money_of_now.setText("¥"+old_pay);
                     try {
                         if (Integer.parseInt(s.toString()) <= Integer.parseInt(payAmount)) {
-                            initData(s.toString(),is_have_adress);
-                            Log.e("213213","2");
+                            initData(s.toString(), is_have_adress);
+                            Log.e("213213", "2");
                             tv_cut_money_of_store.setText("-¥" + s.toString());
                         } else {
                             showToasts("门店优惠金额不能大于实际需付金额");
@@ -315,8 +327,8 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
                     }
                 } else {
                     //edt_door_ticket.setText("");
-                    initData("0",is_have_adress);
-                    Log.e("213213","3");
+                    initData("0", is_have_adress);
+                    Log.e("213213", "3");
                 }
 
 
@@ -435,8 +447,7 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
     }
 
 
-
-    private void initData(String num,boolean is_have_adress) {
+    private void initData(String num, boolean is_have_adress) {
 
         map.put("shopDerate", num);
         map.put("isUse", is_have_adress);
@@ -492,11 +503,17 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
                     old_pay = saleData.getSaleData().getPayAmount();
                     tv_get_money_of_now.setText("¥" + payAmount);
                     tv_should_money.setText("¥" + saleData.getSaleData().getAmountPayable());
+                    if (!TextUtils.isEmpty(saleData.getSaleData().getRules())){
+                        tv_over_money.setText(saleData.getSaleData().getRules());
+                        mLinIsCut.setVisibility(View.VISIBLE);
+                    }else {
+                        mLinIsCut.setVisibility(View.GONE);
+                    }
 
                     if (!TextUtils.isEmpty(saleData.getSaleData().getOrderDerate())) {
-                        if (saleData.getSaleData().getOrderDerate().equals("0")){
+                        if (saleData.getSaleData().getOrderDerate().equals("0")) {
                             lin_cuxiao.setVisibility(View.GONE);
-                        }else {
+                        } else {
                             lin_cuxiao.setVisibility(View.VISIBLE);
                             tv_cut_money_of_promotion.setText("-¥" + saleData.getSaleData().getOrderDerate());
                         }
@@ -505,9 +522,9 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
                     }
 
                     if (!TextUtils.isEmpty(saleData.getSaleData().getShopDerate())) {
-                        if (saleData.getSaleData().getShopDerate().equals("0")){
+                        if (saleData.getSaleData().getShopDerate().equals("0")) {
                             lin_store.setVisibility(View.GONE);
-                        }else {
+                        } else {
                             lin_store.setVisibility(View.VISIBLE);
                             tv_cut_money_of_store.setText("-¥" + saleData.getSaleData().getShopDerate());
                         }
@@ -517,9 +534,9 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
                     }
 
                     if (!TextUtils.isEmpty(saleData.getSaleData().getCouponDerate())) {
-                        if (saleData.getSaleData().getCouponDerate().equals("0")){
+                        if (saleData.getSaleData().getCouponDerate().equals("0")) {
                             lin_juan.setVisibility(View.GONE);
-                        }else {
+                        } else {
                             lin_juan.setVisibility(View.VISIBLE);
                             tv_cut_money_of_juan.setText("-¥" + saleData.getSaleData().getCouponDerate());
                         }
@@ -541,7 +558,7 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
                         addressId = saleData.getSaleData().getAddressId();
                     }
                     if (saleData.getSaleData().getRules() != null) {
-                        findViewById(R.id.rl_activity).setVisibility(View.VISIBLE);
+                        findViewById(R.id.rl_activity).setVisibility(View.GONE);
                         tv_activity.setText(saleData.getSaleData().getRules());
                     }
                     if (saleData.getSaleData().getUseCouponList().size() > 0) {
@@ -552,12 +569,20 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
                             tv_get_tivket.setText("已选1张");
                         }
                     } else {
-                        tv_get_tivket.setVisibility(View.GONE);
-                        tv_get_ticket.setText("无优惠券");
-                        tv_get_ticket.setEnabled(false);
+
+                        if (saleData.getSaleData().getNotUseCouponList().size()>0){
+                            tv_get_tivket.setVisibility(View.GONE);
+                            tv_get_ticket.setText("无可用");
+                        }else {
+                            tv_get_tivket.setVisibility(View.GONE);
+                            tv_get_ticket.setText("无优惠券");
+                            tv_get_ticket.setEnabled(false);
+                        }
+
+
                     }
-                }else {
-                    if (!TextUtils.isEmpty(baseModel.getMsg())){
+                } else {
+                    if (!TextUtils.isEmpty(baseModel.getMsg())) {
                         showToasts(baseModel.getMsg());
                     }
                 }
@@ -585,7 +610,7 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
                 Intent intent = new Intent(mContext, LocationManageActivity.class);
                 intent.putExtra("customerId", customerId);
                 intent.putExtra("type", "1");
-                intent.putExtra("use","1");
+                intent.putExtra("use", "1");
                 startActivityForResult(intent, 2);
             }
         });
@@ -642,6 +667,10 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
         lin_juan = (LinearLayout) findViewById(R.id.lin_juan);
         lin_cuxiao = (LinearLayout) findViewById(R.id.lin_cuxiao);
         lin_store = (LinearLayout) findViewById(R.id.lin_store);
+        tv_order_promotion = (TextView) findViewById(R.id.tv_order_promotion);
+        tv_over_money = (TextView) findViewById(R.id.tv_over_money);
+        tv_cut_money = (TextView) findViewById(R.id.tv_cut_money);
+        mLinIsCut = (LinearLayout) findViewById(R.id.lin_is_cut);
     }
 
     @Override
@@ -659,20 +688,18 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
             tv_name.setText(((AddressDatasBean) data.getSerializableExtra("address")).getShipPerson());
             tv_phone.setText(((AddressDatasBean) data.getSerializableExtra("address")).getShipMobile());
             tv_details.setText(((AddressDatasBean) data.getSerializableExtra("address")).getShipAddress());
-            initData(edt_door_ticket.getText().toString(),is_have_adress);
-            Log.e("213213","4");
+            initData(edt_door_ticket.getText().toString(), is_have_adress);
+            Log.e("213213", "4");
         }
 
         if (requestCode == 3 && resultCode == 3) {
             assetId = data.getStringExtra("assetId");
             payValue = data.getStringExtra("payValue");
-            tv_get_ticket.setText(getString(R.string.label_money)+payValue);
+            tv_get_ticket.setText(getString(R.string.label_money) + payValue);
             clickTicket = "";
-            initData(edt_door_ticket.getText().toString(),is_have_adress);
-            Log.e("213213","5");
+            initData(edt_door_ticket.getText().toString(), is_have_adress);
+            Log.e("213213", "5");
         }
-
-
 
 
     }
@@ -681,8 +708,8 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
     public void onEvent(ArrayList<ScanDatasBean> beanArrayList) {
         if (beanArrayList != null) {
             data = beanArrayList;
-            initData(edt_door_ticket.getText().toString(),is_have_adress);
-            Log.e("213213","6");
+            initData(edt_door_ticket.getText().toString(), is_have_adress);
+            Log.e("213213", "6");
         }
     }
 

@@ -32,6 +32,7 @@
            android:layout_width="match_parent"
            android:layout_height="38dp"
            android:background="@null"
+           android:textColorHint="@color/color_air_blue"
            android:drawableLeft="@mipmap/group_1_2"
            android:drawablePadding="@dimen/space_10"
            android:hint="@string/login_input_phone"
@@ -63,6 +64,7 @@
             android:drawableLeft="@mipmap/group_1_3"
             android:drawablePadding="@dimen/space_10"
             android:hint="@string/login_input_pwd"
+            android:textColorHint="@color/color_air_blue"
             android:textColor="@color/color_air_blue"
             android:textSize="@dimen/text_size_13"
             />
@@ -97,6 +99,7 @@
                 android:drawablePadding="@dimen/space_10"
                 android:hint="@string/login_input_code"
                 android:maxLength="6"
+                android:textColorHint="@color/color_air_blue"
                 android:textColor="@color/color_air_blue"
                 android:textSize="@dimen/text_size_13"
                 android:id="@+id/edt_code"

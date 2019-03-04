@@ -77,12 +77,12 @@ public class RegisterSuccessActivity extends BaseActivity {
 
                     case 4:
                         if (registerBean != null) {
-                            Intent intent = new Intent(mContext, AttentionGoodsActivity.class);
+                            Intent intent = new Intent(mContext, VipAttentionMangerActivity.class);
                             intent.putExtra("registerBean", registerBean);
                             startActivity(intent);
                         }
                         if (customer != null) {
-                            Intent intent = new Intent(mContext, AttentionGoodsActivity.class);
+                            Intent intent = new Intent(mContext, VipAttentionMangerActivity.class);
                             ShopPersonalListBean listBean = new ShopPersonalListBean();
                             listBean.setCustomerId("" + customer.getCustomerId());
                             intent.putExtra("label", listBean);
@@ -162,6 +162,7 @@ public class RegisterSuccessActivity extends BaseActivity {
     }
 
     private void initView() {
+        tv_who = (TextView) findViewById(R.id.tv_who);
         lin_people = findViewById(R.id.lin_people);
         ((TextView) findViewById(R.id.textHeadTitle)).setText(R.string.register_success);
         findViewById(R.id.btnBack).setOnClickListener(new View.OnClickListener() {
@@ -180,12 +181,15 @@ public class RegisterSuccessActivity extends BaseActivity {
             tv_phone.setText(phone);
             if (!TextUtils.isEmpty(customer.getIdentity())) {
                 lin_people.setVisibility(View.VISIBLE);
-                tv_who.setText("身份：");
+                tv_who.setVisibility(View.VISIBLE);
+                tv_who.setText("身份：     ");
                 tv_people.setText(customer.getIdentity());
             }
+
             if (!TextUtils.isEmpty(customer.getReferee())) {
                 lin_people.setVisibility(View.VISIBLE);
-                tv_who.setText("推荐人：");
+                tv_who.setVisibility(View.VISIBLE);
+                tv_who.setText("推荐人：  ");
                 tv_people.setText(customer.getReferee());
             }
 
@@ -195,7 +199,7 @@ public class RegisterSuccessActivity extends BaseActivity {
         registerBean = (RegisterBean) getIntent().getSerializableExtra("register");
         if (registerBean != null) {
             String phone = registerBean.getPhone().substring(0, 3) + " " + registerBean.getPhone().substring(3, 7) + " " + registerBean.getPhone().substring(7, 11);
-            tv_phone.setText("手机号码 : " + phone);
+            tv_phone.setText(phone);
         }
         if (registerBean != null) {
             data.add(new HomeBean("卖货", R.mipmap.group_34_2));
@@ -221,7 +225,7 @@ public class RegisterSuccessActivity extends BaseActivity {
             }
         };
         gv.setAdapter(adapter);
-        tv_who = (TextView) findViewById(R.id.tv_who);
+
     }
 
     public class HomeBean {

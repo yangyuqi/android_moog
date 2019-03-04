@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -37,6 +38,7 @@ public class AttentionIntentActivity extends BaseActivity {
 
     int layout_id ;
     private View no_data;
+    private int tabposition;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +58,7 @@ public class AttentionIntentActivity extends BaseActivity {
         tabLayout = (TabLayout) findViewById(R.id.tab);
         ls = (ListView) findViewById(R.id.ls);
         no_data=findViewById(R.id.no_data);
+        tabLayout.getTabAt(0).select();
 //        if (role.equals(PublicUtils.SHOP_SELLER)){
 //            tabLayout.setVisibility(View.GONE);
 //            startActivity(new Intent(mContext,AttentionManagerActivity.class));
@@ -68,17 +71,24 @@ public class AttentionIntentActivity extends BaseActivity {
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        onNewIntent(intent);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
 
-        tabLayout.getTabAt(0).select();
+
         if (role.equals(PublicUtils.SHOP_SELLER)){
             tabLayout.setVisibility(View.GONE);
             startActivity(new Intent(mContext,AttentionManagerActivity.class));
             finish();
         }else if (role.equals(PublicUtils.SHOP_LEADER)){
             tabLayout.setVisibility(View.VISIBLE);
-            initData(0);
+            Log.e("eqeq",tabposition+"");
+            initData(tabposition);
         }
     }
 
@@ -111,7 +121,7 @@ public class AttentionIntentActivity extends BaseActivity {
                     BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                     if (baseModel.getCode()== PublicUtils.code){
                         NotLabelList list = gson.fromJson(gson.toJson(baseModel.getDatas()),NotLabelList.class);
-                       initView(i,list.getNotLabelList());
+                        initView(i,list.getNotLabelList());
                     }
                 }
             });
@@ -124,7 +134,9 @@ public class AttentionIntentActivity extends BaseActivity {
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-               initData(tab.getPosition());
+                tabposition=tab.getPosition();
+                Log.e("sadwa",tab.getPosition()+"");
+                initData(tab.getPosition());
             }
 
             @Override
@@ -143,7 +155,7 @@ public class AttentionIntentActivity extends BaseActivity {
         if (list.size()==0){
             no_data.setVisibility(View.VISIBLE);
             ls.setVisibility(View.GONE);
-           // showToast(getString(R.string.load_list_erron));
+            // showToast(getString(R.string.load_list_erron));
         }else {
             no_data.setVisibility(View.GONE);
             ls.setVisibility(View.VISIBLE);

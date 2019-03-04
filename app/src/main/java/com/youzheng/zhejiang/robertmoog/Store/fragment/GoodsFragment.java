@@ -47,7 +47,7 @@ public class GoodsFragment extends BaseFragment {
     private String sku;
     private int goodsId;
     private boolean isFirstLoad = false;
-    public static SpringView springView;
+    public  SpringView springView;
     private View no_data;
     @Nullable
     @Override

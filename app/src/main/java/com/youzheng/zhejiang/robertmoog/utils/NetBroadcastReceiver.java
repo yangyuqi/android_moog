@@ -22,6 +22,7 @@ public class NetBroadcastReceiver extends BroadcastReceiver {
                 listener.onChangeListener(netWorkState);
             }
         }
+//        context.unregisterReceiver(this);
     }
 
     // 自定义接口

@@ -2,6 +2,7 @@ package com.youzheng.zhejiang.robertmoog.Store.adapter;
 
 import android.content.Context;
 import android.os.Build;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -134,7 +135,7 @@ public class SmallChooseReturnGoodsAdapter extends BaseAdapter {
 
                 finalViewHolder.tv_number.setText(bean.getNum()+"");
                 bean.setNum(bean.getNum());
-
+                Log.e("添加",list.size()+"");
                 listtener.getMeal(list);
             }
         });

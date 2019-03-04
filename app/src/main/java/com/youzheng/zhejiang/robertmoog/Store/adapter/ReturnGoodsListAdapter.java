@@ -136,6 +136,18 @@ public class ReturnGoodsListAdapter extends RecyclerView.Adapter {
         holder.mTvOrderNum.setText(beans.getReturnOrderCode());
         holder.mTvCount.setText("共" + beans.getProductNum() + "件商品");
         holder.mTvMoney.setText(context.getString(R.string.label_money)+beans.getActualRefundAmount());
+
+        if (piclist.size()==1){
+            holder.lin_code.setVisibility(View.VISIBLE);
+            for (ReturnGoodsList.ReturnOrderListBean.ProductListBean productListBean:list.get(position).getProductList()){
+                holder.tv_goods_SKU.setText(productListBean.getSku());
+                holder.tv_goods_contents.setText(productListBean.getName());
+            }
+        }else {
+            holder.lin_code.setVisibility(View.GONE);
+        }
+
+
         if (piclist.size()<4&&piclist.size()!=0){
             holder.mRvListPic.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -206,8 +218,8 @@ public class ReturnGoodsListAdapter extends RecyclerView.Adapter {
         TextView mTvOrderNum;
         RecyclerView mRvListPic;
         TextView mTvCount;
-        TextView mTvMoney;
-        LinearLayout item;
+        TextView mTvMoney,tv_goods_SKU,tv_goods_contents;
+        LinearLayout item,lin_code;
         public MoreImageHolder(View itemView) {
             super(itemView);
             mTvDate = itemView.findViewById(R.id.tv_date);
@@ -216,6 +228,9 @@ public class ReturnGoodsListAdapter extends RecyclerView.Adapter {
             mTvCount = itemView.findViewById(R.id.tv_count);
             mTvMoney = itemView.findViewById(R.id.tv_money);
             item= itemView.findViewById(R.id.item);
+            tv_goods_SKU= itemView.findViewById(R.id.tv_goods_SKU);
+            tv_goods_contents= itemView.findViewById(R.id.tv_goods_contents);
+            lin_code= itemView.findViewById(R.id.lin_code);
         }
     }
 

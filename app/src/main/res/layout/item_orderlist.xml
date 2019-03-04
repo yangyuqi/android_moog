@@ -63,6 +63,7 @@
                 android:id="@+id/iv_goods"
                 android:layout_width="88dp"
                 android:layout_height="88dp"
+                android:scaleType="centerCrop"
                 android:src="@mipmap/ic_launcher"/>
 
             <LinearLayout
@@ -130,7 +131,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/disbursements"
+                android:text="@string/disbursements_1"
                 android:textColor="@color/text_main"
                 android:textSize="13sp"/>
 

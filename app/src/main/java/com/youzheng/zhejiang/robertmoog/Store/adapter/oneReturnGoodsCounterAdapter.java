@@ -78,7 +78,7 @@ public class oneReturnGoodsCounterAdapter extends RecyclerView.Adapter<oneReturn
 
         if (bean.isIsSpecial()==true){
             oneHolder.tv_area.setVisibility(View.VISIBLE);
-            if (bean.getSquare()!=0){
+            if (!TextUtils.isEmpty(bean.getSquare())){
                 oneHolder.tv_area.setText(bean.getSquare()+"平方");
             }
         }else {

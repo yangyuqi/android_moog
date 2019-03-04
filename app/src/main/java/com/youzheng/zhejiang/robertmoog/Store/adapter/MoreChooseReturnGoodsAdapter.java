@@ -104,6 +104,8 @@ public class MoreChooseReturnGoodsAdapter extends RecyclerView.Adapter<MoreChoos
 
                 adapter.setRefreshUI(productListBeanList);
 
+
+
 //                for (ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean.ProductListBeanX beanX:productListBeanList){
 //                    ChooseGoodsRequest.OrderProductListBean request=new ChooseGoodsRequest.OrderProductListBean();
 //                    request.setCount(beanX.getNum());
@@ -123,8 +125,6 @@ public class MoreChooseReturnGoodsAdapter extends RecyclerView.Adapter<MoreChoos
                     request.setCount(beanX.getNum()+"");
                     request.setOrderItemProductId(beanX.getOrderItemProductId());
                     requests.add(request);
-
-
             }
         }
 

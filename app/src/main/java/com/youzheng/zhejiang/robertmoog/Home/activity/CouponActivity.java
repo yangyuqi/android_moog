@@ -28,8 +28,9 @@ public class CouponActivity extends BaseActivity {
     private TabLayout tabLayout ;
     private RecyclerView recyclerView ;
     CouponAdapter addapter ;
-    TextView tv_add ;
+    TextView tv_add ,tv_text;
     private View no_data;
+    int tabpos;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,17 +39,55 @@ public class CouponActivity extends BaseActivity {
 
         initView();
 
+
         initClick();
+
+        if (tabpos==0){
+            if (useCouponList.size()==0){
+                no_data.setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(View.GONE);
+                tv_text.setText("您暂无可用的优惠券");
+            }else {
+                no_data.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+            }
+        }else {
+            if (notUseCouponList.size()==0){
+                no_data.setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(View.GONE);
+                tv_text.setText("您暂无可用的优惠券");
+            }else {
+                no_data.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     private void initClick() {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                tabpos=tab.getPosition();
                 if (tab.getPosition()==0){
+                    if (useCouponList.size()==0){
+                        no_data.setVisibility(View.VISIBLE);
+                        recyclerView.setVisibility(View.GONE);
+                        tv_text.setText("您暂无可用的优惠券");
+                    }else {
+                        no_data.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
+                    }
                     addapter.setData(useCouponList,CouponActivity.this,"1");
                 }else if (tab.getPosition()==1){
                     addapter.setData(notUseCouponList,CouponActivity.this,"2");
+                    if (notUseCouponList.size()==0){
+                        no_data.setVisibility(View.VISIBLE);
+                        recyclerView.setVisibility(View.GONE);
+                        tv_text.setText("您暂无可用的优惠券");
+                    }else {
+                        no_data.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
+                    }
                 }
             }
 
@@ -72,21 +111,36 @@ public class CouponActivity extends BaseActivity {
     }
 
     private void initView() {
+        tv_text=findViewById(R.id.tv_text);
         no_data=findViewById(R.id.no_data);
         tabLayout = findViewById(R.id.tab);
+
+        recyclerView = findViewById(R.id.recycler);
         useCouponList = (ArrayList<CouponListBean>) getIntent().getSerializableExtra("useCouponList");
         notUseCouponList = (ArrayList<CouponListBean>) getIntent().getSerializableExtra("notUseCouponList");
         if (useCouponList.size()==0){
             tabLayout.addTab(tabLayout.newTab().setText("可使用（0）"));
+//            no_data.setVisibility(View.VISIBLE);
+//            recyclerView.setVisibility(View.GONE);
+//            tv_text.setText("您暂无可用的优惠券");
         }else {
+//            no_data.setVisibility(View.GONE);
+//            recyclerView.setVisibility(View.VISIBLE);
             tabLayout.addTab(tabLayout.newTab().setText("可使用"+"（"+useCouponList.size()+")"));
         }
         if (notUseCouponList.size()==0){
+//            no_data.setVisibility(View.VISIBLE);
+//            recyclerView.setVisibility(View.GONE);
+//            tv_text.setText("您暂无可用的优惠券");
             tabLayout.addTab(tabLayout.newTab().setText("不可使用（0）"));
         }else {
+//            no_data.setVisibility(View.GONE);
+//            recyclerView.setVisibility(View.VISIBLE);
             tabLayout.addTab(tabLayout.newTab().setText("不可使用"+"（"+notUseCouponList.size()+"）"));
         }
-        recyclerView = findViewById(R.id.recycler);
+
+
+
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(manager);
         addapter = new CouponAdapter();

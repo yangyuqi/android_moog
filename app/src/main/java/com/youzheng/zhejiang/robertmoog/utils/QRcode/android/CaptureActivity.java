@@ -342,7 +342,10 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
             public void onResponse(String response) {
                 BaseModel baseModel = gson.fromJson(response, BaseModel.class);
                 if (baseModel.getCode() == PublicUtils.code) {
-                    showToasts("添加意向商品成功");
+//                    showToasts("添加意向商品成功");
+                    if (!TextUtils.isEmpty(baseModel.getMsg())){
+                        showToasts(baseModel.getMsg());
+                    }
                     previewView.setBackgroundColor(getResources().getColor(R.color.text_drak_gray));
                     viewfinderView.setVisibility(View.GONE);
                     tv_start.setVisibility(View.VISIBLE);

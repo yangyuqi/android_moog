@@ -50,7 +50,27 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.CouponView
 
         if (type.equals("1")){
             couponViewHolder.cb.setVisibility(View.VISIBLE);
-            couponViewHolder.rv_select.setOnClickListener(new View.OnClickListener() {
+
+            couponViewHolder.lin_up.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    for (CouponListBean bean : useCouponList){
+                        if (bean.getAssetId().equals(useCouponList.get(i).getAssetId())){
+                            if (bean.isClick()){
+                                bean.setClick(false);
+                            }else {
+                                bean.setClick(true);
+                            }
+                        }else {
+                            bean.setClick(false);
+                        }
+                    }
+                    notifyDataSetChanged();
+                }
+            });
+
+
+            couponViewHolder.rl_bg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                         for (CouponListBean bean : useCouponList){
@@ -87,9 +107,9 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.CouponView
             e.printStackTrace();
         }
 
-        if (useCouponList.get(i).getCouponType().equals("订单满减")){
+        if (useCouponList.get(i).getCouponType().equals("订单优惠")){
             couponViewHolder.rl_bg.setBackgroundResource(R.mipmap.group_24_4);
-        }else if (useCouponList.get(i).getCouponType().equals("品类满减")){
+        }else if (useCouponList.get(i).getCouponType().equals("品类优惠")){
             couponViewHolder.rl_bg.setBackgroundResource(R.mipmap.group_24_5);
         }
 
@@ -168,7 +188,7 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.CouponView
         ImageView cb ;
         ListView ls ;
         ImageView iv_show ;
-        LinearLayout lin_show,lin_info;
+        LinearLayout lin_show,lin_info,lin_up;
         public CouponViewHolder(@NonNull View itemView) {
             super(itemView);
             tv_money = itemView.findViewById(R.id.tv_money);
@@ -185,6 +205,7 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.CouponView
             rv_select= itemView.findViewById(R.id.rv_select);
             lin_info=itemView.findViewById(R.id.lin_info);
             tv_info=itemView.findViewById(R.id.tv_info);
+            lin_up=itemView.findViewById(R.id.lin_up);
         }
     }
 }

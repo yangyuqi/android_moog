@@ -17,22 +17,23 @@
     <SurfaceView
         android:id="@+id/preview_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginBottom="260dp"
+        />
 
 
     <RelativeLayout
 
         android:id="@+id/largeLabel"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="260dp"
         android:orientation="vertical">
 
         <!-- 扫描取景框 -->
         <com.youzheng.zhejiang.robertmoog.utils.QRcode.view.ViewfinderView
-            android:layout_marginTop="-80dp"
             android:id="@+id/viewfinder_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
         />
 

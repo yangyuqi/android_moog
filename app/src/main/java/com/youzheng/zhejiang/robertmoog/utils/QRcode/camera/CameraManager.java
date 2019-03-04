@@ -233,7 +233,26 @@ public final class CameraManager {
             theCamera.setOneShotPreviewCallback(previewCallback);
         }
     }
-
+//    public Rect getFramingRect() {
+//        Point screenResolution = configManager.getScreenResolution();
+//        if (framingRect == null) {
+//            if (camera == null) {
+//                return null;
+//            }
+//
+//            //改动之后
+//            int width = screenResolution.x * 7 / 10;
+//            int height = screenResolution.y * 7 / 10;
+//
+//            int leftOffset = (screenResolution.x - width) / 2;
+//            int topOffset = (screenResolution.y - height) / 3;
+//            framingRect = new Rect(leftOffset, topOffset, leftOffset + width, topOffset + height);
+//
+//
+//            Log.d(TAG, "Calculated framing rect: " + framingRect);
+//        }
+//        return framingRect;
+//    }
 
     /*取景框*/
     public synchronized Rect getFramingRect() {
@@ -249,13 +268,13 @@ public final class CameraManager {
 
             int screenResolutionX = screenResolution.x;
 
-            int width = (int) (screenResolutionX * 0.43);
+            int width = (int) (screenResolutionX * 0.5);
             int height = width;
 
 
             /*水平居中  偏上显示*/
             int leftOffset = (screenResolution.x - width) / 2;
-            int topOffset = (screenResolution.y - height) / 5;
+            int topOffset = (screenResolution.y - height)/12;
 
             framingRect = new Rect(leftOffset, topOffset, leftOffset + width,
                     topOffset + height);

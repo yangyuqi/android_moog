@@ -195,9 +195,14 @@ public class MyFragment extends BaseFragment implements BaseFragment.ReloadInter
                             OkHttpClientManager.postAsynJson(gson.toJson(new HashMap<>()), UrlUtils.LOGIN_OUT + "?access_token=" + token, new OkHttpClientManager.StringCallback() {
                                 @Override
                                 public void onFailure(Request request, IOException e) {
-                                    SharedPreferencesUtils.clear(mContext);
-                                    getActivity().finish();
-                                    startActivity(new Intent(mContext,LoginActivity.class));
+                                    try {
+                                        SharedPreferencesUtils.clear(mContext);
+                                        getActivity().finish();
+                                        startActivity(new Intent(mContext,LoginActivity.class));
+                                    }catch (Exception e1){
+                                        e1.printStackTrace();
+                                    }
+
                                 }
 
                                 @Override

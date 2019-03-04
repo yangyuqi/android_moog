@@ -236,6 +236,7 @@ public class LoginActivity extends BaseActivity {
                            if (baseModel.getCode()==PublicUtils.code){
                                UserConfigDataBean dataBean = gson.fromJson(gson.toJson(baseModel.getDatas()),UserConfigDataBean.class);
                                SharedPreferencesUtils.setParam(mContext,PublicUtils.role,dataBean.getUserConfigData().getUserRole());
+                               SharedPreferencesUtils.setParam(mContext,PublicUtils.EMPLOYEDID,dataBean.getUserConfigData().getEmployeeId());
                                SharedPreferencesUtils.setParam(mContext,PublicUtils.shop_title,dataBean.getUserConfigData().getShopName());
                                SharedPreferencesUtils.setParam(mContext,PublicUtils.shop_phone,edt_phone.getText().toString());
                                startActivity(new Intent(mContext, MainActivity.class));

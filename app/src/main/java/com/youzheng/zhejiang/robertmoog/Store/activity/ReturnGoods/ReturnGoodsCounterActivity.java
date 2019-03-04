@@ -132,6 +132,7 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
         setContentView(R.layout.activity_return_goods_counter);
         returnId=getIntent().getStringExtra("orderID");
         isall=getIntent().getBooleanExtra("is_all",false);
+        requests.clear();
         requests= (List<ChooseGoodsRequest.OrderProductListBean>) getIntent().getSerializableExtra("request");
         initView();
         initGetDate();
