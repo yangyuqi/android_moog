@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -40,6 +41,8 @@ public class SetMealDetailsActivity extends BaseActivity {
     TextView tv_name, tv_des;
     /**  */
     private TextView tv_como_name;
+    private View no_data, no_web;
+    private RelativeLayout layout_header;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,8 +52,19 @@ public class SetMealDetailsActivity extends BaseActivity {
         comId = getIntent().getIntExtra("id", 0);
         initData();
     }
-
+    @Override
+    public void onChangeListener(int status) {
+        super.onChangeListener(status);
+        if (status==-1){
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.VISIBLE);
+        }else {
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.GONE);
+        }
+    }
     private void initView() {
+        no_web = findViewById(R.id.no_web);
         ((TextView) findViewById(R.id.textHeadTitle)).setText("套餐详情");
         findViewById(R.id.btnBack).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,6 +97,7 @@ public class SetMealDetailsActivity extends BaseActivity {
         tv_des = findViewById(R.id.tv_des);
         tv_name = findViewById(R.id.tv_name);
         tv_como_name = (TextView) findViewById(R.id.tv_como_name);
+        layout_header = (RelativeLayout) findViewById(R.id.layout_header);
     }
 
     private void initData() {
@@ -100,7 +115,7 @@ public class SetMealDetailsActivity extends BaseActivity {
                 if (baseModel.getCode() == PublicUtils.code) {
                     MealDataS mealDataS = gson.fromJson(gson.toJson(baseModel.getDatas()), MealDataS.class);
                     tv_name.setText("" + mealDataS.getMealData().getComboCode());
-                    tv_como_name.setText("" +mealDataS.getMealData().getComboName());
+                    tv_como_name.setText("" + mealDataS.getMealData().getComboName());
                     tv_des.setText("" + mealDataS.getMealData().getComboDescribe());
                     if (mealDataS.getMealData().getList().size() > 0) {
                         adapter.setData(mealDataS.getMealData().getList());

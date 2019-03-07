@@ -143,6 +143,7 @@ public class BaseCameraActivity extends BaseActivity {
                 showToasts(getString(R.string.null_sd));
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
 
     }

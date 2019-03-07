@@ -2,6 +2,7 @@ package com.youzheng.zhejiang.robertmoog.Store.view;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -124,7 +125,9 @@ public class SingleOptionsPicker<T> {
 //                            textView.setText(options1 + 30 + "KG");
 //                        }
                         textView.setText(list.get(options1));
-                        getListener.getTextStr(list.get(options1),title);
+                        Log.e("1231231",list.get(options1)+"-----------"+options1+"");
+
+                        getListener.getTextStr(list.get(options1),title,options1);
 
 
                     }

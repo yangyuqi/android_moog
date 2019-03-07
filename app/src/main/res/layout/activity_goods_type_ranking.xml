@@ -9,7 +9,9 @@
     tools:context=".Count.activity.GoodsTypeRankingActivity">
 
     <include layout="@layout/title_bar" />
-
+    <include layout="@layout/layout_no_web"
+        android:id="@+id/no_web"
+        android:visibility="gone"/>
     <LinearLayout
         android:id="@+id/lin_search"
         android:layout_width="match_parent"
@@ -128,7 +130,7 @@
      android:layout_width="match_parent"
      android:layout_height="match_parent"
      app:type="follow"
-     android:background="@color/bg_background_white"
+
      android:layout_marginTop="1dp"
      android:id="@+id/springView">
 
@@ -136,7 +138,7 @@
          android:id="@+id/pr_list"
          android:layout_width="match_parent"
          android:background="@color/bg_background_white"
-         android:layout_height="wrap_content"/>
+         android:layout_height="match_parent"/>
 
 
 

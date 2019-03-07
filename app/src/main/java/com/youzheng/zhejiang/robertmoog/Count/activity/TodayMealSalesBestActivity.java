@@ -59,7 +59,8 @@ public class TodayMealSalesBestActivity extends BaseActivity implements View.OnC
     private String endstr = "";
     private String rulestr = "COUNT";//默认是数量
     private SpringView mSpringView;
-    private View no_data;
+
+    private View no_data,no_web;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,8 +111,19 @@ public class TodayMealSalesBestActivity extends BaseActivity implements View.OnC
         super.onResume();
 
     }
-
+    @Override
+    public void onChangeListener(int status) {
+        super.onChangeListener(status);
+        if (status==-1){
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.VISIBLE);
+        }else {
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.GONE);
+        }
+    }
     private void initView() {
+        no_web = findViewById(R.id.no_web);
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);

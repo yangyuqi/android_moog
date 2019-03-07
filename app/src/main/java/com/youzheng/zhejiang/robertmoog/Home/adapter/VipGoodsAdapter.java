@@ -47,30 +47,31 @@ public class VipGoodsAdapter extends RecyclerView.Adapter<VipGoodsAdapter.VipGoo
     private Context context;
     private LayoutInflater layoutInflater;
     private OnRecyclerViewAdapterItemClickListener mOnItemClickListener;
-    CommonAdapter<VipGoods.IntentInfoListBean.ProductListBean> adapter ;
+    CommonAdapter<VipGoods.IntentInfoListBean.ProductListBean> adapter;
     private List<VipGoods.IntentInfoListBean.ProductListBean> inlist;
     int Width;
     VipDeleteListener listener;
-
+    int layout_id;
 
 
     public void setOnItemClickListener(OnRecyclerViewAdapterItemClickListener mOnItemClickListener) {
         this.mOnItemClickListener = mOnItemClickListener;
     }
-    public VipGoodsAdapter(List<VipGoods.IntentInfoListBean> intentInfoListBeans, Context context,int Width,  VipDeleteListener listener) {
+
+    public VipGoodsAdapter(List<VipGoods.IntentInfoListBean> intentInfoListBeans, Context context, int Width, VipDeleteListener listener) {
         this.intentInfoListBeans = intentInfoListBeans;
         this.context = context;
-        this.Width=Width;
-        this.listener=listener;
+        this.Width = Width;
+        this.listener = listener;
         layoutInflater = LayoutInflater.from(context);
     }
 
-    public void setLists(List<VipGoods.IntentInfoListBean> intentInfoListBeans){
+    public void setLists(List<VipGoods.IntentInfoListBean> intentInfoListBeans) {
         this.intentInfoListBeans = intentInfoListBeans;
         notifyDataSetChanged();
     }
 
-    public void clear(){
+    public void clear() {
         intentInfoListBeans.clear();
         notifyDataSetChanged();
     }
@@ -102,77 +103,87 @@ public class VipGoodsAdapter extends RecyclerView.Adapter<VipGoodsAdapter.VipGoo
         final VipGoods.IntentInfoListBean bean = intentInfoListBeans.get(i);
         vipGoodsHolder.tv_name.setText(bean.getName());
         vipGoodsHolder.tv_role.setText("(" + bean.getBusinessRole() + ")");
-        if (!TextUtils.isEmpty(bean.getRemark())){
-            vipGoodsHolder.tv_attention.setText(bean.getRemark());
+        vipGoodsHolder.tv_attention.setText(bean.getRemark());
+        if (!TextUtils.isEmpty(bean.getRemark())) {
             vipGoodsHolder.tv_update_intent.setText("修改备注");
-        }else {
+        } else {
             vipGoodsHolder.tv_update_intent.setText("添加备注");
         }
-        inlist=new ArrayList<>();
-        inlist=intentInfoListBeans.get(i).getProductList();
-//        for (VipGoods.IntentInfoListBean.ProductListBean listBean:intentInfoListBeans.get(i).getProductList()){
-//            inlist.add(listBean);
+        inlist = new ArrayList<>();
+        inlist = intentInfoListBeans.get(i).getProductList();
+//        for (int j = 0; j <inlist.size() ; j++) {
+//            if (inlist.size()==0){
+//                vipGoodsHolder.tv_no_data.setVisibility(View.VISIBLE);
+//            }else {
+//                vipGoodsHolder.tv_no_data.setVisibility(View.GONE);
+//            }
+//
 //        }
-        final String employedid= (String) SharedPreferencesUtils.getParam(context,PublicUtils.EMPLOYEDID,"");
-           if (employedid.equals(bean.getId())){
-               vipGoodsHolder.lin_over.setVisibility(View.VISIBLE);
-           }else {
-               vipGoodsHolder.lin_over.setVisibility(View.GONE);
-           }
+        if (inlist.size()==0){
+            vipGoodsHolder.tv_no_data.setVisibility(View.VISIBLE);
+        }else {
+            vipGoodsHolder.tv_no_data.setVisibility(View.GONE);
+        }
 
+        final String employedid = (String) SharedPreferencesUtils.getParam(context, PublicUtils.EMPLOYEDID, "");
+        if (employedid.equals(bean.getId())) {
+            vipGoodsHolder.lin_over.setVisibility(View.VISIBLE);
+        } else {
+            vipGoodsHolder.lin_over.setVisibility(View.GONE);
+        }
 
-        adapter = new CommonAdapter<VipGoods.IntentInfoListBean.ProductListBean>(context,inlist,R.layout.common_goods_vh_item) {
+        if (employedid.equals(bean.getId())) {
+            layout_id = R.layout.common_goods_vh_item22;
+        } else {
+            layout_id = R.layout.common_goods_vh_item;
+        }
+
+        adapter = new CommonAdapter<VipGoods.IntentInfoListBean.ProductListBean>(context, inlist,layout_id) {
             @Override
             public void convert(final ViewHolder helper, final VipGoods.IntentInfoListBean.ProductListBean item) {
-                helper.setText(R.id.tv_name,item.getName());
-                helper.setText(R.id.tv_desc,item.getSku());
-                helper.setText(R.id.tv_price,"¥"+item.getPrice());
+                helper.setText(R.id.tv_name, item.getSku());
+                helper.setText(R.id.tv_desc, item.getName());
+                helper.setText(R.id.tv_price, "¥" + item.getPrice());
                 Glide.with(mContext).load(item.getPhoto()).error(R.mipmap.type_icon).into((ImageView) helper.getView(R.id.iv_icon));
 
-                if (employedid.equals(bean.getId())){
-                    helper.getConvertView().setOnTouchListener(new View.OnTouchListener() {
-                        @Override
-                        public boolean onTouch(View v, MotionEvent event) {
-                            return helper.getConvertView().onTouchEvent(event);
-                        }
-                    });
-                }
-                final String access_token= (String) SharedPreferencesUtils.getParam(context,PublicUtils.access_token,"");
-                    RelativeLayout view = helper.getView(R.id.rl_width);
-                    LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
-                    params.width = (int) PublicUtils.dip2px(PublicUtils.px2dip(Width));
-                    view.setLayoutParams(params);
-                    helper.getView(R.id.main_right_drawer_layout).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            DeleteDialog dialog = new DeleteDialog(mContext,"提示","是否删除此意向商品","确定");
-                            dialog.show();
-                            dialog.OnDeleteBtn(new DeleteDialogInterface() {
-                                @Override
-                                public void isDelete(boolean isdelete) {
-                                    Map<String,Object> map = new HashMap<>();
-                                    map.put("id",item.getId());
-                                    final Gson gson=new Gson();
-                                    OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.DELETE_GOODS + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
-                                        @Override
-                                        public void onFailure(Request request, IOException e) {
 
-                                        }
+                final String access_token = (String) SharedPreferencesUtils.getParam(context, PublicUtils.access_token, "");
+                RelativeLayout view = helper.getView(R.id.rl_width);
+                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
+                params.width = (int) PublicUtils.dip2px(PublicUtils.px2dip(Width));
+                view.setLayoutParams(params);
+                helper.getView(R.id.main_right_drawer_layout).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DeleteDialog dialog = new DeleteDialog(mContext, "提示", "是否删除此意向商品", "确定");
+                        dialog.show();
+                        dialog.OnDeleteBtn(new DeleteDialogInterface() {
+                            @Override
+                            public void isDelete(boolean isdelete) {
+                                Map<String, Object> map = new HashMap<>();
+                                map.put("id", item.getId());
+                                final Gson gson = new Gson();
+                                OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.DELETE_GOODS + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
+                                    @Override
+                                    public void onFailure(Request request, IOException e) {
 
-                                        @Override
-                                        public void onResponse(String response) {
-                                            BaseModel baseModel = gson.fromJson(response,BaseModel.class);
-                                            if (baseModel.getCode()==PublicUtils.code){
-                                                adapter.clear();
-                                                listener.delete();
-                                                //  initData();
-                                            }
+                                    }
+
+                                    @Override
+                                    public void onResponse(String response) {
+                                        BaseModel baseModel = gson.fromJson(response, BaseModel.class);
+                                        if (baseModel.getCode() == PublicUtils.code) {
+                                            adapter.clear();
+                                            listener.delete();
+                                            sendRemark(bean.getIntentId() + "");
+                                            //  initData();
                                         }
-                                    });
-                                }
-                            });
-                        }
-                    });
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
 
             }
         };
@@ -181,14 +192,13 @@ public class VipGoodsAdapter extends RecyclerView.Adapter<VipGoodsAdapter.VipGoo
         adapter.notifyDataSetChanged();
 
 
-
     }
 
 
-    private void sendRemark(String id){
-        Map<String,Object> map = new HashMap<>();
-        map.put("id",id);
-        map.put("remark","");
+    private void sendRemark(String id) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", id);
+        map.put("remark", "");
         OkHttpClientManager.postAsynJson(new Gson().toJson(map), UrlUtils.UPDATE_INTENT_REMARK + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
             public void onFailure(Request request, IOException e) {
@@ -197,8 +207,8 @@ public class VipGoodsAdapter extends RecyclerView.Adapter<VipGoodsAdapter.VipGoo
 
             @Override
             public void onResponse(String response) {
-                BaseModel baseModel = new Gson().fromJson(response,BaseModel.class);
-                if (baseModel.getCode()==PublicUtils.code){
+                BaseModel baseModel = new Gson().fromJson(response, BaseModel.class);
+                if (baseModel.getCode() == PublicUtils.code) {
 
                 }
             }
@@ -212,9 +222,10 @@ public class VipGoodsAdapter extends RecyclerView.Adapter<VipGoodsAdapter.VipGoo
 
     class VipGoodsHolder extends RecyclerView.ViewHolder {
 
-        private TextView tv_name, tv_role, tv_attention, tv_update_intent;
+        private TextView tv_name, tv_role, tv_attention, tv_update_intent,tv_no_data;
         private NoScrollListView ls;
         private LinearLayout lin_over;
+        private View no_data;
 
         public VipGoodsHolder(@NonNull View itemView) {
             super(itemView);
@@ -223,7 +234,8 @@ public class VipGoodsAdapter extends RecyclerView.Adapter<VipGoodsAdapter.VipGoo
             tv_attention = itemView.findViewById(R.id.tv_attention);
             tv_update_intent = itemView.findViewById(R.id.tv_update_intent);
             ls = itemView.findViewById(R.id.ls);
-            lin_over=itemView.findViewById(R.id.lin_over);
+            lin_over = itemView.findViewById(R.id.lin_over);
+            tv_no_data= itemView.findViewById(R.id.tv_no_data);
 
         }
     }

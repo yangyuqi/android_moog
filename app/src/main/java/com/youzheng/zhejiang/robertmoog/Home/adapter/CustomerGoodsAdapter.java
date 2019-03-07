@@ -85,7 +85,7 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
         if (viewHolder instanceof CustomerIntentViewHolder){
             if (data.get(i).getProductList().size()>1){
                 ((CustomerIntentViewHolder) viewHolder).rl_show.setVisibility(View.VISIBLE);
-                ((CustomerIntentViewHolder) viewHolder).tv_num.setText(String.valueOf(data.get(i).getProductList().size()-1));
+                ((CustomerIntentViewHolder) viewHolder).tv_num.setText(String.valueOf(data.get(i).getProductList().size()));
 
                 ((CustomerIntentViewHolder) viewHolder).rl_show.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -97,7 +97,8 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
                                 ((CustomerIntentViewHolder) viewHolder).iv_show_more.setImageResource(R.mipmap.group_14_1);
                                 data.get(i).setExpress(false);
                             } else {
-                                listBeanList = data.get(i).getProductList().subList(1, data.get(i).getProductList().size());
+                                    listBeanList = data.get(i).getProductList().subList(1, data.get(i).getProductList().size());
+
                                 ((CustomerIntentViewHolder) viewHolder).iv_show_more.setImageResource(R.mipmap.group_12_3);
                                 data.get(i).setExpress(true);
                             }
@@ -227,7 +228,7 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
                         @Override
                         public void isDelete(boolean isdelete) {
                             Map<String,Object> map = new HashMap<>() ;
-                            map.put("id",data.get(i).getId());
+                            map.put("id",data.get(i).getGoodsId());
                             OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.DELETE_INTENT + "?access_token=" + token, new OkHttpClientManager.StringCallback() {
                                 @Override
                                 public void onFailure(Request request, IOException e) {
@@ -238,7 +239,7 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
                                 public void onResponse(String response) {
                                     BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                                     if (baseModel.getCode()==PublicUtils.code){
-                                        data.remove(i);
+                                        listBeanList.remove(i);
                                         notifyDataSetChanged();
                                     }
                                 }
@@ -271,7 +272,7 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
                                 public void onResponse(String response) {
                                     BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                                     if (baseModel.getCode()==PublicUtils.code){
-                                        data.get(i).getProductList().remove(i);
+                                        data.remove(i);
                                         listener.refresh(data);
                                         notifyDataSetChanged();
                                     }

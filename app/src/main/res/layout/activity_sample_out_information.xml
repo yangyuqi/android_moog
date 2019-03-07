@@ -11,6 +11,9 @@
     <include layout="@layout/layout_no_data"
         android:id="@+id/no_data"
         android:visibility="gone"/>
+    <include layout="@layout/layout_no_web"
+        android:id="@+id/no_web"
+        android:visibility="gone"/>
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

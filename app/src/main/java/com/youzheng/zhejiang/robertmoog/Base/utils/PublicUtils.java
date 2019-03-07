@@ -22,6 +22,10 @@ public class PublicUtils {
     public static String EMPLOYEDID
             = "EMPLOYEDID";//店员ID
 
+    public static String ISFIRST
+            = "ISFIRST";//是否第一次进入
+    public static String ISGO
+            = "ISGO";//是否第
     public static String getSHA256StrJava(String str) {
         MessageDigest messageDigest;
         String encodeStr = "";

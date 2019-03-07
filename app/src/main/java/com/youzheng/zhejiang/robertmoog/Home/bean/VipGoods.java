@@ -30,7 +30,7 @@ public class VipGoods {
             private String name;
             private String businessRole;
             private String remark;
-            private String intentId;
+            private int intentId;
             private List<ProductListBean> productList;
 
             public String getId() {
@@ -65,11 +65,11 @@ public class VipGoods {
                 this.remark = remark;
             }
 
-            public String getIntentId() {
+            public int getIntentId() {
                 return intentId;
             }
 
-            public void setIntentId(String intentId) {
+            public void setIntentId(int intentId) {
                 this.intentId = intentId;
             }
 

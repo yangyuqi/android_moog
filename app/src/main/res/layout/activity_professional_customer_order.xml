@@ -9,7 +9,9 @@
     tools:context=".Store.activity.ProfessionalCustomerOrderActivity">
     
     <include layout="@layout/title_bar" />
-    
+    <include layout="@layout/layout_no_web"
+        android:id="@+id/no_web"
+        android:visibility="gone"/>
     
     <android.support.design.widget.TabLayout
         android:id="@+id/tab"

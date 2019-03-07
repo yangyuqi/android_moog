@@ -32,7 +32,6 @@ import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
 import com.youzheng.zhejiang.robertmoog.Base.utils.MyConstant;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
 import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
-import com.youzheng.zhejiang.robertmoog.Count.activity.MealRankingActivity;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.GoodsPagerAdapter;
@@ -88,6 +87,11 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
     private int who;
     private ImageView iv_clear;
     private View view_dowm;
+    private View no_data,no_web;
+    /**
+     * 暂无数据!
+     */
+    private TextView mTvText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,8 +100,20 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
         initView();
 
     }
-
+    @Override
+    public void onChangeListener(int status) {
+        super.onChangeListener(status);
+        if (status==-1){
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.VISIBLE);
+        }else {
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.GONE);
+        }
+    }
     private void initView() {
+        no_web = findViewById(R.id.no_web);
+        no_data = findViewById(R.id.no_data);
         btnBack = (ImageView) findViewById(R.id.btnBack);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
         textHeadNext = (TextView) findViewById(R.id.textHeadNext);
@@ -131,6 +147,7 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
                 tv_search.setText("");
             }
         });
+        mTvText = (TextView) findViewById(R.id.tv_text);
     }
 
     private void initData() {
@@ -253,8 +270,13 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
         if (productListDetailDataBeans.size() != 0) {
             searchlist.addAll(productListDetailDataBeans);
             searchAdapter.setRefreshUI(productListDetailDataBeans);
-        }else {
-            showToasts(getString(R.string.load_list_erron));
+            no_data.setVisibility(View.GONE);
+            search_list.setVisibility(View.VISIBLE);
+        } else {
+            no_data.setVisibility(View.VISIBLE);
+            mTvText.setText("未搜索到相关商品");
+            search_list.setVisibility(View.GONE);
+            //showToasts(getString(R.string.load_list_erron));
         }
         //searchlist=goodsList.getProductListDetailData();
 
@@ -264,7 +286,7 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
     private void showPopuWindow() {
         View inflate = getLayoutInflater().inflate(R.layout.popuwindow_goods_title, null);
         mGvTitle = (GridView) inflate.findViewById(R.id.gv_title);
-         view_dowm=inflate.findViewById(R.id.view_dowm);
+        view_dowm = inflate.findViewById(R.id.view_dowm);
         goodsTitleAdapter = new GoodsTitleAdapter(stringList, this);
         mGvTitle.setAdapter(goodsTitleAdapter);
         iv_more.setImageResource(R.mipmap.group_12_3);
@@ -289,8 +311,8 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
 
         window.setBackgroundDrawable(getDrawable());
 
-        view_dowm.setBackgroundColor(getResources().getColor(R.color.text_drak_black));
-        view_dowm.setAlpha(0.5f);
+        pager.setBackgroundColor(getResources().getColor(R.color.text_drak_black));
+        pager.setAlpha(0.35f);
 
         window.setOnDismissListener(new poponDismissListener());
         window.setTouchable(true); // 设置popupwindow可点击
@@ -299,16 +321,18 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
         window.update();
 
     }
-    class poponDismissListener implements PopupWindow.OnDismissListener{
+
+    class poponDismissListener implements PopupWindow.OnDismissListener {
         @Override
         public void onDismiss() {
             // TODO Auto-generated method stub
             iv_more.setImageResource(R.mipmap.group_14_1);
-            view_dowm.setBackgroundColor(getResources().getColor(R.color.bg_background_white));
-            view_dowm.setAlpha(1f);
+            pager.setBackgroundColor(getResources().getColor(R.color.bg_background_white));
+            pager.setAlpha(1f);
 
         }
     }
+
     //获取屏幕的高度
     public static int getScreenHeight(Activity context) {
         WindowManager manager = context.getWindowManager();
@@ -349,7 +373,8 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
             lin_tab.setVisibility(View.VISIBLE);
             pager.setVisibility(View.VISIBLE);
             search_list.setVisibility(View.GONE);
-        }else {
+            no_data.setVisibility(View.GONE);
+        } else {
             iv_clear.setVisibility(View.VISIBLE);
         }
     }

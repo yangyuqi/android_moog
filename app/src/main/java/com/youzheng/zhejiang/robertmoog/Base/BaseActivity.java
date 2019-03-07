@@ -83,7 +83,7 @@ public class BaseActivity extends AppCompatActivity implements NetBroadcastRecei
         if (!isNetConnect()) {
             //网络异常，请检查网络
             //showNetDialog();
-            changePageState(PageState.ERROR);
+           // changePageState(PageState.ERROR);
            // T.showShort("网络异常，请检查网络，哈哈");
         }
         return isNetConnect();
@@ -93,12 +93,13 @@ public class BaseActivity extends AppCompatActivity implements NetBroadcastRecei
     public void onChangeListener(int status) {
         this.netMobile = status;
         Log.i("netType", "netType:" + netMobile);
+        isNetConnect();
         if (!isNetConnect()) {
-            changePageState(PageState.ERROR);
+          //  changePageState(PageState.ERROR);
 //            showNetDialog();
 //            T.showShort("网络异常，请检查网络，哈哈");
         } else {
-            changePageState(PageState.NORMAL);
+          //  changePageState(PageState.NORMAL);
 //            hideNetDialog();
 //            T.showShort("网络恢复正常");
         }
@@ -217,9 +218,8 @@ public class BaseActivity extends AppCompatActivity implements NetBroadcastRecei
         try{
             if(netBroadcastReceiver!=null)
                 unregisterReceiver(netBroadcastReceiver);
-        }catch(Exception e)
-        {
-
+        }catch(Exception e) {
+             e.printStackTrace();
         }
         super.onDestroy();
     }

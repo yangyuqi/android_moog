@@ -20,11 +20,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.liaoinstan.springview.widget.SpringView;
-import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
 import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
+import com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.Model.Home.EnumsDatas;
 import com.youzheng.zhejiang.robertmoog.Model.Home.EnumsDatasBean;
@@ -35,7 +35,6 @@ import com.youzheng.zhejiang.robertmoog.Store.adapter.ReturnGoodsTimeAdapter;
 import com.youzheng.zhejiang.robertmoog.Store.bean.ReturnGoodsList;
 import com.youzheng.zhejiang.robertmoog.Store.listener.OnRecyclerViewAdapterItemClickListener;
 import com.youzheng.zhejiang.robertmoog.Store.utils.SoftInputUtils;
-import com.youzheng.zhejiang.robertmoog.Store.view.RecycleViewDivider;
 import com.youzheng.zhejiang.robertmoog.utils.View.MyFooter;
 import com.youzheng.zhejiang.robertmoog.utils.View.MyHeader;
 
@@ -96,7 +95,11 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
     private String type;
     private SpringView mSpringView;
     private ImageView iv_clear;
-    private View no_data;
+    private View no_data,no_web;
+    /**
+     * 暂无数据!
+     */
+    private TextView tv_text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,22 +162,29 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
                 BaseModel baseModel = gson.fromJson(response, BaseModel.class);
                 if (baseModel.getCode() == PublicUtils.code) {
                     EnumsDatas enumsDatas = gson.fromJson(gson.toJson(baseModel.getDatas()), EnumsDatas.class);
-                    if (enumsDatas.getEnums().size() > 0) {
-                        for (final EnumsDatasBean bean : enumsDatas.getEnums()) {
-                            if (bean.getClassName().equals("TimeQuantum")) {//  TimeQuantum
+                    if (enumsDatas.getEnums()!=null){
+                        if (enumsDatas.getEnums().size() > 0) {
+                            for (final EnumsDatasBean bean : enumsDatas.getEnums()) {
+                                if (!TextUtils.isEmpty(bean.getClassName())){
+                                    if (bean.getClassName().equals("TimeQuantum")) {//  TimeQuantum
 //                                final List<String> date = new ArrayList<String>();
-                                List<EnumsDatasBeanDatas> list1 = new ArrayList<>();
-                                for (int i = 0; i < bean.getDatas().size(); i++) {
-                                    list1.add(bean.getDatas().get(i));
+                                        List<EnumsDatasBeanDatas> list1 = new ArrayList<>();
+                                        for (int i = 0; i < bean.getDatas().size(); i++) {
+                                            list1.add(bean.getDatas().get(i));
+                                        }
+                                        strlist = list1;
+                                    }
                                 }
-                                strlist = list1;
                             }
+                           if (strlist.size()!=0){
+                               goodsTimeAdapter.setUI(strlist);
+                           }
+
+
+
                         }
-
-                        goodsTimeAdapter.setUI(strlist);
-
-
                     }
+
 
                 } else {
                     showToasts(baseModel.getMsg());
@@ -184,9 +194,20 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
 
     }
 
-
+    @Override
+    public void onChangeListener(int status) {
+        super.onChangeListener(status);
+        if (status==-1){
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.VISIBLE);
+        }else {
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.GONE);
+        }
+    }
     private void initView() {
-        no_data=findViewById(R.id.no_data);
+        no_web = findViewById(R.id.no_web);
+        no_data = findViewById(R.id.no_data);
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
@@ -219,7 +240,7 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rv_list.setLayoutManager(manager);
         rv_list.setAdapter(adapter);
-        rv_list.addItemDecoration(new com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider(ReturnGoodsListActivity.this, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
+        rv_list.addItemDecoration(new RecycleViewDivider(ReturnGoodsListActivity.this, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
 
 
         adapter = new ReturnGoodsListAdapter(list, this);
@@ -245,6 +266,7 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
             }
         });
 
+        tv_text = (TextView) findViewById(R.id.tv_text);
     }
 
     @Override
@@ -301,12 +323,22 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
             no_data.setVisibility(View.GONE);
             mSpringView.setVisibility(View.VISIBLE);
         } else {
-            if (page==1&&TextUtils.isEmpty(orderCode)&&TextUtils.isEmpty(timeQuantum)){
+            if (page == 1) {
                 no_data.setVisibility(View.VISIBLE);
+                tv_text.setText("暂无退货单信息");
                 mSpringView.setVisibility(View.GONE);
-            }else {
+            } else {
                 showToasts(getString(R.string.load_list_erron));
             }
+
+//            if (!TextUtils.isEmpty(orderCode)){
+//                no_data.setVisibility(View.VISIBLE);
+//                tv_text.setText("暂无退货单信息");
+//                mSpringView.setVisibility(View.GONE);
+//            }
+
+
+
         }
 
 
@@ -321,10 +353,20 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
                 finish();
                 break;
             case R.id.tv_time:
-                drawer_layout.openDrawer(GravityCompat.END);
-                tv_search.setClickable(false);
-                SoftInputUtils.hideSoftInput(this);
-                tv_search.clearFocus();
+                if (strlist!=null){
+                    if (strlist.size()!=0){
+                        drawer_layout.openDrawer(GravityCompat.END);
+                        tv_search.setClickable(false);
+                        SoftInputUtils.hideSoftInput(this);
+                        tv_search.clearFocus();
+                    }else {
+                        showToasts("暂无数据");
+                    }
+                }else {
+                    showToasts("暂无数据");
+                }
+
+
                 break;
             case R.id.iv_search:
                 SoftInputUtils.hideSoftInput(ReturnGoodsListActivity.this);
@@ -392,9 +434,9 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
             iv_clear.setVisibility(View.GONE);
             list.clear();
             orderCode = "";
-            page=1;
+            page = 1;
             initData(page, pageSize, orderCode, timeQuantum, isCustomer);
-        }else {
+        } else {
             iv_clear.setVisibility(View.VISIBLE);
         }
     }

@@ -8,7 +8,12 @@
     android:background="@color/bg_all"
     tools:context=".Count.activity.GoodsTypeRankingDetailActivity">
     <include layout="@layout/title_bar" />
-
+    <include layout="@layout/layout_no_data"
+        android:id="@+id/no_data"
+        android:visibility="gone"/>
+    <include layout="@layout/layout_no_web"
+        android:id="@+id/no_web"
+        android:visibility="gone"/>
     <LinearLayout
         android:id="@+id/lin_title"
         android:layout_width="match_parent"
@@ -41,9 +46,7 @@
             android:textColor="@color/text_main"/>
 
     </LinearLayout>
-    <include layout="@layout/layout_no_data"
-        android:id="@+id/no_data"
-        android:visibility="gone"/>
+
 <com.liaoinstan.springview.widget.SpringView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"

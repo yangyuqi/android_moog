@@ -17,6 +17,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -82,6 +83,7 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
      * 开始扫描
      */
     private TextView tv_start;
+    private FrameLayout fy;
 
     public ViewfinderView getViewfinderView() {
         return viewfinderView;
@@ -115,7 +117,7 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        instance=this;
+        instance = this;
         // 保持Activity处于唤醒状态
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -128,7 +130,7 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
         try {
             config = (ZxingConfig) getIntent().getExtras().get(Constant.INTENT_ZXING_CONFIG);
         } catch (Exception e) {
-
+            e.printStackTrace();
             Log.i("config", e.toString());
         }
 
@@ -186,7 +188,7 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
                     iv_preview.setImageResource(R.mipmap.group_12_3);
                     findViewById(R.id.largeLabel).setVisibility(View.VISIBLE);
                     isPreview = true;
-                    if (tv_start.getVisibility()==View.VISIBLE){
+                    if (fy.getVisibility() == View.VISIBLE) {
                         if (handler != null) {
                             handler.quitSynchronously();
                             handler = null;
@@ -199,7 +201,7 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
 
                             surfaceHolder.removeCallback(CaptureActivity.this);
                         }
-                    }else {
+                    } else {
                         cameraManager = new CameraManager(getApplication(), config);
 
                         viewfinderView.setCameraManager(cameraManager);
@@ -255,7 +257,7 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
             public void onClick(View v) {
                 if (ClickUtils.isFastDoubleClick()) {
                     return;
-                }else {
+                } else {
                     startActivityForResult(new Intent(CaptureActivity.this, SearchGoodsActivity.class), 2);
 
                 }
@@ -279,10 +281,10 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
                         Intent intent = new Intent(CaptureActivity.this, SalesActivity.class);
                         intent.putExtra("customerId", customerId);
                         intent.putExtra("data", datasBeanList);
-                        intent.putExtra("address_aa",1);
+                        intent.putExtra("address_aa", 1);
                         Log.e("传过去的集合", String.valueOf(datasBeanList));
                         startActivity(intent);
-                       // finish();
+                        // finish();
                     } else {
                         addIntention();
                     }
@@ -312,9 +314,10 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
                 inactivityTimer.onResume();
                 previewView.setBackgroundColor(getResources().getColor(R.color.transparent));
                 viewfinderView.setVisibility(View.VISIBLE);
-                tv_start.setVisibility(View.GONE);
+                fy.setVisibility(View.GONE);
             }
         });
+        fy = (FrameLayout) findViewById(R.id.fy);
     }
 
     private void addIntention() {
@@ -335,7 +338,7 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
 
                 previewView.setBackgroundColor(getResources().getColor(R.color.text_drak_gray));
                 viewfinderView.setVisibility(View.GONE);
-                tv_start.setVisibility(View.VISIBLE);
+                fy.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -343,20 +346,19 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
                 BaseModel baseModel = gson.fromJson(response, BaseModel.class);
                 if (baseModel.getCode() == PublicUtils.code) {
 //                    showToasts("添加意向商品成功");
-                    if (!TextUtils.isEmpty(baseModel.getMsg())){
+                    if (!TextUtils.isEmpty(baseModel.getMsg())) {
                         showToasts(baseModel.getMsg());
                     }
                     previewView.setBackgroundColor(getResources().getColor(R.color.text_drak_gray));
                     viewfinderView.setVisibility(View.GONE);
-                    tv_start.setVisibility(View.VISIBLE);
+                    fy.setVisibility(View.VISIBLE);
                     finish();
                 } else {
-                    if (!TextUtils.isEmpty(baseModel.getMsg())){
+                    if (!TextUtils.isEmpty(baseModel.getMsg())) {
                         showToasts(baseModel.getMsg());
                     }
 
                 }
-
 
 
             }
@@ -370,12 +372,23 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
     public void handleDecode(Result rawResult) {
 
         inactivityTimer.onActivity();
-
         beepManager.playBeepSoundAndVibrate();
 
-        if (tv_start.getVisibility()==View.VISIBLE){
+        if (fy.getVisibility() == View.VISIBLE) {
+            isPreview = false;
+            if (handler != null) {
+                handler.quitSynchronously();
+                handler = null;
+            }
+            inactivityTimer.shutdown();
+            beepManager.close();
+            cameraManager.closeDriver();
+
+            if (!hasSurface) {
+                surfaceHolder.removeCallback(CaptureActivity.this);
+            }
             return;
-        }else {
+        } else {
 
             Intent intent = getIntent();
             intent.putExtra(Constant.CODED_CONTENT, rawResult.getText());
@@ -384,26 +397,11 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
         }
 
 
-
-
         previewView.setBackgroundColor(getResources().getColor(R.color.text_drak_gray));
         viewfinderView.setVisibility(View.GONE);
-        tv_start.setVisibility(View.VISIBLE);
+        fy.setVisibility(View.VISIBLE);
 
-        isPreview = false;
 
-        if (handler != null) {
-            handler.quitSynchronously();
-            handler = null;
-        }
-        inactivityTimer.shutdown();
-        beepManager.close();
-        cameraManager.closeDriver();
-
-        if (!hasSurface) {
-
-            surfaceHolder.removeCallback(CaptureActivity.this);
-        }
 //        Toast.makeText(this,rawResult.getText(),Toast.LENGTH_SHORT).show();
     }
 
@@ -414,7 +412,7 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
 
         previewView.setBackgroundColor(getResources().getColor(R.color.text_drak_gray));
         viewfinderView.setVisibility(View.GONE);
-        tv_start.setVisibility(View.VISIBLE);
+        fy.setVisibility(View.VISIBLE);
         cameraManager = new CameraManager(getApplication(), config);
 
         viewfinderView.setCameraManager(cameraManager);
@@ -431,7 +429,6 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
 
         beepManager.updatePrefs();
         inactivityTimer.onResume();
-
 
 
     }
@@ -528,7 +525,7 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
             new DecodeImgThread(path, new DecodeImgCallback() {
                 @Override
                 public void onImageDecodeSuccess(Result result) {
-                    Log.e("扫码","扫码成功");
+                    Log.e("扫码", "扫码成功");
                     handleDecode(result);
 
 
@@ -536,8 +533,8 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
 
                 @Override
                 public void onImageDecodeFailed() {
-                    Log.e("扫码","扫码失败");
-                    Toast toast=  Toast.makeText(CaptureActivity.this, null, Toast.LENGTH_SHORT);
+                    Log.e("扫码", "扫码失败");
+                    Toast toast = Toast.makeText(CaptureActivity.this, null, Toast.LENGTH_SHORT);
                     toast.setText("条形码识别失败");
                     toast.setGravity(Gravity.CENTER, 0, 0);
                     toast.show();
@@ -571,44 +568,50 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
         }
     }
 
-    public void addData(String code) {
+    public void addData(final String code) {
         Map<String, Object> map = new HashMap<>();
         map.put("code", code);
         OkHttpClientManager.postAsynJson(new Gson().toJson(map), UrlUtils.SCAN_GOODS + "?access_token=" + token, new OkHttpClientManager.StringCallback() {
             @Override
             public void onFailure(Request request, IOException e) {
-                Log.e("接口","失败111"+e);
+                Log.e("接口", "失败111" + e);
             }
 
             @Override
             public void onResponse(String response) {
-                Log.e("接口",response);
+                Log.e("接口", response);
                 BaseModel baseModel = gson.fromJson(response, BaseModel.class);
                 if (baseModel.getCode() == PublicUtils.code) {
                     ScanDatas scanDatas = gson.fromJson(gson.toJson(baseModel.getDatas()), ScanDatas.class);
-                    if (scanDatas.getSelectProducts().size() > 0) {
-                        datasBeanList.addAll(scanDatas.getSelectProducts());
-                        Map<String, ScanDatasBean> map = new HashMap<>();
-                        for (ScanDatasBean bean : datasBeanList) {
-                            String id = bean.getId();
-                            if (map.containsKey(id)) {
-                                ScanDatasBean datasBean = map.get(id);
-                                bean.setNum(datasBean.getNum() + bean.getNum());
+                    if (scanDatas.getSelectProducts().size() != 0) {
+                        if (scanDatas.getSelectProducts().size()>1){
+                            Intent intent=new Intent(CaptureActivity.this,SearchGoodsActivity.class);
+                            intent.putExtra("goodsCode",code);
+                            startActivityForResult(intent,2);
+                        }else {
+                            datasBeanList.addAll(scanDatas.getSelectProducts());
+                            Map<String, ScanDatasBean> map = new HashMap<>();
+                            for (ScanDatasBean bean : datasBeanList) {
+                                String id = bean.getId();
+                                if (map.containsKey(id)) {
+                                    ScanDatasBean datasBean = map.get(id);
+                                    bean.setNum(datasBean.getNum() + bean.getNum());
+                                }
+                                map.put(id, bean);
                             }
-                            map.put(id, bean);
-                        }
-                        datasBeanList.clear();
-                        datasBeanList.addAll(map.values());
-                        if (type == null) {
-                            addapter.setDate(datasBeanList, mContext, "2", widWidth);
-                        } else {
-                            addapter.setDate(datasBeanList, mContext, "4", widWidth);
+                            datasBeanList.clear();
+                            datasBeanList.addAll(map.values());
+                            if (type == null) {
+                                addapter.setDate(datasBeanList, mContext, "2", widWidth);
+                            } else {
+                                addapter.setDate(datasBeanList, mContext, "4", widWidth);
+                            }
                         }
                     }
                 } else {
-                    if (!TextUtils.isEmpty(baseModel.getMsg())){
-                       // showToast("条形码识别失败");
-                        Log.e("接口","失败222");
+                    if (!TextUtils.isEmpty(baseModel.getMsg())) {
+                        // showToast("条形码识别失败");
+                        Log.e("接口", "失败222");
                         showToasts(baseModel.getMsg());
                     }
 

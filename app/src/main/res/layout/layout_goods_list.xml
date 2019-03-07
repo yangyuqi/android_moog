@@ -7,7 +7,9 @@
     <include layout="@layout/layout_no_data"
         android:id="@+id/no_data"
         android:visibility="gone"/>
-
+    <include layout="@layout/layout_no_web"
+        android:id="@+id/no_web"
+        android:visibility="gone"/>
     <com.liaoinstan.springview.widget.SpringView
         android:id="@+id/springView"
         app:type="follow"
@@ -17,6 +19,7 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/pr_goods"
             android:layout_width="match_parent"
+            android:background="@color/bg_background_white"
             android:layout_height="match_parent"
           />
 

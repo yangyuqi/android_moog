@@ -83,10 +83,6 @@ public class OneChooseReturnGoodsAdapter extends RecyclerView.Adapter<OneChooseR
         }
 
 
-//        final String num=oneHolder.tv_number.getText().toString();
-//        addnumber= Integer.parseInt(num);
-
-
         oneHolder.tv_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,35 +118,39 @@ public class OneChooseReturnGoodsAdapter extends RecyclerView.Adapter<OneChooseR
         });
 
 
-        oneHolder.tv_cut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (bean.getNum()==0){
-                    Toast toast=  Toast.makeText(context, null, Toast.LENGTH_SHORT);
-                    toast.setText("商品数量不能小于0");
-                    toast.setGravity(Gravity.CENTER, 0, 0);
-                    toast.show();
-                  //  Toast.makeText(context,"商品数量不能小于0",Toast.LENGTH_SHORT).show();
-                }else {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        oneHolder.tv_add.setBackground(context.getDrawable(R.drawable.bg_order));
-                    }
-                    bean.setNum(bean.getNum()-1);
-                }
-
-                if (bean.getNum()==0){
-                    oneHolder.tv_cut.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
-                }else {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        oneHolder.tv_cut.setBackground(context.getDrawable(R.drawable.bg_order));
-
+            oneHolder.tv_cut.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (bean.getNum()==0){
+                        Toast toast=  Toast.makeText(context, null, Toast.LENGTH_SHORT);
+                        toast.setText("商品数量不能小于0");
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
+                        //  Toast.makeText(context,"商品数量不能小于0",Toast.LENGTH_SHORT).show();
+                    }else {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            oneHolder.tv_add.setBackground(context.getDrawable(R.drawable.bg_order));
+                        }
+                        bean.setNum(bean.getNum()-1);
                     }
 
+                    if (bean.getNum()==0){
+                        oneHolder.tv_cut.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
+                    }else {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            oneHolder.tv_cut.setBackground(context.getDrawable(R.drawable.bg_order));
+
+                        }
+
+                    }
+                    oneHolder.tv_number.setText(bean.getNum()+"");
+                    bean.setNum(bean.getNum());
+
                 }
-                oneHolder.tv_number.setText(bean.getNum()+"");
-                bean.setNum(bean.getNum());
-            }
-        });
+            });
+
+
+
     }
 
 

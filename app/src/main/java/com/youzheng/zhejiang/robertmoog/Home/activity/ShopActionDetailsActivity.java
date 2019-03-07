@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
@@ -52,7 +53,8 @@ public class ShopActionDetailsActivity extends BaseActivity {
      * 请店员引导消费者到店扫描门店张贴二维码领
      */
     private TextView tv_text;
-
+    private View no_data, no_web;
+    private RelativeLayout layout_header;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -140,7 +142,21 @@ public class ShopActionDetailsActivity extends BaseActivity {
         });
     }
 
+    @Override
+    public void onChangeListener(int status) {
+        super.onChangeListener(status);
+        if (status == -1) {
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.VISIBLE);
+        } else {
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.GONE);
+        }
+    }
+
     private void initView() {
+
+        no_web = findViewById(R.id.no_web);
         tv_goods = findViewById(R.id.tv_goods);
         tv_meal = findViewById(R.id.tv_meal);
         lin_event = findViewById(R.id.lin_event);
@@ -181,5 +197,6 @@ public class ShopActionDetailsActivity extends BaseActivity {
 
 
         tv_text = (TextView) findViewById(R.id.tv_text);
+        layout_header = (RelativeLayout) findViewById(R.id.layout_header);
     }
 }

@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
@@ -25,7 +26,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.greenrobot.event.EventBus;
 import okhttp3.Request;
 
 public class LocationManageActivity extends BaseActivity implements View.OnClickListener {
@@ -35,10 +35,15 @@ public class LocationManageActivity extends BaseActivity implements View.OnClick
     List<AddressDatasBean> data = new ArrayList<>();
     private String pageNum = "1", pageSize = "20", type;
     private String customerId;
-    private View no_data;
+    private View no_data, no_web;
     private String use;
     /**  */
     private TextView textHeadNext;
+    /**
+     * 暂无数据!
+     */
+    private TextView tv_text;
+    private RelativeLayout layout_header;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,6 +85,7 @@ public class LocationManageActivity extends BaseActivity implements View.OnClick
                         ls.setVisibility(View.VISIBLE);
                     } else {
                         no_data.setVisibility(View.VISIBLE);
+                        tv_text.setText("暂无收货地址");
                         ls.setVisibility(View.GONE);
                         //showToast(getString(R.string.load_list_erron));
                     }
@@ -88,7 +94,20 @@ public class LocationManageActivity extends BaseActivity implements View.OnClick
         });
     }
 
+    @Override
+    public void onChangeListener(int status) {
+        super.onChangeListener(status);
+        if (status == -1) {
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.VISIBLE);
+        } else {
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.GONE);
+        }
+    }
+
     private void initView() {
+        no_web = findViewById(R.id.no_web);
         no_data = findViewById(R.id.no_data);
         ((TextView) findViewById(R.id.textHeadTitle)).setText("地址管理");
         findViewById(R.id.btnBack).setOnClickListener(new View.OnClickListener() {
@@ -133,13 +152,15 @@ public class LocationManageActivity extends BaseActivity implements View.OnClick
         });
         textHeadNext = (TextView) findViewById(R.id.textHeadNext);
 
-        if (use.equals("1")){
-           textHeadNext.setVisibility(View.VISIBLE);
-           textHeadNext.setText("不使用");
-        }else {
+        if (use.equals("1")) {
+            textHeadNext.setVisibility(View.VISIBLE);
+            textHeadNext.setText("不使用");
+        } else {
             textHeadNext.setVisibility(View.GONE);
         }
         textHeadNext.setOnClickListener(this);
+        tv_text = (TextView) findViewById(R.id.tv_text);
+        layout_header = (RelativeLayout) findViewById(R.id.layout_header);
     }
 
     @Override
@@ -148,9 +169,9 @@ public class LocationManageActivity extends BaseActivity implements View.OnClick
             default:
                 break;
             case R.id.textHeadNext:
-               // EventBus.getDefault().post("no_adress");
-                Intent intent=new Intent(this,SalesActivity.class);
-                intent.putExtra("address_aa",0);
+                // EventBus.getDefault().post("no_adress");
+                Intent intent = new Intent(this, SalesActivity.class);
+                intent.putExtra("address_aa", 0);
                 startActivity(intent);
                 finish();
                 break;

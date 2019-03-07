@@ -102,6 +102,9 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
      */
     private TextView tv_cut_money;
     private LinearLayout mLinIsCut;
+    private List<EnumsDatasBeanDatas> list1=new ArrayList<>();
+    private List<EnumsDatasBeanDatas> list2=new ArrayList<>();
+    private List<EnumsDatasBeanDatas> list3=new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -162,59 +165,87 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
                 BaseModel baseModel = gson.fromJson(response, BaseModel.class);
                 if (baseModel.getCode() == PublicUtils.code) {
                     EnumsDatas enumsDatas = gson.fromJson(gson.toJson(baseModel.getDatas()), EnumsDatas.class);
-                    if (enumsDatas.getEnums().size() > 0) {
+                    if (enumsDatas.getEnums()!=null){
+                        if (enumsDatas.getEnums().size() > 0) {
 
-                        for (final EnumsDatasBean bean : enumsDatas.getEnums()) {
+                            for (final EnumsDatasBean bean : enumsDatas.getEnums()) {
+                                  if (!TextUtils.isEmpty(bean.getClassName())){
+                                      if (bean.getClassName().equals("PickUpStatus")) {//
+                                          // TimeQuantum
+                                          list1 = new ArrayList<>();
 
-                            if (bean.getClassName().equals("PickUpStatus")) {//
-                                // TimeQuantum
-                                List<EnumsDatasBeanDatas> list1 = new ArrayList<>();
-                                for (int i = 0; i < bean.getDatas().size(); i++) {
-                                    tv_get_state.setText(bean.getDatas().get(0).getDes());
-                                    list1.add(bean.getDatas().get(i));
-                                    get_state.add(bean.getDatas().get(i).getDes());
-                                }
-                                // typelist=list1;
-                                if (tv_get_state.getText().toString().equals(getString(R.string.all_lift))) {
-                                    lin_send.setVisibility(View.GONE);
-                                    tv_dispatching_type.setText("");
-                                } else {
-                                    lin_send.setVisibility(View.VISIBLE);
-                                }
+                                         for (int i = 0; i < bean.getDatas().size(); i++) {
+//                                              tv_get_state.setText(bean.getDatas().get(0).getDes());
+                                              list1.add(bean.getDatas().get(i));
+                                              get_state.add(bean.getDatas().get(i).getDes());
+                                             if (bean.getDatas().get(i).getDes().equals(getString(R.string.all_lift))){
+                                                 tv_get_state.setText(bean.getDatas().get(i).getDes());
+                                                 PickUpStatus=bean.getDatas().get(i).getId();
+                                             }
+                                         }
+
+                                         if (tv_get_state.getText().toString().equals("")){
+                                             tv_get_state.setText(bean.getDatas().get(0).getDes());
+                                             PickUpStatus=list1.get(0).getId();
+                                         }
+
+
+
+                                          // typelist=list1;
+                                          if (tv_get_state.getText().toString().equals(getString(R.string.all_lift))) {
+                                              lin_send.setVisibility(View.GONE);
+                                          } else {
+                                              lin_send.setVisibility(View.VISIBLE);
+                                          }
+                                      }
+                                  }
+
                             }
-                        }
 
 
-                        for (final EnumsDatasBean bean : enumsDatas.getEnums()) {
-                            if (bean.getClassName().equals("ShoppingMethod")) {//  TimeQuantum
+                            for (final EnumsDatasBean bean : enumsDatas.getEnums()) {
+                                if (bean.getClassName()!=null){
+                                    if (bean.getClassName().equals("ShoppingMethod")) {//  TimeQuantum
 //                                final List<String> date = new ArrayList<String>();
 
-                                List<EnumsDatasBeanDatas> list2 = new ArrayList<>();
-                                for (int i = 0; i < bean.getDatas().size(); i++) {
-                                    tv_dispatching_type.setText(bean.getDatas().get(0).getDes());
-                                    list2.add(bean.getDatas().get(i));
-                                    dispatching_type.add(bean.getDatas().get(i).getDes());
+                                        list2 = new ArrayList<>();
+                                        for (int i = 0; i < bean.getDatas().size(); i++) {
+                                            tv_dispatching_type.setText(bean.getDatas().get(0).getDes());
+                                            list2.add(bean.getDatas().get(i));
+                                            dispatching_type.add(bean.getDatas().get(i).getDes());
+                                        }
+                                        if (lin_send.getVisibility()==View.VISIBLE){
+                                            ShoppingMethod=list2.get(0).getId();
+                                        }else {
+                                            ShoppingMethod="";
+                                        }
+                                        // returnlist=list2;
+                                    }
                                 }
-                                // returnlist=list2;
+
                             }
-                        }
 
 
-                        for (final EnumsDatasBean bean : enumsDatas.getEnums()) {
-                            if (bean.getClassName().equals("PaymentMethod")) {//  TimeQuantum
+                            for (final EnumsDatasBean bean : enumsDatas.getEnums()) {
+                                if (bean.getClassName()!=null){
+                                    if (bean.getClassName().equals("PaymentMethod")) {//  TimeQuantum
 //                                final List<String> date = new ArrayList<String>();
-
-                                List<EnumsDatasBeanDatas> list3 = new ArrayList<>();
-                                for (int i = 0; i < bean.getDatas().size(); i++) {
-                                    tv_get_money_type.setText(bean.getDatas().get(0).getDes());
-                                    list3.add(bean.getDatas().get(i));
-                                    get_money_type.add(bean.getDatas().get(i).getDes());
+                                        list3 = new ArrayList<>();
+                                        for (int i = 0; i < bean.getDatas().size(); i++) {
+                                            tv_get_money_type.setText(bean.getDatas().get(0).getDes());
+                                            list3.add(bean.getDatas().get(i));
+                                            get_money_type.add(bean.getDatas().get(i).getDes());
+                                        }
+                                        paymentMethod=list3.get(0).getId();
+                                        //  reasonlist=list3;
+                                    }
                                 }
-                                //  reasonlist=list3;
-                            }
-                        }
 
+                            }
+
+                        }
                     }
+
 
                 } else {
                     showToasts(baseModel.getMsg());
@@ -223,7 +254,28 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
         });
 
     }
+    @Override
+    public void getTextStr(String str, String title,int position) {
+        if (title.equals(getString(R.string.get_type))) {
+            PickUpStatus=list1.get(position).getId();
+            Log.e("1111","list1-----"+list1.size()+"------"+PickUpStatus);
+            if (str.equals(getString(R.string.all_lift))) {
+                lin_send.setVisibility(View.GONE);
+                ShoppingMethod="";
+            } else {
+                lin_send.setVisibility(View.VISIBLE);
+                tv_dispatching_type.setText(list2.get(0).getDes());
+                ShoppingMethod=list2.get(0).getId();
+            }
+        }else if (title.equals(getString(R.string.get_money_type))){
 
+            paymentMethod=list3.get(position).getId();
+            Log.e("1111","list2-----"+list2.size()+"------"+paymentMethod);
+        }else if (title.equals(getString(R.string.send_type))){
+            ShoppingMethod=list2.get(position).getId();
+            Log.e("1111","list3-----"+list3.size()+"------"+ShoppingMethod);
+        }
+    }
 
     private void initClick() {
         tv_confrim.setOnClickListener(new View.OnClickListener() {
@@ -270,7 +322,15 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
         tv_get_state.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SingleOptionsPicker.openOptionsPicker(SalesActivity.this, get_state, tv_get_state, getString(R.string.get_type), SalesActivity.this);
+                if (get_state!=null){
+                    if (get_state.size()!=0){
+                        SingleOptionsPicker.openOptionsPicker(SalesActivity.this, get_state, tv_get_state, getString(R.string.get_type), SalesActivity.this);
+                    }else {
+                        showToasts("暂无数据");
+                    }
+                }else {
+                    showToasts("暂无数据");
+                }
 
             }
         });
@@ -278,7 +338,16 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
         tv_dispatching_type.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SingleOptionsPicker.openOptionsPicker(SalesActivity.this, dispatching_type, tv_dispatching_type, getString(R.string.send_type), SalesActivity.this);
+                if (dispatching_type!=null){
+                    if (dispatching_type.size()!=0){
+                        SingleOptionsPicker.openOptionsPicker(SalesActivity.this, dispatching_type, tv_dispatching_type, getString(R.string.send_type), SalesActivity.this);
+
+                    }else {
+                        showToasts("暂无数据");
+                    }
+                }else {
+                    showToasts("暂无数据");
+                }
 
             }
         });
@@ -286,7 +355,16 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
         tv_get_money_type.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SingleOptionsPicker.openOptionsPicker(SalesActivity.this, get_money_type, tv_get_money_type, getString(R.string.get_money_type), SalesActivity.this);
+                if (get_money_type!=null){
+                    if (get_money_type.size()!=0){
+                        SingleOptionsPicker.openOptionsPicker(SalesActivity.this, get_money_type, tv_get_money_type, getString(R.string.get_money_type), SalesActivity.this);
+
+                    }else {
+                        showToasts("暂无数据");
+                    }
+                }else {
+                    showToasts("暂无数据");
+                }
 
             }
         });
@@ -322,7 +400,7 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
                         }
 
                     } catch (Exception e) {
-
+                         e.printStackTrace();
                         // tv_get_money_of_now.setText("¥"+old_pay);
                     }
                 } else {
@@ -338,13 +416,16 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
         tv_get_ticket.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, CouponActivity.class);
-                intent.putExtra("useCouponList", useCouponList);
-                intent.putExtra("notUseCouponList", notUseCouponList);
-                startActivityForResult(intent, 3);
+                    Intent intent = new Intent(mContext, CouponActivity.class);
+                    intent.putExtra("useCouponList", useCouponList);
+                    intent.putExtra("notUseCouponList", notUseCouponList);
+                    startActivityForResult(intent, 3);
+
+
             }
         });
     }
+
 
     private void orderConfirm() {
         Map<String, Object> map = new HashMap<>();
@@ -352,35 +433,35 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
         map.put("isMoen", sv_life.isChecked());
         map.put("customerId", customerId);
 
-        if (tv_get_state.getText().equals(getString(R.string.all_lift))) {
-            PickUpStatus = "ALL_LIFT";
-        } else if (tv_get_state.getText().equals(getString(R.string.limit_lift))) {
-            PickUpStatus = "LIMIT_LIFT";
-        } else if (tv_get_state.getText().equals(getString(R.string.no_lift))) {
-            PickUpStatus = "NO_LIFT";
-        }
-
-        if (tv_get_money_type.getText().equals(getString(R.string.bank_card))) {
-            paymentMethod = "BANK_CARD";
-        } else if (tv_get_money_type.getText().equals(getString(R.string.we_chat))) {
-            paymentMethod = "WECHAT";
-        } else if (tv_get_money_type.getText().equals(getString(R.string.alipay))) {
-            paymentMethod = "ALIPAY";
-        } else if (tv_get_money_type.getText().equals(getString(R.string.cash))) {
-            paymentMethod = "CASH";
-        } else if (tv_get_money_type.getText().equals(getString(R.string.market_get))) {
-            paymentMethod = "MARKET";
-        } else if (tv_get_money_type.getText().equals(getString(R.string.other))) {
-            paymentMethod = "OTHER";
-        }
-
-        if (tv_dispatching_type.getText().equals("顾客自提")) {
-            ShoppingMethod = "CUSTOMER_SELF_EXTRACTION";
-        } else if (tv_dispatching_type.getText().equals("大仓配送")) {
-            ShoppingMethod = "LARGE_WAREHOUSE_DELIVERY";
-        } else if (tv_dispatching_type.getText().equals("")) {
-            ShoppingMethod = "";
-        }
+//        if (tv_get_state.getText().equals(getString(R.string.all_lift))) {
+//            PickUpStatus = "ALL_LIFT";
+//        } else if (tv_get_state.getText().equals(getString(R.string.limit_lift))) {
+//            PickUpStatus = "LIMIT_LIFT";
+//        } else if (tv_get_state.getText().equals(getString(R.string.no_lift))) {
+//            PickUpStatus = "NO_LIFT";
+//        }
+//
+//        if (tv_get_money_type.getText().equals(getString(R.string.bank_card))) {
+//            paymentMethod = "BANK_CARD";
+//        } else if (tv_get_money_type.getText().equals(getString(R.string.we_chat))) {
+//            paymentMethod = "WECHAT";
+//        } else if (tv_get_money_type.getText().equals(getString(R.string.alipay))) {
+//            paymentMethod = "ALIPAY";
+//        } else if (tv_get_money_type.getText().equals(getString(R.string.cash))) {
+//            paymentMethod = "CASH";
+//        } else if (tv_get_money_type.getText().equals(getString(R.string.market_get))) {
+//            paymentMethod = "MARKET";
+//        } else if (tv_get_money_type.getText().equals(getString(R.string.other))) {
+//            paymentMethod = "OTHER";
+//        }
+//
+//        if (tv_dispatching_type.getText().equals("顾客自提")) {
+//            ShoppingMethod = "CUSTOMER_SELF_EXTRACTION";
+//        } else if (tv_dispatching_type.getText().equals("大仓配送")) {
+//            ShoppingMethod = "LARGE_WAREHOUSE_DELIVERY";
+//        } else if (tv_dispatching_type.getText().equals("")) {
+//            ShoppingMethod = "";
+//        }
 
 
         map.put("pickUpStatus", PickUpStatus);
@@ -695,11 +776,19 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
         if (requestCode == 3 && resultCode == 3) {
             assetId = data.getStringExtra("assetId");
             payValue = data.getStringExtra("payValue");
-            tv_get_ticket.setText(getString(R.string.label_money) + payValue);
-            clickTicket = "";
+
             initData(edt_door_ticket.getText().toString(), is_have_adress);
             Log.e("213213", "5");
+            if (assetId.equals("")){
+                tv_get_ticket.setText("未使用");
+                clickTicket=null;
+            }else {
+                tv_get_ticket.setText(getString(R.string.label_money) + payValue);
+                clickTicket = "";
+            }
         }
+
+
 
 
     }
@@ -713,17 +802,6 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
         }
     }
 
-    @Override
-    public void getTextStr(String str, String title) {
-        if (title.equals(getString(R.string.get_type))) {
-            if (str.equals(getString(R.string.all_lift))) {
-                lin_send.setVisibility(View.GONE);
-                tv_dispatching_type.setText("");
-            } else {
-                lin_send.setVisibility(View.VISIBLE);
-            }
-        }
-    }
 
     @Override
     public void refreshData(EditText editText) {

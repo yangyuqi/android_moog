@@ -51,7 +51,7 @@
 
     <LinearLayout
         android:id="@+id/optionspicker"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
         android:orientation="horizontal">
@@ -66,13 +66,15 @@
             android:id="@+id/options2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+           />
 
         <com.contrarywind.view.WheelView
             android:id="@+id/options3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+           />
     </LinearLayout>
 
 

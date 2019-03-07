@@ -12,17 +12,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.liaoinstan.springview.widget.SpringView;
-import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
 import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
+import com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.CheckResultAdapter;
 import com.youzheng.zhejiang.robertmoog.Store.bean.CheckStoreList;
 import com.youzheng.zhejiang.robertmoog.Store.listener.OnRecyclerViewAdapterItemClickListener;
-import com.youzheng.zhejiang.robertmoog.Store.view.RecycleViewDivider;
 import com.youzheng.zhejiang.robertmoog.utils.View.MyFooter;
 import com.youzheng.zhejiang.robertmoog.utils.View.MyHeader;
 
@@ -56,7 +55,12 @@ public class CheckResultActivity extends BaseActivity implements View.OnClickLis
     private int year;
     private Calendar selectedDate;
     private SpringView mSpringView;
-    private View no_data;
+    private View no_data,no_web;
+    /**
+     * 暂无数据!
+     */
+    private TextView tv_text;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,9 +131,20 @@ public class CheckResultActivity extends BaseActivity implements View.OnClickLis
         super.onResume();
 
     }
-
+    @Override
+    public void onChangeListener(int status) {
+        super.onChangeListener(status);
+        if (status==-1){
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.VISIBLE);
+        }else {
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.GONE);
+        }
+    }
     private void initView() {
-        no_data=findViewById(R.id.no_data);
+        no_web = findViewById(R.id.no_web);
+        no_data = findViewById(R.id.no_data);
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
@@ -142,7 +157,7 @@ public class CheckResultActivity extends BaseActivity implements View.OnClickLis
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         pr_list.setLayoutManager(manager);
         pr_list.setAdapter(adapter);
-        pr_list.addItemDecoration(new com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider(CheckResultActivity.this, LinearLayoutManager.VERTICAL, 5, getResources().getColor(R.color.bg_all)));
+        pr_list.addItemDecoration(new RecycleViewDivider(CheckResultActivity.this, LinearLayoutManager.VERTICAL, 5, getResources().getColor(R.color.bg_all)));
 
         adapter = new CheckResultAdapter(list, this);
         pr_list.setAdapter(adapter);
@@ -152,6 +167,7 @@ public class CheckResultActivity extends BaseActivity implements View.OnClickLis
         mSpringView.setHeader(new MyHeader(this));
         mSpringView.setFooter(new MyFooter(this));
 
+        tv_text = (TextView) findViewById(R.id.tv_text);
     }
 
     private void initData(int Year) {
@@ -169,7 +185,7 @@ public class CheckResultActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onResponse(String response) {
                 Log.e("巡店列表", response);
-               // pr_list.setPullLoadMoreCompleted();
+                // pr_list.setPullLoadMoreCompleted();
                 mSpringView.onFinishFreshAndLoad();
                 BaseModel baseModel = gson.fromJson(response, BaseModel.class);
                 if (baseModel.getCode() == PublicUtils.code) {
@@ -209,10 +225,11 @@ public class CheckResultActivity extends BaseActivity implements View.OnClickLis
             no_data.setVisibility(View.GONE);
             mSpringView.setVisibility(View.VISIBLE);
         } else {
-            if (year == selectedDate.get(Calendar.YEAR)){
+            if (year == selectedDate.get(Calendar.YEAR)) {
                 no_data.setVisibility(View.VISIBLE);
+                tv_text.setText("暂无巡店信息");
                 mSpringView.setVisibility(View.GONE);
-            }else {
+            } else {
                 list.clear();
                 adapter.clear();
                 showToast(getString(R.string.load_list_erron));

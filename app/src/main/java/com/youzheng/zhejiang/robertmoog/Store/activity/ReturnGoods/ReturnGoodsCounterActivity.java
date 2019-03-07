@@ -124,7 +124,9 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
     private String orderID;
     private List<ConfirmReturnRequest.ReshippedGoodsDataListBean> request=new ArrayList<>();
     private EditText et_other_reason;
-
+    private List<EnumsDatasBeanDatas> list1=new ArrayList<>();
+    private List<EnumsDatasBeanDatas> list2=new ArrayList<>();
+    private List<EnumsDatasBeanDatas> list3=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -224,53 +226,75 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
                 BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                 if (baseModel.getCode()==PublicUtils.code){
                     EnumsDatas enumsDatas = gson.fromJson(gson.toJson(baseModel.getDatas()),EnumsDatas.class);
-                    if (enumsDatas.getEnums().size()>0){
-                        for (final EnumsDatasBean bean : enumsDatas.getEnums()){
-                            if (bean.getClassName().equals("ReturnPickUpStatus")){//  TimeQuantum
-                                List<EnumsDatasBeanDatas> list1=new ArrayList<>();
-                                for (int i = 0; i < bean.getDatas().size(); i++) {
-                                    list1.add(bean.getDatas().get(i));
-                                    if (bean.getDatas().get(i).getId().equals("ALL_LIFT")){
-                                        tv_get_state.setText("已提");
-                                        pick_state="ALL_LIFT";
+                    if (enumsDatas.getEnums()!=null){
+                        if (enumsDatas.getEnums().size()>0){
+                            for (final EnumsDatasBean bean : enumsDatas.getEnums()){
+                                if (!TextUtils.isEmpty(bean.getClassName())){
+                                    if (bean.getClassName().equals("ReturnPickUpStatus")){//  TimeQuantum
+                                        list1=new ArrayList<>();
+                                        for (int i = 0; i < bean.getDatas().size(); i++) {
+                                            list1.add(bean.getDatas().get(i));
+                                            if (bean.getDatas().get(i).getDes().equals(getString(R.string.already_get))){
+                                                tv_get_state.setText(bean.getDatas().get(i).getDes());
+                                                pick_state =bean.getDatas().get(i).getId() ;
+                                            }
+                                            type.add(bean.getDatas().get(i).getDes());
+                                        }
+                                        if (tv_get_state.getText().toString().equals("")){
+                                            tv_get_state.setText(bean.getDatas().get(0).getDes());
+                                            pick_state =bean.getDatas().get(0).getId() ;
+
+                                        }
+                                        typelist=list1;
                                     }
-                                    type.add(bean.getDatas().get(i).getDes());
                                 }
-                                typelist=list1;
+
                             }
-                        }
 
 
-                        for (final EnumsDatasBean bean : enumsDatas.getEnums()){
-                            if (bean.getClassName().equals("RefundMethod")){//  TimeQuantum
+                            for (final EnumsDatasBean bean : enumsDatas.getEnums()){
+                                if (!TextUtils.isEmpty(bean.getClassName())){
+                                    if (bean.getClassName().equals("RefundMethod")){//  TimeQuantum
 //                                final List<String> date = new ArrayList<String>();
-                                List<EnumsDatasBeanDatas> list2=new ArrayList<>();
-                                for (int i = 0; i < bean.getDatas().size(); i++) {
-                                    list2.add(bean.getDatas().get(i));
-                                    if (bean.getDatas().get(i).getId().equals("RETURN_CAME")){
-                                        tv_return_type.setText("原路返回");
-                                        paymentMethod="RETURN_CAME";
+                                        list2=new ArrayList<>();
+                                        for (int i = 0; i < bean.getDatas().size(); i++) {
+                                            list2.add(bean.getDatas().get(i));
+                                            if (bean.getDatas().get(i).getDes().equals(getString(R.string.yuan_lu))){
+                                                tv_return_type.setText(bean.getDatas().get(i).getDes());
+                                                paymentMethod=bean.getDatas().get(i).getId();
+                                            }
+                                            returns.add(bean.getDatas().get(i).getDes());
+                                        }
+
+                                        if (tv_return_type.getText().toString().equals("")){
+                                            tv_return_type.setText(bean.getDatas().get(0).getDes());
+                                            paymentMethod=bean.getDatas().get(0).getId();
+                                        }
+                                        returnlist=list2;
                                     }
-                                    returns.add(bean.getDatas().get(i).getDes());
                                 }
-                                returnlist=list2;
+
                             }
-                        }
 
 
-                        for (final EnumsDatasBean bean : enumsDatas.getEnums()){
-                            if (bean.getClassName().equals("ReturnReason")){//  TimeQuantum
+                            for (final EnumsDatasBean bean : enumsDatas.getEnums()){
+                                if (!TextUtils.isEmpty(bean.getClassName())){
+                                    if (bean.getClassName().equals("ReturnReason")){//  TimeQuantum
 //                                final List<String> date = new ArrayList<String>();
-                                List<EnumsDatasBeanDatas> list3=new ArrayList<>();
-                                for (int i = 0; i < bean.getDatas().size(); i++) {
-                                    list3.add(bean.getDatas().get(i));
-                                    reason.add(bean.getDatas().get(i).getDes());
+                                        list3=new ArrayList<>();
+                                        for (int i = 0; i < bean.getDatas().size(); i++) {
+                                            list3.add(bean.getDatas().get(i));
+                                            reason.add(bean.getDatas().get(i).getDes());
+                                        }
+                                        reasonlist=list3;
+                                    }
                                 }
-                                reasonlist=list3;
-                            }
-                        }
 
+                            }
+
+                        }
                     }
+
 
                 }else {
                     showToasts(baseModel.getMsg());
@@ -345,16 +369,42 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
                 finish();
                 break;
             case R.id.lin_get_goods:
-                //SingleOptionsPicker.tv_choose_degree.setText("提货状态");
-                SingleOptionsPicker.openOptionsPicker(this, type, tv_get_state,getString(R.string.get_goods_state),this);
+                if (type!=null){
+                    if (type.size()!=0){
+                        SingleOptionsPicker.openOptionsPicker(this,type , tv_get_state, getString(R.string.get_goods_state), this);
+
+                    }else {
+                        showToasts("暂无数据");
+                    }
+                }else {
+                    showToasts("暂无数据");
+                }
                 break;
             case R.id.lin_return_type:
-               // SingleOptionsPicker.tv_choose_degree.setText("退款方式");
-                SingleOptionsPicker.openOptionsPicker(this, returns, tv_return_type,getString(R.string.return_goods_type),this);
+
+                if (returns!=null){
+                    if (returns.size()!=0){
+                        SingleOptionsPicker.openOptionsPicker(this, returns, tv_return_type, getString(R.string.return_goods_type), this);
+
+                    }else {
+                        showToasts("暂无数据");
+                    }
+                }else {
+                    showToasts("暂无数据");
+                }
+
                 break;
             case R.id.lin_return_reason:
-                //SingleOptionsPicker.tv_choose_degree.setText("退货理由");
-                SingleOptionsPicker.openOptionsPicker(this, reason, tv_return_reason,getString(R.string.return_reason),this);
+                if (reason!=null){
+                    if (reason.size()!=0){
+                        SingleOptionsPicker.openOptionsPicker(this, reason, tv_return_reason, getString(R.string.return_reason), this);
+
+                    }else {
+                        showToasts("暂无数据");
+                    }
+                }else {
+                    showToasts("暂无数据");
+                }
 
                 break;
             case R.id.tv_confirm_return:
@@ -374,7 +424,21 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
                 break;
         }
     }
-
+    @Override
+    public void getTextStr(String str,String title,int position) {
+        if (title.equals(getString(R.string.return_reason))) {
+            reasons=list3.get(position).getId();
+            if (str.equals(getString(R.string.other))) {
+                et_other_reason.setVisibility(View.VISIBLE);
+            } else {
+                et_other_reason.setVisibility(View.GONE);
+            }
+        }else if (title.equals(getString(R.string.return_goods_type))){
+            paymentMethod=list2.get(position).getId();
+        }else if (title.equals(getString(R.string.get_goods_state))){
+            pick_state=list1.get(position).getId();
+        }
+    }
     private void confirmReturn() {
 
         if (tv_return_type.getText().equals(getString(R.string.bank_card))){
@@ -518,14 +582,5 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
         }
     }
 
-    @Override
-    public void getTextStr(String str,String title) {
-        if (title.equals(getString(R.string.return_reason))){
-            if (str.equals(getString(R.string.other))){
-                et_other_reason.setVisibility(View.VISIBLE);
-            }else {
-                et_other_reason.setVisibility(View.GONE);
-            }
-        }
-    }
+
 }

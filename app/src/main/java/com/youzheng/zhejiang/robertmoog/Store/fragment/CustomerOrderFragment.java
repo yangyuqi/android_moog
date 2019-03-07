@@ -22,12 +22,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.liaoinstan.springview.widget.SpringView;
-import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import com.youzheng.zhejiang.robertmoog.Base.BaseFragment;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
 import com.youzheng.zhejiang.robertmoog.Base.utils.MyConstant;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
 import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
+import com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.Model.Home.EnumsDatas;
 import com.youzheng.zhejiang.robertmoog.Model.Home.EnumsDatasBean;
@@ -39,7 +39,6 @@ import com.youzheng.zhejiang.robertmoog.Store.adapter.ProfessionalCustomerOrderL
 import com.youzheng.zhejiang.robertmoog.Store.bean.NewOrderListBean;
 import com.youzheng.zhejiang.robertmoog.Store.listener.OnRecyclerViewAdapterItemClickListener;
 import com.youzheng.zhejiang.robertmoog.Store.utils.SoftInputUtils;
-import com.youzheng.zhejiang.robertmoog.Store.view.RecycleViewDivider;
 import com.youzheng.zhejiang.robertmoog.utils.SharedPreferencesUtils;
 import com.youzheng.zhejiang.robertmoog.utils.View.MyFooter;
 import com.youzheng.zhejiang.robertmoog.utils.View.MyHeader;
@@ -93,6 +92,11 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
     private SpringView springView;
     private ImageView iv_clear;
     private View no_data;
+    /**
+     * 暂无数据!
+     */
+    private TextView tv_text;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -178,7 +182,7 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
     }
 
     private void initView() {
-        no_data=view.findViewById(R.id.no_data);
+        no_data = view.findViewById(R.id.no_data);
         tv_search = (EditText) view.findViewById(R.id.tv_search);
         iv_search = (ImageView) view.findViewById(R.id.iv_search);
         iv_search.setOnClickListener(this);
@@ -198,7 +202,7 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
         LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         rv_list.setLayoutManager(manager);
         rv_list.setAdapter(adapter);
-        rv_list.addItemDecoration(new com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider(getActivity(), LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
+        rv_list.addItemDecoration(new RecycleViewDivider(getActivity(), LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
 
         adapter = new ProfessionalCustomerOrderListAdapter(list, getActivity());
         rv_list.setAdapter(adapter);
@@ -224,6 +228,7 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
             }
         });
 
+        tv_text = (TextView) view.findViewById(R.id.tv_text);
     }
 
     private void initGetDate() {
@@ -239,22 +244,29 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
                 BaseModel baseModel = gson.fromJson(response, BaseModel.class);
                 if (baseModel.getCode() == PublicUtils.code) {
                     EnumsDatas enumsDatas = gson.fromJson(gson.toJson(baseModel.getDatas()), EnumsDatas.class);
-                    if (enumsDatas.getEnums().size() > 0) {
-                        for (final EnumsDatasBean bean : enumsDatas.getEnums()) {
-                            if (bean.getClassName().equals("TimeQuantum")) {//  TimeQuantum
+                    if (enumsDatas.getEnums()!=null){
+                        if (enumsDatas.getEnums().size() > 0) {
+                            for (final EnumsDatasBean bean : enumsDatas.getEnums()) {
+                                if (!TextUtils.isEmpty(bean.getClassName())){
+                                    if (bean.getClassName().equals("TimeQuantum")) {//  TimeQuantum
 //                                final List<String> date = new ArrayList<String>();
-                                List<EnumsDatasBeanDatas> list1 = new ArrayList<>();
-                                for (int i = 0; i < bean.getDatas().size(); i++) {
-                                    list1.add(bean.getDatas().get(i));
+                                        List<EnumsDatasBeanDatas> list1 = new ArrayList<>();
+                                        for (int i = 0; i < bean.getDatas().size(); i++) {
+                                            list1.add(bean.getDatas().get(i));
+                                        }
+                                        strlist = list1;
+                                    }
                                 }
-                                strlist = list1;
                             }
+                             if (strlist.size()!=0){
+                                 goodsTimeAdapter.setUI(strlist);
+                             }
+
+
+
                         }
-
-                        goodsTimeAdapter.setUI(strlist);
-
-
                     }
+
 
                 }
             }
@@ -312,10 +324,11 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
             no_data.setVisibility(View.GONE);
             springView.setVisibility(View.VISIBLE);
         } else {
-            if (page==1&&TextUtils.isEmpty(orderCode)&&TextUtils.isEmpty(timeQuantum)){
+            if (page == 1) {
                 no_data.setVisibility(View.VISIBLE);
                 springView.setVisibility(View.GONE);
-            }else {
+                tv_text.setText("暂无订单信息");
+            } else {
                 showToasts(getString(R.string.load_list_erron));
             }
         }
@@ -340,10 +353,19 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
                 }
                 break;
             case R.id.tv_time:
-                drawer_layout.openDrawer(GravityCompat.END);
-                tv_search.setClickable(false);
-                SoftInputUtils.hideSoftInput(getActivity());
-                tv_search.clearFocus();
+                if (strlist!=null){
+                    if (strlist.size()!=0){
+                        drawer_layout.openDrawer(GravityCompat.END);
+                        tv_search.setClickable(false);
+                        SoftInputUtils.hideSoftInput(getActivity());
+                        tv_search.clearFocus();
+                    }else {
+                        showToasts("暂无数据");
+                    }
+                }else {
+                    showToasts("暂无数据");
+                }
+
                 break;
             case R.id.tv_again:
                 goodsTimeAdapter.setSelectItem(0);
@@ -395,9 +417,9 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
             iv_clear.setVisibility(View.GONE);
             list.clear();
             orderCode = "";
-            page=1;
+            page = 1;
             initData(page, pageSize, orderCode, timeQuantum, isCustomer, type);
-        }else {
+        } else {
             iv_clear.setVisibility(View.VISIBLE);
         }
     }

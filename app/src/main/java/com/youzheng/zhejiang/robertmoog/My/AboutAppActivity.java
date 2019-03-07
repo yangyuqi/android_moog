@@ -43,7 +43,7 @@ public class AboutAppActivity extends BaseActivity {
     private WebView wv_web;
     //字体颜色设为白色, “p”标签内的字体颜色  “*”定义了字体大小以及行高；
     public final static String CSS_STYLE ="<style>* {font-size:40px;line-height:40px;}</style>";
-
+    private View no_data,no_web;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +59,17 @@ public class AboutAppActivity extends BaseActivity {
         initData();
         initWebview();
     }
-
+    @Override
+    public void onChangeListener(int status) {
+        super.onChangeListener(status);
+        if (status==-1){
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.VISIBLE);
+        }else {
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.GONE);
+        }
+    }
     private void initWebview() {
         // wv_detail.loadUrl("http://www.baidu.com");
         WebSettings webSettings = wv_web.getSettings();
@@ -152,6 +162,7 @@ public class AboutAppActivity extends BaseActivity {
     }
 
     private void initView() {
+        no_web = findViewById(R.id.no_web);
         btnBack = (ImageView) findViewById(R.id.btnBack);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
         textHeadNext = (TextView) findViewById(R.id.textHeadNext);

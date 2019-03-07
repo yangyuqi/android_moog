@@ -18,6 +18,7 @@
         android:id="@+id/preview_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+
         android:layout_marginBottom="260dp"
         />
 
@@ -37,15 +38,37 @@
             android:layout_centerHorizontal="true"
         />
 
-        <TextView
-            android:id="@+id/tv_start"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="开始扫描"
-            android:visibility="gone"
-            android:textColor="@color/bg_background_white"
-            android:textSize="20sp"
-            android:layout_centerInParent="true"/>
+        <FrameLayout
+            android:id="@+id/fy"
+            android:layout_width="match_parent"
+            android:background="@color/bg_main"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            >
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@mipmap/group_102_2"/>
+
+            <TextView
+                android:id="@+id/tv_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="开始扫描"
+                android:padding="10dp"
+                android:layout_gravity="center"
+                android:visibility="visible"
+                android:textColor="@color/bg_background_white"
+                android:textSize="20sp"
+                android:layout_centerInParent="true"/>
+
+
+        </FrameLayout>
+
+
 
 
     </RelativeLayout>

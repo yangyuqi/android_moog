@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
@@ -42,6 +43,9 @@ public class SearchGoodsActivity extends BaseActivity implements TextWatcher {
     List<ScanDatasBean> data = new ArrayList<>();
     int widWidth;
     private ImageView iv_clear;
+    private String goodsCode;
+    private View no_data, no_web;
+    private RelativeLayout layout_header;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,9 +55,14 @@ public class SearchGoodsActivity extends BaseActivity implements TextWatcher {
         DisplayMetrics outMetrics = new DisplayMetrics();
         manager.getDefaultDisplay().getMetrics(outMetrics);
         widWidth = outMetrics.widthPixels;
+        goodsCode = getIntent().getStringExtra("goodsCode");
         initView();
 
         initClick();
+        if (!TextUtils.isEmpty(goodsCode)) {
+            search(goodsCode);
+        }
+
     }
 
     private void initClick() {
@@ -65,16 +74,16 @@ public class SearchGoodsActivity extends BaseActivity implements TextWatcher {
                     showToasts("请输入搜索条件");
                     return;
                 }
-
-                search();
+                goodsCode = tv_search.getText().toString();
+                search(goodsCode);
 
             }
         });
     }
 
-    private void search(){
+    private void search(String goodsCode) {
         Map<String, Object> map = new HashMap<>();
-        map.put("code", tv_search.getText().toString());//f36451db-3efa-4ccb-8260-d7fb7e2128f9
+        map.put("code", goodsCode);//f36451db-3efa-4ccb-8260-d7fb7e2128f9
         OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.SCAN_GOODS + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
             public void onFailure(Request request, IOException e) {
@@ -94,14 +103,29 @@ public class SearchGoodsActivity extends BaseActivity implements TextWatcher {
                         showToasts(baseModel.getMsg());
                     }
 
+
                 }
             }
         });
     }
 
+//    @Override
+//    public void onChangeListener(int status) {
+//        super.onChangeListener(status);
+//        if (status == -1) {
+//            layout_header.setVisibility(View.VISIBLE);
+//            no_web.setVisibility(View.VISIBLE);
+//        } else {
+//            layout_header.setVisibility(View.VISIBLE);
+//            no_web.setVisibility(View.GONE);
+//        }
+//    }
+
     SearchResultAdapter addapter;
 
     private void initView() {
+       // layout_header = (RelativeLayout) findViewById(R.id.layout_header);
+        no_web = findViewById(R.id.no_web);
         ((TextView) findViewById(R.id.textHeadTitle)).setText("查找商品/套餐");
         findViewById(R.id.btnBack).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,11 +150,12 @@ public class SearchGoodsActivity extends BaseActivity implements TextWatcher {
                 tv_search.setText("");
 //                data.clear();
 //                addapter.clear();
-               // search();
+                // search();
             }
         });
 
         tv_search.addTextChangedListener(this);
+
     }
 
     @Override
@@ -145,11 +170,11 @@ public class SearchGoodsActivity extends BaseActivity implements TextWatcher {
 
     @Override
     public void afterTextChanged(Editable s) {
-        if (tv_search.length()==0){
+        if (tv_search.length() == 0) {
             iv_clear.setVisibility(View.GONE);
 //            data.clear();
 //            addapter.clear();
-        }else {
+        } else {
             iv_clear.setVisibility(View.VISIBLE);
         }
     }

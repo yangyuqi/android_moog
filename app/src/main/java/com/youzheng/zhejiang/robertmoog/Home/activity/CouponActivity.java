@@ -31,13 +31,15 @@ public class CouponActivity extends BaseActivity {
     TextView tv_add ,tv_text;
     private View no_data;
     int tabpos;
+    String asseid;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.coupon_layout);
         getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-
+        asseid=getIntent().getStringExtra("Click");
         initView();
+
 
 
         initClick();
@@ -78,6 +80,7 @@ public class CouponActivity extends BaseActivity {
                         recyclerView.setVisibility(View.VISIBLE);
                     }
                     addapter.setData(useCouponList,CouponActivity.this,"1");
+
                 }else if (tab.getPosition()==1){
                     addapter.setData(notUseCouponList,CouponActivity.this,"2");
                     if (notUseCouponList.size()==0){

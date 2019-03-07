@@ -20,6 +20,7 @@ import com.youzheng.zhejiang.robertmoog.Store.adapter.SampleOutAdapter;
 import com.youzheng.zhejiang.robertmoog.Store.bean.CommitRequest;
 import com.youzheng.zhejiang.robertmoog.Store.bean.SampleOutList;
 import com.youzheng.zhejiang.robertmoog.Store.view.MyListView;
+import com.youzheng.zhejiang.robertmoog.utils.SharedPreferencesUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -49,17 +50,21 @@ public class SampleOutInformationActivity extends BaseActivity implements View.O
     private List<CommitRequest.ProductSampleDataBean> request=new ArrayList<>();
     private LinearLayout lin_title;
     private List<SampleOutList.SampleResDataBean.SampleSingleDataListBean> beans;
-    private View no_data;
+
+    private View no_data,no_web;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sample_out_information);
         initView();
         initData();
+
     }
 
     private void initView() {
-
+        no_web = findViewById(R.id.no_web);
         no_data=findViewById(R.id.no_data);
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
@@ -79,7 +84,17 @@ public class SampleOutInformationActivity extends BaseActivity implements View.O
 
 //        initData();
     }
-
+    @Override
+    public void onChangeListener(int status) {
+        super.onChangeListener(status);
+        if (status==-1){
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.VISIBLE);
+        }else {
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.GONE);
+        }
+    }
     @Override
     protected void onResume() {
         super.onResume();
@@ -130,6 +145,20 @@ public class SampleOutInformationActivity extends BaseActivity implements View.O
             no_data.setVisibility(View.GONE);
             lv_rain_information .setVisibility(View.VISIBLE);
             lv_information .setVisibility(View.VISIBLE);
+
+            boolean isfirst= (boolean) SharedPreferencesUtils.getParam(this,PublicUtils.ISGO,true);
+            if (isfirst){
+                adapter.setAppear(true);
+                out2Adapter.setAppear(true);
+                textHeadNext.setText(getString(R.string.cancel));
+                tv_commit.setVisibility(View.VISIBLE);
+            }else {
+                adapter.setAppear(false);
+                out2Adapter.setAppear(false);
+                textHeadNext.setText(getString(R.string.edit));
+                tv_commit.setVisibility(View.GONE);
+            }
+
         }else {
             lin_title.setVisibility(View.GONE);
             textHeadNext.setVisibility(View.GONE);
@@ -148,6 +177,7 @@ public class SampleOutInformationActivity extends BaseActivity implements View.O
                 break;
             case R.id.btnBack:
                 finish();
+                SharedPreferencesUtils.setParam(this,PublicUtils.ISGO,false);
                 break;
             case R.id.textHeadNext:
                 if (textHeadNext.getText().equals(getString(R.string.edit))){
@@ -235,6 +265,7 @@ public class SampleOutInformationActivity extends BaseActivity implements View.O
                     if (baseModel.getCode()==PublicUtils.code){
                         showToasts(getString(R.string.commit_success));
                        // finish();
+                        SharedPreferencesUtils.setParam(SampleOutInformationActivity.this,PublicUtils.ISGO,false);
                         list.clear();
                         list2.clear();
                         initData();

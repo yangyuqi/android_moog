@@ -9,17 +9,15 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
 import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
+import com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.CouponDetailAdapter;
 import com.youzheng.zhejiang.robertmoog.Store.bean.CouponDetail;
-import com.youzheng.zhejiang.robertmoog.Store.bean.StoreCustomerDetail;
-import com.youzheng.zhejiang.robertmoog.Store.view.RecycleViewDivider;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,22 +40,26 @@ public class CouponDetailActivity extends BaseActivity implements View.OnClickLi
     private RelativeLayout layout_header;
     private RecyclerView lv_list;
     private String date;
-    private List<CouponDetail.CouponUsageRecordDetailBean> list=new ArrayList<>();
+    private List<CouponDetail.CouponUsageRecordDetailBean> list = new ArrayList<>();
     private CouponDetailAdapter adapter;
-    private View no_data;
+    private View no_data,no_web;
+    /**
+     * 暂无数据!
+     */
+    private TextView tv_text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_coupon_detail);
-        date=getIntent().getStringExtra("couponDate");
+        date = getIntent().getStringExtra("couponDate");
         initView();
         initData(date);
     }
 
     private void initView() {
-
-        no_data=findViewById(R.id.no_data);
+        no_web = findViewById(R.id.no_web);
+        no_data = findViewById(R.id.no_data);
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
@@ -69,11 +71,23 @@ public class CouponDetailActivity extends BaseActivity implements View.OnClickLi
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         lv_list.setLayoutManager(manager);
         lv_list.setAdapter(adapter);
-        lv_list.addItemDecoration(new com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider(CouponDetailActivity.this, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
+        lv_list.addItemDecoration(new RecycleViewDivider(CouponDetailActivity.this, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
 
 
-        adapter=new CouponDetailAdapter(list,this);
+        adapter = new CouponDetailAdapter(list, this);
         lv_list.setAdapter(adapter);
+        tv_text = (TextView) findViewById(R.id.tv_text);
+    }
+    @Override
+    public void onChangeListener(int status) {
+        super.onChangeListener(status);
+        if (status==-1){
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.VISIBLE);
+        }else {
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -83,8 +97,8 @@ public class CouponDetailActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void initData(String date) {
-        HashMap<String,Object> map=new HashMap<>();
-        map.put("registerDate",date);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("registerDate", date);
 
         OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.COUPON_RECORD_DETAIL + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
@@ -94,14 +108,14 @@ public class CouponDetailActivity extends BaseActivity implements View.OnClickLi
 
             @Override
             public void onResponse(String response) {
-                Log.e("优惠券使用详情",response);
+                Log.e("优惠券使用详情", response);
                 //lv_list.setPullLoadMoreCompleted();
-                BaseModel baseModel = gson.fromJson(response,BaseModel.class);
-                if (baseModel.getCode()==PublicUtils.code){
-                    CouponDetail couponDetail = gson.fromJson(gson.toJson(baseModel.getDatas()),CouponDetail.class);
+                BaseModel baseModel = gson.fromJson(response, BaseModel.class);
+                if (baseModel.getCode() == PublicUtils.code) {
+                    CouponDetail couponDetail = gson.fromJson(gson.toJson(baseModel.getDatas()), CouponDetail.class);
                     setData(couponDetail);
 
-                }else {
+                } else {
                     showToasts(baseModel.getMsg());
                 }
             }
@@ -111,19 +125,19 @@ public class CouponDetailActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void setData(CouponDetail couponDetail) {
-        if (couponDetail.getCouponUsageRecordDetail()==null) return;
+        if (couponDetail.getCouponUsageRecordDetail() == null) return;
 
-        List<CouponDetail.CouponUsageRecordDetailBean> beans=couponDetail.getCouponUsageRecordDetail();
-        if (beans.size()!=0){
+        List<CouponDetail.CouponUsageRecordDetailBean> beans = couponDetail.getCouponUsageRecordDetail();
+        if (beans.size() != 0) {
             list.addAll(beans);
             adapter.refreshUI(beans);
             no_data.setVisibility(View.GONE);
             lv_list.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             no_data.setVisibility(View.VISIBLE);
+            tv_text.setText("暂无优惠券使用信息");
             lv_list.setVisibility(View.GONE);
         }
-
 
 
     }

@@ -102,7 +102,7 @@ public class MealRankingActivity extends BaseActivity implements View.OnClickLis
     SimpleDateFormat dateFormater;
     Calendar cal;
     Date date;
-    private View no_data;
+    private View no_data,no_web;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -174,7 +174,19 @@ public class MealRankingActivity extends BaseActivity implements View.OnClickLis
         });
     }
 
+    @Override
+    public void onChangeListener(int status) {
+        super.onChangeListener(status);
+        if (status==-1){
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.VISIBLE);
+        }else {
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.GONE);
+        }
+    }
     private void initView() {
+        no_web = findViewById(R.id.no_web);
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
@@ -346,9 +358,12 @@ public class MealRankingActivity extends BaseActivity implements View.OnClickLis
 
         window.setBackgroundDrawable(getDrawable());
         //backgroundAlpha(0.5f);
+
+      //  mSpringView.setBackgroundColor(getResources().getColor(R.color.text_drak_black));
         mSpringView.setBackgroundColor(getResources().getColor(R.color.text_drak_black));
-        mSpringView.setAlpha(0.5f);
-        pr_list.setVisibility(View.GONE);
+        mSpringView.setAlpha(0.35f);
+      //  mSpringView.setAlpha(0.5f);
+       // pr_list.setVisibility(View.GONE);
 //        pr_list.setBackgroundColor(getResources().getColor(R.color.contents_text));
 //        pr_list.setAlpha(0.5f);
 
@@ -369,7 +384,7 @@ public class MealRankingActivity extends BaseActivity implements View.OnClickLis
             iv_more.setImageResource(R.mipmap.group_14_1);
             mSpringView.setBackgroundColor(getResources().getColor(R.color.bg_background_white));
             mSpringView.setAlpha(1f);
-            pr_list.setVisibility(View.VISIBLE);
+           // pr_list.setVisibility(View.VISIBLE);
 //            pr_list.setBackgroundColor(getResources().getColor(R.color.bg_background_white));
 //            pr_list.setAlpha(1f);
         }
@@ -393,7 +408,7 @@ public class MealRankingActivity extends BaseActivity implements View.OnClickLis
      */
     private Drawable getDrawable() {
         ShapeDrawable bgdrawable = new ShapeDrawable(new OvalShape());
-        bgdrawable.getPaint().setColor(this.getResources().getColor(android.R.color.transparent));
+        bgdrawable.getPaint().setColor(this.getResources().getColor(R.color.transparent));
         return bgdrawable;
     }
 

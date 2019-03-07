@@ -2,6 +2,7 @@ package com.youzheng.zhejiang.robertmoog.Store.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -46,18 +47,26 @@ public class SampleOutDetailActivity extends BaseActivity implements View.OnClic
      * 2016/01/19 09:19:04
      */
     private TextView tv_time;
-    private List<SampleOutPic.SampleImgIssueDataBean.ListBean> list=new ArrayList<>();
+    private List<SampleOutPic.SampleImgIssueDataBean.ListBean> list = new ArrayList<>();
     private SampleDetailAdapter adapter;
-    private List<String> piclist=new ArrayList<>();
+    private List<String> piclist = new ArrayList<>();
+    private View no_data,no_web;
+    /**
+     * 暂无数据!
+     */
+    private TextView tv_text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sample_out_detail);
         initView();
+        initData();
     }
 
     private void initView() {
+        no_web = findViewById(R.id.no_web);
+        no_data = findViewById(R.id.no_data);
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
@@ -68,17 +77,30 @@ public class SampleOutDetailActivity extends BaseActivity implements View.OnClic
         tv_name = (TextView) findViewById(R.id.tv_name);
         gv_photo = (GridView) findViewById(R.id.gv_photo);
         tv_time = (TextView) findViewById(R.id.tv_time);
-        adapter=new SampleDetailAdapter(list,this);
+        adapter = new SampleDetailAdapter(list, this);
         gv_photo.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
         gv_photo.setOnItemClickListener(this);
 
-        initData();
+
+        tv_text = (TextView) findViewById(R.id.tv_text);
+    }
+    @Override
+    public void onChangeListener(int status) {
+        super.onChangeListener(status);
+        if (status==-1){
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.VISIBLE);
+        }else {
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.GONE);
+        }
     }
 
+
     private void initData() {
-        OkHttpClientManager.postAsynJson(gson.toJson(new HashMap<>()),UrlUtils.SAMPLE_HISTORY + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
+        OkHttpClientManager.postAsynJson(gson.toJson(new HashMap<>()), UrlUtils.SAMPLE_HISTORY + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
             public void onFailure(Request request, IOException e) {
 
@@ -86,12 +108,12 @@ public class SampleOutDetailActivity extends BaseActivity implements View.OnClic
 
             @Override
             public void onResponse(String response) {
-                Log.e("出样历史",response);
-                BaseModel baseModel = gson.fromJson(response,BaseModel.class);
-                if (baseModel.getCode()==PublicUtils.code){
-                    SampleOutPic sampleOutPic = gson.fromJson(gson.toJson(baseModel.getDatas()),SampleOutPic.class);
+                Log.e("出样历史", response);
+                BaseModel baseModel = gson.fromJson(response, BaseModel.class);
+                if (baseModel.getCode() == PublicUtils.code) {
+                    SampleOutPic sampleOutPic = gson.fromJson(gson.toJson(baseModel.getDatas()), SampleOutPic.class);
                     setData(sampleOutPic);
-                }else {
+                } else {
                     showToasts(baseModel.getMsg());
                 }
             }
@@ -99,23 +121,33 @@ public class SampleOutDetailActivity extends BaseActivity implements View.OnClic
     }
 
     private void setData(SampleOutPic sampleOutPic) {
-        if (sampleOutPic==null) return;
-        if (sampleOutPic.getSampleImgIssueData().getList()==null) return;
-        String Operator=sampleOutPic.getSampleImgIssueData().getOperator();
-        if (!Operator.equals("")||Operator!=null){
-            tv_name.setText(Operator);
+        if (sampleOutPic == null) return;
+        List<SampleOutPic.SampleImgIssueDataBean.ListBean> pic = sampleOutPic.getSampleImgIssueData().getList();
+        if (pic!=null){
+            if (pic.size() != 0) {
+                list.addAll(pic);
+                adapter.setPic(pic);
+                no_data.setVisibility(View.GONE);
+            } else {
+                no_data.setVisibility(View.VISIBLE);
+                tv_text.setText("暂无出样信息");
+            }
+        }else {
+            no_data.setVisibility(View.VISIBLE);
+            tv_text.setText("暂无出样信息");
         }
 
-        String operationTime=sampleOutPic.getSampleImgIssueData().getOperationTime();
-        if (!operationTime.equals("")||operationTime!=null){
-            tv_time.setText(operationTime);
+       // String Operator = sampleOutPic.getSampleImgIssueData().getOperator();
+        if (!TextUtils.isEmpty(sampleOutPic.getSampleImgIssueData().getOperator())) {
+            tv_name.setText(sampleOutPic.getSampleImgIssueData().getOperator());
         }
 
-        List<SampleOutPic.SampleImgIssueDataBean.ListBean> pic=sampleOutPic.getSampleImgIssueData().getList();
-        if (pic.size()!=0){
-            list.addAll(pic);
-            adapter.setPic(pic);
+     //   String operationTime = sampleOutPic.getSampleImgIssueData().getOperationTime();
+        if (!TextUtils.isEmpty(sampleOutPic.getSampleImgIssueData().getOperationTime())) {
+            tv_time.setText(sampleOutPic.getSampleImgIssueData().getOperationTime());
         }
+
+
 
         for (int i = 0; i < pic.size(); i++) {
             piclist.add(list.get(i).getBigUrl());

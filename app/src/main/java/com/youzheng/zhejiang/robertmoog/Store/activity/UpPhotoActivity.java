@@ -19,10 +19,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
 import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
+import com.youzheng.zhejiang.robertmoog.MainActivity;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.AddphotoAdapter;
@@ -31,10 +33,19 @@ import com.youzheng.zhejiang.robertmoog.Store.listener.OnRecyclerViewAdapterItem
 import com.youzheng.zhejiang.robertmoog.Store.utils.AndroidScheduler;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.finalteam.galleryfinal.model.PhotoInfo;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import rx.Subscriber;
 import rx.schedulers.Schedulers;
 import top.zibin.luban.Luban;
@@ -307,6 +318,7 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
                         Log.e("213", "压缩完成"+"--------------"+file.length()/1024+"k");
 //                        lin_show.setVisibility(View.GONE);
                         // TODO 压缩成功后调用，返回压缩后的图片文件
+
                         fileList.add(file);
                     }
 
@@ -317,6 +329,8 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
                 }).launch();    //启动压缩
 
     }
+
+
 
     private void upPic(ArrayList<File> pic) {
         lin_show.setVisibility(View.VISIBLE);
@@ -377,6 +391,7 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
             public void onClick(View v) {
                 if (fileList.size()==list.size()){
                     upPic(fileList);
+                    //upLoad(filespath);
                 }else {
                     showToasts(getString(R.string.pic_not_finish_yas));
                 }

@@ -7,7 +7,7 @@ public class SampleOutPic {
 
 
         /**
-         * sampleImgIssueData : {"operator":"15622489789","operationTime":"2019-01-07 17:04:32","list":[{"bigUrl":"http://114.55.59.171:9080/image/product/originalImg/eca994b9-26fc-4c20-bfb4-a37290acb151.jpg","smallUrl":"http://114.55.59.171:9080/image/product/100/eca994b9-26fc-4c20-bfb4-a37290acb151.jpg"}]}
+         * sampleImgIssueData : {"operator":"15602035888","operationTime":"2019-03-05 18:00:29","list":[{"bigUrl":"https://demo.waycomtech.com/image/detail/originalImg/aaf959a3-fe6d-47d5-b6fa-97e52da8347f.png","smallUrl":"https://demo.waycomtech.com/image/detail/100/aaf959a3-fe6d-47d5-b6fa-97e52da8347f.png"}]}
          */
 
         private SampleImgIssueDataBean sampleImgIssueData;
@@ -22,9 +22,9 @@ public class SampleOutPic {
 
         public static class SampleImgIssueDataBean {
             /**
-             * operator : 15622489789
-             * operationTime : 2019-01-07 17:04:32
-             * list : [{"bigUrl":"http://114.55.59.171:9080/image/product/originalImg/eca994b9-26fc-4c20-bfb4-a37290acb151.jpg","smallUrl":"http://114.55.59.171:9080/image/product/100/eca994b9-26fc-4c20-bfb4-a37290acb151.jpg"}]
+             * operator : 15602035888
+             * operationTime : 2019-03-05 18:00:29
+             * list : [{"bigUrl":"https://demo.waycomtech.com/image/detail/originalImg/aaf959a3-fe6d-47d5-b6fa-97e52da8347f.png","smallUrl":"https://demo.waycomtech.com/image/detail/100/aaf959a3-fe6d-47d5-b6fa-97e52da8347f.png"}]
              */
 
             private String operator;
@@ -57,8 +57,8 @@ public class SampleOutPic {
 
             public static class ListBean {
                 /**
-                 * bigUrl : http://114.55.59.171:9080/image/product/originalImg/eca994b9-26fc-4c20-bfb4-a37290acb151.jpg
-                 * smallUrl : http://114.55.59.171:9080/image/product/100/eca994b9-26fc-4c20-bfb4-a37290acb151.jpg
+                 * bigUrl : https://demo.waycomtech.com/image/detail/originalImg/aaf959a3-fe6d-47d5-b6fa-97e52da8347f.png
+                 * smallUrl : https://demo.waycomtech.com/image/detail/100/aaf959a3-fe6d-47d5-b6fa-97e52da8347f.png
                  */
 
                 private String bigUrl;
@@ -80,6 +80,6 @@ public class SampleOutPic {
                     this.smallUrl = smallUrl;
                 }
             }
+        }
 
-    }
 }

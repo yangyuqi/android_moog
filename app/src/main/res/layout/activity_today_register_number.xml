@@ -9,12 +9,14 @@
     tools:context=".Count.activity.TodayRegisterNumberActivity">
 
     <include layout="@layout/title_bar" />
-
-    <include layout="@layout/layout_no_data"
-        android:id="@+id/no_data"
+    <include layout="@layout/layout_no_web"
+        android:id="@+id/no_web"
         android:visibility="gone"/>
     <include layout="@layout/layout_no_data"
         android:id="@+id/no_data"
+        android:visibility="gone"/>
+    <include layout="@layout/layout_no_web"
+        android:id="@+id/no_web"
         android:visibility="gone"/>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/pr_list"

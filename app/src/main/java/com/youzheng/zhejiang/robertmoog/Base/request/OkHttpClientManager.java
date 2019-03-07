@@ -53,6 +53,7 @@ public class OkHttpClientManager
     private static OkHttpClientManager mInstance;
     private OkHttpClient mOkHttpClient;
     private Handler mDelivery;
+    private BaseModel baseModel;
 
 
     private static final String TAG = "OkHttpClientManager";
@@ -352,6 +353,7 @@ public class OkHttpClientManager
     private void sendSuccessStringCallback(final String string, final StringCallback callback)
     {
 
+
         mDelivery.post(new Runnable()
         {
             @Override
@@ -360,27 +362,41 @@ public class OkHttpClientManager
                 if (callback != null)
                     try {
                         callback.onResponse(string);
-                        BaseModel baseModel = new Gson().fromJson(string,BaseModel.class);
-                        if (baseModel.getCode()==401){
-                            RMApp.mContext.startActivity(new Intent(RMApp.mContext, LoginActivity.class));
-                            SharedPreferencesUtils.clear(RMApp.mContext);
-                            Toast toast=  Toast.makeText(RMApp.mContext, null, Toast.LENGTH_SHORT);
-                            toast.setText("登录失效,请重新登录");
-                            toast.setGravity(Gravity.CENTER, 0, 0);
-                            toast.show();
-                           // Toast.makeText(RMApp.mContext,"登录失效,请重新登录",Toast.LENGTH_SHORT).show();
-                        }
+                          baseModel = new Gson().fromJson(string,BaseModel.class);
+                          if (baseModel!=null){
+                              if (baseModel.getCode()==401){
+                                  Intent intent=new Intent(RMApp.mContext, LoginActivity.class);
+                                  intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                  RMApp.mContext.startActivity(intent);
+                                  SharedPreferencesUtils.clear(RMApp.mContext);
+                                  Toast toast=  Toast.makeText(RMApp.mContext, null, Toast.LENGTH_SHORT);
+                                  toast.setText("登录失效,请重新登录");
+                                  toast.setGravity(Gravity.CENTER, 0, 0);
+                                  toast.show();
+                              }
+                          }
+
                     }catch (Exception e){
-//                        BaseModel baseModel = new Gson().fromJson(string,BaseModel.class);
-//                        if (baseModel.getCode()==401){
-//                            RMApp.mContext.startActivity(new Intent(RMApp.mContext, LoginActivity.class));
-//                            SharedPreferencesUtils.clear(RMApp.mContext);
-//                            Toast toast=  Toast.makeText(RMApp.mContext, null, Toast.LENGTH_SHORT);
-//                            toast.setText("登录失效,请重新登录");
-//                            toast.setGravity(Gravity.CENTER, 0, 0);
-//                            toast.show();
-//                            // Toast.makeText(RMApp.mContext,"登录失效,请重新登录",Toast.LENGTH_SHORT).show();
-//                        }
+                        Log.e("走到异常了",string);
+                        try {
+                            if (baseModel!=null){
+                                if (baseModel.getCode()==401){
+                                    Intent intent=new Intent(RMApp.mContext, LoginActivity.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    RMApp.mContext.startActivity(intent);
+                                    SharedPreferencesUtils.clear(RMApp.mContext);
+                                    Toast toast=  Toast.makeText(RMApp.mContext, null, Toast.LENGTH_SHORT);
+                                    toast.setText("登录失效,请重新登录");
+                                    toast.setGravity(Gravity.CENTER, 0, 0);
+                                    toast.show();
+                                }
+                            }
+                        }catch (Exception e1){
+                            e1.printStackTrace();
+                        }
+
+
+                       e.printStackTrace();
                     }
                     Log.e("http--response--",string);
             }
@@ -471,7 +487,7 @@ public class OkHttpClientManager
                 .build();
     }
 
-    private static final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/jpg");
+    private static final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/jpeg");
     MediaType MutilPart_Form_Data = MediaType.parse("multipart/form-data; charset=utf-8");
     public  Observable<String> sendMultipart(final String reqUrl, final String pic_key, final ArrayList<File> files){
         return Observable.create(new Observable.OnSubscribe<String>(){
@@ -489,10 +505,15 @@ public class OkHttpClientManager
 //                }
                 //遍历paths中所有图片绝对路径到builder，并约定key如“upload”作为后台接受多张图片的key
                 if (files != null){
-                    for (File file : files) {
+                    for (int i = 0; i < files.size(); i++) {
+                        File  file=new File(files.get(i).getAbsolutePath());
                         multipartBodyBuilder.addFormDataPart(pic_key,file.getName(), RequestBody.create(MEDIA_TYPE_PNG, file));
                         Log.e("几张图片",file.toString()+"-------"+file.getName()+"");
                     }
+//                    for (File file : files) {
+//
+//
+//                    }
                 }
                 //构建请求体
                 RequestBody requestBody = multipartBodyBuilder.build();

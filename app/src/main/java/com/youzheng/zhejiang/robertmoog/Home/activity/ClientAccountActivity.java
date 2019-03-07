@@ -6,9 +6,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.liaoinstan.springview.widget.SpringView;
 import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
@@ -19,8 +19,6 @@ import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.Model.Home.CouponListBean;
 import com.youzheng.zhejiang.robertmoog.Model.Home.CouponListClient;
 import com.youzheng.zhejiang.robertmoog.R;
-import com.youzheng.zhejiang.robertmoog.utils.View.MyFooter;
-import com.youzheng.zhejiang.robertmoog.utils.View.MyHeader;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,8 +33,13 @@ public class ClientAccountActivity extends BaseActivity {
     String customerId;
     String pageNum = "1", pageSize = "30";
     ArrayList<CouponListBean> data = new ArrayList<>();
-    private View no_data;
-   // private SpringView springView;
+    private View no_data, no_web;
+    /**
+     * 暂无数据!
+     */
+    private TextView tv_text;
+    private RelativeLayout layout_header;
+    // private SpringView springView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,7 +51,6 @@ public class ClientAccountActivity extends BaseActivity {
         initData();
 
     }
-
 
 
     private void initData() {
@@ -73,8 +75,9 @@ public class ClientAccountActivity extends BaseActivity {
                         recyclerView.setVisibility(View.VISIBLE);
                     } else {
                         no_data.setVisibility(View.VISIBLE);
+                        tv_text.setText("暂无优惠券");
                         recyclerView.setVisibility(View.GONE);
-                       // showToast(getString(R.string.load_list_erron));
+                        // showToast(getString(R.string.load_list_erron));
                     }
                 } else {
                     if (!TextUtils.isEmpty(baseModel.getMsg())) {
@@ -85,7 +88,21 @@ public class ClientAccountActivity extends BaseActivity {
         });
     }
 
+    @Override
+    public void onChangeListener(int status) {
+        super.onChangeListener(status);
+        if (status == -1) {
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.VISIBLE);
+        } else {
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.GONE);
+        }
+    }
+
+
     private void initView() {
+        no_web = findViewById(R.id.no_web);
         no_data = findViewById(R.id.no_data);
         ((TextView) findViewById(R.id.textHeadTitle)).setText("客户账户");
         findViewById(R.id.btnBack).setOnClickListener(new View.OnClickListener() {
@@ -105,5 +122,7 @@ public class ClientAccountActivity extends BaseActivity {
         recyclerView.addItemDecoration(new RecycleViewDivider(mContext, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
         addapter.setData(data, ClientAccountActivity.this, "3");
 
+        tv_text = (TextView) findViewById(R.id.tv_text);
+        layout_header = (RelativeLayout) findViewById(R.id.layout_header);
     }
 }

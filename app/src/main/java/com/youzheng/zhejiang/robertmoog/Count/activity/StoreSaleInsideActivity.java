@@ -87,7 +87,7 @@ public class StoreSaleInsideActivity extends BaseActivity implements View.OnClic
     private String startstr="";
     private String endstr="";
     private String orderCount,orderAmountCount,customerTransaction;
-    private View no_data;
+    private View no_data,no_web;
 
 
     @Override
@@ -149,7 +149,21 @@ public class StoreSaleInsideActivity extends BaseActivity implements View.OnClic
 
     }
 
+    @Override
+    public void onChangeListener(int status) {
+        super.onChangeListener(status);
+        if (status==-1){
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.VISIBLE);
+        }else {
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.GONE);
+        }
+    }
+
+
     private void initView() {
+        no_web = findViewById(R.id.no_web);
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);

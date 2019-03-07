@@ -11,21 +11,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.liaoinstan.springview.widget.SpringView;
-import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import com.youzheng.zhejiang.robertmoog.Base.BaseFragment;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
 import com.youzheng.zhejiang.robertmoog.Base.utils.MyConstant;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
 import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
+import com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.activity.GoodsDetailActivity;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.GoodsListAdapter;
 import com.youzheng.zhejiang.robertmoog.Store.bean.GoodsList;
 import com.youzheng.zhejiang.robertmoog.Store.listener.OnRecyclerViewAdapterItemClickListener;
-import com.youzheng.zhejiang.robertmoog.Store.view.RecycleViewDivider;
 import com.youzheng.zhejiang.robertmoog.utils.SharedPreferencesUtils;
 import com.youzheng.zhejiang.robertmoog.utils.View.MyFooter;
 import com.youzheng.zhejiang.robertmoog.utils.View.MyHeader;
@@ -47,8 +47,13 @@ public class GoodsFragment extends BaseFragment {
     private String sku;
     private int goodsId;
     private boolean isFirstLoad = false;
-    public  SpringView springView;
+    public SpringView springView;
     private View no_data;
+    /**
+     * 暂无数据!
+     */
+    private TextView tv_text;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -104,14 +109,14 @@ public class GoodsFragment extends BaseFragment {
             OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.GOODS_LIST + "?access_token=" + token, new OkHttpClientManager.StringCallback() {
                 @Override
                 public void onFailure(Request request, IOException e) {
-                   // pr_goods.setPullLoadMoreCompleted();
+                    // pr_goods.setPullLoadMoreCompleted();
                     springView.onFinishFreshAndLoad();
                 }
 
                 @Override
                 public void onResponse(String response) {
                     Log.e("商品列表", response);
-                   // pr_goods.setPullLoadMoreCompleted();
+                    // pr_goods.setPullLoadMoreCompleted();
                     springView.onFinishFreshAndLoad();
                     BaseModel baseModel = gson.fromJson(response, BaseModel.class);
                     if (baseModel.getCode() == PublicUtils.code) {
@@ -133,12 +138,19 @@ public class GoodsFragment extends BaseFragment {
             no_data.setVisibility(View.GONE);
             springView.setVisibility(View.VISIBLE);
         } else {
-            if (page==1&&TextUtils.isEmpty(sku)){
+            if (page == 1) {
                 no_data.setVisibility(View.VISIBLE);
+                tv_text.setText("暂无商品信息");
                 springView.setVisibility(View.GONE);
-            }else {
+            } else {
                 showToasts(getString(R.string.load_list_erron));
             }
+//            if (!TextUtils.isEmpty(sku)){
+//                no_data.setVisibility(View.VISIBLE);
+//                springView.setVisibility(View.GONE);
+//                tv_text.setText("未搜索到相关商品");
+//            }
+
         }
         //list=goodsList.getProductListDetailData();
 
@@ -146,12 +158,12 @@ public class GoodsFragment extends BaseFragment {
     }
 
     private void initView() {
-        no_data=view.findViewById(R.id.no_data);
+        no_data = view.findViewById(R.id.no_data);
         pr_goods = (RecyclerView) view.findViewById(R.id.pr_goods);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         pr_goods.setLayoutManager(manager);
         pr_goods.setAdapter(adapter);
-        pr_goods.addItemDecoration(new com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider(getActivity(), LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
+        pr_goods.addItemDecoration(new RecycleViewDivider(getActivity(), LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
 
 
         adapter = new GoodsListAdapter(list, getActivity());
@@ -174,6 +186,7 @@ public class GoodsFragment extends BaseFragment {
         springView = (SpringView) view.findViewById(R.id.springView);
         springView.setHeader(new MyHeader(getActivity()));
         springView.setFooter(new MyFooter(getActivity()));
+        tv_text = (TextView) view.findViewById(R.id.tv_text);
     }
 
     private void setListener() {
@@ -192,7 +205,6 @@ public class GoodsFragment extends BaseFragment {
 //                initData(page, pageSize);
 //            }
 //        });
-
 
 
         springView.setListener(new SpringView.OnFreshListener() {

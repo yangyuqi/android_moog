@@ -3,6 +3,7 @@ package com.youzheng.zhejiang.robertmoog.Store.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,19 +13,17 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.liaoinstan.springview.widget.SpringView;
-import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
 import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
+import com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.StoreCustomerAdapter;
 import com.youzheng.zhejiang.robertmoog.Store.bean.CustomerList;
 import com.youzheng.zhejiang.robertmoog.Store.listener.OnRecyclerViewAdapterItemClickListener;
-import com.youzheng.zhejiang.robertmoog.Store.view.RecycleViewDivider;
-import com.youzheng.zhejiang.robertmoog.utils.View.MyFooter;
-import com.youzheng.zhejiang.robertmoog.utils.View.MyHeader;
+import com.youzheng.zhejiang.robertmoog.utils.NetUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -56,8 +55,12 @@ public class StoreCustomerActivity extends BaseActivity implements View.OnClickL
     private int year;
     private Calendar calendar;
     private SpringView mSpringView;
-    private View no_data;
-
+    private View no_data,no_web;
+    /**
+     * 暂无数据!
+     */
+    private TextView tv_text;
+    private int netMobile;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +70,7 @@ public class StoreCustomerActivity extends BaseActivity implements View.OnClickL
         //获取系统的日期
         //年
         year = calendar.get(Calendar.YEAR);
-       // setListener();
+        // setListener();
         initData(year);
     }
 
@@ -122,7 +125,8 @@ public class StoreCustomerActivity extends BaseActivity implements View.OnClickL
 
 
     private void initView() {
-        no_data=findViewById(R.id.no_data);
+        no_data = findViewById(R.id.no_data);
+        no_web = findViewById(R.id.no_web);
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
@@ -135,18 +139,30 @@ public class StoreCustomerActivity extends BaseActivity implements View.OnClickL
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         lv_list.setLayoutManager(manager);
         lv_list.setAdapter(adapter);
-        lv_list.addItemDecoration(new com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider(StoreCustomerActivity.this, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
+        lv_list.addItemDecoration(new RecycleViewDivider(StoreCustomerActivity.this, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
 
         adapter = new StoreCustomerAdapter(list, this);
         lv_list.setAdapter(adapter);
         adapter.setOnItemClickListener(this);
 
 
-//        mSpringView = (SpringView) findViewById(R.id.springView);
-//
-//
-//        mSpringView.setHeader(new MyHeader(this));
-//        mSpringView.setFooter(new MyFooter(this));
+
+        tv_text = (TextView) findViewById(R.id.tv_text);
+    }
+
+
+
+    @Override
+    public void onChangeListener(int status) {
+        super.onChangeListener(status);
+        if (status==-1){
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.VISIBLE);
+        }else {
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.GONE);
+        }
+
     }
 
     @Override
@@ -196,22 +212,23 @@ public class StoreCustomerActivity extends BaseActivity implements View.OnClickL
         }
 
         List<CustomerList.CoustomerListBean> coustomerListBeans = customerList.getCoustomerList();
-        if (coustomerListBeans.size() != 0) {
-            list.addAll(coustomerListBeans);
-            adapter.setListRefreshUi(coustomerListBeans);
-            no_data.setVisibility(View.GONE);
-            lv_list.setVisibility(View.VISIBLE);
-        } else {
-            //showToast(getString(R.string.load_list_erron));
-
-            if (year == calendar.get(Calendar.YEAR)){
+        if (coustomerListBeans!=null){
+            if (coustomerListBeans.size() != 0) {
+                list.addAll(coustomerListBeans);
+                adapter.setListRefreshUi(coustomerListBeans);
+                no_data.setVisibility(View.GONE);
+                lv_list.setVisibility(View.VISIBLE);
+            } else {
                 no_data.setVisibility(View.VISIBLE);
+                tv_text.setText("暂无门店客户信息");
                 lv_list.setVisibility(View.GONE);
-            }else {
-                showToasts(getString(R.string.load_list_erron));
             }
-
+        }else {
+            no_data.setVisibility(View.VISIBLE);
+            tv_text.setText("暂无门店客户信息");
+            lv_list.setVisibility(View.GONE);
         }
+
 
 
     }

@@ -89,7 +89,7 @@ public class StoreSalesNumberActivity extends BaseActivity implements View.OnCli
     private String orderCount, orderAmountCount, customerTransaction;
     private String shopid;
     private SpringView springView;
-    private View no_data;
+    private View no_data,no_web;
     SimpleDateFormat dateFormater;
     Calendar cal;
     Date date;
@@ -161,8 +161,19 @@ public class StoreSalesNumberActivity extends BaseActivity implements View.OnCli
         super.onResume();
 
     }
-
+    @Override
+    public void onChangeListener(int status) {
+        super.onChangeListener(status);
+        if (status==-1){
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.VISIBLE);
+        }else {
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.GONE);
+        }
+    }
     private void initView() {
+        no_web = findViewById(R.id.no_web);
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
@@ -209,8 +220,8 @@ public class StoreSalesNumberActivity extends BaseActivity implements View.OnCli
         });
 
         springView = (SpringView) findViewById(R.id.springView);
-        springView.setHeader(new MyHeader(this));
-        springView.setFooter(new MyFooter(this));
+//        springView.setHeader(new MyHeader(this));
+//        springView.setFooter(new MyFooter(this));
         no_data=findViewById(R.id.no_data);
 
     }

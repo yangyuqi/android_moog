@@ -80,6 +80,7 @@
                 android:textColor="@color/text_drak_black"
                 android:textSize="13sp"
                 android:text="嘎嘎嘎"
+                android:visibility="invisible"
                 />
 
 

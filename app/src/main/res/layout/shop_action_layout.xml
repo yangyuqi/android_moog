@@ -11,8 +11,8 @@
     <include layout="@layout/layout_no_data"
         android:id="@+id/no_data"
         android:visibility="gone"/>
-    <include layout="@layout/layout_no_data"
-        android:id="@+id/no_data"
+    <include layout="@layout/layout_no_web"
+        android:id="@+id/no_web"
         android:visibility="gone"/>
     <com.liaoinstan.springview.widget.SpringView
         android:background="@color/bg_all"

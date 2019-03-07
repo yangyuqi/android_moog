@@ -187,7 +187,7 @@ public class StoreOrderlistDetailActivity extends BaseActivity implements View.O
     private LinearLayout lin_cuxiao;
     private LinearLayout lin_store;
     private LinearLayout lin_address;
-
+    private View no_data,no_web;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -197,8 +197,20 @@ public class StoreOrderlistDetailActivity extends BaseActivity implements View.O
         initView();
         initData(id);
     }
+    @Override
+    public void onChangeListener(int status) {
+        super.onChangeListener(status);
+        if (status==-1){
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.VISIBLE);
+        }else {
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.GONE);
+        }
+    }
 
     private void initView() {
+        no_web = findViewById(R.id.no_web);
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
@@ -389,11 +401,18 @@ public class StoreOrderlistDetailActivity extends BaseActivity implements View.O
             tv_get_state.setText(pickUpStatus);
         }
 
+          if (pickUpStatus.equals("全部已提")){
+              lin_send.setVisibility(View.GONE);
+          }else {
+              lin_send.setVisibility(View.VISIBLE);
+          }
+
         if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getShoppingMethod())) {
-            shoppingMethod = orderlistDetail.getOrderItemData().getShoppingMethod();
-            tv_dispatching_type.setText(shoppingMethod);
+           // shoppingMethod = orderlistDetail.getOrderItemData().getShoppingMethod();
+            tv_dispatching_type.setText(orderlistDetail.getOrderItemData().getShoppingMethod());
+            //lin_send.setVisibility(View.VISIBLE);
         } else {
-            lin_send.setVisibility(View.GONE);
+           // lin_send.setVisibility(View.GONE);
         }
 
         if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getPaymentMethod())) {

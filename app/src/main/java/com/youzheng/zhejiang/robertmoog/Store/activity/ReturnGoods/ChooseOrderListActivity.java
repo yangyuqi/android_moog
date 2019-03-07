@@ -10,16 +10,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.liaoinstan.springview.widget.SpringView;
-import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
 import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
+import com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.ChooseGoodsListAdapter;
 import com.youzheng.zhejiang.robertmoog.Store.bean.NewOrderListBean;
-import com.youzheng.zhejiang.robertmoog.Store.view.RecycleViewDivider;
 import com.youzheng.zhejiang.robertmoog.utils.View.MyFooter;
 import com.youzheng.zhejiang.robertmoog.utils.View.MyHeader;
 
@@ -59,13 +58,18 @@ public class ChooseOrderListActivity extends BaseActivity implements View.OnClic
     //  private String type="ALL";//订单类型（ALL:全部，GROOM:推荐订单，MAJOR:专业）默认是全部
     public static ChooseOrderListActivity Instance;
     private View no_data;
+    /**
+     * 暂无数据!
+     */
+    private TextView tv_text;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_order_list);
         isCustomer = getIntent().getBooleanExtra("identifion", false);
         customerId = getIntent().getStringExtra("customerId");
-        Instance=this;
+        Instance = this;
         initView();
         setListener();
 
@@ -117,7 +121,7 @@ public class ChooseOrderListActivity extends BaseActivity implements View.OnClic
     }
 
     private void initView() {
-        no_data=findViewById(R.id.no_data);
+        no_data = findViewById(R.id.no_data);
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
@@ -129,7 +133,7 @@ public class ChooseOrderListActivity extends BaseActivity implements View.OnClic
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         pr_list.setLayoutManager(manager);
         pr_list.setAdapter(adapter);
-        pr_list.addItemDecoration(new com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider(ChooseOrderListActivity.this, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
+        pr_list.addItemDecoration(new RecycleViewDivider(ChooseOrderListActivity.this, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
 
         adapter = new ChooseGoodsListAdapter(list, this);
         pr_list.setAdapter(adapter);
@@ -138,6 +142,7 @@ public class ChooseOrderListActivity extends BaseActivity implements View.OnClic
         mSpringView = (SpringView) findViewById(R.id.springView);
         mSpringView.setHeader(new MyHeader(this));
         mSpringView.setFooter(new MyFooter(this));
+        tv_text = (TextView) findViewById(R.id.tv_text);
     }
 
     private void initData(int page, int pageSize, String orderCode, String timeQuantum, Boolean isCustomer) {
@@ -155,7 +160,7 @@ public class ChooseOrderListActivity extends BaseActivity implements View.OnClic
         OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.ORDERLIST_LIST + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
             public void onFailure(Request request, IOException e) {
-               // pr_list.setPullLoadMoreCompleted();
+                // pr_list.setPullLoadMoreCompleted();
                 mSpringView.onFinishFreshAndLoad();
             }
 
@@ -190,10 +195,11 @@ public class ChooseOrderListActivity extends BaseActivity implements View.OnClic
             no_data.setVisibility(View.GONE);
             mSpringView.setVisibility(View.VISIBLE);
         } else {
-            if (page==1){
+            if (page == 1) {
                 no_data.setVisibility(View.VISIBLE);
+                tv_text.setText("暂无可退订单");
                 mSpringView.setVisibility(View.GONE);
-            }else {
+            } else {
                 showToasts(getString(R.string.load_list_erron));
             }
         }

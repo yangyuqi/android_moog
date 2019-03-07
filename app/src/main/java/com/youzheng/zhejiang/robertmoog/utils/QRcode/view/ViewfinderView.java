@@ -30,7 +30,7 @@ import java.util.List;
 public final class ViewfinderView extends View {
 
     /*界面刷新间隔时间*/
-    private static final long ANIMATION_DELAY = 10L;
+    public static final long ANIMATION_DELAY = 10L;
     private static final int CURRENT_POINT_OPACITY = 0xA0;
     private static final int MAX_RESULT_POINTS = 20;
     private static final int POINT_SIZE = 6;
@@ -54,6 +54,7 @@ public final class ViewfinderView extends View {
     private ZxingConfig config;
     private ValueAnimator valueAnimator;
     private Rect frame;
+
 
 
     public ViewfinderView(Context context) {
@@ -146,6 +147,11 @@ public final class ViewfinderView extends View {
         }
 
 
+    }
+
+    public void stopAni(){
+        valueAnimator = ValueAnimator.ofInt(frame.top, frame.bottom);
+        valueAnimator.end();
     }
 
     public void setCameraManager(CameraManager cameraManager) {

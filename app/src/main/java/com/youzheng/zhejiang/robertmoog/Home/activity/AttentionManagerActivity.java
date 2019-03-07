@@ -15,6 +15,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.liaoinstan.springview.widget.SpringView;
@@ -65,8 +66,14 @@ public class AttentionManagerActivity extends BaseActivity implements MangerList
     ImageView iv_search;
     SpringView springView;
     private ImageView iv_clear;
-    private View no_data;
+    private View no_data, no_web;
     private int tabpos;
+    /**
+     * 暂无数据!
+     */
+    private TextView tv_text;
+    private RelativeLayout layout_header;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,11 +94,11 @@ public class AttentionManagerActivity extends BaseActivity implements MangerList
     protected void onResume() {
         super.onResume();
 
-        if (tabpos==0){
+        if (tabpos == 0) {
             tabLayout.getTabAt(0).select();
             data.clear();
             initData();
-        }else {
+        } else {
             tabLayout.getTabAt(1).select();
             da_list.clear();
             refreshData();
@@ -109,11 +116,11 @@ public class AttentionManagerActivity extends BaseActivity implements MangerList
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                tabpos=tab.getPosition();
+                tabpos = tab.getPosition();
                 if (tab.getPosition() == 0) {
                     springView.setVisibility(View.VISIBLE);
                     ls.setVisibility(View.GONE);
-                    // findViewById(R.id.rl_search).setVisibility(View.VISIBLE);
+                    findViewById(R.id.rl_search).setVisibility(View.VISIBLE);
                     initData();
                 } else if (tab.getPosition() == 1) {
                     springView.setVisibility(View.GONE);
@@ -166,13 +173,14 @@ public class AttentionManagerActivity extends BaseActivity implements MangerList
                 BaseModel baseModel = gson.fromJson(response, BaseModel.class);
                 if (baseModel.getCode() == PublicUtils.code) {
                     NotLabelList list = gson.fromJson(gson.toJson(baseModel.getDatas()), NotLabelList.class);
-                    if (list.getNotLabelList().size()!=0){
+                    if (list.getNotLabelList().size() != 0) {
                         com_adapter.setData(list.getNotLabelList());
                         com_adapter.notifyDataSetChanged();
                         no_data.setVisibility(View.GONE);
                         ls.setVisibility(View.VISIBLE);
-                    }else {
+                    } else {
                         no_data.setVisibility(View.VISIBLE);
+                        tv_text.setText("暂无未标记客户");
                         ls.setVisibility(View.GONE);
                     }
 
@@ -227,12 +235,20 @@ public class AttentionManagerActivity extends BaseActivity implements MangerList
                         springView.setVisibility(View.VISIBLE);
                         findViewById(R.id.rl_search).setVisibility(View.VISIBLE);
                     } else {
-                        if (pageNum==1&&TextUtils.isEmpty(tv_search.getText().toString())){
+                        if (pageNum == 1) {
                             no_data.setVisibility(View.VISIBLE);
+                            tv_text.setText("暂无意向信息");
                             springView.setVisibility(View.GONE);
-                            findViewById(R.id.rl_search).setVisibility(View.GONE);
-                        }else {
+//                            findViewById(R.id.rl_search).setVisibility(View.GONE);
+                        } else {
                             showToasts(getString(R.string.load_list_erron));
+                        }
+
+
+                        if (!TextUtils.isEmpty(tv_search.getText().toString())) {
+                            no_data.setVisibility(View.VISIBLE);
+                            tv_text.setText("未搜索到该用户信息");
+                            springView.setVisibility(View.GONE);
                         }
 
                         //adapter.setData(new ArrayList<CustomerIntentListBean>(), mContext);
@@ -242,8 +258,21 @@ public class AttentionManagerActivity extends BaseActivity implements MangerList
         });
     }
 
+    @Override
+    public void onChangeListener(int status) {
+        super.onChangeListener(status);
+        if (status == -1) {
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.VISIBLE);
+        } else {
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.GONE);
+        }
+    }
+
     private void initView() {
-        no_data=findViewById(R.id.no_data);
+        no_web = findViewById(R.id.no_web);
+        no_data = findViewById(R.id.no_data);
         listBean = (ShopPersonalListBean) getIntent().getSerializableExtra("label");
         if (listBean != null) {
             personalId = listBean.getId();
@@ -325,6 +354,8 @@ public class AttentionManagerActivity extends BaseActivity implements MangerList
                 tv_search.setText("");
             }
         });
+        tv_text = (TextView) findViewById(R.id.tv_text);
+        layout_header = (RelativeLayout) findViewById(R.id.layout_header);
     }
 
     @Subscribe
@@ -346,18 +377,19 @@ public class AttentionManagerActivity extends BaseActivity implements MangerList
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
         if (tv_search.length() == 0) {
             iv_clear.setVisibility(View.GONE);
             data.clear();
             phone = "";
             initData();
-        }else {
+            no_data.setVisibility(View.GONE);
+        } else {
             iv_clear.setVisibility(View.VISIBLE);
         }
-    }
-
-    @Override
-    public void afterTextChanged(Editable s) {
-
     }
 }

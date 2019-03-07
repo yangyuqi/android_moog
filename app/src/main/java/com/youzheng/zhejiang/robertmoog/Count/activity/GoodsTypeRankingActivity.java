@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -24,7 +25,6 @@ import com.bigkoo.pickerview.listener.CustomListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.liaoinstan.springview.widget.SpringView;
-import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
@@ -32,10 +32,10 @@ import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
 import com.youzheng.zhejiang.robertmoog.Count.adapter.CheckRuleAdapter;
 import com.youzheng.zhejiang.robertmoog.Count.adapter.GoodsTypeRankingAdapter;
 import com.youzheng.zhejiang.robertmoog.Count.bean.GoodsTypeRankingList;
+import com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.listener.OnRecyclerViewAdapterItemClickListener;
-import com.youzheng.zhejiang.robertmoog.Store.view.RecycleViewDivider;
 import com.youzheng.zhejiang.robertmoog.utils.View.MyFooter;
 import com.youzheng.zhejiang.robertmoog.utils.View.MyHeader;
 
@@ -98,10 +98,12 @@ public class GoodsTypeRankingActivity extends BaseActivity implements View.OnCli
     private String rulestr = "COUNT";//默认是数量
     private String type = "";
     private SpringView mSpringView;
-    private View no_data;
+    private View no_data,no_web;
     SimpleDateFormat dateFormater;
     Calendar cal;
     Date date;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,32 +111,23 @@ public class GoodsTypeRankingActivity extends BaseActivity implements View.OnCli
         initView();
         setListener();
         initTimer();
-         dateFormater = new SimpleDateFormat("yyyy/MM/dd");
-         cal = Calendar.getInstance();
+        dateFormater = new SimpleDateFormat("yyyy/MM/dd");
+        cal = Calendar.getInstance();
         cal.set(Calendar.DAY_OF_MONTH, 1);
         cal.getTime();
         tv_startDate.setText(dateFormater.format(cal.getTime()) + "");
         startstr = dateFormater.format(cal.getTime()) + "";
         cal.set(Calendar.DAY_OF_MONTH,
                 cal.getActualMaximum(Calendar.DAY_OF_MONTH));
-         date = new Date(System.currentTimeMillis());
+        date = new Date(System.currentTimeMillis());
 
         tv_endDate.setText(dateFormater.format(date));
         endstr = dateFormater.format(date);
         initData(page, pageSize, isDay, startstr, endstr, rulestr);
     }
-    public void backgroundAlpha(float bgAlpha)
-    {
-        WindowManager.LayoutParams lp = getWindow().getAttributes();
-        lp.alpha = bgAlpha; //0.0-1.0
-        lp.dimAmount = bgAlpha;//设置灰度
-        if (bgAlpha == 1) {
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);//不移除该Flag的话,在有视频的页面上的视频会出现黑屏的bug
-        } else {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);//此行代码主要是解决在华为 红米米手机上半透明效果无效的bug
-        }
-        getWindow().setAttributes(lp);
-    }
+
+
+
     private void setListener() {
 //        pr_list.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
 //            @Override
@@ -175,8 +168,19 @@ public class GoodsTypeRankingActivity extends BaseActivity implements View.OnCli
         super.onResume();
 
     }
-
+    @Override
+    public void onChangeListener(int status) {
+        super.onChangeListener(status);
+        if (status==-1){
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.VISIBLE);
+        }else {
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.GONE);
+        }
+    }
     private void initView() {
+        no_web = findViewById(R.id.no_web);
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
@@ -200,7 +204,7 @@ public class GoodsTypeRankingActivity extends BaseActivity implements View.OnCli
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         pr_list.setLayoutManager(manager);
         pr_list.setAdapter(adapter);
-        pr_list.addItemDecoration(new com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider(GoodsTypeRankingActivity.this, LinearLayoutManager.VERTICAL, 5, getResources().getColor(R.color.bg_all)));
+        pr_list.addItemDecoration(new RecycleViewDivider(GoodsTypeRankingActivity.this, LinearLayoutManager.VERTICAL, 5, getResources().getColor(R.color.bg_all)));
 
 
         adapter = new GoodsTypeRankingAdapter(list, this);
@@ -218,8 +222,8 @@ public class GoodsTypeRankingActivity extends BaseActivity implements View.OnCli
                 Intent intent = new Intent(GoodsTypeRankingActivity.this, GoodsTypeRankingDetailActivity.class);
                 intent.putExtra("type", type);
                 intent.putExtra("goodsId", list.get(position).getId());
-                intent.putExtra("startdate",startstr);
-                intent.putExtra("enddate",endstr);
+                intent.putExtra("startdate", startstr);
+                intent.putExtra("enddate", endstr);
                 startActivity(intent);
 
             }
@@ -234,7 +238,9 @@ public class GoodsTypeRankingActivity extends BaseActivity implements View.OnCli
 
         mSpringView.setHeader(new MyHeader(this));
         mSpringView.setFooter(new MyFooter(this));
-        no_data=findViewById(R.id.no_data);
+        no_data = findViewById(R.id.no_data);
+
+
     }
 
     private void initData(int page, int pageSize, boolean isDay, String startDate, String endDate, String rule) {
@@ -249,7 +255,7 @@ public class GoodsTypeRankingActivity extends BaseActivity implements View.OnCli
         OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.GOODS_TYPE_RANKING_LIST + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
             public void onFailure(Request request, IOException e) {
-               // pr_list.setPullLoadMoreCompleted();
+                // pr_list.setPullLoadMoreCompleted();
                 mSpringView.onFinishFreshAndLoad();
             }
 
@@ -282,10 +288,10 @@ public class GoodsTypeRankingActivity extends BaseActivity implements View.OnCli
             no_data.setVisibility(View.GONE);
             mSpringView.setVisibility(View.VISIBLE);
         } else {
-            if (page==1){
+            if (page == 1) {
                 no_data.setVisibility(View.VISIBLE);
                 mSpringView.setVisibility(View.GONE);
-            }else {
+            } else {
                 showToasts(getString(R.string.load_list_erron));
             }
 
@@ -322,10 +328,13 @@ public class GoodsTypeRankingActivity extends BaseActivity implements View.OnCli
                     showPopuWindow(1);
                 }
                 break;
+
         }
     }
 
     private void showPopuWindow(int who) {
+
+
         View inflate = getLayoutInflater().inflate(R.layout.popuwindow_rule, null);
         listView = inflate.findViewById(R.id.lv_list);
         List<String> lists = new ArrayList<>();
@@ -361,17 +370,22 @@ public class GoodsTypeRankingActivity extends BaseActivity implements View.OnCli
                 window.dismiss();
             }
         });
+
+
         window = new PopupWindow(inflate, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, true);
         window.setAnimationStyle(R.style.ActionDialogStyle);
         iv_more.setImageResource(R.mipmap.group_12_3);
-        window.setBackgroundDrawable(getDrawable());
-        //backgroundAlpha(0.5f);
-//        pr_list.setBackgroundColor(getResources().getColor(R.color.contents_text));
-//        pr_list.setAlpha(0.5f);
 
-        mSpringView.setBackgroundColor(getResources().getColor(R.color.contents_text));
-        mSpringView.setAlpha(0.5f);
-         pr_list.setVisibility(View.GONE);
+        mSpringView.setBackgroundColor(getResources().getColor(R.color.text_drak_gray));
+
+        mSpringView.setAlpha(0.35f);
+
+
+        window.setBackgroundDrawable(getDrawable());
+
+
+
+
 
         window.setOnDismissListener(new poponDismissListener());
         window.setTouchable(true); // 设置popupwindow可点击
@@ -380,18 +394,34 @@ public class GoodsTypeRankingActivity extends BaseActivity implements View.OnCli
         window.update();
 
     }
-    class poponDismissListener implements PopupWindow.OnDismissListener{
+    public void backgroundAlpha(float bgAlpha) {
+
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.alpha = bgAlpha; //0.0-1.0
+        lp.dimAmount = bgAlpha;//设置灰度
+        if (bgAlpha == 1) {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);//不移除该Flag的话,在有视频的页面上的视频会出现黑屏的bug
+        } else {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);//此行代码主要是解决在华为 红米米手机上半透明效果无效的bug
+        }
+        getWindow().setAttributes(lp);
+    }
+    class poponDismissListener implements PopupWindow.OnDismissListener {
         @Override
         public void onDismiss() {
             // TODO Auto-generated method stub
             //Log.v("List_noteTypeActivity:", "我是关闭事件");
-//            pr_list.setBackgroundColor(getResources().getColor(R.color.bg_background_white));
-//            pr_list.setAlpha(1f);
-            iv_more.setImageResource(R.mipmap.group_14_1);
-            pr_list.setVisibility(View.VISIBLE);
             mSpringView.setBackgroundColor(getResources().getColor(R.color.bg_background_white));
             mSpringView.setAlpha(1f);
-          //  backgroundAlpha(1f);
+            iv_more.setImageResource(R.mipmap.group_14_1);
+            // pr_list.setVisibility(View.VISIBLE);
+
+//            layout_header.setAlpha(1f);
+//            lin_search.setAlpha(1f);
+//            lin_title.setAlpha(1f);
+//            view.setBackgroundColor(getResources().getColor(R.color.bg_background_white));
+//            view.setAlpha(1f);
+//              backgroundAlpha(1f);
         }
     }
 
@@ -402,7 +432,7 @@ public class GoodsTypeRankingActivity extends BaseActivity implements View.OnCli
      */
     private Drawable getDrawable() {
         ShapeDrawable bgdrawable = new ShapeDrawable(new OvalShape());
-        bgdrawable.getPaint().setColor(this.getResources().getColor(android.R.color.transparent));
+        bgdrawable.getPaint().setColor(this.getResources().getColor(R.color.transparent));
         return bgdrawable;
     }
 

@@ -38,7 +38,7 @@ public class ProfessionalCustomerOrderActivity extends BaseActivity implements V
     private ViewPager pager;
     private List<Fragment> list=new ArrayList<>();
     private ProfessionalCustomerPagerAdapter pagerAdapter;
-
+    private View no_data,no_web;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +48,8 @@ public class ProfessionalCustomerOrderActivity extends BaseActivity implements V
     }
 
     private void initView() {
+
+        no_web = findViewById(R.id.no_web);
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
@@ -58,6 +60,17 @@ public class ProfessionalCustomerOrderActivity extends BaseActivity implements V
         tab = (TabLayout) findViewById(R.id.tab);
         pager = (ViewPager) findViewById(R.id.pager);
         initPager();
+    }
+    @Override
+    public void onChangeListener(int status) {
+        super.onChangeListener(status);
+        if (status==-1){
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.VISIBLE);
+        }else {
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.GONE);
+        }
     }
 
     private void initPager() {

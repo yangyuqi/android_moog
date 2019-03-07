@@ -9,7 +9,9 @@
     tools:context=".Store.activity.StoreCustomerInsideActivity">
 
     <include layout="@layout/title_bar"/>
-
+    <include layout="@layout/layout_no_web"
+        android:id="@+id/no_web"
+        android:visibility="gone"/>
     <include layout="@layout/layout_no_data"
         android:id="@+id/no_data"
         android:visibility="gone"/>

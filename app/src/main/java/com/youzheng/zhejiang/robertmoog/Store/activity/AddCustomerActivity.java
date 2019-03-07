@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -65,6 +66,7 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
     private List<String> list=new ArrayList<>();
     private String phone,name,id;
     private LinearLayout lin_show;
+    private List<EnumsDatasBeanDatas> list1=new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +75,10 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
         initGetDate();
     }
 
+    @Override
+    public void getTextStr(String str,String title,int position) {
 
+    }
     private void initGetDate() {
         OkHttpClientManager.postAsynJson(gson.toJson(new HashMap<>()), UrlUtils.LIST_DATA+"?access_token="+access_token, new OkHttpClientManager.StringCallback() {
             @Override
@@ -87,23 +92,25 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
                 BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                 if (baseModel.getCode()==PublicUtils.code){
                     EnumsDatas enumsDatas = gson.fromJson(gson.toJson(baseModel.getDatas()),EnumsDatas.class);
-                    if (enumsDatas.getEnums().size()>0){
-                        for (final EnumsDatasBean bean : enumsDatas.getEnums()){
-                            if (bean.getClassName().equals("SpecialtyType")){//  TimeQuantum
+                    if (enumsDatas.getEnums()!=null){
+                        if (enumsDatas.getEnums().size()>0){
+                            for (final EnumsDatasBean bean : enumsDatas.getEnums()){
+                                if (!TextUtils.isEmpty(bean.getClassName())){
+                                    if (bean.getClassName().equals("SpecialtyType")){//  TimeQuantum
 //                                final List<String> date = new ArrayList<String>();
-                                List<EnumsDatasBeanDatas> list1=new ArrayList<>();
-                                for (int i = 0; i < bean.getDatas().size(); i++) {
-                                    list1.add(bean.getDatas().get(i));
-                                    list.add(bean.getDatas().get(i).getDes());
+                                        list1=new ArrayList<>();
+                                        for (int i = 0; i < bean.getDatas().size(); i++) {
+                                            list1.add(bean.getDatas().get(i));
+                                            list.add(bean.getDatas().get(i).getDes());
+                                        }
+
+                                    }
                                 }
 
                             }
                         }
-
-
-
-
                     }
+
 
                 }
             }
@@ -154,12 +161,17 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
                 finish();
                 break;
             case R.id.lin_degree:
-//                list.clear();
-//                list.add(getString(R.string.gong_zhang));
-//                list.add(getString(R.string.desinger));
-                //SingleOptionsPicker.tv_choose_degree.setText("选择身份");
-                SingleOptionsPicker.openOptionsPicker(this, list, tv_degree,getString(R.string.choose_rule),this);
-                SoftInputUtils.hideSoftInput(this);
+                 if (list!=null){
+                     if (list.size()!=0){
+                         SingleOptionsPicker.openOptionsPicker(this, list, tv_degree,getString(R.string.choose_rule),this);
+                         SoftInputUtils.hideSoftInput(this);
+                     }else {
+                         showToasts("暂无数据");
+                     }
+                 }else {
+                     showToasts("暂无数据");
+                 }
+
                 break;
             case R.id.tv_add:
                 phone=edt_phone.getText().toString().trim();
@@ -227,8 +239,5 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
 
 
 
-    @Override
-    public void getTextStr(String str,String title) {
 
-    }
 }

@@ -400,10 +400,12 @@
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
-        <activity android:name=".Home.activity.VipAttentionMangerActivity"
+        <activity
+            android:name=".Home.activity.VipAttentionMangerActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" ></activity>
+            android:screenOrientation="portrait" />
+        <activity android:name=".Home.activity.LeadActivity"></activity>
     </application>
 
 </manifest>

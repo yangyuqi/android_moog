@@ -11,16 +11,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.liaoinstan.springview.widget.SpringView;
-import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
 import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
+import com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.ProfessionalCustomerAdapter;
 import com.youzheng.zhejiang.robertmoog.Store.bean.ProfessionalCustomerList;
-import com.youzheng.zhejiang.robertmoog.Store.view.RecycleViewDivider;
 import com.youzheng.zhejiang.robertmoog.utils.View.MyFooter;
 import com.youzheng.zhejiang.robertmoog.utils.View.MyHeader;
 
@@ -53,7 +52,12 @@ public class ProfessionalCustomerActivity extends BaseActivity implements View.O
     private int page = 1;
     private int pageSize = 10;
     private SpringView springView;
-    private View no_data;
+    private View no_data,no_web;
+    /**
+     * 暂无数据!
+     */
+    private TextView tv_text;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,10 +109,20 @@ public class ProfessionalCustomerActivity extends BaseActivity implements View.O
         });
 
     }
-
+    @Override
+    public void onChangeListener(int status) {
+        super.onChangeListener(status);
+        if (status==-1){
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.VISIBLE);
+        }else {
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.GONE);
+        }
+    }
     private void initView() {
-
-        no_data=findViewById(R.id.no_data);
+        no_web = findViewById(R.id.no_web);
+        no_data = findViewById(R.id.no_data);
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
@@ -126,7 +140,7 @@ public class ProfessionalCustomerActivity extends BaseActivity implements View.O
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         lv_list.setLayoutManager(manager);
         lv_list.setAdapter(adapter);
-        lv_list.addItemDecoration(new com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider(ProfessionalCustomerActivity.this, LinearLayoutManager.VERTICAL, 5, getResources().getColor(R.color.bg_all)));
+        lv_list.addItemDecoration(new RecycleViewDivider(ProfessionalCustomerActivity.this, LinearLayoutManager.VERTICAL, 5, getResources().getColor(R.color.bg_all)));
 
         adapter = new ProfessionalCustomerAdapter(list, this);
         lv_list.setAdapter(adapter);
@@ -135,6 +149,7 @@ public class ProfessionalCustomerActivity extends BaseActivity implements View.O
         springView = (SpringView) findViewById(R.id.springView);
         springView.setHeader(new MyHeader(this));
         springView.setFooter(new MyFooter(this));
+        tv_text = (TextView) findViewById(R.id.tv_text);
     }
 
     private void initData(int page, int pageSize) {
@@ -147,7 +162,7 @@ public class ProfessionalCustomerActivity extends BaseActivity implements View.O
         OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.PROFESSIONAL_CUSTOMER_LIST + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
             public void onFailure(Request request, IOException e) {
-               // lv_list.setPullLoadMoreCompleted();
+                // lv_list.setPullLoadMoreCompleted();
                 springView.onFinishFreshAndLoad();
 
             }
@@ -155,7 +170,7 @@ public class ProfessionalCustomerActivity extends BaseActivity implements View.O
             @Override
             public void onResponse(String response) {
                 Log.e("专业客户列表", response);
-               // lv_list.setPullLoadMoreCompleted();
+                // lv_list.setPullLoadMoreCompleted();
                 springView.onFinishFreshAndLoad();
                 BaseModel baseModel = gson.fromJson(response, BaseModel.class);
                 if (baseModel.getCode() == PublicUtils.code) {
@@ -184,10 +199,11 @@ public class ProfessionalCustomerActivity extends BaseActivity implements View.O
             no_data.setVisibility(View.GONE);
             springView.setVisibility(View.VISIBLE);
         } else {
-            if (page==1){
+            if (page == 1) {
                 no_data.setVisibility(View.VISIBLE);
+                tv_text.setText("暂无专业客户信息");
                 springView.setVisibility(View.GONE);
-            }else {
+            } else {
                 showToasts(getString(R.string.load_list_erron));
             }
         }

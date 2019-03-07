@@ -7,7 +7,9 @@
     android:layout_height="match_parent">
 
     <include layout="@layout/title_bar" />
-
+    <include layout="@layout/layout_no_web"
+        android:id="@+id/no_web"
+        android:visibility="gone"/>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="45dp"
@@ -100,17 +102,16 @@
     <com.liaoinstan.springview.widget.SpringView
         android:background="@color/bg_all"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         app:type="follow"
         android:id="@+id/sv"
-        app:footer="@layout/default_footer"
-        app:header="@layout/default_header"
         >
 
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:divider="@color/bg_all"
+        android:background="@color/bg_background_white"
         android:dividerHeight="@dimen/space_10"
         android:id="@+id/ls"
         ></ListView>

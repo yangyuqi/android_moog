@@ -46,7 +46,7 @@ public class CheckStoreDetailActivity extends BaseActivity implements View.OnCli
     private List<CheckStoreDetail.PatrolShopDetailBean> list=new ArrayList<>();
     private CheckStoreDetailAdapter adapter;
     private int checkid;
-    private View no_data;
+    private View no_data,no_web;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +56,7 @@ public class CheckStoreDetailActivity extends BaseActivity implements View.OnCli
     }
 
     private void initView() {
+        no_web = findViewById(R.id.no_web);
         no_data=findViewById(R.id.no_data);
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
@@ -74,7 +75,17 @@ public class CheckStoreDetailActivity extends BaseActivity implements View.OnCli
         initData();
 
     }
-
+    @Override
+    public void onChangeListener(int status) {
+        super.onChangeListener(status);
+        if (status==-1){
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.VISIBLE);
+        }else {
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.GONE);
+        }
+    }
     private void initData() {
         HashMap<String,Object> map=new HashMap<>();
         map.put("patrolShopId",checkid);

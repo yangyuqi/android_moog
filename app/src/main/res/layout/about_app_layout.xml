@@ -7,7 +7,9 @@
     android:layout_height="match_parent">
 
     <include layout="@layout/title_bar"/>
-
+    <include layout="@layout/layout_no_web"
+        android:id="@+id/no_web"
+        android:visibility="gone"/>
     <WebView
         android:id="@+id/wv_web"
         android:layout_width="match_parent"

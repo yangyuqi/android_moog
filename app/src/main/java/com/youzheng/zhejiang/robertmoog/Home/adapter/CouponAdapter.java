@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,12 +31,15 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.CouponView
     Context context ;
     String type ;//1使用 2未使用 3.账户
 
+    String assid;
     public void setData(ArrayList<CouponListBean> useCouponList , Context context ,String type){
         this.useCouponList = useCouponList ;
         this.context = context;
         this.type = type ;
         notifyDataSetChanged();
     }
+
+
 
 
     @NonNull
@@ -51,6 +55,7 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.CouponView
         if (type.equals("1")){
             couponViewHolder.cb.setVisibility(View.VISIBLE);
 
+
             couponViewHolder.lin_up.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -58,10 +63,14 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.CouponView
                         if (bean.getAssetId().equals(useCouponList.get(i).getAssetId())){
                             if (bean.isClick()){
                                 bean.setClick(false);
+                                Log.e("1111","未选中111-------------"+i);
                             }else {
                                 bean.setClick(true);
+                                Log.e("1111","选中222-------------"+i);
+
                             }
                         }else {
+                            Log.e("1111","未选中333-------------"+i);
                             bean.setClick(false);
                         }
                     }
@@ -113,10 +122,14 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.CouponView
             couponViewHolder.rl_bg.setBackgroundResource(R.mipmap.group_24_5);
         }
 
+
+
         if (useCouponList.get(i).isClick()){
+            Log.e("1111","选中-------------"+i);
             couponViewHolder.cb.setImageResource(R.mipmap.group_24_1);
         }else {
             couponViewHolder.cb.setImageResource(R.mipmap.group_24_2);
+            Log.e("1111","未选中-------------"+i);
         }
 
         if (useCouponList.get(i).getShopList().size()>0){

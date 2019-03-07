@@ -48,6 +48,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private Context context ;
     private int widWidth ;
     private String type = "";//1表示搜索  2.表示扫一扫  3.表示卖货  4.表示意向商品
+    int count=1;
 
     public void setDate(ArrayList<ScanDatasBean> objects , Context context ,String type ,int widWidth) {
         this.objects = objects;
@@ -114,19 +115,47 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 ((CommonGoodsViewHolder) holder).tv_confirm.setVisibility(View.GONE);
                 ((CommonGoodsViewHolder) holder).ll_num.setVisibility(View.VISIBLE);
                 ((CommonGoodsViewHolder) holder).tv_get_num.setVisibility(View.GONE);
-                if (objects.get(position).getNum()==999){
-                    ((CommonGoodsViewHolder) holder).tv_add.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
-                }else {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        ((CommonGoodsViewHolder) holder).tv_add.setBackground(context.getDrawable(R.drawable.bg_order));
-                    }
-                }
+
+                ((CommonGoodsViewHolder) holder).tv_specail.setVisibility(View.GONE);
+
+
+
+                   // Log.e("13123123",objects.get(position).getSquare()+""+objects.get(position).getSquare__suffix()+"11111111");
                 if (objects.get(position).isSpecial()) {
-                    ((CommonGoodsViewHolder) holder).tv_specail.setVisibility(View.VISIBLE);
-                    Log.e("13123123",objects.get(position).getSquare()+""+objects.get(position).getSquare__suffix()+"11111111");
-                    ((CommonGoodsViewHolder) holder).tv_specail.setText(""+objects.get(position).getSquare() + objects.get(position).getSquare__suffix());
-                    ((CommonGoodsViewHolder) holder).edt_num.setText(""+objects.get(position).getSquare_num());
+
+
+                    BigDecimal b = new BigDecimal(objects.get(position).getMinNum());
+                    //保留5位并且属于四舍五入类型，当然这里的四舍五入没有任何意义，可以选择其他类型。
+                    String str=  b.setScale(3, BigDecimal.ROUND_HALF_UP).toString();
+                    ((CommonGoodsViewHolder) holder).tv_specail.setVisibility(View.GONE);
+                    Log.e("最小",objects.get(position).getMinNum()+"---------"+str);
+                    //String minNum=objects.get(position).getMinNum();
+                    if (count==1){
+                        objects.get(position).setSquare(objects.get(position).getMinNum());
+                        objects.get(position).setSquare_num(objects.get(position).getMinNum());
+                    }
+
+                    if (objects.get(position).getSquare_num().equals("999.999")){
+                        ((CommonGoodsViewHolder) holder).tv_add.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
+                    }else {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            ((CommonGoodsViewHolder) holder).tv_add.setBackground(context.getDrawable(R.drawable.bg_order));
+                        }
+                    }
+
+                    ((CommonGoodsViewHolder) holder).tv_specail.setText(objects.get(position).getSquare() + objects.get(position).getSquare__suffix());
+                    ((CommonGoodsViewHolder) holder).edt_num.setText(objects.get(position).getSquare_num());
+
+//                    ((CommonGoodsViewHolder) holder).tv_specail.setText(""+objects.get(position).getSquare() + objects.get(position).getSquare__suffix());
+//                    ((CommonGoodsViewHolder) holder).edt_num.setText(""+objects.get(position).getSquare_num());
                 }else {
+                    if (objects.get(position).getNum()==999){
+                        ((CommonGoodsViewHolder) holder).tv_add.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
+                    }else {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            ((CommonGoodsViewHolder) holder).tv_add.setBackground(context.getDrawable(R.drawable.bg_order));
+                        }
+                    }
                     ((CommonGoodsViewHolder) holder).tv_specail.setVisibility(View.GONE);
                     ((CommonGoodsViewHolder) holder).edt_num.setText(""+objects.get(position).getNum());
                 }
@@ -163,7 +192,11 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     ((CommonGoodsViewHolder) holder).edt_num.setText(""+objects.get(position).getNum());
                     ((CommonGoodsViewHolder) holder).tv_specail.setVisibility(View.VISIBLE);
                     Log.e("13123123",objects.get(position).getSquare()+""+objects.get(position).getSquare__suffix()+"222222");
-                    ((CommonGoodsViewHolder) holder).tv_specail.setText(""+objects.get(position).getSquare()+objects.get(position).getSquare__suffix());
+
+                    BigDecimal b = new BigDecimal(objects.get(position).getSquare());
+                    //保留5位并且属于四舍五入类型，当然这里的四舍五入没有任何意义，可以选择其他类型。
+                    String str1=  b.setScale(3, BigDecimal.ROUND_HALF_UP).toString();
+                    ((CommonGoodsViewHolder) holder).tv_specail.setText(""+str1+objects.get(position).getSquare__suffix());
                     if (TextUtils.isEmpty(objects.get(position).getCodePU())){
                         ((CommonGoodsViewHolder) holder).tv_add_code.setVisibility(View.VISIBLE);
                         ((CommonGoodsViewHolder) holder).tv_pu_code.setVisibility(View.GONE);
@@ -228,37 +261,31 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                         if (type.equals("2")) {
                             if (objects.get(position).isSpecial()){
-                                if (objects.get(position).getSquare_num()==999){
+                                if (objects.get(position).getSquare_num().equals("999.999")){
                                     Toast toast = Toast.makeText(context, null, Toast.LENGTH_SHORT);
-                                    toast.setText("不能大于999");
+                                    toast.setText("不能大于999.999");
                                     toast.setGravity(Gravity.CENTER, 0, 0);
                                     toast.show();
                                     //Toast.makeText(context,"不能大于999",Toast.LENGTH_SHORT).show();
 //                                    ((CommonGoodsViewHolder) holder).tv_add.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
                                 }else {
-                                    int num=Integer.parseInt(((CommonGoodsViewHolder) holder).edt_num.getText().toString());
-                                    float sss= (float) (num*0.001);
-                                    BigDecimal b = new BigDecimal((sss + 0.001));
+                                    float num= Float.parseFloat(((CommonGoodsViewHolder) holder).edt_num.getText().toString());
+//                                    float sss= (float) (num*0.001);
+                                    //BigDecimal b = new BigDecimal((sss + 0.001));
+                                    BigDecimal b = new BigDecimal(num + 0.001);
                                     //保留5位并且属于四舍五入类型，当然这里的四舍五入没有任何意义，可以选择其他类型。
                                     String str=  b.setScale(3, BigDecimal.ROUND_HALF_UP).toString();
                                     Log.e("sssssss", str);
-                                    objects.get(position).setSquare(Float.parseFloat(str));
-                                    objects.get(position).setSquare_num(num + 1);
-
+                                    objects.get(position).setSquare(str);
+                                    objects.get(position).setSquare_num(str);
+                                       count++;
                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                                         ((CommonGoodsViewHolder) holder).tv_reduce.setBackground(context.getDrawable(R.drawable.bg_order));
                                     }
 
                                 }
 
-//                                if (objects.get(position).getSquare_num()==999){
-//                                    ((CommonGoodsViewHolder) holder).tv_add.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
-//                                }else {
-//                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                                        ((CommonGoodsViewHolder) holder).tv_add.setBackground(context.getDrawable(R.drawable.bg_order));
-//                                    }
-//
-//                                }
+
                             }else {
 
                                 if (objects.get(position).getNum()==999){
@@ -266,8 +293,6 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                                     toast.setText("不能大于999");
                                     toast.setGravity(Gravity.CENTER, 0, 0);
                                     toast.show();
-                                    // Toast.makeText(context,"不能大于999",Toast.LENGTH_SHORT).show();
-                                    //((CommonGoodsViewHolder) holder).tv_add.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
                                 }else {
                                     objects.get(position).setNum(objects.get(position).getNum() + 1);
                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -275,13 +300,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                                     }
 
                                 }
-//                                if (objects.get(position).getNum()==999){
-//                                    ((CommonGoodsViewHolder) holder).tv_add.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
-//                                }else {
-//                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                                        ((CommonGoodsViewHolder) holder).tv_add.setBackground(context.getDrawable(R.drawable.bg_order));
-//                                    }
-//                                }
+
 
                                 notifyDataSetChanged();
 
@@ -368,26 +387,27 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 @Override
                 public void afterTextChanged(Editable s) {
                     if (s.toString().equals("")){
-                        // ((CommonGoodsViewHolder) holder).edt_num.setText("1");
-                        objects.get(position).setNum(1);
-                        // objects.get(position).setSquare_num(1);
-//                        try {
-//                            ((CommonGoodsTypeViewHolder) holder).edt_num.setText("1");
-//                        }catch (Exception e){
-//                            ((CommonGoodsTypeViewHolder) holder).edt_num.setText("1");
-//                            e.printStackTrace();
-//                        }
-                        //((CommonGoodsTypeViewHolder) holder).edt_num.setText("1");
-                        Toast toast = Toast.makeText(context, null, Toast.LENGTH_SHORT);
-                        toast.setText("最小值不能小于1");
-                        toast.setGravity(Gravity.CENTER, 0, 0);
-                        toast.show();
-                        //Toast.makeText(context,"最小值不能小于1",Toast.LENGTH_SHORT).show();
-                        //((CommonGoodsTypeViewHolder) holder).edt_num.setText(objects.get(position).getNum()+"");
+                        if (objects.get(position).isSpecial()){
+                            objects.get(position).setSquare_num(objects.get(position).getMinNum());
+                            count++;
+                            Toast toast = Toast.makeText(context, null, Toast.LENGTH_SHORT);
+                            toast.setText("最小值不能小于"+objects.get(position).getMinNum());
+                            toast.setGravity(Gravity.CENTER, 0, 0);
+                            toast.show();
+                        }else {
+                            objects.get(position).setNum(1);
+                            Toast toast = Toast.makeText(context, null, Toast.LENGTH_SHORT);
+                            toast.setText("最小值不能小于1");
+                            toast.setGravity(Gravity.CENTER, 0, 0);
+                            toast.show();
+                        }
+
+
                         return;
                     }else {
                         if (objects.get(position).isSpecial()){
-                            objects.get(position).setSquare_num(1);
+                            objects.get(position).setSquare_num("1");
+                            count++;
                         }else {
                             objects.get(position).setNum(Integer.parseInt(s.toString()));
                         }
@@ -397,59 +417,70 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     if (s.toString().equals("0")){
                         objects.get(position).setNum(1);
                         s.replace(0,s.length(),"1");
-//                        DeleteDialog dialog = new DeleteDialog(context,"提示","是否删除此商品","确定");
-//                        dialog.show();
-//                        dialog.OnDeleteBtn(new DeleteDialogInterface() {
-//                            @Override
-//                            public void isDelete(boolean isdelete) {
-//                                objects.remove(position);
-//                                notifyDataSetChanged();
-//                            }
-//                        });
+//
                     }
 
-//                    if (Integer.parseInt(s.toString().trim())<1){
-//                        objects.get(position).setNum(0);
-////                        try {
-////                            ((CommonGoodsTypeViewHolder) holder).edt_num.setText("1");
-////                        }catch (Exception e){
-////                            ((CommonGoodsTypeViewHolder) holder).edt_num.setText("1");
-////                            e.printStackTrace();
-////                        }
 //
-//                       // objects.get(position).setSquare_num(1);
-//                        //((CommonGoodsTypeViewHolder) holder).edt_num.setText(objects.get(position).getNum()+"");
-//                        //((CommonGoodsTypeViewHolder) holder).edt_num.setText("1");
-//                        Toast.makeText(context,"最小值不能小于1",Toast.LENGTH_SHORT).show();
-//                        return;
-//                    }
 
                     if (objects.get(position).isSpecial()){
-                        if (Integer.parseInt(s.toString())>999){
-                            objects.get(position).setSquare_num(999);
-                            ((CommonGoodsViewHolder) holder).edt_num.setText("999");
-                            ((CommonGoodsViewHolder) holder).tv_add.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                ((CommonGoodsViewHolder) holder).tv_reduce.setBackground(context.getDrawable(R.drawable.bg_order));
-                            }
-                            Toast toast = Toast.makeText(context, null, Toast.LENGTH_SHORT);
-                            toast.setText("不能大于999");
-                            toast.setGravity(Gravity.CENTER, 0, 0);
-                            toast.show();
-                            return;
-                        }else if (Integer.parseInt(s.toString())<=1){
-                            ((CommonGoodsViewHolder) holder).tv_reduce.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
 
-                        } else {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                ((CommonGoodsViewHolder) holder).tv_add.setBackground(context.getDrawable(R.drawable.bg_order));
-                            }
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                ((CommonGoodsViewHolder) holder).tv_reduce.setBackground(context.getDrawable(R.drawable.bg_order));
-                            }
+                    }else {
 
+                    }
+
+
+                    if (objects.get(position).isSpecial()){
+
+                        if (type.equals("2")) {
+
+                            float num= Float.parseFloat(s.toString());
+//                            float sss= (float) (num*0.001);
+                            objects.get(position).setSquare(num+"");
+                            objects.get(position).setSquare_num(num+"");
+                            count++;
+                            //((CommonGoodsViewHolder) holder).tv_specail.setVisibility(View.VISIBLE);
+                            Log.e("1222",num+"------2222");
+                           // Log.e("13123123",Integer.parseInt(s.toString())+"----"+Integer.parseInt(s.toString())*0.001+""+objects.get(position).getSquare__suffix()+"33333333");
+                            ((CommonGoodsViewHolder) holder).tv_specail.setText(num+objects.get(position).getSquare__suffix());
+
+                            if (num>1000){
+                                objects.get(position).setSquare_num("999.999");
+                                ((CommonGoodsViewHolder) holder).edt_num.setText("999.999");
+                                ((CommonGoodsViewHolder) holder).tv_add.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                    ((CommonGoodsViewHolder) holder).tv_reduce.setBackground(context.getDrawable(R.drawable.bg_order));
+                                }
+                                Toast toast = Toast.makeText(context, null, Toast.LENGTH_SHORT);
+                                toast.setText("不能大于999.999");
+                                toast.setGravity(Gravity.CENTER, 0, 0);
+                                toast.show();
+                                count++;
+                                return;
+                            }else if (Float.parseFloat(s.toString())<=Float.parseFloat(objects.get(position).getMinNum())){
+                                ((CommonGoodsViewHolder) holder).tv_reduce.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
+
+                            } else {
+                                try {
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                        ((CommonGoodsViewHolder) holder).tv_add.setBackground(context.getDrawable(R.drawable.bg_order));
+                                    }
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                        ((CommonGoodsViewHolder) holder).tv_reduce.setBackground(context.getDrawable(R.drawable.bg_order));
+                                    }
+                                }catch (Exception e){
+
+                                }
+
+
+                            }
+                        }else if (type.equals("3")){
+                            objects.get(position).setNum(Integer.parseInt(s.toString()));
+                            EventBus.getDefault().post(objects);
                         }
                     }else {
+                        ((CommonGoodsViewHolder) holder).tv_specail.setVisibility(View.GONE);
+
+
                         if (Integer.parseInt(s.toString())>999){
                             objects.get(position).setNum(999);
                             ((CommonGoodsViewHolder) holder).edt_num.setText("999");
@@ -467,6 +498,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                             ((CommonGoodsViewHolder) holder).tv_reduce.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
                         }
                         else {
+                            objects.get(position).setNum(Integer.parseInt(s.toString()));
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                                 ((CommonGoodsViewHolder) holder).tv_add.setBackground(context.getDrawable(R.drawable.bg_order));
                             }
@@ -475,139 +507,11 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                             }
                         }
                     }
-
-
-
-
-//                if (s.toString().startsWith("0")){
-//                    ((CommonGoodsViewHolder) holder).edt_num.setText(s.toString().substring(1));
-//                    return;
-//                }
-
-                    if (objects.get(position).isSpecial()){
-
-                        if (type.equals("2")) {
-
-                            int num=Integer.parseInt(s.toString());
-                            float sss= (float) (num*0.001);
-                            objects.get(position).setSquare(sss);
-                            objects.get(position).setSquare_num(Integer.parseInt(s.toString()));
-                            ((CommonGoodsViewHolder) holder).tv_specail.setVisibility(View.VISIBLE);
-                            Log.e("1222",sss+"------2222");
-                            Log.e("13123123",Integer.parseInt(s.toString())+"----"+Integer.parseInt(s.toString())*0.001+""+objects.get(position).getSquare__suffix()+"33333333");
-                            ((CommonGoodsViewHolder) holder).tv_specail.setText(sss+objects.get(position).getSquare__suffix());
-                        }else if (type.equals("3")){
-                            objects.get(position).setNum(Integer.parseInt(s.toString()));
-                            EventBus.getDefault().post(objects);
-                        }
-                    }else {
-                        ((CommonGoodsViewHolder) holder).tv_specail.setVisibility(View.GONE);
-                        objects.get(position).setNum(Integer.parseInt(s.toString()));
-                    }
                 }
             };
 
             ((CommonGoodsViewHolder) holder).edt_num.addTextChangedListener(textWatcher);
             ((CommonGoodsViewHolder) holder).edt_num.setTag(textWatcher);
-//            ((CommonGoodsViewHolder) holder).edt_num.addTextChangedListener(new TextWatcher() {
-//                @Override
-//                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//                }
-//
-//                @Override
-//                public void onTextChanged(CharSequence s, int start, int before, int count) {
-//
-//                }
-//
-//                @Override
-//                public void afterTextChanged(Editable s) {
-//                    if (s.toString().equals("")){
-//                       // ((CommonGoodsViewHolder) holder).edt_num.setText("1");
-//                        objects.get(position).setNum(0);
-//                       // objects.get(position).setSquare_num(1);
-////                        try {
-////                            ((CommonGoodsTypeViewHolder) holder).edt_num.setText("1");
-////                        }catch (Exception e){
-////                            ((CommonGoodsTypeViewHolder) holder).edt_num.setText("1");
-////                            e.printStackTrace();
-////                        }
-//                        //((CommonGoodsTypeViewHolder) holder).edt_num.setText("1");
-//                        Toast.makeText(context,"最小值不能小于1",Toast.LENGTH_SHORT).show();
-//                        //((CommonGoodsTypeViewHolder) holder).edt_num.setText(objects.get(position).getNum()+"");
-//                           return;
-//                    }else {
-//                        objects.get(position).setNum(Integer.parseInt(s.toString()));
-//                    }
-//
-//                    if (s.toString().equals("0")){
-//                        objects.get(position).setNum(1);
-//                        s.replace(0,s.length(),"1");
-////                        DeleteDialog dialog = new DeleteDialog(context,"提示","是否删除此商品","确定");
-////                        dialog.show();
-////                        dialog.OnDeleteBtn(new DeleteDialogInterface() {
-////                            @Override
-////                            public void isDelete(boolean isdelete) {
-////                                objects.remove(position);
-////                                notifyDataSetChanged();
-////                            }
-////                        });
-//                    }
-//
-////                    if (Integer.parseInt(s.toString().trim())<1){
-////                        objects.get(position).setNum(0);
-//////                        try {
-//////                            ((CommonGoodsTypeViewHolder) holder).edt_num.setText("1");
-//////                        }catch (Exception e){
-//////                            ((CommonGoodsTypeViewHolder) holder).edt_num.setText("1");
-//////                            e.printStackTrace();
-//////                        }
-////
-////                       // objects.get(position).setSquare_num(1);
-////                        //((CommonGoodsTypeViewHolder) holder).edt_num.setText(objects.get(position).getNum()+"");
-////                        //((CommonGoodsTypeViewHolder) holder).edt_num.setText("1");
-////                        Toast.makeText(context,"最小值不能小于1",Toast.LENGTH_SHORT).show();
-////                        return;
-////                    }
-//
-//                    if (Integer.parseInt(s.toString())>999){
-//                        objects.get(position).setNum(999);
-//                        ((CommonGoodsViewHolder) holder).edt_num.setText("999");
-//                        ((CommonGoodsViewHolder) holder).tv_add.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
-//                        Toast.makeText(context,"不能大于999",Toast.LENGTH_SHORT).show();
-//                        return;
-//                    }else {
-//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                            ((CommonGoodsViewHolder) holder).tv_add.setBackground(context.getDrawable(R.drawable.bg_order));
-//                        }
-//
-//                    }
-//
-//                    if (s.toString().startsWith("0")){
-//                        ((CommonGoodsViewHolder) holder).edt_num.setText(s.toString().substring(1));
-//                        return;
-//                    }
-//
-//                    if (objects.get(position).isSpecial()){
-//                        if (type.equals("2")) {
-//                            int num=Integer.parseInt(s.toString());
-//                            float sss= (float) (num*0.001);
-//                            objects.get(position).setSquare(sss);
-//                            objects.get(position).setSquare_num(Integer.parseInt(s.toString()));
-//                            ((CommonGoodsViewHolder) holder).tv_specail.setVisibility(View.VISIBLE);
-//                            Log.e("1222",sss+"------2222");
-//                            Log.e("13123123",Integer.parseInt(s.toString())+"----"+Integer.parseInt(s.toString())*0.001+""+objects.get(position).getSquare__suffix()+"33333333");
-//                            ((CommonGoodsViewHolder) holder).tv_specail.setText(sss+objects.get(position).getSquare__suffix());
-//                        }else if (type.equals("3")){
-//                            objects.get(position).setNum(Integer.parseInt(s.toString()));
-//                            EventBus.getDefault().post(objects);
-//                        }
-//                    }else {
-//                        ((CommonGoodsViewHolder) holder).tv_specail.setVisibility(View.GONE);
-//                        //objects.get(position).setNum(Integer.parseInt(s.toString()));
-//                    }
-//                }
-//            });
 
 
 
@@ -618,37 +522,38 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                         if (type.equals("2")) {
 
-                            if (objects.get(position).getSquare_num()==1){
+                            if (objects.get(position).getSquare_num().equals(objects.get(position).getMinNum())){
                                 Toast toast = Toast.makeText(context, null, Toast.LENGTH_SHORT);
-                                toast.setText("最小不能小于1");
+                                toast.setText("最小不能小于"+objects.get(position).getMinNum());
                                 toast.setGravity(Gravity.CENTER, 0, 0);
                                 toast.show();
                                 //Toast.makeText(context, "最小不能小于1", Toast.LENGTH_SHORT).show();
-                                //  ((CommonGoodsViewHolder) holder).tv_reduce.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
+                                  ((CommonGoodsViewHolder) holder).tv_reduce.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
                             }else {
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                                     ((CommonGoodsViewHolder) holder).tv_add.setBackground(context.getDrawable(R.drawable.bg_order));
                                 }
-                                int num=Integer.parseInt(((CommonGoodsViewHolder) holder).edt_num.getText().toString());
-                                float sss= (float) (num*0.001);
-                                BigDecimal b = new BigDecimal((sss - 0.001));
+                                float num= Float.parseFloat(((CommonGoodsViewHolder) holder).edt_num.getText().toString());
+//                                float sss= (float) (num*0.001);
+                                BigDecimal b = new BigDecimal((num - 0.001));
                                 //保留3位并且属于四舍五入类型，当然这里的四舍五入没有任何意义，可以选择其他类型。
                                 String str=  b.setScale(3, BigDecimal.ROUND_HALF_UP).toString();
                                 Log.e("sssssss", str);
-                                objects.get(position).setSquare(Float.parseFloat(str));
-                                objects.get(position).setSquare_num(num - 1);
+                                objects.get(position).setSquare(str);
+                                objects.get(position).setSquare_num(str);
+                                count++;
 
                             }
 
-                            if (objects.get(position).getSquare_num()==1){
-                                ((CommonGoodsViewHolder) holder).tv_reduce.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
-                            }else {
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                    ((CommonGoodsViewHolder) holder).tv_reduce.setBackground(context.getDrawable(R.drawable.bg_order));
-
-                                }
-
-                            }
+//                            if (objects.get(position).getSquare_num().equals("")){
+//                                ((CommonGoodsViewHolder) holder).tv_reduce.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
+//                            }else {
+//                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                                    ((CommonGoodsViewHolder) holder).tv_reduce.setBackground(context.getDrawable(R.drawable.bg_order));
+//
+//                                }
+//
+//                            }
 
 
                         } else if (type.equals("3")) {
@@ -680,24 +585,10 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                                 }
                             }
 
-//                                if (objects.get(position).getNum() > 1) {
-//
-//                                } else {
-//                                    if (objects.get(position).getNum() == 1) {
-//                                        ((CommonGoodsViewHolder) holder).tv_reduce.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
-//                                        Toast.makeText(context, "最小不能小于1", Toast.LENGTH_SHORT).show();
-//                                    }else {
-//
-//                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                                            ((CommonGoodsViewHolder) holder).tv_reduce.setBackground(context.getDrawable(R.drawable.bg_order));
-//                                            ((CommonGoodsViewHolder) holder).tv_add.setBackground(context.getDrawable(R.drawable.bg_order));
-//
-//                                        }
-//                                    }
-//                                }
+
                         }
                         notifyDataSetChanged();
-                        //notifyItemChanged(position);
+
                     }
                 });
             }else {
@@ -733,22 +624,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                             }
                         }
 
-//                        if (objects.get(position).getNum() > 1) {
-//                            objects.get(position).setNum(objects.get(position).getNum() - 1);
 //
-//                        } else {
-//                            if (objects.get(position).getNum() == 1) {
-//                                ((CommonGoodsViewHolder) holder).tv_reduce.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
-//                                Toast.makeText(context, "最小不能小于1", Toast.LENGTH_SHORT).show();
-//                            }else {
-//                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                                    ((CommonGoodsViewHolder) holder).tv_reduce.setBackground(context.getDrawable(R.drawable.bg_order));
-//                                    ((CommonGoodsViewHolder) holder).tv_add.setBackground(context.getDrawable(R.drawable.bg_order));
-//
-//                                }
-//                            }
-//
-//                        }
                         notifyDataSetChanged();
                     }
                 });
@@ -795,11 +671,17 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                             helper.setText(R.id.tv_name,item.getSku());
                             helper.setText(R.id.tv_desc,item.getName());
                             helper.setText(R.id.tv_price,"¥"+item.getPrice());
-                            if (item.getCount()==0||item.getCount()==null){
-                                helper.getView(R.id.tv_count).setVisibility(View.GONE);
+                            if (type.equals("3")){
+                                if (item.getCount()==0||item.getCount()==null){
+                                    helper.getView(R.id.tv_count).setVisibility(View.GONE);
+                                }else {
+                                    helper.getView(R.id.tv_count).setVisibility(View.VISIBLE);
+                                    helper.setText(R.id.tv_count,"X"+item.getCount());
+                                }
                             }else {
-                                helper.setText(R.id.tv_count,"X"+item.getCount());
+                                helper.getView(R.id.tv_count).setVisibility(View.GONE);
                             }
+
 
                             Glide.with(mContext).load(item.getPhoto()).error(R.mipmap.type_icon).into((ImageView) helper.getView(R.id.iv_icon));
                         }
@@ -808,12 +690,15 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 }
             });
 
-            if (objects.get(position).getActivityName()!=null){
-                // ((CommonGoodsTypeViewHolder) holder).rl_activity.setVisibility(View.VISIBLE);
-                //((CommonGoodsTypeViewHolder) holder).tv_activity.setText(objects.get(position).getActivityName());
-            }else {
-                // ((CommonGoodsTypeViewHolder) holder).rl_activity.setVisibility(View.GONE);
+            if (type.equals("1")||type.equals("4")){
+                if (objects.get(position).getActivityName()!=null){
+                    ((CommonGoodsTypeViewHolder) holder).rl_activity.setVisibility(View.VISIBLE);
+                    ((CommonGoodsTypeViewHolder) holder).tv_activity.setText(objects.get(position).getActivityName());
+                }else {
+                    ((CommonGoodsTypeViewHolder) holder).rl_activity.setVisibility(View.GONE);
+                }
             }
+
 
             ((CommonGoodsTypeViewHolder) holder).tv_price.setText("¥"+objects.get(position).getPrice());
             ((CommonGoodsTypeViewHolder) holder).tv_desc.setText(objects.get(position).getName());
@@ -1054,70 +939,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             ((CommonGoodsTypeViewHolder) holder).edt_num.addTextChangedListener(watcher);
             ((CommonGoodsTypeViewHolder) holder).edt_num.setTag(watcher);
 
-//            ((CommonGoodsTypeViewHolder) holder).edt_num.addTextChangedListener(new TextWatcher() {
-//                @Override
-//                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//                }
-//
-//                @Override
-//                public void onTextChanged(CharSequence s, int start, int before, int count) {
-//
-//                }
-//
-//                @Override
-//                public void afterTextChanged(Editable s) {
-//                    if (s.toString().equals("")){
-//                        objects.get(position).setNum(0);
-////                        ((CommonGoodsTypeViewHolder) holder).edt_num.setText("1");
-////                        Toast.makeText(context,"最小值不能小于1",Toast.LENGTH_SHORT).show();
-//                        return;
-//                    }else {
-//                        objects.get(position).setNum(Integer.parseInt(s.toString()));
-//                    }
-//
-//                    if (s.toString().equals("0")){
-//                        objects.get(position).setNum(1);
-//                        s.replace(0,s.length(),"1");
-////                        DeleteDialog dialog = new DeleteDialog(context,"提示","是否删除此商品","确定");
-////                        dialog.show();
-////                        dialog.OnDeleteBtn(new DeleteDialogInterface() {
-////                            @Override
-////                            public void isDelete(boolean isdelete) {
-////                                objects.remove(position);
-////                                notifyDataSetChanged();
-////                            }
-////                        });
-//                    }
-////                    if (Integer.parseInt(s.toString().trim())<1){
-////                        objects.get(position).setNum(0);
-//////                        ((CommonGoodsTypeViewHolder) holder).edt_num.setText("1");
-//////                        Toast.makeText(context,"最小值不能小于1",Toast.LENGTH_SHORT).show();
-////                        return;
-////                    }
-//
-//
-//
-//                    if (Integer.parseInt(s.toString())>999){
-//                        objects.get(position).setNum(999);
-//                        ((CommonGoodsTypeViewHolder) holder).edt_num.setText("999");
-//                        ((CommonGoodsTypeViewHolder) holder).tv_add.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
-//                        Toast.makeText(context,"不能大于999",Toast.LENGTH_SHORT).show();
-//                        return;
-//                    }else {
-//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                            ((CommonGoodsTypeViewHolder) holder).tv_add.setBackground(context.getDrawable(R.drawable.bg_order));
-//                        }
-//                    }
-//                    if (s.toString().startsWith("0")){
-//                        ((CommonGoodsTypeViewHolder) holder).edt_num.setText(s.toString().substring(1));
-//                        return;
-//                    }
-//                    try {
-//                        objects.get(position).setNum(Integer.parseInt(s.toString()));
-//                    }catch (Exception e){}
-//                }
-//            });
+
         }
     }
 

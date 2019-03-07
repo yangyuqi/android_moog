@@ -145,7 +145,7 @@
                             android:layout_height="match_parent" />
 
                         <EditText
-                            android:maxLength="10"
+                            android:maxLength="7"
                             android:textColor="@color/text_main"
                             android:inputType="number|numberDecimal"
                             android:id="@+id/edt_num"
