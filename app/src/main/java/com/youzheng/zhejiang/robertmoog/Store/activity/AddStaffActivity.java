@@ -137,6 +137,7 @@ public class AddStaffActivity extends BaseActivity implements View.OnClickListen
                 BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                 if (baseModel!=null){
                     if (baseModel.getCode()==PublicUtils.code){
+                        showToasts("添加成功");
                         finish();
                         tv_add.setClickable(true);
                     }else {

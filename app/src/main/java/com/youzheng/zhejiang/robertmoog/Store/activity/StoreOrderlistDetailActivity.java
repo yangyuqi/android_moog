@@ -302,7 +302,7 @@ public class StoreOrderlistDetailActivity extends BaseActivity implements View.O
                     OrderlistDetail orderlistDetail = gson.fromJson(gson.toJson(baseModel.getDatas()), OrderlistDetail.class);
                     setData(orderlistDetail);
                 } else {
-                    showToast(baseModel.getMsg());
+                    showToasts(baseModel.getMsg());
                 }
             }
         });
@@ -330,7 +330,13 @@ public class StoreOrderlistDetailActivity extends BaseActivity implements View.O
 
         if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getAccount())) {
             account = orderlistDetail.getOrderItemData().getAccount();
-            tv_customer.setText(account);
+            if (account.length()!=11){
+                tv_customer.setText(account);
+            }else {
+                String phone = account.substring(0, 3) + " " + account.substring(3, 7) + " " + account.substring(7, 11);
+                tv_customer.setText(phone);
+            }
+
         }
 
         if (!TextUtils.isEmpty(orderlistDetail.getOrderItemData().getBusinessRole())) {

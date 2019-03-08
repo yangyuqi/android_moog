@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         android:gravity="center_horizontal"
         android:padding="15dp"
-        android:text="输入PU单号"
+        android:text="输入PO单号"
         android:textColor="@color/bg_background_white"
         android:textSize="18sp" />
     <RelativeLayout

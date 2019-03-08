@@ -67,8 +67,7 @@ public class ClientViewActivity extends BaseActivity implements TextWatcher {
                 if (tv_search.getText().toString().equals("")) {
                     showToasts(getString(R.string.login_input_phone));
                     return;
-                } else if (tv_search.getText().toString().length() < 11) {
-                    showToasts("手机号码不正确");
+
                 } else if (PhoneUtil.isCellphone(tv_search.getText().toString()) == false) {
                     showToasts("手机号码格式不正确");
                 } else {
@@ -99,15 +98,19 @@ public class ClientViewActivity extends BaseActivity implements TextWatcher {
                                 });
 
                             } else {
-                                showToasts(baseModel.getMsg());
+                                //showToasts(baseModel.getMsg());
                                 if (baseModel.getCode() == PublicUtils.no_exist) {
                                     final RemindDialog dialog = new RemindDialog(mContext, new RemindDialog.onSuccessClick() {
                                         @Override
                                         public void onSuccess() {
-                                            startActivity(new Intent(mContext, RegisterActivity.class));
+                                            Intent intent = new Intent(mContext, RegisterActivity.class);
+                                            intent.putExtra("no_phone", tv_search.getText().toString());
+                                            startActivity(intent);
                                         }
                                     }, "2");
                                     dialog.show();
+                                }else {
+                                    showToasts(baseModel.getMsg());
                                 }
                             }
                         }

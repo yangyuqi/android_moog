@@ -484,6 +484,8 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         if (Integer.parseInt(s.toString())>999){
                             objects.get(position).setNum(999);
                             ((CommonGoodsViewHolder) holder).edt_num.setText("999");
+                            ((CommonGoodsViewHolder) holder).edt_num.clearFocus();
+                           // ((CommonGoodsViewHolder) holder).edt_num.setSelection(s.length());
                             ((CommonGoodsViewHolder) holder).tv_add.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                                 ((CommonGoodsViewHolder) holder).tv_reduce.setBackground(context.getDrawable(R.drawable.bg_order));
@@ -903,7 +905,9 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     if (Integer.parseInt(s.toString())>999){
                         objects.get(position).setNum(999);
                         ((CommonGoodsTypeViewHolder) holder).edt_num.setText("999");
-                        ((CommonGoodsTypeViewHolder) holder).edt_num.setText("999");
+                        //((CommonGoodsTypeViewHolder) holder).edt_num.setText("999");
+                        ((CommonGoodsTypeViewHolder) holder).edt_num.clearFocus();
+                        //((CommonGoodsTypeViewHolder) holder).edt_num.setSelection(s.length());
                         ((CommonGoodsTypeViewHolder) holder).tv_add.setBackgroundColor(context.getResources().getColor(R.color.text_drak_gray));
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                             ((CommonGoodsTypeViewHolder) holder).tv_reduce.setBackground(context.getDrawable(R.drawable.bg_order));

@@ -74,7 +74,7 @@ public class  OneOrderDetailAdapter  extends RecyclerView.Adapter<OneOrderDetail
                 oneHolder.tv_add_money.setVisibility(View.GONE);
             }
           if (!TextUtils.isEmpty(bean.getCodePu())){
-              oneHolder.tv_pu_code.setText("PU单号: "+" "+bean.getCodePu());
+              oneHolder.tv_pu_code.setText("PO单号: "+" "+bean.getCodePu());
           }else {
               oneHolder.tv_pu_code.setVisibility(View.GONE);
           }

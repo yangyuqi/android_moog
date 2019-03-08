@@ -46,7 +46,7 @@ public class ScanDatasBean implements Serializable{
     private String square__suffix="平方";
     private String square_num ;
     private String addPrice__suffix="增项加价 : ¥ ";
-    private String codePU__suffix = "PU单号 : " ;
+    private String codePU__suffix = "PO单号 : " ;
 
     public String getSquare_num() {
         return square_num;

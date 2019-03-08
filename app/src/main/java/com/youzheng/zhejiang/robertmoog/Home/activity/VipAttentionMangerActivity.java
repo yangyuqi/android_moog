@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -64,6 +65,16 @@ public class VipAttentionMangerActivity extends BaseActivity implements View.OnC
     private TextView tv_text;
     private RelativeLayout layout_header;
     private View include_state;
+    private LinearLayout lin_over;
+    /**
+     * 暂无意向商品信息
+     */
+    private TextView tv_no_data;
+    private TextView tv_attention;
+    /**
+     * 修改备注
+     */
+    private TextView tv_update_intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,17 +153,23 @@ public class VipAttentionMangerActivity extends BaseActivity implements View.OnC
             intentInfoListBeans.addAll(listBeans);
             adapter.setLists(listBeans);
             rv_list.setVisibility(View.VISIBLE);
-            no_data.setVisibility(View.GONE);
+            lin_over.setVisibility(View.GONE);
+            tv_no_data.setVisibility(View.GONE);
+//            no_data.setVisibility(View.GONE);
         } else {
             rv_list.setVisibility(View.GONE);
-            tv_text.setText("暂无意向商品");
-            no_data.setVisibility(View.VISIBLE);
+            lin_over.setVisibility(View.VISIBLE);
+            tv_no_data.setVisibility(View.VISIBLE);
+
+//            rv_list.setVisibility(View.GONE);
+//            tv_text.setText("暂无意向商品");
+//            no_data.setVisibility(View.VISIBLE);
         }
     }
 
 
     private void initView() {
-        include_state=findViewById(R.id.include_state);
+        include_state = findViewById(R.id.include_state);
         no_web = findViewById(R.id.no_web);
         no_data = findViewById(R.id.no_data);
         btnBack = (ImageView) findViewById(R.id.btnBack);
@@ -181,6 +198,11 @@ public class VipAttentionMangerActivity extends BaseActivity implements View.OnC
         tv_text = (TextView) findViewById(R.id.tv_text);
 
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);
+        lin_over = (LinearLayout) findViewById(R.id.lin_over);
+        tv_no_data = (TextView) findViewById(R.id.tv_no_data);
+        tv_attention = (TextView) findViewById(R.id.tv_attention);
+        tv_update_intent = (TextView) findViewById(R.id.tv_update_intent);
+        tv_update_intent.setOnClickListener(this);
     }
 
     @Override
@@ -231,6 +253,24 @@ public class VipAttentionMangerActivity extends BaseActivity implements View.OnC
                         }
                     }
                 });
+
+                break;
+            case R.id.tv_update_intent:
+                    if (bean != null) {
+                        remark_id = bean.getCustomerId();
+                        Log.e("remark_id", remark_id + "111111111" + bean.getCustomerId());
+                    }
+                    if (registerBean != null) {
+                        remark_id = registerBean.getCustomerId() + "";
+                        Log.e("remark_id", remark_id + "22222222" + registerBean.getCustomerId());
+
+                    }
+                    Log.e("remark_id", remark_id);
+                    RemarkDialog remarkDialog = new RemarkDialog(VipAttentionMangerActivity.this, remark_id, "", false);
+                    remarkDialog.show();
+
+
+
 
                 break;
         }

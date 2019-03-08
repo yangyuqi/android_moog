@@ -17,6 +17,7 @@ import com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider;
 import com.youzheng.zhejiang.robertmoog.Home.adapter.SearchResultAdapter;
 import com.youzheng.zhejiang.robertmoog.Model.Home.CouponListBean;
 import com.youzheng.zhejiang.robertmoog.R;
+import com.youzheng.zhejiang.robertmoog.Store.listener.OnRecyclerViewAdapterItemClickListener;
 
 import java.util.ArrayList;
 
@@ -155,18 +156,29 @@ public class CouponActivity extends BaseActivity {
         tv_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent();
+               String assetId= "";
+                String payValue="";
                 for (CouponListBean bean :useCouponList){
                     if (bean.isClick()){
                         if (bean.getAssetId()!=null){
-                            Intent intent = new Intent();
-                            intent.putExtra("assetId",bean.getAssetId());
-                            intent.putExtra("payValue",bean.getPayValue());
-                            setResult(3,intent);
+                            assetId=bean.getAssetId();
+                            payValue=bean.getPayValue();
+                            break;
                         }
                     }
                 }
+
+                intent.putExtra("assetId",assetId);
+                intent.putExtra("payValue",payValue);
+                intent.putExtra("useCouponList", useCouponList);
+                intent.putExtra("notUseCouponList", notUseCouponList);
+                setResult(3,intent);
                 finish();
-            }
+            }//这是回传  选中然后确定按钮的点击
+
         });
+
+
     }
 }

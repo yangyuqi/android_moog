@@ -126,8 +126,7 @@ public class RegisterActivity  extends BaseActivity implements TextWatcher {
                 if (edt_phone.getText().toString().equals("")){
                     showToasts(getString(R.string.login_input_phone));
                     return;
-                }else if (edt_phone.getText().toString().length()<11){
-                    showToasts("手机号码不正确");
+
                 }else if (PhoneUtil.isCellphone(edt_phone.getText().toString())==false) {
                     showToasts("手机号码格式不正确");
                 }else {

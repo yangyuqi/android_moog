@@ -274,8 +274,6 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
                                                 tv_get_state.setText(bean.getDatas().get(i).getDes());
                                                 pick_state =bean.getDatas().get(i).getId() ;
                                             }
-
-
                                             type.add(bean.getDatas().get(i).getDes());
                                         }
 
@@ -347,16 +345,31 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
     @Override
     public void getTextStr(String str, String title,int position) {
         if (title.equals(getString(R.string.return_reason))) {
-            reasons=list3.get(position).getId();
+            if (list3!=null){
+                if (list3.size()!=0){
+                    reasons=list3.get(position).getId();
+                }
+
+            }
             if (str.equals(getString(R.string.other))) {
                 et_other_reason.setVisibility(View.VISIBLE);
             } else {
                 et_other_reason.setVisibility(View.GONE);
             }
         }else if (title.equals(getString(R.string.return_goods_type))){
-            paymentMethod=list2.get(position).getId();
+            if (list2!=null){
+                if (list2.size()!=0){
+                    paymentMethod=list2.get(position).getId();
+                }
+            }
+
         }else if (title.equals(getString(R.string.get_goods_state))){
-            pick_state=list1.get(position).getId();
+            if (list1!=null){
+                if (list1.size()!=0){
+                    pick_state=list1.get(position).getId();
+                }
+            }
+
         }
     }
     private void initView() {

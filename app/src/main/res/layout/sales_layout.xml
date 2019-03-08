@@ -763,7 +763,6 @@
                 android:paddingLeft="15dp"
                 android:layout_marginTop="5dp"
                 android:paddingTop="10dp"
-
                 android:background="@color/bg_background_white">
 
                 <EditText

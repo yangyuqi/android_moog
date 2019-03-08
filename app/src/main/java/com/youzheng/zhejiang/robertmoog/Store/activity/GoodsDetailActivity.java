@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.jude.rollviewpager.RollPagerView;
 import com.jude.rollviewpager.adapter.StaticPagerAdapter;
+import com.jude.rollviewpager.hintview.ColorPointHintView;
 import com.jude.rollviewpager.hintview.IconHintView;
 import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
@@ -191,8 +192,7 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
         adapter=new TestNormalAdapter();
         pagerView.setAdapter(adapter);
 
-        //自定义指示器图片
-        pagerView.setHintView(new IconHintView(this, R.mipmap.group_72_2, R.mipmap.group_72_1));
+
 
     }
 
@@ -217,7 +217,12 @@ public class GoodsDetailActivity extends BaseActivity implements View.OnClickLis
             view.setScaleType(ImageView.ScaleType.CENTER_CROP);
             if (piclist.size()==1){
                 pagerView.setPlayDelay(0);
+                pagerView.setHintView(null);
+
             }else {
+                //自定义指示器图片
+                pagerView.setHintView(new IconHintView(GoodsDetailActivity.this, R.mipmap.group_72_2, R.mipmap.group_72_1));
+               // pagerView.setHintView(new IconHintView(GoodsDetailActivity.this, R.mipmap.group_72_2, R.mipmap.group_72_1));
                 pagerView.setPlayDelay(2000);
             }
            // view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));

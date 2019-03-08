@@ -3,6 +3,7 @@ package com.youzheng.zhejiang.robertmoog.Home.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -318,9 +319,6 @@ public class AddNewAddressActivity extends BaseActivity {
         if (edt_phone.getText().toString().equals("")){
             showToasts("请先填写手机号");
             return;
-        }else if (edt_phone.getText().toString().length() < 11) {
-            showToasts("手机号码不正确");
-            return;
         } else if (PhoneUtil.isCellphone(edt_phone.getText().toString()) == false) {
             showToasts("手机号码格式不正确");
             return;
@@ -366,9 +364,13 @@ public class AddNewAddressActivity extends BaseActivity {
             public void onResponse(String response) {
                 BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                 if (baseModel.getCode()==PublicUtils.code){
+                    showToasts("添加成功");
                     finish();
                 }else {
-                    showToasts(baseModel.getMsg());
+                    if (!TextUtils.isEmpty(baseModel.getMsg())){
+                        showToasts(baseModel.getMsg());
+                    }
+
                 }
             }
         });

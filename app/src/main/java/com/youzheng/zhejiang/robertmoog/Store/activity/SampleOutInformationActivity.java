@@ -81,7 +81,7 @@ public class SampleOutInformationActivity extends BaseActivity implements View.O
         tv_commit.setOnClickListener(this);
         lin_title=findViewById(R.id.lin_title);
 
-
+    
 //        initData();
     }
     @Override

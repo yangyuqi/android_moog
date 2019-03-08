@@ -197,7 +197,14 @@ public class ReturnGoodsDetailActivity extends BaseActivity implements View.OnCl
 
 
         if (!TextUtils.isEmpty(returnGoodsDetail.getReturnItem().getCustCode())) {
-            tv_customer.setText(returnGoodsDetail.getReturnItem().getCustCode());
+            if (returnGoodsDetail.getReturnItem().getCustCode().length()!=11){
+                tv_customer.setText(returnGoodsDetail.getReturnItem().getCustCode());
+            }else {
+                String phone = returnGoodsDetail.getReturnItem().getCustCode().substring(0, 3) + " " + returnGoodsDetail.getReturnItem().getCustCode().substring(3, 7) + " " + returnGoodsDetail.getReturnItem().getCustCode().substring(7, 11);
+                tv_customer.setText(phone);
+            }
+
+           // tv_customer.setText(returnGoodsDetail.getReturnItem().getCustCode());
         }
 
         if (returnGoodsDetail.getReturnItem().getProductCount() != 0) {

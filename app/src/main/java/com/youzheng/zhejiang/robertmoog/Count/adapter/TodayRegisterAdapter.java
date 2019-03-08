@@ -11,6 +11,9 @@ import com.youzheng.zhejiang.robertmoog.Count.bean.TodayRegisterList;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.bean.StoreCustomerDetail;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class TodayRegisterAdapter extends RecyclerView.Adapter<TodayRegisterAdapter.InsideHolder> {
@@ -39,10 +42,34 @@ public class TodayRegisterAdapter extends RecyclerView.Adapter<TodayRegisterAdap
     @Override
     public void onBindViewHolder(InsideHolder holder, int position) {
         TodayRegisterList.CustomerListBean bean=list.get(position);
-        holder.tv_date.setText(bean.getCreateDate());
+
+        try {
+            holder.tv_date.setText(StringToDate(bean.getCreateDate()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
         holder.tv_way.setText(bean.getChannel());
-        holder.tv_phone.setText(bean.getPhone());
+        if (bean.getPhone().length()!=11){
+            holder.tv_phone.setText(bean.getPhone());
+        }else {
+            String phone = bean.getPhone().substring(0, 3) + " " + bean.getPhone().substring(3, 7) + " " + bean.getPhone().substring(7, 11);
+            holder.tv_phone.setText(phone);
+        }
+
         holder.tv_people.setText(bean.getOperatePersonal());
+    }
+
+    private String StringToDate(String time) throws ParseException {
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date;
+        date = format.parse(time);
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        String s = format1.format(date);
+        return s;
+
     }
 
     @Override

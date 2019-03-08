@@ -15,11 +15,13 @@ import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
 import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
+import com.youzheng.zhejiang.robertmoog.Home.activity.RegisterActivity;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.Model.Home.CustomerBean;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.utils.SoftInputUtils;
 import com.youzheng.zhejiang.robertmoog.utils.PhoneUtil;
+import com.youzheng.zhejiang.robertmoog.utils.View.RemindDialog;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -118,7 +120,19 @@ public class ReturnRecognitionActivity extends BaseActivity implements View.OnCl
                     }
 
                 } else {
-                    showToasts(baseModel.getMsg());
+                    if (baseModel.getCode() == PublicUtils.no_exist) {
+                        final RemindDialog dialog = new RemindDialog(mContext, new RemindDialog.onSuccessClick() {
+                            @Override
+                            public void onSuccess() {
+                                Intent intent = new Intent(mContext, RegisterActivity.class);
+                                intent.putExtra("no_phone", tv_search.getText().toString());
+                                startActivity(intent);
+                            }
+                        }, "2");
+                        dialog.show();
+                    }else {
+                        showToasts(baseModel.getMsg());
+                    }
                 }
             }
         });

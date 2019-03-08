@@ -111,6 +111,14 @@ public class RemarkDialog extends Dialog implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.tv_ok :
+                if (TextUtils.isEmpty(confrim_dialog_tv_content.getText().toString())){
+                    Toast toast = Toast.makeText(mcontext,null, Toast.LENGTH_SHORT);
+                    toast.setText("请输入内容");
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+                    return;
+                }
+
                 if (id==null){
                     return;
                 }

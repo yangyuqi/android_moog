@@ -51,6 +51,7 @@ public class ShopActionActivity extends BaseActivity {
      */
     private TextView tv_text;
     private RelativeLayout layout_header;
+    private View head;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -137,6 +138,10 @@ public class ShopActionActivity extends BaseActivity {
     }
 
     private void initView() {
+//        head=findViewById(R.id.head);
+//        tv_text=head.findViewById(R.id.tv_text);
+        tv_text = (TextView) findViewById(R.id.tv_text);
+        layout_header = (RelativeLayout) findViewById(R.id.layout_header);
         no_web = findViewById(R.id.no_web);
         no_data = findViewById(R.id.no_data);
         ls = findViewById(R.id.ls);
@@ -234,7 +239,6 @@ public class ShopActionActivity extends BaseActivity {
                 }
             }
         });
-        tv_text = (TextView) findViewById(R.id.tv_text);
-        layout_header = (RelativeLayout) findViewById(R.id.layout_header);
+
     }
 }

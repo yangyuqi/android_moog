@@ -427,49 +427,64 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
     @Override
     public void getTextStr(String str,String title,int position) {
         if (title.equals(getString(R.string.return_reason))) {
-            reasons=list3.get(position).getId();
+            if (list3!=null){
+                if (list3.size()!=0){
+                    reasons=list3.get(position).getId();
+                }
+            }
+
             if (str.equals(getString(R.string.other))) {
                 et_other_reason.setVisibility(View.VISIBLE);
             } else {
                 et_other_reason.setVisibility(View.GONE);
             }
         }else if (title.equals(getString(R.string.return_goods_type))){
-            paymentMethod=list2.get(position).getId();
+            if (list2!=null){
+                if (list2.size()!=0){
+                    paymentMethod=list2.get(position).getId();
+                }
+            }
+
         }else if (title.equals(getString(R.string.get_goods_state))){
-            pick_state=list1.get(position).getId();
+            if (list1!=null){
+                if (list1.size()!=0){
+                    pick_state=list1.get(position).getId();
+                }
+            }
+
         }
     }
     private void confirmReturn() {
 
-        if (tv_return_type.getText().equals(getString(R.string.bank_card))){
-            paymentMethod="BANK_CARD";
-        }else if (tv_return_type.getText().equals(getString(R.string.we_chat))){
-            paymentMethod="WECHAT";
-        }else if (tv_return_type.getText().equals(getString(R.string.alipay))){
-            paymentMethod="ALIPAY";
-        }else if (tv_return_type.getText().equals(getString(R.string.cash))){
-            paymentMethod="CASH";
-        }else if (tv_return_type.getText().equals(getString(R.string.market_get))){
-            paymentMethod="MARKET";
-        }else if (tv_return_type.getText().equals(getString(R.string.yuan_lu))){
-            paymentMethod="RETURN_CAME";
-        }
-
-        if (tv_get_state.getText().equals(getString(R.string.already_get))){
-            pick_state="ALL_LIFT";
-        }else if (tv_get_state.getText().equals(getString(R.string.no_lift))){
-            pick_state="NO_LIFT";
-        }
-
-        if (tv_return_reason.getText().equals(getString(R.string.quality_problem))){
-            reasons="QUALITY_PROBLEM";
-        }else if (tv_return_reason.getText().equals(getString(R.string.brand_problem))){
-            reasons="BRAND_PROBLEM";
-        }else if (tv_return_reason.getText().equals(getString(R.string.price_problem))){
-            reasons="PRICE_PROBLEM";
-        }else if (tv_return_reason.getText().equals(getString(R.string.other))){
-            reasons="OTHER";
-        }
+//        if (tv_return_type.getText().equals(getString(R.string.bank_card))){
+//            paymentMethod="BANK_CARD";
+//        }else if (tv_return_type.getText().equals(getString(R.string.we_chat))){
+//            paymentMethod="WECHAT";
+//        }else if (tv_return_type.getText().equals(getString(R.string.alipay))){
+//            paymentMethod="ALIPAY";
+//        }else if (tv_return_type.getText().equals(getString(R.string.cash))){
+//            paymentMethod="CASH";
+//        }else if (tv_return_type.getText().equals(getString(R.string.market_get))){
+//            paymentMethod="MARKET";
+//        }else if (tv_return_type.getText().equals(getString(R.string.yuan_lu))){
+//            paymentMethod="RETURN_CAME";
+//        }
+//
+//        if (tv_get_state.getText().equals(getString(R.string.already_get))){
+//            pick_state="ALL_LIFT";
+//        }else if (tv_get_state.getText().equals(getString(R.string.no_lift))){
+//            pick_state="NO_LIFT";
+//        }
+//
+//        if (tv_return_reason.getText().equals(getString(R.string.quality_problem))){
+//            reasons="QUALITY_PROBLEM";
+//        }else if (tv_return_reason.getText().equals(getString(R.string.brand_problem))){
+//            reasons="BRAND_PROBLEM";
+//        }else if (tv_return_reason.getText().equals(getString(R.string.price_problem))){
+//            reasons="PRICE_PROBLEM";
+//        }else if (tv_return_reason.getText().equals(getString(R.string.other))){
+//            reasons="OTHER";
+//        }
 
         HashMap<String,Object> map=new HashMap<>();
         map.put("pickUpStatus",pick_state);

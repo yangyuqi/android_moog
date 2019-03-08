@@ -125,6 +125,7 @@ public class StoreCustomerActivity extends BaseActivity implements View.OnClickL
 
 
     private void initView() {
+        tv_text = (TextView) findViewById(R.id.tv_text);
         no_data = findViewById(R.id.no_data);
         no_web = findViewById(R.id.no_web);
         btnBack = (ImageView) findViewById(R.id.btnBack);
@@ -147,7 +148,7 @@ public class StoreCustomerActivity extends BaseActivity implements View.OnClickL
 
 
 
-        tv_text = (TextView) findViewById(R.id.tv_text);
+
     }
 
 

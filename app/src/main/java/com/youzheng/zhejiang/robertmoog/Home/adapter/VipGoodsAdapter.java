@@ -52,7 +52,8 @@ public class VipGoodsAdapter extends RecyclerView.Adapter<VipGoodsAdapter.VipGoo
     int Width;
     VipDeleteListener listener;
     int layout_id;
-
+    private List<VipGoods.IntentInfoListBean.ProductListBean> S=new ArrayList<>();
+     String access_token;
 
     public void setOnItemClickListener(OnRecyclerViewAdapterItemClickListener mOnItemClickListener) {
         this.mOnItemClickListener = mOnItemClickListener;
@@ -109,33 +110,43 @@ public class VipGoodsAdapter extends RecyclerView.Adapter<VipGoodsAdapter.VipGoo
         } else {
             vipGoodsHolder.tv_update_intent.setText("添加备注");
         }
+
         inlist = new ArrayList<>();
         inlist = intentInfoListBeans.get(i).getProductList();
-//        for (int j = 0; j <inlist.size() ; j++) {
-//            if (inlist.size()==0){
-//                vipGoodsHolder.tv_no_data.setVisibility(View.VISIBLE);
-//            }else {
-//                vipGoodsHolder.tv_no_data.setVisibility(View.GONE);
-//            }
-//
-//        }
-        if (inlist.size()==0){
+
+
+
+        boolean ishaveData=false;
+        for (int j = 0; j <intentInfoListBeans.size() ; j++) {
+            if (intentInfoListBeans.get(j).getProductList().size()>0){
+                ishaveData=true;
+                break;
+            }
+        }
+        if (ishaveData==false){
             vipGoodsHolder.tv_no_data.setVisibility(View.VISIBLE);
+            vipGoodsHolder.ls.setVisibility(View.GONE);
         }else {
+            vipGoodsHolder.ls.setVisibility(View.VISIBLE);
             vipGoodsHolder.tv_no_data.setVisibility(View.GONE);
         }
 
+
+
+
+
+
         final String employedid = (String) SharedPreferencesUtils.getParam(context, PublicUtils.EMPLOYEDID, "");
         if (employedid.equals(bean.getId())) {
-            vipGoodsHolder.lin_over.setVisibility(View.VISIBLE);
+            vipGoodsHolder.tv_update_intent.setVisibility(View.VISIBLE);
         } else {
-            vipGoodsHolder.lin_over.setVisibility(View.GONE);
+            vipGoodsHolder.tv_update_intent.setVisibility(View.GONE);
         }
 
         if (employedid.equals(bean.getId())) {
-            layout_id = R.layout.common_goods_vh_item22;
-        } else {
             layout_id = R.layout.common_goods_vh_item;
+        } else {
+            layout_id = R.layout.common_goods_vh_item22;
         }
 
         adapter = new CommonAdapter<VipGoods.IntentInfoListBean.ProductListBean>(context, inlist,layout_id) {
@@ -147,7 +158,7 @@ public class VipGoodsAdapter extends RecyclerView.Adapter<VipGoodsAdapter.VipGoo
                 Glide.with(mContext).load(item.getPhoto()).error(R.mipmap.type_icon).into((ImageView) helper.getView(R.id.iv_icon));
 
 
-                final String access_token = (String) SharedPreferencesUtils.getParam(context, PublicUtils.access_token, "");
+                access_token = (String) SharedPreferencesUtils.getParam(context, PublicUtils.access_token, "");
                 RelativeLayout view = helper.getView(R.id.rl_width);
                 LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
                 params.width = (int) PublicUtils.dip2px(PublicUtils.px2dip(Width));
@@ -224,7 +235,7 @@ public class VipGoodsAdapter extends RecyclerView.Adapter<VipGoodsAdapter.VipGoo
 
         private TextView tv_name, tv_role, tv_attention, tv_update_intent,tv_no_data;
         private NoScrollListView ls;
-        private LinearLayout lin_over;
+        private LinearLayout lin_over,lin_role;
         private View no_data;
 
         public VipGoodsHolder(@NonNull View itemView) {
@@ -236,7 +247,7 @@ public class VipGoodsAdapter extends RecyclerView.Adapter<VipGoodsAdapter.VipGoo
             ls = itemView.findViewById(R.id.ls);
             lin_over = itemView.findViewById(R.id.lin_over);
             tv_no_data= itemView.findViewById(R.id.tv_no_data);
-
+            lin_role= itemView.findViewById(R.id.lin_role);
         }
     }
 

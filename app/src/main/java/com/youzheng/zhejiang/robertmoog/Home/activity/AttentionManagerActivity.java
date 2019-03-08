@@ -332,8 +332,6 @@ public class AttentionManagerActivity extends BaseActivity implements MangerList
                 if (tv_search.getText().toString().equals("")) {
                     showToasts(getString(R.string.write_customer_phone));
                     return;
-                } else if (tv_search.getText().toString().length() < 11) {
-                    showToasts("手机号码不正确");
                 } else if (PhoneUtil.isCellphone(tv_search.getText().toString()) == false) {
                     showToasts("手机号码格式不正确");
                 } else {

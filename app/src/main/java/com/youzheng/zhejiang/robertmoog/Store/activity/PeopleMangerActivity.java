@@ -218,14 +218,14 @@ public class PeopleMangerActivity extends BaseActivity implements View.OnClickLi
                 BaseModel baseModel = gson.fromJson(response, BaseModel.class);
                 if (baseModel.getCode() == PublicUtils.code) {
 
-                    showToast(getString(R.string.stop_success));
+                    showToasts(getString(R.string.stop_success));
 //                    page=1;
                     //list.clear();
                     initData();
 
                 } else {
                     if (!baseModel.getMsg().equals("")) {
-                        showToast(baseModel.getMsg());
+                        showToasts(baseModel.getMsg());
                     }
 
                 }

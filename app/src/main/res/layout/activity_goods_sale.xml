@@ -79,7 +79,9 @@
 
     </LinearLayout>
 
-
+    <include layout="@layout/layout_no_data"
+        android:id="@+id/no_data"
+        android:visibility="gone"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="45dp"
@@ -111,9 +113,7 @@
     </LinearLayout>
 
 
-    <include layout="@layout/layout_no_data"
-        android:id="@+id/no_data"
-        android:visibility="gone"/>
+
 
 <com.liaoinstan.springview.widget.SpringView
     android:layout_width="match_parent"

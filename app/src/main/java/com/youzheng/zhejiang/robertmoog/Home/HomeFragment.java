@@ -95,8 +95,7 @@ public class HomeFragment extends BaseFragment implements BaseFragment.ReloadInt
         rollPagerView = mView.findViewById(R.id.rv);
         rollPagerView.setPlayDelay(2000);
         rollPagerView.setAnimationDurtion(500);
-        //自定义指示器图片
-        rollPagerView.setHintView(new IconHintView(getActivity(), R.mipmap.group_72_2, R.mipmap.group_72_1));
+
         data.clear();
         data.add(new HomeBean(getString(R.string.home_gv_one), R.mipmap.group_5_3));
         data.add(new HomeBean(getString(R.string.home_gv_two), R.mipmap.group_5_4));
@@ -132,8 +131,6 @@ public class HomeFragment extends BaseFragment implements BaseFragment.ReloadInt
                 if (tv_search.getText().toString().equals("")) {
                     showToasts(getString(R.string.login_input_phone));
                     return;
-                } else if (tv_search.getText().toString().length() < 11) {
-                    showToasts("手机号码不正确");
                 } else if (PhoneUtil.isCellphone(tv_search.getText().toString()) == false) {
                     showToasts("手机号码格式不正确");
                 } else {
@@ -231,7 +228,10 @@ public class HomeFragment extends BaseFragment implements BaseFragment.ReloadInt
                             rollPagerView.setAdapter(new BannerNormalAdapter(homePageData.getHomePageData().getBannerImageData(), access_token));
                             if (homePageData.getHomePageData().getBannerImageData().size()==1){
                                 rollPagerView.setPlayDelay(0);
+                                rollPagerView.setHintView(null);
                             }else {
+                                //自定义指示器图片
+                                rollPagerView.setHintView(new IconHintView(getActivity(), R.mipmap.group_72_2, R.mipmap.group_72_1));
                                 rollPagerView.setPlayDelay(2000);
                             }
                         }

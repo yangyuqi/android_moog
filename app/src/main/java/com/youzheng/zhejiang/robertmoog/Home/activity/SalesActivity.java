@@ -74,6 +74,7 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
     private String payAmount, assetId, payValue, old_pay;
     EditText edt_door_ticket;
     View rl_activity;
+    int clickid;
     // private String get_state,dispatching_type,get_money_type;
 
     private ArrayList<CouponListBean> useCouponList = new ArrayList<>();
@@ -102,9 +103,9 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
      */
     private TextView tv_cut_money;
     private LinearLayout mLinIsCut;
-    private List<EnumsDatasBeanDatas> list1=new ArrayList<>();
-    private List<EnumsDatasBeanDatas> list2=new ArrayList<>();
-    private List<EnumsDatasBeanDatas> list3=new ArrayList<>();
+    private List<EnumsDatasBeanDatas> list1 = new ArrayList<>();
+    private List<EnumsDatasBeanDatas> list2 = new ArrayList<>();
+    private List<EnumsDatasBeanDatas> list3 = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -144,8 +145,13 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
             is_have_adress = false;
             addressId = "";
         }
-        notUseCouponList.clear();
-        useCouponList.clear();
+        if(notUseCouponList.size()==0){
+            notUseCouponList.clear();
+        }
+        if(useCouponList.size()==0){
+            useCouponList.clear();
+        }
+
         initData(edt_door_ticket.getText().toString(), is_have_adress);
         Log.e("213213", "1");
 
@@ -165,46 +171,45 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
                 BaseModel baseModel = gson.fromJson(response, BaseModel.class);
                 if (baseModel.getCode() == PublicUtils.code) {
                     EnumsDatas enumsDatas = gson.fromJson(gson.toJson(baseModel.getDatas()), EnumsDatas.class);
-                    if (enumsDatas.getEnums()!=null){
+                    if (enumsDatas.getEnums() != null) {
                         if (enumsDatas.getEnums().size() > 0) {
 
                             for (final EnumsDatasBean bean : enumsDatas.getEnums()) {
-                                  if (!TextUtils.isEmpty(bean.getClassName())){
-                                      if (bean.getClassName().equals("PickUpStatus")) {//
-                                          // TimeQuantum
-                                          list1 = new ArrayList<>();
+                                if (!TextUtils.isEmpty(bean.getClassName())) {
+                                    if (bean.getClassName().equals("PickUpStatus")) {//
+                                        // TimeQuantum
+                                        list1 = new ArrayList<>();
 
-                                         for (int i = 0; i < bean.getDatas().size(); i++) {
+                                        for (int i = 0; i < bean.getDatas().size(); i++) {
 //                                              tv_get_state.setText(bean.getDatas().get(0).getDes());
-                                              list1.add(bean.getDatas().get(i));
-                                              get_state.add(bean.getDatas().get(i).getDes());
-                                             if (bean.getDatas().get(i).getDes().equals(getString(R.string.all_lift))){
-                                                 tv_get_state.setText(bean.getDatas().get(i).getDes());
-                                                 PickUpStatus=bean.getDatas().get(i).getId();
-                                             }
-                                         }
+                                            list1.add(bean.getDatas().get(i));
+                                            get_state.add(bean.getDatas().get(i).getDes());
+                                            if (bean.getDatas().get(i).getDes().equals(getString(R.string.all_lift))) {
+                                                tv_get_state.setText(bean.getDatas().get(i).getDes());
+                                                PickUpStatus = bean.getDatas().get(i).getId();
+                                            }
+                                        }
 
-                                         if (tv_get_state.getText().toString().equals("")){
-                                             tv_get_state.setText(bean.getDatas().get(0).getDes());
-                                             PickUpStatus=list1.get(0).getId();
-                                         }
+                                        if (tv_get_state.getText().toString().equals("")) {
+                                            tv_get_state.setText(bean.getDatas().get(0).getDes());
+                                            PickUpStatus = list1.get(0).getId();
+                                        }
 
 
-
-                                          // typelist=list1;
-                                          if (tv_get_state.getText().toString().equals(getString(R.string.all_lift))) {
-                                              lin_send.setVisibility(View.GONE);
-                                          } else {
-                                              lin_send.setVisibility(View.VISIBLE);
-                                          }
-                                      }
-                                  }
+                                        // typelist=list1;
+                                        if (tv_get_state.getText().toString().equals(getString(R.string.all_lift))) {
+                                            lin_send.setVisibility(View.GONE);
+                                        } else {
+                                            lin_send.setVisibility(View.VISIBLE);
+                                        }
+                                    }
+                                }
 
                             }
 
 
                             for (final EnumsDatasBean bean : enumsDatas.getEnums()) {
-                                if (bean.getClassName()!=null){
+                                if (bean.getClassName() != null) {
                                     if (bean.getClassName().equals("ShoppingMethod")) {//  TimeQuantum
 //                                final List<String> date = new ArrayList<String>();
 
@@ -214,10 +219,10 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
                                             list2.add(bean.getDatas().get(i));
                                             dispatching_type.add(bean.getDatas().get(i).getDes());
                                         }
-                                        if (lin_send.getVisibility()==View.VISIBLE){
-                                            ShoppingMethod=list2.get(0).getId();
-                                        }else {
-                                            ShoppingMethod="";
+                                        if (lin_send.getVisibility() == View.VISIBLE) {
+                                            ShoppingMethod = list2.get(0).getId();
+                                        } else {
+                                            ShoppingMethod = "";
                                         }
                                         // returnlist=list2;
                                     }
@@ -227,7 +232,7 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
 
 
                             for (final EnumsDatasBean bean : enumsDatas.getEnums()) {
-                                if (bean.getClassName()!=null){
+                                if (bean.getClassName() != null) {
                                     if (bean.getClassName().equals("PaymentMethod")) {//  TimeQuantum
 //                                final List<String> date = new ArrayList<String>();
                                         list3 = new ArrayList<>();
@@ -236,7 +241,7 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
                                             list3.add(bean.getDatas().get(i));
                                             get_money_type.add(bean.getDatas().get(i).getDes());
                                         }
-                                        paymentMethod=list3.get(0).getId();
+                                        paymentMethod = list3.get(0).getId();
                                         //  reasonlist=list3;
                                     }
                                 }
@@ -254,26 +259,47 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
         });
 
     }
+
     @Override
-    public void getTextStr(String str, String title,int position) {
+    public void getTextStr(String str, String title, int position) {
         if (title.equals(getString(R.string.get_type))) {
-            PickUpStatus=list1.get(position).getId();
-            Log.e("1111","list1-----"+list1.size()+"------"+PickUpStatus);
+            if (list1 != null) {
+                if (list1.size() != 0) {
+                    PickUpStatus = list1.get(position).getId();
+                }
+            }
+
+            Log.e("1111", "list1-----" + list1.size() + "------" + PickUpStatus);
             if (str.equals(getString(R.string.all_lift))) {
                 lin_send.setVisibility(View.GONE);
-                ShoppingMethod="";
+                ShoppingMethod = "";
             } else {
                 lin_send.setVisibility(View.VISIBLE);
-                tv_dispatching_type.setText(list2.get(0).getDes());
-                ShoppingMethod=list2.get(0).getId();
+                if (list2 != null) {
+                    if (list2.size() != 0) {
+                        tv_dispatching_type.setText(list2.get(0).getDes());
+                        ShoppingMethod = list2.get(0).getId();
+                    }
+                }
             }
-        }else if (title.equals(getString(R.string.get_money_type))){
+        } else if (title.equals(getString(R.string.get_money_type))) {
+            if (list3 != null) {
+                if (list3.size() != 0) {
+                    paymentMethod = list3.get(position).getId();
+                }
+            }
 
-            paymentMethod=list3.get(position).getId();
-            Log.e("1111","list2-----"+list2.size()+"------"+paymentMethod);
-        }else if (title.equals(getString(R.string.send_type))){
-            ShoppingMethod=list2.get(position).getId();
-            Log.e("1111","list3-----"+list3.size()+"------"+ShoppingMethod);
+
+            Log.e("1111", "list2-----" + list2.size() + "------" + paymentMethod);
+        } else if (title.equals(getString(R.string.send_type))) {
+            if (list3 != null) {
+                if (list3.size() != 0) {
+                    ShoppingMethod = list2.get(position).getId();
+                }
+            }
+
+
+            Log.e("1111", "list3-----" + list3.size() + "------" + ShoppingMethod);
         }
     }
 
@@ -322,13 +348,13 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
         tv_get_state.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (get_state!=null){
-                    if (get_state.size()!=0){
+                if (get_state != null) {
+                    if (get_state.size() != 0) {
                         SingleOptionsPicker.openOptionsPicker(SalesActivity.this, get_state, tv_get_state, getString(R.string.get_type), SalesActivity.this);
-                    }else {
+                    } else {
                         showToasts("暂无数据");
                     }
-                }else {
+                } else {
                     showToasts("暂无数据");
                 }
 
@@ -338,14 +364,14 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
         tv_dispatching_type.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (dispatching_type!=null){
-                    if (dispatching_type.size()!=0){
+                if (dispatching_type != null) {
+                    if (dispatching_type.size() != 0) {
                         SingleOptionsPicker.openOptionsPicker(SalesActivity.this, dispatching_type, tv_dispatching_type, getString(R.string.send_type), SalesActivity.this);
 
-                    }else {
+                    } else {
                         showToasts("暂无数据");
                     }
-                }else {
+                } else {
                     showToasts("暂无数据");
                 }
 
@@ -355,14 +381,14 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
         tv_get_money_type.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (get_money_type!=null){
-                    if (get_money_type.size()!=0){
+                if (get_money_type != null) {
+                    if (get_money_type.size() != 0) {
                         SingleOptionsPicker.openOptionsPicker(SalesActivity.this, get_money_type, tv_get_money_type, getString(R.string.get_money_type), SalesActivity.this);
 
-                    }else {
+                    } else {
                         showToasts("暂无数据");
                     }
-                }else {
+                } else {
                     showToasts("暂无数据");
                 }
 
@@ -400,7 +426,7 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
                         }
 
                     } catch (Exception e) {
-                         e.printStackTrace();
+                        e.printStackTrace();
                         // tv_get_money_of_now.setText("¥"+old_pay);
                     }
                 } else {
@@ -413,13 +439,14 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
             }
         });
 
+        //从这个界面跳进来的？嗯嗯
         tv_get_ticket.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    Intent intent = new Intent(mContext, CouponActivity.class);
-                    intent.putExtra("useCouponList", useCouponList);
-                    intent.putExtra("notUseCouponList", notUseCouponList);
-                    startActivityForResult(intent, 3);
+                Intent intent = new Intent(mContext, CouponActivity.class);
+                intent.putExtra("useCouponList", useCouponList);
+                intent.putExtra("notUseCouponList", notUseCouponList);
+                startActivityForResult(intent, 3);
 
 
             }
@@ -584,10 +611,10 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
                     old_pay = saleData.getSaleData().getPayAmount();
                     tv_get_money_of_now.setText("¥" + payAmount);
                     tv_should_money.setText("¥" + saleData.getSaleData().getAmountPayable());
-                    if (!TextUtils.isEmpty(saleData.getSaleData().getRules())){
+                    if (!TextUtils.isEmpty(saleData.getSaleData().getRules())) {
                         tv_over_money.setText(saleData.getSaleData().getRules());
                         mLinIsCut.setVisibility(View.VISIBLE);
-                    }else {
+                    } else {
                         mLinIsCut.setVisibility(View.GONE);
                     }
 
@@ -625,8 +652,17 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
                         lin_juan.setVisibility(View.GONE);
                     }
 
-                    notUseCouponList = saleData.getSaleData().getNotUseCouponList();
-                    useCouponList = saleData.getSaleData().getUseCouponList();
+
+
+
+                    if(notUseCouponList.size()==0){
+                        notUseCouponList = saleData.getSaleData().getNotUseCouponList();
+                    }
+                    if(useCouponList.size()==0){
+                        useCouponList = saleData.getSaleData().getUseCouponList();
+                    }
+
+
                     if (TextUtils.isEmpty(saleData.getSaleData().getAddressId())) {
                         findViewById(R.id.rl_address).setVisibility(View.GONE);
                         findViewById(R.id.ll_address).setVisibility(View.VISIBLE);
@@ -651,10 +687,10 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
                         }
                     } else {
 
-                        if (saleData.getSaleData().getNotUseCouponList().size()>0){
+                        if (saleData.getSaleData().getNotUseCouponList().size() > 0) {
                             tv_get_tivket.setVisibility(View.GONE);
                             tv_get_ticket.setText("无可用");
-                        }else {
+                        } else {
                             tv_get_tivket.setVisibility(View.GONE);
                             tv_get_ticket.setText("无优惠券");
                             tv_get_ticket.setEnabled(false);
@@ -777,18 +813,28 @@ public class SalesActivity extends BaseActivity implements GetListener, SalesLis
             assetId = data.getStringExtra("assetId");
             payValue = data.getStringExtra("payValue");
 
+
+//            intent.putExtra("useCouponList", useCouponList);
+//            intent.putExtra("notUseCouponList", notUseCouponList);
+
+            ArrayList<CouponListBean> useCouponList = (ArrayList<CouponListBean>) data.getSerializableExtra("useCouponList");
+            ArrayList<CouponListBean> notUseCouponList = (ArrayList<CouponListBean>) data.getSerializableExtra("notUseCouponList");
+            if (useCouponList != null) {
+                this.useCouponList = useCouponList;
+            }
+            if (notUseCouponList != null) {
+                this.notUseCouponList = notUseCouponList;
+            }
             initData(edt_door_ticket.getText().toString(), is_have_adress);
             Log.e("213213", "5");
-            if (assetId.equals("")){
+            if (assetId.equals("")) {
                 tv_get_ticket.setText("未使用");
-                clickTicket=null;
-            }else {
+                clickTicket = null;
+            } else {
                 tv_get_ticket.setText(getString(R.string.label_money) + payValue);
                 clickTicket = "";
             }
         }
-
-
 
 
     }

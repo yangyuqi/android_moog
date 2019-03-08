@@ -86,6 +86,7 @@
         android:layout_height="45dp"
         android:layout_marginTop="5dp"
         android:gravity="center_vertical"
+        android:visibility="gone"
         android:background="@color/bg_background_white"
         android:orientation="horizontal">
 
@@ -114,9 +115,7 @@
 
     </LinearLayout>
 
-    <include layout="@layout/layout_no_data"
-        android:id="@+id/no_data"
-        android:visibility="gone"/>
+
 
     <com.liaoinstan.springview.widget.SpringView
         android:layout_width="match_parent"

@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.youzheng.zhejiang.robertmoog.Model.Home.CouponListBean;
 import com.youzheng.zhejiang.robertmoog.Model.Home.CouponListBeanDetail;
 import com.youzheng.zhejiang.robertmoog.R;
+import com.youzheng.zhejiang.robertmoog.Store.listener.OnRecyclerViewAdapterItemClickListener;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -31,7 +32,17 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.CouponView
     Context context ;
     String type ;//1使用 2未使用 3.账户
 
+
+
     String assid;
+
+    private OnRecyclerViewAdapterItemClickListener mOnItemClickListener;
+
+    public void setOnItemClickListener(OnRecyclerViewAdapterItemClickListener mOnItemClickListener) {
+        this.mOnItemClickListener = mOnItemClickListener;
+    }
+
+
     public void setData(ArrayList<CouponListBean> useCouponList , Context context ,String type){
         this.useCouponList = useCouponList ;
         this.context = context;
@@ -46,7 +57,8 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.CouponView
     @Override
     public CouponViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.coupon_rv_item,null);
-        return new CouponViewHolder(view);
+         CouponViewHolder couponViewHolder=new CouponViewHolder(view);
+        return couponViewHolder;
     }
 
     @Override
@@ -143,9 +155,16 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.CouponView
                         shop_List.clear();
                         useCouponList.get(i).setExpress(false);
                         couponViewHolder.tv_show.setVisibility(View.GONE);
+                        couponViewHolder.tv_together.setVisibility(View.GONE);
                     }else {
                         couponViewHolder.tv_show.setVisibility(View.VISIBLE);
                         shop_List = useCouponList.get(i).getShopList();
+                        if (useCouponList.get(i).getCouponCategory()!=null){
+                            couponViewHolder.tv_together.setVisibility(View.VISIBLE);
+                            couponViewHolder.tv_together.setText("参与活动的品类 :"+useCouponList.get(i).getCouponCategory());
+                        }else {
+                            couponViewHolder.tv_together.setVisibility(View.GONE);
+                        }
                         couponViewHolder.iv_show.setImageResource(R.mipmap.group_25_1);
                         useCouponList.get(i).setExpress(true);
                     }
@@ -171,12 +190,7 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.CouponView
             couponViewHolder.lin_info.setVisibility(View.GONE);
         }
 
-        if (useCouponList.get(i).getCouponCategory()!=null){
-            couponViewHolder.tv_together.setVisibility(View.VISIBLE);
-            couponViewHolder.tv_together.setText("参与活动的品类 :"+useCouponList.get(i).getCouponCategory());
-        }else {
-            couponViewHolder.tv_together.setVisibility(View.GONE);
-        }
+
     }
     private String StringToDate(String time) throws ParseException {
 
@@ -193,6 +207,8 @@ public class CouponAdapter extends RecyclerView.Adapter<CouponAdapter.CouponView
     public int getItemCount() {
         return useCouponList.size();
     }
+
+
 
     public class CouponViewHolder extends RecyclerView.ViewHolder{
 

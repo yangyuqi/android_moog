@@ -53,7 +53,7 @@ public class OkHttpClientManager
     private static OkHttpClientManager mInstance;
     private OkHttpClient mOkHttpClient;
     private Handler mDelivery;
-    private BaseModel baseModel;
+
 
 
     private static final String TAG = "OkHttpClientManager";
@@ -362,7 +362,8 @@ public class OkHttpClientManager
                 if (callback != null)
                     try {
                         callback.onResponse(string);
-                          baseModel = new Gson().fromJson(string,BaseModel.class);
+
+                        BaseModel  baseModel = new Gson().fromJson(string,BaseModel.class);
                           if (baseModel!=null){
                               if (baseModel.getCode()==401){
                                   Intent intent=new Intent(RMApp.mContext, LoginActivity.class);
@@ -379,6 +380,7 @@ public class OkHttpClientManager
                     }catch (Exception e){
                         Log.e("走到异常了",string);
                         try {
+                            BaseModel  baseModel = new Gson().fromJson(string,BaseModel.class);
                             if (baseModel!=null){
                                 if (baseModel.getCode()==401){
                                     Intent intent=new Intent(RMApp.mContext, LoginActivity.class);

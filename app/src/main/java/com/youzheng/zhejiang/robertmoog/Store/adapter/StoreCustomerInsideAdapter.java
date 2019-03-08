@@ -42,7 +42,8 @@ public class StoreCustomerInsideAdapter extends RecyclerView.Adapter<StoreCustom
         StoreCustomerDetail.MonthCoustomerDetailBean monthCoustomerDetailBean=list.get(position);
         holder.tv_date.setText(monthCoustomerDetailBean.getRegisterDate());
         holder.tv_way.setText(monthCoustomerDetailBean.getSourceChannelEnum());
-        holder.tv_phone.setText(monthCoustomerDetailBean.getAccount());
+        String phone = monthCoustomerDetailBean.getAccount().substring(0, 3) + " " + monthCoustomerDetailBean.getAccount().substring(3, 7) + " " + monthCoustomerDetailBean.getAccount().substring(7, 11);
+        holder.tv_phone.setText(phone);
         if (TextUtils.isEmpty(monthCoustomerDetailBean.getCustomerType())&&TextUtils.isEmpty(monthCoustomerDetailBean.getUpdateUserName())){
             holder.tv_people.setVisibility(View.GONE);
         }else {

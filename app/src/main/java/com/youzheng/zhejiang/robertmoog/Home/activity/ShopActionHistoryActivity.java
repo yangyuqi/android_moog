@@ -48,6 +48,11 @@ public class ShopActionHistoryActivity extends BaseActivity {
     private boolean types;
     private View no_data, no_web;
     private RelativeLayout layout_header;
+//    private View head;
+    /**
+     * 暂无数据!
+     */
+    private TextView tv_text;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -99,6 +104,7 @@ public class ShopActionHistoryActivity extends BaseActivity {
                     } else {
                         if (pageNum == 1) {
                             no_data.setVisibility(View.VISIBLE);
+                            tv_text.setText("暂无促销活动信息");
                             springView.setVisibility(View.GONE);
                         } else {
                             showToast(getString(R.string.load_list_erron));
@@ -137,6 +143,10 @@ public class ShopActionHistoryActivity extends BaseActivity {
     }
 
     private void initView() {
+        layout_header = (RelativeLayout) findViewById(R.id.layout_header);
+        tv_text = (TextView) findViewById(R.id.tv_text);
+//        head = findViewById(R.id.head);
+//        tv_text = head.findViewById(R.id.tv_text);
         no_web = findViewById(R.id.no_web);
         no_data = findViewById(R.id.no_data);
         ls = findViewById(R.id.ls);
@@ -227,6 +237,6 @@ public class ShopActionHistoryActivity extends BaseActivity {
                 }
             }
         });
-        layout_header = (RelativeLayout) findViewById(R.id.layout_header);
+
     }
 }

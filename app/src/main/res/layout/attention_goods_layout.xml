@@ -45,9 +45,18 @@
 
 
     </LinearLayout>
-    <include layout="@layout/layout_no_data"
-        android:id="@+id/no_data"
-        android:visibility="gone"/>
+   <TextView
+       android:id="@+id/tv_no_data"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:text="暂无意向商品信息"
+       android:gravity="center_horizontal"
+       android:textSize="15sp"
+       android:textColor="@color/text_main"
+       android:paddingTop="40dp"
+       android:visibility="gone"
+
+       />
     <ListView
         android:layout_marginTop="@dimen/space_10"
         android:layout_width="match_parent"

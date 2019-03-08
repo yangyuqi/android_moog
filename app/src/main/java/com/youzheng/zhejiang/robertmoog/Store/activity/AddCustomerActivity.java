@@ -222,6 +222,7 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
                 if (baseModel!=null){
                     if (baseModel.getCode()==PublicUtils.code){
                         tv_add.setClickable(true);
+                        showToasts("添加成功");
                         finish();
                     }else {
                         if (!baseModel.getMsg().equals("")){

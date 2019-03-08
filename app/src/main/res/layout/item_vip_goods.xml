@@ -7,6 +7,7 @@
     android:layout_height="wrap_content">
 
  <LinearLayout
+     android:id="@+id/lin_role"
      android:layout_width="match_parent"
      android:layout_height="50dp"
      android:orientation="horizontal"
@@ -72,23 +73,32 @@
 
 
     </LinearLayout>
-   <TextView
-       android:id="@+id/tv_no_data"
-       android:layout_width="match_parent"
-       android:layout_height="40dp"
-       android:gravity="center"
-       android:textSize="15sp"
-       android:visibility="gone"
-       android:textColor="@color/text_main"
-       android:text="暂无意向商品信息"
-       android:textStyle="bold"
-       android:background="@color/bg_background_white"/>
-    <com.youzheng.zhejiang.robertmoog.utils.View.NoScrollListView
-        android:layout_marginTop="@dimen/space_5"
+
+
+
+        <com.youzheng.zhejiang.robertmoog.utils.View.NoScrollListView
+            android:layout_marginTop="@dimen/space_5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/ls"
+            android:visibility="invisible"
+            android:background="@color/bg_background_white"
+            android:dividerHeight="@dimen/space_divider_2"
+            />
+    <TextView
+        android:id="@+id/tv_no_data"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/ls"
-        android:dividerHeight="@dimen/space_divider_2"
-       />
+        android:layout_height="100dp"
+        android:gravity="center"
+        android:textSize="15sp"
+        android:visibility="visible"
+        android:background="@color/bg_background_white"
+        android:textColor="@color/text_main"
+        android:text="暂无意向商品信息" />
+
+
+
+
+
 
 </LinearLayout>

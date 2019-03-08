@@ -10,17 +10,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.liaoinstan.springview.widget.SpringView;
-import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
 import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
-import com.youzheng.zhejiang.robertmoog.Count.activity.StoreSaleInsideActivity;
+import com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.StoreCustomerInsideAdapter;
 import com.youzheng.zhejiang.robertmoog.Store.bean.StoreCustomerDetail;
-import com.youzheng.zhejiang.robertmoog.Store.view.RecycleViewDivider;
 import com.youzheng.zhejiang.robertmoog.utils.View.MyFooter;
 import com.youzheng.zhejiang.robertmoog.utils.View.MyHeader;
 
@@ -50,7 +48,11 @@ public class StoreCustomerInsideActivity extends BaseActivity implements View.On
     private int pageSize = 10;
     private int page = 1;
     private SpringView mSpringView;
-    private View no_data,no_web;
+    private View no_data, no_web;
+    /**
+     * 暂无数据!
+     */
+    private TextView tv_text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,26 +90,28 @@ public class StoreCustomerInsideActivity extends BaseActivity implements View.On
 
             @Override
             public void onLoadmore() {
-               // list.clear();
+                // list.clear();
                 page++;
                 initData(page, pageSize);
             }
         });
     }
+
     @Override
     public void onChangeListener(int status) {
         super.onChangeListener(status);
-        if (status==-1){
+        if (status == -1) {
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.GONE);
         }
     }
+
     private void initView() {
         no_web = findViewById(R.id.no_web);
-        no_data=findViewById(R.id.no_data);
+        no_data = findViewById(R.id.no_data);
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
@@ -119,7 +123,7 @@ public class StoreCustomerInsideActivity extends BaseActivity implements View.On
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         lv_list.setLayoutManager(manager);
         lv_list.setAdapter(adapter);
-        lv_list.addItemDecoration(new com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider(StoreCustomerInsideActivity.this, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
+        lv_list.addItemDecoration(new RecycleViewDivider(StoreCustomerInsideActivity.this, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
 
 
         adapter = new StoreCustomerInsideAdapter(list, this);
@@ -133,6 +137,7 @@ public class StoreCustomerInsideActivity extends BaseActivity implements View.On
 
         mSpringView.setHeader(new MyHeader(this));
         mSpringView.setFooter(new MyFooter(this));
+        tv_text = (TextView) findViewById(R.id.tv_text);
     }
 
     @Override
@@ -162,7 +167,7 @@ public class StoreCustomerInsideActivity extends BaseActivity implements View.On
                 if (baseModel.getCode() == PublicUtils.code) {
                     StoreCustomerDetail storeCustomerDetail = gson.fromJson(gson.toJson(baseModel.getDatas()), StoreCustomerDetail.class);
                     setData(storeCustomerDetail);
-                   // lv_list.setPullLoadMoreCompleted();
+                    // lv_list.setPullLoadMoreCompleted();
                 } else {
                     showToasts(baseModel.getMsg());
                 }
@@ -181,10 +186,11 @@ public class StoreCustomerInsideActivity extends BaseActivity implements View.On
             no_data.setVisibility(View.GONE);
             mSpringView.setVisibility(View.VISIBLE);
         } else {
-            if (page==1){
+            if (page == 1) {
                 no_data.setVisibility(View.VISIBLE);
+                tv_text.setText("暂无门店客户信息");
                 mSpringView.setVisibility(View.GONE);
-            }else {
+            } else {
                 showToasts(getString(R.string.load_list_erron));
             }
         }

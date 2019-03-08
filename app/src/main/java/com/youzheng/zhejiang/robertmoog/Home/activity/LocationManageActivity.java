@@ -124,7 +124,14 @@ public class LocationManageActivity extends BaseActivity implements View.OnClick
             @Override
             public void convert(ViewHolder helper, final AddressDatasBean item) {
                 helper.setText(R.id.tv_name, item.getShipPerson());
-                helper.setText(R.id.tv_phone, item.getShipMobile());
+                if (item.getShipMobile().length()!=11){
+                    helper.setText(R.id.tv_phone, item.getShipMobile());
+                }else {
+                    String phone = item.getShipMobile().substring(0, 3) + " " + item.getShipMobile().substring(3, 7) + " " + item.getShipMobile().substring(7, 11);
+                    helper.setText(R.id.tv_phone, phone);
+
+                }
+
                 helper.setText(R.id.tv_details, item.getShipAddress());
 
                 helper.getConvertView().setOnClickListener(new View.OnClickListener() {

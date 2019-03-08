@@ -93,6 +93,7 @@ public class LeadActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.bt_start:
                 startActivity(new Intent(this,LoginActivity.class));
                 SPUtils.setParam(this,"IsFir",false);
+                finish();
                 break;
         }
     }

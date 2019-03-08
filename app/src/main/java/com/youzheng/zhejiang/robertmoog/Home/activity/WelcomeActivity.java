@@ -24,6 +24,7 @@ public class WelcomeActivity extends AppCompatActivity {
         boolean isfirst= (boolean) SPUtils.getParam(WelcomeActivity.this,"IsFir",true);
         if (isfirst){
             startActivity(new Intent(WelcomeActivity.this,LeadActivity.class));
+            finish();
             return;
         }else {
             final String token = (String) SharedPreferencesUtils.getParam(WelcomeActivity.this, PublicUtils.access_token, "");
@@ -37,6 +38,7 @@ public class WelcomeActivity extends AppCompatActivity {
                         startActivity(new Intent(WelcomeActivity.this,LoginActivity.class));
                     }else {
                         startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
+
                     }
                     finish();
                 }
