@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,8 @@ import com.youzheng.zhejiang.robertmoog.Store.activity.CheckPicActivity;
 import com.youzheng.zhejiang.robertmoog.Store.utils.DonwloadSaveImg;
 
 import xyz.zpayh.hdimage.HDImageView;
+import xyz.zpayh.hdimage.ImageSource;
+import xyz.zpayh.hdimage.ImageSourceBuilder;
 
 public class NoteInfoDialog extends Dialog implements View.OnClickListener, View.OnLongClickListener {
 
@@ -53,7 +56,15 @@ public class NoteInfoDialog extends Dialog implements View.OnClickListener, View
             }
         });
         iv = view.findViewById(R.id.iv);
-        iv.setImageURI(pic);
+        if (TextUtils.isEmpty(pic)){
+            ImageSource imageSource = ImageSourceBuilder.newBuilder()
+                    .setUri(R.mipmap.type_icon)
+                    .build();
+            iv.setImageSource(imageSource);
+        }else {
+            iv.setImageURI(pic);
+        }
+
         iv.setOnLongClickListener(this);
        // Glide.with(context).load(pic).error(R.mipmap.type_icon).into(iv);
     }

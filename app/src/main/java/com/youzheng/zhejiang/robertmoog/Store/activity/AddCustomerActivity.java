@@ -189,6 +189,8 @@ public class AddCustomerActivity extends BaseActivity implements View.OnClickLis
                         id="DESIGNER";
                     }
                         //写你相关操作即可
+
+
                     addProfessionalCustomer(phone,name,id);
 
 

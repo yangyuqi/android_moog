@@ -29,6 +29,11 @@ public class GoodsSearchAdapter extends BaseAdapter {
         this.list=list;
         notifyDataSetChanged();
     }
+
+    public void clear(){
+        list.clear();
+        notifyDataSetChanged();
+    }
     @Override
     public int getCount() {
         return list.size();

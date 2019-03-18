@@ -110,6 +110,7 @@ public void onChangeListener(int status) {
     if (status==-1){
         layout_header.setVisibility(View.VISIBLE);
         no_web.setVisibility(View.VISIBLE);
+        no_data.setVisibility(View.GONE);
     }else {
         layout_header.setVisibility(View.VISIBLE);
         no_web.setVisibility(View.GONE);
@@ -209,7 +210,7 @@ public void onChangeListener(int status) {
         List<ShopSale.ShopDataBean> beans = shopSale.getShopData();
         if (beans.size() != 0) {
             list.addAll(beans);
-            adapter.setUI(beans);
+            adapter.setUI(list);
             no_data.setVisibility(View.GONE);
             pr_list.setVisibility(View.VISIBLE);
         } else {

@@ -44,7 +44,9 @@ public class ProfessionalCustomerOrderListAdapter extends RecyclerView.Adapter {
     }
 
     public void setUI(List<NewOrderListBean.OrderListBean> list){
-        this.list = list;
+//        this.list.clear();
+        //this.list.addAll(list);
+        this.list=list;
         notifyDataSetChanged();
     }
     public void clear(){
@@ -135,7 +137,7 @@ public class ProfessionalCustomerOrderListAdapter extends RecyclerView.Adapter {
         }
     }
 
-    private void setMoreImageData(final MoreImageHolder holder, final int position) {
+    private void setMoreImageData(final MoreImageHolder holder, final int positions) {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         holder.mRvListPic.setLayoutManager(linearLayoutManager);
@@ -145,13 +147,13 @@ public class ProfessionalCustomerOrderListAdapter extends RecyclerView.Adapter {
 
         piclist=new ArrayList<>();
         if (list.size() != 0) {
-            for (NewOrderListBean.OrderListBean.OrderItemInfosBean itemInfosBean : list.get(position).getOrderItemInfos()) {
+            for (NewOrderListBean.OrderListBean.OrderItemInfosBean itemInfosBean : list.get(positions).getOrderItemInfos()) {
                 piclist.add(itemInfosBean.getPhoto());
             }
         }
 
         moreGoodsAdapter.setPic(piclist);
-        NewOrderListBean.OrderListBean beans = list.get(position);
+        NewOrderListBean.OrderListBean beans = list.get(positions);
         holder.mTvDate.setText(beans.getCreateDate());
         holder.mTvOrderNum.setText(beans.getOrderCode());
         holder.mTvCount.setText("共" + beans.getProductNum() + "件商品");
@@ -159,7 +161,7 @@ public class ProfessionalCustomerOrderListAdapter extends RecyclerView.Adapter {
         holder.tv_people.setText(beans.getRecommender());
         if (piclist.size()==1){
             holder.lin_code.setVisibility(View.VISIBLE);
-            for (NewOrderListBean.OrderListBean.OrderItemInfosBean itemInfosBean:list.get(position).getOrderItemInfos()){
+            for (NewOrderListBean.OrderListBean.OrderItemInfosBean itemInfosBean:list.get(positions).getOrderItemInfos()){
                 holder.tv_goods_SKU.setText(itemInfosBean.getCode());
                 holder.tv_goods_contents.setText(itemInfosBean.getName());
             }
@@ -176,7 +178,23 @@ public class ProfessionalCustomerOrderListAdapter extends RecyclerView.Adapter {
                     return holder.item.onTouchEvent(event);
                 }
             });
+        }else {
+
         }
+
+        moreGoodsAdapter.setOnItemClickListener(new OnRecyclerViewAdapterItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent=new Intent(context,StoreOrderlistDetailActivity.class);
+                intent.putExtra("OrderGoodsId",list.get(positions).getId());
+                context.startActivity(intent);
+            }
+
+            @Override
+            public void onItemLongClick(View view, int position) {
+
+            }
+        });
 //        holder.mRvListPic.setOnTouchListener(new View.OnTouchListener() {
 //            @Override
 //            public boolean onTouch(View v, MotionEvent event) {

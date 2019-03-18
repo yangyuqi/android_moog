@@ -207,9 +207,7 @@ public class BaseCameraActivity extends BaseActivity {
     protected void skipPhoto(){
 
         if (Build.VERSION.SDK_INT >= 23) {
-            if (PermissionUtils.permissionIsOpen(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    ){
-
+            if (PermissionUtils.permissionIsOpen(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)){
                 galleryFinal();
 
             } else {

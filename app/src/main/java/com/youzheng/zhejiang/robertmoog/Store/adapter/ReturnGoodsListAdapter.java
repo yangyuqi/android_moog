@@ -46,7 +46,9 @@ public class ReturnGoodsListAdapter extends RecyclerView.Adapter {
     }
 
     public void setUI(List<ReturnGoodsList.ReturnOrderListBean> list){
-        this.list = list;
+       this.list = list;
+//        this.list.clear();
+//        this.list.addAll(list);
         notifyDataSetChanged();
     }
 
@@ -99,9 +101,6 @@ public class ReturnGoodsListAdapter extends RecyclerView.Adapter {
                 }
             });
 
-
-
-
             return moreImageHolder;
         }
     }
@@ -115,7 +114,7 @@ public class ReturnGoodsListAdapter extends RecyclerView.Adapter {
         }
     }
 
-    private void setMoreImageData(final MoreImageHolder holder, final int position) {
+    private void setMoreImageData(final MoreImageHolder holder, final int positions) {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         holder.mRvListPic.setLayoutManager(linearLayoutManager);
@@ -125,13 +124,13 @@ public class ReturnGoodsListAdapter extends RecyclerView.Adapter {
 
         piclist=new ArrayList<>();
         if (list.size()!=0){
-            for (ReturnGoodsList.ReturnOrderListBean.ProductListBean productListBean:list.get(position).getProductList()){
+            for (ReturnGoodsList.ReturnOrderListBean.ProductListBean productListBean:list.get(positions).getProductList()){
                 piclist.add(productListBean.getPhoto());
             }
 
         }
         moreGoodsAdapter.setPic(piclist);
-        ReturnGoodsList.ReturnOrderListBean beans =list.get(position);
+        ReturnGoodsList.ReturnOrderListBean beans =list.get(positions);
         holder.mTvDate.setText(beans.getCreateDate());
         holder.mTvOrderNum.setText(beans.getReturnOrderCode());
         holder.mTvCount.setText("共" + beans.getProductNum() + "件商品");
@@ -139,7 +138,7 @@ public class ReturnGoodsListAdapter extends RecyclerView.Adapter {
 
         if (piclist.size()==1){
             holder.lin_code.setVisibility(View.VISIBLE);
-            for (ReturnGoodsList.ReturnOrderListBean.ProductListBean productListBean:list.get(position).getProductList()){
+            for (ReturnGoodsList.ReturnOrderListBean.ProductListBean productListBean:list.get(positions).getProductList()){
                 holder.tv_goods_SKU.setText(productListBean.getSku());
                 holder.tv_goods_contents.setText(productListBean.getName());
             }
@@ -156,7 +155,23 @@ public class ReturnGoodsListAdapter extends RecyclerView.Adapter {
                     return holder.item.onTouchEvent(event);
                 }
             });
+        }else {
+
         }
+
+        moreGoodsAdapter.setOnItemClickListener(new OnRecyclerViewAdapterItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent=new Intent(context,ReturnGoodsDetailActivity.class);
+                intent.putExtra("returnGoodsId",list.get(positions).getId()+"");
+                context.startActivity(intent);
+            }
+
+            @Override
+            public void onItemLongClick(View view, int position) {
+
+            }
+        });
 //        holder.mRvListPic.setOnTouchListener(new View.OnTouchListener() {
 //            @Override
 //            public boolean onTouch(View v, MotionEvent event) {

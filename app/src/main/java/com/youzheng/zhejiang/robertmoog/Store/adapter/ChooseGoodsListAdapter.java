@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -43,7 +44,9 @@ public class ChooseGoodsListAdapter extends RecyclerView.Adapter {
     }
 
     public void setUI(List<NewOrderListBean.OrderListBean> list){
-        this.list = list;
+//        this.list.clear();
+        //this.list.addAll(list);
+        this.list=list;
         notifyDataSetChanged();
     }
 
@@ -112,7 +115,15 @@ public class ChooseGoodsListAdapter extends RecyclerView.Adapter {
         holder.mTvCount.setText("共" + beans.getProductNum() + "件商品");
         holder.mTvMoney.setText(context.getString(R.string.label_money)+beans.getPayAmount());
 
-
+        if (piclist.size()==1){
+            holder.lin_code.setVisibility(View.VISIBLE);
+            for (NewOrderListBean.OrderListBean.OrderItemInfosBean itemInfosBean:list.get(position).getOrderItemInfos()){
+                holder.tv_goods_SKU.setText(itemInfosBean.getCode());
+                holder.tv_goods_contents.setText(itemInfosBean.getName());
+            }
+        }else {
+            holder.lin_code.setVisibility(View.GONE);
+        }
         final int positions = holder.getLayoutPosition();
 
         holder.tv_return_all.setOnClickListener(new View.OnClickListener() {
@@ -227,8 +238,9 @@ public class ChooseGoodsListAdapter extends RecyclerView.Adapter {
         RecyclerView mRvListPic;
         TextView mTvCount;
         TextView mTvMoney;
-        TextView tv_return_all;
+        TextView tv_return_all,tv_goods_SKU,tv_goods_contents;
         TextView tv_return_partial;
+        private LinearLayout lin_code;
         public MoreImageHolder(View itemView) {
             super(itemView);
             mTvDate = itemView.findViewById(R.id.tv_date);
@@ -238,6 +250,9 @@ public class ChooseGoodsListAdapter extends RecyclerView.Adapter {
             mTvMoney = itemView.findViewById(R.id.tv_money);
             tv_return_all=itemView.findViewById(R.id.tv_return_all);
             tv_return_partial=itemView.findViewById(R.id.tv_return_partial);
+            tv_goods_SKU= itemView.findViewById(R.id.tv_goods_SKU);
+            tv_goods_contents= itemView.findViewById(R.id.tv_goods_contents);
+            lin_code= itemView.findViewById(R.id.lin_code);
         }
     }
 

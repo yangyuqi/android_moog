@@ -58,6 +58,7 @@ public class TodayRegisterNumberActivity extends BaseActivity implements View.On
         if (status==-1){
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.VISIBLE);
+            no_data.setVisibility(View.GONE);
         }else {
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.GONE);
@@ -125,7 +126,7 @@ public class TodayRegisterNumberActivity extends BaseActivity implements View.On
         List<TodayRegisterList.CustomerListBean> beanList = registerList.getCustomerList();
         if (beanList.size() != 0) {
             list.addAll(beanList);
-            adapter.refreshUI(beanList);
+            adapter.refreshUI(list);
             no_data.setVisibility(View.GONE);
             pr_list.setVisibility(View.VISIBLE);
         } else {

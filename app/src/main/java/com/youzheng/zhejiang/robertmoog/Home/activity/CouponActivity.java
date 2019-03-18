@@ -18,6 +18,7 @@ import com.youzheng.zhejiang.robertmoog.Home.adapter.SearchResultAdapter;
 import com.youzheng.zhejiang.robertmoog.Model.Home.CouponListBean;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.listener.OnRecyclerViewAdapterItemClickListener;
+import com.youzheng.zhejiang.robertmoog.utils.ClickUtils;
 
 import java.util.ArrayList;
 
@@ -46,23 +47,29 @@ public class CouponActivity extends BaseActivity {
         initClick();
 
         if (tabpos==0){
-            if (useCouponList.size()==0){
-                no_data.setVisibility(View.VISIBLE);
-                recyclerView.setVisibility(View.GONE);
-                tv_text.setText("您暂无可用的优惠券");
-            }else {
-                no_data.setVisibility(View.GONE);
-                recyclerView.setVisibility(View.VISIBLE);
+            if (useCouponList!=null){
+                if (useCouponList.size()==0){
+                    no_data.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
+                    tv_text.setText("您暂无可用的优惠券");
+                }else {
+                    no_data.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                }
             }
+
         }else {
-            if (notUseCouponList.size()==0){
-                no_data.setVisibility(View.VISIBLE);
-                recyclerView.setVisibility(View.GONE);
-                tv_text.setText("您暂无可用的优惠券");
-            }else {
-                no_data.setVisibility(View.GONE);
-                recyclerView.setVisibility(View.VISIBLE);
+            if (notUseCouponList!=null){
+                if (notUseCouponList.size()==0){
+                    no_data.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
+                    tv_text.setText("您暂无可用的优惠券");
+                }else {
+                    no_data.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                }
             }
+
         }
     }
 
@@ -72,26 +79,33 @@ public class CouponActivity extends BaseActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 tabpos=tab.getPosition();
                 if (tab.getPosition()==0){
-                    if (useCouponList.size()==0){
-                        no_data.setVisibility(View.VISIBLE);
-                        recyclerView.setVisibility(View.GONE);
-                        tv_text.setText("您暂无可用的优惠券");
-                    }else {
-                        no_data.setVisibility(View.GONE);
-                        recyclerView.setVisibility(View.VISIBLE);
+                    if (useCouponList!=null){
+                        if (useCouponList.size()==0){
+                            no_data.setVisibility(View.VISIBLE);
+                            recyclerView.setVisibility(View.GONE);
+                            tv_text.setText("您暂无可用的优惠券");
+                        }else {
+                            no_data.setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.VISIBLE);
+                        }
+                        addapter.setData(useCouponList,CouponActivity.this,"1");
                     }
-                    addapter.setData(useCouponList,CouponActivity.this,"1");
+
 
                 }else if (tab.getPosition()==1){
-                    addapter.setData(notUseCouponList,CouponActivity.this,"2");
-                    if (notUseCouponList.size()==0){
-                        no_data.setVisibility(View.VISIBLE);
-                        recyclerView.setVisibility(View.GONE);
-                        tv_text.setText("您暂无可用的优惠券");
-                    }else {
-                        no_data.setVisibility(View.GONE);
-                        recyclerView.setVisibility(View.VISIBLE);
+                    if (notUseCouponList!=null){
+                        if (notUseCouponList.size()==0){
+                            no_data.setVisibility(View.VISIBLE);
+                            recyclerView.setVisibility(View.GONE);
+                            tv_text.setText("您暂无可用的优惠券");
+                        }else {
+                            no_data.setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.VISIBLE);
+                        }
+                        addapter.setData(notUseCouponList,CouponActivity.this,"2");
                     }
+
+
                 }
             }
 
@@ -122,26 +136,22 @@ public class CouponActivity extends BaseActivity {
         recyclerView = findViewById(R.id.recycler);
         useCouponList = (ArrayList<CouponListBean>) getIntent().getSerializableExtra("useCouponList");
         notUseCouponList = (ArrayList<CouponListBean>) getIntent().getSerializableExtra("notUseCouponList");
-        if (useCouponList.size()==0){
-            tabLayout.addTab(tabLayout.newTab().setText("可使用（0）"));
-//            no_data.setVisibility(View.VISIBLE);
-//            recyclerView.setVisibility(View.GONE);
-//            tv_text.setText("您暂无可用的优惠券");
-        }else {
-//            no_data.setVisibility(View.GONE);
-//            recyclerView.setVisibility(View.VISIBLE);
-            tabLayout.addTab(tabLayout.newTab().setText("可使用"+"（"+useCouponList.size()+")"));
+        if (useCouponList!=null){
+            if (useCouponList.size()==0){
+                tabLayout.addTab(tabLayout.newTab().setText("可使用（0）"));
+            }else {
+                tabLayout.addTab(tabLayout.newTab().setText("可使用"+"（"+useCouponList.size()+")"));
+            }
         }
-        if (notUseCouponList.size()==0){
-//            no_data.setVisibility(View.VISIBLE);
-//            recyclerView.setVisibility(View.GONE);
-//            tv_text.setText("您暂无可用的优惠券");
-            tabLayout.addTab(tabLayout.newTab().setText("不可使用（0）"));
-        }else {
-//            no_data.setVisibility(View.GONE);
-//            recyclerView.setVisibility(View.VISIBLE);
-            tabLayout.addTab(tabLayout.newTab().setText("不可使用"+"（"+notUseCouponList.size()+"）"));
+
+        if (notUseCouponList!=null){
+            if (notUseCouponList.size()==0){
+                tabLayout.addTab(tabLayout.newTab().setText("不可使用（0）"));
+            }else {
+                tabLayout.addTab(tabLayout.newTab().setText("不可使用"+"（"+notUseCouponList.size()+"）"));
+            }
         }
+
 
 
 
@@ -150,12 +160,17 @@ public class CouponActivity extends BaseActivity {
         addapter = new CouponAdapter();
         recyclerView.setAdapter(addapter);
         recyclerView.addItemDecoration(new RecycleViewDivider(mContext, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
-        addapter.setData(useCouponList,CouponActivity.this,"1");
+        if (useCouponList!=null){
+            addapter.setData(useCouponList,CouponActivity.this,"1");
+        }
         tv_add = findViewById(R.id.tv_add);
 
         tv_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (ClickUtils.isFastDoubleClick()){
+                    return;
+                }
                 Intent intent = new Intent();
                String assetId= "";
                 String payValue="";

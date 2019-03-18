@@ -158,22 +158,6 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void setListener() {
-//        rv_list.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
-//            @Override
-//            public void onRefresh() {
-//                page = 1;
-//                list.clear();
-//                initData(page, pageSize, orderCode, timeQuantum, isCustomer, type);
-//
-//            }
-//
-//            @Override
-//            public void onLoadMore() {
-//                // list.clear();
-//                page++;
-//                initData(page, pageSize, orderCode, timeQuantum, isCustomer, type);
-//            }
-//        });
 
 
         mSpringView.setListener(new SpringView.OnFreshListener() {
@@ -200,9 +184,11 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
         if (status == -1) {
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.VISIBLE);
+            no_data.setVisibility(View.GONE);
         } else {
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.GONE);
+
         }
     }
 
@@ -281,9 +267,9 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
 
     }
 
-    private void initData(int page, int pageSize, String orderCode, String timeQuantum, Boolean isCustomer, String type) {
+    private void initData(final int pages, int pageSize, String orderCode, String timeQuantum, Boolean isCustomer, String type) {
         HashMap<String, Object> map = new HashMap<>();
-        map.put("pageNum", page);
+        map.put("pageNum", pages);
         map.put("pageSize", pageSize);
         map.put("orderCode", orderCode);
         map.put("timeQuantum", timeQuantum);
@@ -311,6 +297,7 @@ public class OrderListActivity extends BaseActivity implements View.OnClickListe
                     setData(listBean);
 
                 } else {
+
                     showToasts(baseModel.getMsg());
                 }
             }

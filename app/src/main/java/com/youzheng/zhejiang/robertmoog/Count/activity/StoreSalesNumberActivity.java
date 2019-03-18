@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -167,9 +168,11 @@ public class StoreSalesNumberActivity extends BaseActivity implements View.OnCli
         if (status==-1){
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.VISIBLE);
+            no_data.setVisibility(View.GONE);
         }else {
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.GONE);
+
         }
     }
     private void initView() {
@@ -262,22 +265,22 @@ public class StoreSalesNumberActivity extends BaseActivity implements View.OnCli
         orderAmountCount = shopSale.getOrderAmountCount();
         customerTransaction = shopSale.getCustomerTransaction();
 
-        if (!orderCount.equals("") || orderCount != null) {
+        if (!TextUtils.isEmpty(orderCount)) {
             tv_order_total.setText(orderCount);
         }
 
-        if (!orderAmountCount.equals("") || orderAmountCount != null) {
+        if (!TextUtils.isEmpty(orderAmountCount)) {
             tv_order_money.setText(orderAmountCount);
         }
 
-        if (!customerTransaction.equals("") || customerTransaction != null) {
+        if (!TextUtils.isEmpty(customerTransaction)) {
             tv_order_value.setText(customerTransaction);
         }
 
         List<ShopSale.ShopDataBean> beans = shopSale.getShopData();
         if (beans.size() != 0) {
             list.addAll(beans);
-            adapter.setUI(beans);
+            adapter.setUI(list);
             no_data.setVisibility(View.GONE);
             springView.setVisibility(View.VISIBLE);
         } else {

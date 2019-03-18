@@ -121,11 +121,13 @@ public class AttentionManagerActivity extends BaseActivity implements MangerList
                     springView.setVisibility(View.VISIBLE);
                     ls.setVisibility(View.GONE);
                     findViewById(R.id.rl_search).setVisibility(View.VISIBLE);
+                    adapter.clear();
                     initData();
                 } else if (tab.getPosition() == 1) {
                     springView.setVisibility(View.GONE);
                     ls.setVisibility(View.VISIBLE);
                     findViewById(R.id.rl_search).setVisibility(View.GONE);
+                    com_adapter.clear();
                     refreshData();
                 }
             }
@@ -227,7 +229,9 @@ public class AttentionManagerActivity extends BaseActivity implements MangerList
                                 //showToast(getString(R.string.load_list_erron));
                             }
                         }
-                        adapter.setData(customerList, mContext);
+                        data.addAll(customerList);
+                        adapter.setData(data, mContext);
+//                        adapter.notifyDataSetChanged();
 //                        if (customerList.size()==0){
 //                            showToast(getString(R.string.load_list_erron));
 //                        }
@@ -264,6 +268,7 @@ public class AttentionManagerActivity extends BaseActivity implements MangerList
         if (status == -1) {
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.VISIBLE);
+            no_data.setVisibility(View.GONE);
         } else {
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.GONE);
@@ -336,6 +341,7 @@ public class AttentionManagerActivity extends BaseActivity implements MangerList
                     showToasts("手机号码格式不正确");
                 } else {
                     phone = tv_search.getText().toString();
+                    adapter.clear();
                     initData();
                 }
 
@@ -359,12 +365,15 @@ public class AttentionManagerActivity extends BaseActivity implements MangerList
     @Subscribe
     public void onEvent(String refresh) {
         if (refresh.equals("refresh")) {
+            data.clear();
+            adapter.clear();
             initData();
         }
     }
 
     @Override
     public void refresh(List<CustomerIntentListBean> lists) {
+        adapter.clear();
         initData();
     }
 

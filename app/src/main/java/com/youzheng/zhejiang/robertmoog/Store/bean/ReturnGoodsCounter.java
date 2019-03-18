@@ -82,15 +82,15 @@ public class ReturnGoodsCounter {
                 private String refundAmount;
                 private String photo;
                 private String orderItemProductId;
-                private int square;
+                private String square;
                 private boolean isSpecial;
-                private int money;
+                private long money;
 
-                public int getMoney() {
+                public long getMoney() {
                     return money;
                 }
 
-                public void setMoney(int money) {
+                public void setMoney(long money) {
                     this.money = money;
                 }
 
@@ -142,11 +142,11 @@ public class ReturnGoodsCounter {
                     this.orderItemProductId = orderItemProductId;
                 }
 
-                public int getSquare() {
+                public String getSquare() {
                     return square;
                 }
 
-                public void setSquare(int square) {
+                public void setSquare(String square) {
                     this.square = square;
                 }
 

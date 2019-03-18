@@ -133,14 +133,23 @@ public class UnqualifiedActivity extends BaseActivity implements View.OnClickLis
         }
 
         List<UnqualifiedContent.PatrolShopProblemDetailBean.QuestionImagesBean> beans=unqualifiedContent.getPatrolShopProblemDetail().getQuestionImages();
-
-        if (beans.size()!=0){
-            list.addAll(beans);
-            adapter.setPic(beans);
+        if (beans!=null){
+            if (beans.size()!=0){
+                list.addAll(beans);
+                adapter.setPic(list);
+            }else {
+                gv_pic.setVisibility(View.GONE);
+            }
+        }else {
+            gv_pic.setVisibility(View.GONE);
         }
 
-        for (int i = 0; i < beans.size(); i++) {
-            pic.add(list.get(i).getImageImgUrl());
+
+        if (beans!=null){
+            for (int i = 0; i < beans.size(); i++) {
+                pic.add(list.get(i).getImageImgUrl());
+            }
+
         }
 
     }

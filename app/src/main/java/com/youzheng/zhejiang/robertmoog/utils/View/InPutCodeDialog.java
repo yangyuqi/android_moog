@@ -3,6 +3,7 @@ package com.youzheng.zhejiang.robertmoog.utils.View;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -74,6 +75,12 @@ public class InPutCodeDialog extends Dialog implements View.OnClickListener{
         DisplayMetrics d = mcontext.getResources().getDisplayMetrics(); // 获取屏幕宽、高用
         lp.width = (int) (d.widthPixels * 0.74); // 高度设置为屏幕的0.6
         dialogWindow.setAttributes(lp);
+
+        if (TextUtils.isEmpty(confrim_dialog_tv_content.getText().toString())){
+            tv_no.setText("取消");
+        }else {
+            tv_no.setText("清除");
+        }
     }
 
     @Override
@@ -86,13 +93,19 @@ public class InPutCodeDialog extends Dialog implements View.OnClickListener{
                     EventBus.getDefault().post(objects);
                 }
                 dismiss();
+
                 break;
 
             case R.id.tv_no :
-                remark.setCodePU("");
-                adapter.notifyDataSetChanged();
-                EventBus.getDefault().post(objects);
-                dismiss();
+                if (tv_no.getText().toString().equals("取消")) {
+                    dismiss();
+                }else {
+                    remark.setCodePU("");
+                    adapter.notifyDataSetChanged();
+                    EventBus.getDefault().post(objects);
+                    dismiss();
+                }
+
                 break;
         }
     }

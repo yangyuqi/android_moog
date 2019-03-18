@@ -38,7 +38,8 @@
                 android:text=""
                 android:textSize="15sp"
                 android:maxLength="20"
-                android:inputType="number"
+                android:inputType="textEmailAddress"
+                android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
                 android:textColor="#383838"
                 android:background="@null"
                 />
@@ -58,7 +59,7 @@
         android:orientation="horizontal"
         >
         <TextView
-            android:background="@drawable/bg_order"
+            android:background="@drawable/bg_order_one"
             android:id="@+id/tv_no"
             android:layout_width="0dp"
             android:layout_weight="1"

@@ -32,6 +32,7 @@ public class GoodsListAdapter extends RecyclerView.Adapter<GoodsListAdapter.Good
     }
 
     public void  setRefreshUI(List<GoodsList.ProductListDetailDataBean> list){
+//        this.list.addAll(list);
         this.list=list;
         notifyDataSetChanged();
 

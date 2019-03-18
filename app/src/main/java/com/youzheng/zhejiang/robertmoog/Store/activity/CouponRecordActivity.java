@@ -101,16 +101,21 @@ public class CouponRecordActivity extends BaseActivity implements View.OnClickLi
                     initData(year);
                 } else {
                     year++;
-                    list.clear();
                     initData(year);
                 }
             }
 
             @Override
             public void onLoadmore() {
-                year = year - 1;
-                list.clear();
-                initData(year);
+//                year = year - 1;
+                if (year==2019){
+                    mSpringView.onFinishFreshAndLoad();
+                    showToasts(getString(R.string.load_list_erron));
+                }else {
+                    year=year-1;
+                    initData(year);
+                }
+
             }
         });
 
@@ -150,6 +155,7 @@ public class CouponRecordActivity extends BaseActivity implements View.OnClickLi
         if (status==-1){
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.VISIBLE);
+            no_data.setVisibility(View.GONE);
         }else {
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.GONE);
@@ -203,19 +209,17 @@ public class CouponRecordActivity extends BaseActivity implements View.OnClickLi
         List<CouponRecord.OrderMonthDataListBean> beanList = couponRecord.getOrderMonthDataList();
         if (beanList!=null){
             if (beanList.size() != 0) {
+                list.clear();
                 list.addAll(beanList);
-                adapter.setListRefreshUi(beanList);
+                adapter.setListRefreshUi(list);
                 no_data.setVisibility(View.GONE);
                 mSpringView.setVisibility(View.VISIBLE);
             } else {
-                if (year == selectedDate.get(Calendar.YEAR)) {
+
                     no_data.setVisibility(View.VISIBLE);
                     tv_text.setText("暂无优惠券使用信息");
                     mSpringView.setVisibility(View.GONE);
-                } else {
-                    showToasts(getString(R.string.load_list_erron));
-                    year = year + 1;
-                }
+
 
 
             }

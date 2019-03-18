@@ -6,10 +6,12 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 
 import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
+import com.youzheng.zhejiang.robertmoog.Base.BaseFragment;
 
 public class NetBroadcastReceiver extends BroadcastReceiver {
 
     public NetChangeListener listener = BaseActivity.listener;
+
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -21,6 +23,7 @@ public class NetBroadcastReceiver extends BroadcastReceiver {
             if (listener != null) {
                 listener.onChangeListener(netWorkState);
             }
+
         }
 //        context.unregisterReceiver(this);
     }

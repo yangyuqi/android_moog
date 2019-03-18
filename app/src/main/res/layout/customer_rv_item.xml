@@ -120,6 +120,7 @@
                             android:id="@+id/iv_icon"
                             android:layout_width="88dp"
                             android:layout_height="88dp"
+                            android:scaleType="centerCrop"
                             android:layout_centerVertical="true"
                             android:layout_marginLeft="@dimen/space_15"
                             android:src="@mipmap/group_9_1"
@@ -218,6 +219,10 @@
             </LinearLayout>
 
         </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/bg_all"/>
 
         <com.youzheng.zhejiang.robertmoog.utils.View.NoScrollListView
             android:layout_width="match_parent"

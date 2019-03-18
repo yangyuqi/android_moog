@@ -27,6 +27,7 @@ import com.youzheng.zhejiang.robertmoog.Model.login.UserConfigDataBean;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.bean.Code;
 import com.youzheng.zhejiang.robertmoog.utils.ClickUtils;
+import com.youzheng.zhejiang.robertmoog.utils.PhoneUtil;
 import com.youzheng.zhejiang.robertmoog.utils.QRcode.android.CaptureActivity;
 import com.youzheng.zhejiang.robertmoog.utils.SharedPreferencesUtils;
 import com.youzheng.zhejiang.robertmoog.utils.View.MyCountDownLoginTimer;
@@ -133,6 +134,11 @@ public class LoginActivity extends BaseActivity {
                     showToasts(getString(R.string.phone_not_null));
                     return;
                 }
+
+                 if (PhoneUtil.isCellphone(edt_phone.getText().toString()) == false) {
+                     showToasts("手机号码格式不正确");
+                     return;
+                 }
                 timer.start();
                 Map<String,Object> map = new HashMap<>();
                 map.put("phone",edt_phone.getText().toString());
@@ -148,7 +154,7 @@ public class LoginActivity extends BaseActivity {
                         BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                         if (baseModel.getCode()== PublicUtils.code){
                             Code code = gson.fromJson(gson.toJson(baseModel.getDatas()),Code.class);
-                            showStopDialog(code.getCheckCode());
+                            //showStopDialog(code.getCheckCode());
                         }
                     }
                 });
@@ -258,15 +264,15 @@ public class LoginActivity extends BaseActivity {
        });
     }
 
-    @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-        if(event.getKeyCode() == KeyEvent.KEYCODE_BACK ) {
-            //do something.
-            return true;
-        }else {
-            return super.dispatchKeyEvent(event);
-        }
-    }
+//    @Override
+//    public boolean dispatchKeyEvent(KeyEvent event) {
+//        if(event.getKeyCode() == KeyEvent.KEYCODE_BACK ) {
+//            //do something.
+//            return true;
+//        }else {
+//            return super.dispatchKeyEvent(event);
+//        }
+//    }
 
 
     void changeLayout(String type){

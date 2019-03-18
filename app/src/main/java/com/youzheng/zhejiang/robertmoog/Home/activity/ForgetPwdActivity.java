@@ -21,6 +21,8 @@ import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.bean.Code;
+import com.youzheng.zhejiang.robertmoog.utils.ClickUtils;
+import com.youzheng.zhejiang.robertmoog.utils.PhoneUtil;
 import com.youzheng.zhejiang.robertmoog.utils.View.MyCountDownLoginTimer;
 
 import java.io.IOException;
@@ -66,6 +68,11 @@ public class ForgetPwdActivity extends BaseActivity {
                     showToasts(getString(R.string.phone_not_null));
                     return;
                 }
+
+                if (PhoneUtil.isCellphone(edt_phone.getText().toString()) == false) {
+                    showToasts("手机号码格式不正确");
+                    return;
+                }
                 timer.start();
                 Map<String,Object> map = new HashMap<>();
                 map.put("phone",edt_phone.getText().toString());
@@ -81,7 +88,7 @@ public class ForgetPwdActivity extends BaseActivity {
                         BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                         if (baseModel.getCode()== PublicUtils.code){
                             Code code = gson.fromJson(gson.toJson(baseModel.getDatas()),Code.class);
-                            showStopDialog(code.getCheckCode());
+                            //showStopDialog(code.getCheckCode());
                         }
                     }
                 });
@@ -95,6 +102,11 @@ public class ForgetPwdActivity extends BaseActivity {
                     showToasts(getString(R.string.phone_not_null));
                     return;
                 }
+
+                if (PhoneUtil.isCellphone(edt_phone.getText().toString()) == false) {
+                    showToasts("手机号码格式不正确");
+                    return;
+                }
                 if (edt_code.getText().toString().equals("")){
                     showToasts("验证码不能为空");
                     return;
@@ -103,37 +115,50 @@ public class ForgetPwdActivity extends BaseActivity {
                     showToasts(getString(R.string.pwd_not_null));
                     return;
                 }
+
+                if (edt_password.getText().toString().length()<6){
+                    showToasts("密码不能小于6位");
+                    return;
+                }
+
                 if (!edt_password.getText().toString().equals(edt_again_password.getText().toString())){
                     showToasts("两次密码不一致");
                     return;
                 }
 
-                Map<String,Object> map = new HashMap<>();
-                map.put("phone",edt_phone.getText().toString());
-                map.put("checkCode",edt_code.getText().toString());
-                map.put("newPassword",PublicUtils.getSHA256StrJava(edt_password.getText().toString()));
-                map.put("confirmNewPassword",PublicUtils.getSHA256StrJava(edt_again_password.getText().toString()));
-                OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.FORGET_PASSWORD, new OkHttpClientManager.StringCallback() {
-                    @Override
-                    public void onFailure(Request request, IOException e) {
 
-                    }
-
-                    @Override
-                    public void onResponse(String response) {
-                        BaseModel baseModel = gson.fromJson(response,BaseModel.class);
-                        if (baseModel.getCode()==PublicUtils.code){
-                            showToasts("密码修改成功");
-                            finish();
-                        }else {
-                            if (!TextUtils.isEmpty(baseModel.getMsg())){
-                                showToasts(baseModel.getMsg());
-                            }
+                if (ClickUtils.isFastDoubleClick()){
+                    return;
+                }else {
+                    Map<String,Object> map = new HashMap<>();
+                    map.put("phone",edt_phone.getText().toString());
+                    map.put("checkCode",edt_code.getText().toString());
+                    map.put("newPassword",PublicUtils.getSHA256StrJava(edt_password.getText().toString()));
+                    map.put("confirmNewPassword",PublicUtils.getSHA256StrJava(edt_again_password.getText().toString()));
+                    OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.FORGET_PASSWORD, new OkHttpClientManager.StringCallback() {
+                        @Override
+                        public void onFailure(Request request, IOException e) {
 
                         }
 
-                    }
-                });
+                        @Override
+                        public void onResponse(String response) {
+                            BaseModel baseModel = gson.fromJson(response,BaseModel.class);
+                            if (baseModel.getCode()==PublicUtils.code){
+                                showToasts("密码修改成功");
+                                finish();
+                            }else {
+                                if (!TextUtils.isEmpty(baseModel.getMsg())){
+                                    showToasts(baseModel.getMsg());
+                                }
+
+                            }
+
+                        }
+                    });
+                }
+
+
             }
         });
     }

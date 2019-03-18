@@ -29,7 +29,7 @@ public class DonwloadSaveImg {
     private static Context context;
     private static String filePath;
     private static Bitmap mBitmap;
-    private static String mSaveMessage = "失败";
+    private static String mSaveMessage = "失败，请检查网络";
     private final static String TAG = "PictureActivity";
     private static ProgressDialog mSaveDialog = null;
 

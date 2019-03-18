@@ -37,7 +37,6 @@ import com.youzheng.zhejiang.robertmoog.Store.activity.StoreOrderlistDetailActiv
 import com.youzheng.zhejiang.robertmoog.Store.adapter.GoodsTimeAdapter;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.ProfessionalCustomerOrderListAdapter;
 import com.youzheng.zhejiang.robertmoog.Store.bean.NewOrderListBean;
-import com.youzheng.zhejiang.robertmoog.Store.listener.CounterListener;
 import com.youzheng.zhejiang.robertmoog.Store.listener.OnRecyclerViewAdapterItemClickListener;
 import com.youzheng.zhejiang.robertmoog.Store.utils.SoftInputUtils;
 import com.youzheng.zhejiang.robertmoog.utils.SharedPreferencesUtils;
@@ -53,7 +52,7 @@ import de.greenrobot.event.EventBus;
 import de.greenrobot.event.Subscribe;
 import okhttp3.Request;
 
-public class CustomerOrderFragment extends BaseFragment implements View.OnClickListener, AdapterView.OnItemClickListener, OnRecyclerViewAdapterItemClickListener, TextWatcher {
+public class CustomerOrder2Fragment extends BaseFragment implements View.OnClickListener, AdapterView.OnItemClickListener, OnRecyclerViewAdapterItemClickListener, TextWatcher {
     private View view;
     /**
      * 搜索订单编号sssssss
@@ -133,20 +132,20 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
 
             if (d.equals("-1")) {
                 no_web.setVisibility(View.VISIBLE);
+                no_data.setVisibility(View.GONE);
             }else if (d.equals("1")){
                 no_web.setVisibility(View.GONE);
-                initData(page, pageSize, orderCode, timeQuantum, isCustomer, type);
-                initGetDate();
-                setListener();
+//                initData(page, pageSize, orderCode, timeQuantum, isCustomer, type);
+//                initGetDate();
+//                setListener();
             }
 
 
     }
-
     @Subscribe
     public void onEventA(String d) {
 
-        if (d.equals("MAJOR")) {
+        if (d.equals("GROOM")) {
             initData(page, pageSize, orderCode, timeQuantum, isCustomer, type);
             initGetDate();
             setListener();
@@ -154,7 +153,6 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
 
 
     }
-
 
     @Override
     public void onDestroy() {
@@ -302,9 +300,9 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
 
     }
 
-    private void initData(int page, int pageSize, String orderCode, String timeQuantum, Boolean isCustomer, String type) {
+    private void initData(final int pages, int pageSize, String orderCode, String timeQuantum, Boolean isCustomer, String type) {
         HashMap<String, Object> map = new HashMap<>();
-        map.put("pageNum", page);
+        map.put("pageNum", pages);
         map.put("pageSize", pageSize);
         map.put("orderCode", orderCode);
         map.put("timeQuantum", timeQuantum);
@@ -331,6 +329,7 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
                     NewOrderListBean listBean = gson.fromJson(gson.toJson(baseModel.getDatas()), NewOrderListBean.class);
                     setData(listBean);
                 } else {
+
                     showToasts(baseModel.getMsg());
                 }
             }
@@ -358,6 +357,7 @@ public class CustomerOrderFragment extends BaseFragment implements View.OnClickL
                 springView.setVisibility(View.GONE);
                 tv_text.setText("暂无订单信息");
             } else {
+
                 showToasts(getString(R.string.load_list_erron));
             }
         }

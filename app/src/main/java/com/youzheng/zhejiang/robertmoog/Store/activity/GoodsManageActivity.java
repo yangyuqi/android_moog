@@ -27,9 +27,9 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.liaoinstan.springview.widget.SpringView;
 import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
-import com.youzheng.zhejiang.robertmoog.Base.utils.MyConstant;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
 import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
@@ -42,6 +42,8 @@ import com.youzheng.zhejiang.robertmoog.Store.bean.GoodsType;
 import com.youzheng.zhejiang.robertmoog.Store.fragment.GoodsFragment;
 import com.youzheng.zhejiang.robertmoog.Store.utils.SoftInputUtils;
 import com.youzheng.zhejiang.robertmoog.utils.SharedPreferencesUtils;
+import com.youzheng.zhejiang.robertmoog.utils.View.MyFooter;
+import com.youzheng.zhejiang.robertmoog.utils.View.MyHeader;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -87,30 +89,80 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
     private int who;
     private ImageView iv_clear;
     private View view_dowm;
-    private View no_data,no_web;
+    private View no_data, no_web;
     /**
      * 暂无数据!
      */
     private TextView mTvText;
+    List<String> tab_str = new ArrayList<>();
+    List<Integer> tab_id = new ArrayList<>();
+    private int goodsId;
+    private SpringView springView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_goods_manage);
         initView();
+        intEvent();
+
 
     }
+
+    private void intEvent() {
+        tab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                goodsId = stringList.get(tab.getPosition()).getId();
+                searchAdapter.clear();
+                page=1;
+                initSearch(goodsId);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+
+        springView.setListener(new SpringView.OnFreshListener() {
+            @Override
+            public void onRefresh() {
+                page = 1;
+                searchlist.clear();
+                searchAdapter.clear();
+                initSearch(goodsId);
+            }
+
+            @Override
+            public void onLoadmore() {
+                page++;
+                initSearch(goodsId);
+            }
+        });
+
+    }
+
     @Override
     public void onChangeListener(int status) {
         super.onChangeListener(status);
-        if (status==-1){
+        if (status == -1) {
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.VISIBLE);
-        }else {
+            no_data.setVisibility(View.GONE);
+        } else {
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.GONE);
+
         }
     }
+
     private void initView() {
         no_web = findViewById(R.id.no_web);
         no_data = findViewById(R.id.no_data);
@@ -148,6 +200,11 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
             }
         });
         mTvText = (TextView) findViewById(R.id.tv_text);
+
+
+        springView = (SpringView) findViewById(R.id.springView);
+        springView.setHeader(new MyHeader(this));
+        springView.setFooter(new MyFooter(this));
     }
 
     private void initData() {
@@ -180,25 +237,15 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
         List<GoodsType.ListDataBean> listDataBeans = goodsType.getListData();
         //stringList = goodsType.getListData();
         if (listDataBeans.size() != 0) {
-            stringList.addAll(listDataBeans);
-            adapter.setUI(listDataBeans);
-
-            for (int i = 0; i < listDataBeans.size(); i++) {
-                goodsFragment = new GoodsFragment();
-                Bundle bundle = new Bundle();
-                // bundle.putString(MyConstant.GOODS_LIST_TYPE,stringList.get(i).getName());
-                bundle.putInt(MyConstant.GOODS_ID, stringList.get(i).getId());
-                goodsFragment.setArguments(bundle);
-
-                list.add(goodsFragment);
+            stringList=listDataBeans;
+            for (GoodsType.ListDataBean bean : listDataBeans) {
+                tab_str.add(bean.getName());
+                tab_id.add(bean.getId());
+                tab.addTab(tab.newTab().setText(bean.getName()));
             }
 
-            pager.setAdapter(adapter);
-            //pager.setOffscreenPageLimit(listDataBeans.size() - 1);
-
-            tab.setupWithViewPager(pager);
-            //默认选中
-            tab.getTabAt(0).select();
+        } else {
+            showToasts(getString(R.string.load_list_erron));
         }
 
     }
@@ -210,15 +257,17 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
                 break;
             case R.id.iv_search:
                 SoftInputUtils.hideSoftInput(GoodsManageActivity.this);
-                searchlist.clear();
                 edit = tv_search.getText().toString().trim();
                 if (TextUtils.isEmpty(edit)) {
                     showToasts(getString(R.string.please_write_sku));
                 } else {
-                    initSearch(edit);
-                    lin_tab.setVisibility(View.GONE);
-                    pager.setVisibility(View.GONE);
-                    search_list.setVisibility(View.VISIBLE);
+                    //edit = tv_search.getText().toString().trim();
+                    page=1;
+                    searchAdapter.clear();
+                    initSearch(goodsId);
+//                    lin_tab.setVisibility(View.GONE);
+//                    pager.setVisibility(View.GONE);
+//                    search_list.setVisibility(View.VISIBLE);
                 }
                 break;
             case R.id.iv_more:
@@ -233,24 +282,25 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
     }
 
     //搜索之后的数据
-    private void initSearch(String str) {
+    private void initSearch(int goodsId) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("pageNum", page);
         map.put("pageSize", pageSize);
 //        map.put("sku",goodsName);
-        map.put("sku", str);//测试用
-//        map.put("firstCategoryId",0);
+        map.put("sku", edit);//测试用
+        map.put("firstCategoryId", goodsId);
         String token = (String) SharedPreferencesUtils.getParam(mContext, PublicUtils.access_token, "");
         if (token != null) {
             OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.GOODS_LIST + "?access_token=" + token, new OkHttpClientManager.StringCallback() {
                 @Override
                 public void onFailure(Request request, IOException e) {
-
+                       springView.onFinishFreshAndLoad();
                 }
 
                 @Override
                 public void onResponse(String response) {
                     Log.e("商品列表", response);
+                    springView.onFinishFreshAndLoad();
                     BaseModel baseModel = gson.fromJson(response, BaseModel.class);
                     if (baseModel.getCode() == PublicUtils.code) {
                         GoodsList goodsList = gson.fromJson(gson.toJson(baseModel.getDatas()), GoodsList.class);
@@ -269,16 +319,23 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
 
         if (productListDetailDataBeans.size() != 0) {
             searchlist.addAll(productListDetailDataBeans);
-            searchAdapter.setRefreshUI(productListDetailDataBeans);
+            searchAdapter.setRefreshUI(searchlist);
             no_data.setVisibility(View.GONE);
-            search_list.setVisibility(View.VISIBLE);
+            springView.setVisibility(View.VISIBLE);
         } else {
-            no_data.setVisibility(View.VISIBLE);
-            mTvText.setText("未搜索到相关商品");
-            search_list.setVisibility(View.GONE);
-            //showToasts(getString(R.string.load_list_erron));
+            if (page == 1) {
+                no_data.setVisibility(View.VISIBLE);
+                springView.setVisibility(View.GONE);
+                springView.setVisibility(View.GONE);
+                mTvText.setText("暂无商品信息");
+            } else {
+                showToasts(getString(R.string.load_list_erron));
+            }
+
+
+
         }
-        //searchlist=goodsList.getProductListDetailData();
+
 
 
     }
@@ -311,8 +368,8 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
 
         window.setBackgroundDrawable(getDrawable());
 
-        pager.setBackgroundColor(getResources().getColor(R.color.text_drak_black));
-        pager.setAlpha(0.35f);
+        springView.setBackgroundColor(getResources().getColor(R.color.text_drak_black));
+        springView.setAlpha(0.35f);
 
         window.setOnDismissListener(new poponDismissListener());
         window.setTouchable(true); // 设置popupwindow可点击
@@ -327,8 +384,8 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
         public void onDismiss() {
             // TODO Auto-generated method stub
             iv_more.setImageResource(R.mipmap.group_14_1);
-            pager.setBackgroundColor(getResources().getColor(R.color.bg_background_white));
-            pager.setAlpha(1f);
+            springView.setBackgroundColor(getResources().getColor(R.color.bg_background_white));
+            springView.setAlpha(1f);
 
         }
     }
@@ -367,13 +424,14 @@ public class GoodsManageActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void afterTextChanged(Editable s) {
-        edit = tv_search.getText().toString();
-        if (TextUtils.isEmpty(edit)) {
+
+        if (tv_search.length() == 0) {
             iv_clear.setVisibility(View.GONE);
-            lin_tab.setVisibility(View.VISIBLE);
-            pager.setVisibility(View.VISIBLE);
-            search_list.setVisibility(View.GONE);
+            searchlist.clear();
+            searchAdapter.clear();
+           edit="";
             no_data.setVisibility(View.GONE);
+            initSearch(goodsId);
         } else {
             iv_clear.setVisibility(View.VISIBLE);
         }

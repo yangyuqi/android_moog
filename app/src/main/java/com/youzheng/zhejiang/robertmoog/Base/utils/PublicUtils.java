@@ -26,6 +26,10 @@ public class PublicUtils {
             = "ISFIRST";//是否第一次进入
     public static String ISGO
             = "ISGO";//是否第
+
+    public static String ISADD="ISADD";
+
+    public static String ISPO="ISPO";
     public static String getSHA256StrJava(String str) {
         MessageDigest messageDigest;
         String encodeStr = "";

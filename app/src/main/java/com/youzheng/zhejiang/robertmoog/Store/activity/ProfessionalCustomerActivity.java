@@ -102,7 +102,7 @@ public class ProfessionalCustomerActivity extends BaseActivity implements View.O
 
             @Override
             public void onLoadmore() {
-                list.clear();
+
                 page++;
                 initData(page, pageSize);
             }
@@ -115,6 +115,7 @@ public class ProfessionalCustomerActivity extends BaseActivity implements View.O
         if (status==-1){
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.VISIBLE);
+            no_data.setVisibility(View.GONE);
         }else {
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.GONE);
@@ -195,7 +196,7 @@ public class ProfessionalCustomerActivity extends BaseActivity implements View.O
         List<ProfessionalCustomerList.SpecialtyCustomerListBean> beanList = professionalCustomerList.getSpecialtyCustomerList();
         if (beanList.size() != 0) {
             list.addAll(beanList);
-            adapter.setListRefreshUi(beanList);
+            adapter.setListRefreshUi(list);
             no_data.setVisibility(View.GONE);
             springView.setVisibility(View.VISIBLE);
         } else {

@@ -46,7 +46,8 @@ public class OrderListAdapter extends RecyclerView.Adapter {
     }
 
     public void setUI(List<NewOrderListBean.OrderListBean> list, Context context) {
-        this.list = list;
+        this.list=list;
+       // this.list.addAll(list);
         notifyDataSetChanged();
     }
 
@@ -114,7 +115,7 @@ public class OrderListAdapter extends RecyclerView.Adapter {
         }
     }
 
-    private void setMoreImageData(final MoreImageHolder holder, final int position) {
+    private void setMoreImageData(final MoreImageHolder holder, final int positions) {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         holder.mRvListPic.setLayoutManager(linearLayoutManager);
@@ -124,20 +125,22 @@ public class OrderListAdapter extends RecyclerView.Adapter {
 
         piclist=new ArrayList<>();
         if (list.size() != 0) {
-            for (NewOrderListBean.OrderListBean.OrderItemInfosBean itemInfosBean : list.get(position).getOrderItemInfos()) {
+            for (NewOrderListBean.OrderListBean.OrderItemInfosBean itemInfosBean : list.get(positions).getOrderItemInfos()) {
                 piclist.add(itemInfosBean.getPhoto());
             }
         }
 
         moreGoodsAdapter.setPic(piclist);
-        NewOrderListBean.OrderListBean beans = list.get(position);
+        NewOrderListBean.OrderListBean beans = list.get(positions);
         holder.mTvDate.setText(beans.getCreateDate());
         holder.mTvOrderNum.setText(beans.getOrderCode());
         holder.mTvCount.setText("共" + beans.getProductNum() + "件商品");
         holder.mTvMoney.setText(context.getString(R.string.label_money)+beans.getPayAmount());
+
+
         if (piclist.size()==1){
             holder.lin_code.setVisibility(View.VISIBLE);
-            for (NewOrderListBean.OrderListBean.OrderItemInfosBean itemInfosBean:list.get(position).getOrderItemInfos()){
+            for (NewOrderListBean.OrderListBean.OrderItemInfosBean itemInfosBean:list.get(positions).getOrderItemInfos()){
                 holder.tv_goods_SKU.setText(itemInfosBean.getCode());
                 holder.tv_goods_contents.setText(itemInfosBean.getName());
             }
@@ -153,8 +156,22 @@ public class OrderListAdapter extends RecyclerView.Adapter {
                     return holder.item.onTouchEvent(event);
                 }
             });
-        }
+        }else {
 
+        }
+        moreGoodsAdapter.setOnItemClickListener(new OnRecyclerViewAdapterItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent=new Intent(context,StoreOrderlistDetailActivity.class);
+                intent.putExtra("OrderGoodsId",list.get(positions).getId());
+                context.startActivity(intent);
+            }
+
+            @Override
+            public void onItemLongClick(View view, int position) {
+
+            }
+        });
 
 
 //        holder.mRvListPic.setOnClickListener(new View.OnClickListener() {

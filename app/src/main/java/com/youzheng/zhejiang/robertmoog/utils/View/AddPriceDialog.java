@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +22,8 @@ import com.youzheng.zhejiang.robertmoog.Home.adapter.SearchResultAdapter;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.Model.Home.ScanDatasBean;
 import com.youzheng.zhejiang.robertmoog.R;
+import com.youzheng.zhejiang.robertmoog.Store.activity.SampleOutInformationActivity;
+import com.youzheng.zhejiang.robertmoog.utils.SharedPreferencesUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -70,6 +73,12 @@ public class AddPriceDialog extends Dialog implements View.OnClickListener{
         DisplayMetrics d = mcontext.getResources().getDisplayMetrics(); // 获取屏幕宽、高用
         lp.width = (int) (d.widthPixels * 0.74); // 高度设置为屏幕的0.6
         dialogWindow.setAttributes(lp);
+
+        if (TextUtils.isEmpty(confrim_dialog_tv_content.getText().toString())){
+            tv_no.setText("取消");
+        }else {
+            tv_no.setText("清除");
+        }
     }
 
     @Override
@@ -85,10 +94,15 @@ public class AddPriceDialog extends Dialog implements View.OnClickListener{
                 break;
 
             case R.id.tv_no :
-                dismiss();
-                remark.setAddPrice("");
-                adapter.notifyDataSetChanged();
-                EventBus.getDefault().post(objects);
+                if (tv_no.getText().toString().equals("取消")){
+                    dismiss();
+                }else {
+                    dismiss();
+                    remark.setAddPrice("");
+                    adapter.notifyDataSetChanged();
+                    EventBus.getDefault().post(objects);
+                }
+
                 break;
         }
     }

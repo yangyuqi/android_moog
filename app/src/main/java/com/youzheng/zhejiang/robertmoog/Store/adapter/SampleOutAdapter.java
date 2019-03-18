@@ -88,6 +88,7 @@ public class SampleOutAdapter extends BaseAdapter {
             viewHolder.tv_number.setVisibility(View.GONE);
             viewHolder.et_number.setVisibility(View.VISIBLE);
             viewHolder.et_number.setText(bean.getSampleQuantity()+"");
+            bean.setChange(false);
             bean.setSampleQuantity(bean.getSampleQuantity());
 
             final ViewHolder finalViewHolder1 = viewHolder;
@@ -104,19 +105,26 @@ public class SampleOutAdapter extends BaseAdapter {
 
                 @Override
                 public void afterTextChanged(Editable s) {
+
                     if (TextUtils.isEmpty(s.toString())){
                         bean.setSampleQuantity(0);
-                        // finalViewHolder.et_number.setText(bean.getSampleQuantity()+"");
                     }else {
                         long num= Long.parseLong(s.toString());
+
+                        if (num!=bean.getSampleQuantity()){
+                            bean.setChange(true);
+                        }else {
+                            bean.setChange(false);
+                        }
                         if (num>999){
                             Toast toast=  Toast.makeText(context, null, Toast.LENGTH_SHORT);
                             toast.setText("最大不超过999");
                             toast.setGravity(Gravity.CENTER, 0, 0);
                             toast.show();
-                         //   Toast.makeText(context,"最大不超过999",Toast.LENGTH_SHORT).show();
                             finalViewHolder1.et_number.setText("999");
                             bean.setSampleQuantity(999);
+
+
                         }
                     }
 

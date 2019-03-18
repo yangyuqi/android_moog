@@ -1,5 +1,6 @@
 package com.youzheng.zhejiang.robertmoog.Store.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class ReturnGoodsList {
@@ -58,7 +59,7 @@ public class ReturnGoodsList {
             this.returnOrderList = returnOrderList;
         }
 
-        public static class ReturnOrderListBean {
+        public static class ReturnOrderListBean implements Serializable {
             /**
              * createDate : mock
              * orderCode : mock
@@ -70,7 +71,7 @@ public class ReturnGoodsList {
 
             private String createDate;
             private String orderCode;
-            private int actualRefundAmount;
+            private long actualRefundAmount;
             private int productNum;
             private List<ProductListBean> productList;
             private int id;
@@ -100,11 +101,11 @@ public class ReturnGoodsList {
                 this.orderCode = orderCode;
             }
 
-            public int getActualRefundAmount() {
+            public long getActualRefundAmount() {
                 return actualRefundAmount;
             }
 
-            public void setActualRefundAmount(int actualRefundAmount) {
+            public void setActualRefundAmount(long actualRefundAmount) {
                 this.actualRefundAmount = actualRefundAmount;
             }
 

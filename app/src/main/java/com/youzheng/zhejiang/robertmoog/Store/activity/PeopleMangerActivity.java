@@ -112,6 +112,7 @@ public class PeopleMangerActivity extends BaseActivity implements View.OnClickLi
         if (status==-1){
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.VISIBLE);
+            no_data.setVisibility(View.GONE);
         }else {
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.GONE);
@@ -220,7 +221,7 @@ public class PeopleMangerActivity extends BaseActivity implements View.OnClickLi
 
                     showToasts(getString(R.string.stop_success));
 //                    page=1;
-                    //list.clear();
+                    list.clear();
                     initData();
 
                 } else {
@@ -280,7 +281,7 @@ public class PeopleMangerActivity extends BaseActivity implements View.OnClickLi
         List<PeopleMangerList.ShopPersonalListBean> listBeans = peopleMangerList.getShopPersonalList();
         if (listBeans.size() != 0) {
             list.addAll(listBeans);
-            adapter.setUI(listBeans);
+            adapter.setUI(list);
             no_data.setVisibility(View.GONE);
             mSpringView.setVisibility(View.VISIBLE);
         } else {

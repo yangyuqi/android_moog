@@ -4,12 +4,14 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider;
@@ -126,12 +128,21 @@ public class MoreReturnCounterAdapter extends RecyclerView.Adapter<MoreReturnCou
 
     public List<ConfirmReturnRequest.ReshippedGoodsDataListBean> getRequests(){
         for (ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean.ProductListBeanX beanX:productListBeanList){
-            ConfirmReturnRequest.ReshippedGoodsDataListBean requestBean=new ConfirmReturnRequest.ReshippedGoodsDataListBean();
-            requestBean.setOrderItemProductId(beanX.getOrderItemProductId());
-            requestBean.setCount(beanX.getCount()+"");
-            requestBean.setRefundAmount(beanX.getRefundAmount());
-            requestBean.setActualRefundAmount(beanX.getMoney()+"");
-            requests.add(requestBean);
+            if (beanX.getMoney()!=0){
+                ConfirmReturnRequest.ReshippedGoodsDataListBean requestBean=new ConfirmReturnRequest.ReshippedGoodsDataListBean();
+                requestBean.setOrderItemProductId(beanX.getOrderItemProductId());
+                requestBean.setCount(beanX.getCount()+"");
+                requestBean.setRefundAmount(beanX.getRefundAmount());
+                requestBean.setActualRefundAmount(beanX.getMoney()+"");
+                requests.add(requestBean);
+            }else {
+//                Toast toast = Toast.makeText(context, null, Toast.LENGTH_SHORT);
+//                toast.setText("请输入实退金额");
+//                toast.setGravity(Gravity.CENTER, 0, 0);
+//                toast.show();
+                return null;
+            }
+
         }
 
         return requests;

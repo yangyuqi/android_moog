@@ -200,9 +200,11 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
         if (status==-1){
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.VISIBLE);
+            no_data.setVisibility(View.GONE);
         }else {
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.GONE);
+
         }
     }
     private void initView() {
@@ -275,9 +277,9 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
 
     }
 
-    private void initData(int page, int pageSize, String orderCode, String timeQuantum, Boolean isCustomer) {
+    private void initData(int pages, int pageSize, String orderCode, String timeQuantum, Boolean isCustomer) {
         HashMap<String, Object> map = new HashMap<>();
-        map.put("pageNum", page);
+        map.put("pageNum", pages);
         map.put("pageSize", pageSize);
         map.put("orderCode", orderCode);
         map.put("timeQuantum", timeQuantum);
@@ -305,6 +307,7 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
                     setData(returnGoodsList);
 
                 } else {
+
                     showToasts(baseModel.getMsg());
                 }
             }
@@ -319,7 +322,7 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
         List<ReturnGoodsList.ReturnOrderListBean> listBeans = returnGoodsList.getReturnOrderList();
         if (listBeans.size() != 0) {
             list.addAll(listBeans);
-            adapter.setUI(listBeans);
+            adapter.setUI(list);
             no_data.setVisibility(View.GONE);
             mSpringView.setVisibility(View.VISIBLE);
         } else {
@@ -401,6 +404,8 @@ public class ReturnGoodsListActivity extends BaseActivity implements View.OnClic
 
     @Override
     public void onItemClick(View view, int position) {
+        Log.e("pos",position+"");
+        Log.e("size=",adapter.getItemCount()+"");
         Intent intent = new Intent(this, ReturnGoodsDetailActivity.class);
         intent.putExtra("returnGoodsId", list.get(position).getId() + "");
         startActivity(intent);

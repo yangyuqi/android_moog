@@ -47,7 +47,7 @@ public class CouponActionAdapter extends RecyclerView.Adapter<CouponActionAdapte
     @NonNull
     @Override
     public CouponViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.coupon_action_item,null);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.coupon_action_item2,null);
         return new CouponViewHolder(view);
     }
 
@@ -61,11 +61,11 @@ public class CouponActionAdapter extends RecyclerView.Adapter<CouponActionAdapte
         couponViewHolder.tv_name.setText(couponPromo.getCouponType());
 
 
-        try {
-            couponViewHolder.tv_time.setText(StringToDate(couponPromo.getStartTime())+"-"+StringToDate(couponPromo.getEndTime()));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+//        try {
+//           // couponViewHolder.tv_time.setText(StringToDate(couponPromo.getStartTime())+"-"+StringToDate(couponPromo.getEndTime()));
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
 
         if (couponPromo.getCouponTypeId().equals("ORDER")){
             couponViewHolder.rl_bg.setBackgroundResource(R.mipmap.group_24_4);

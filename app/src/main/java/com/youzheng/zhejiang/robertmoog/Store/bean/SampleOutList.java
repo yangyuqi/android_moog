@@ -55,6 +55,15 @@ public class SampleOutList {
                 private String sampleName;
                 private long sampleQuantity;
                 private String sampleType;
+                private boolean isChange;
+
+                public boolean isChange() {
+                    return isChange;
+                }
+
+                public void setChange(boolean change) {
+                    isChange = change;
+                }
 
                 public int getSampleId() {
                     return sampleId;

@@ -134,7 +134,7 @@ public class GoodsFragment extends BaseFragment {
 
         if (productListDetailDataBeans.size() != 0) {
             list.addAll(productListDetailDataBeans);
-            adapter.setRefreshUI(productListDetailDataBeans);
+            adapter.setRefreshUI(list);
             no_data.setVisibility(View.GONE);
             springView.setVisibility(View.VISIBLE);
         } else {
@@ -145,11 +145,7 @@ public class GoodsFragment extends BaseFragment {
             } else {
                 showToasts(getString(R.string.load_list_erron));
             }
-//            if (!TextUtils.isEmpty(sku)){
-//                no_data.setVisibility(View.VISIBLE);
-//                springView.setVisibility(View.GONE);
-//                tv_text.setText("未搜索到相关商品");
-//            }
+
 
         }
         //list=goodsList.getProductListDetailData();

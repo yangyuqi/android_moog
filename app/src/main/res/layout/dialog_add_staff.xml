@@ -17,11 +17,11 @@
     <TextView
         android:id="@+id/version"
         android:layout_width="match_parent"
-        android:text="确认发布出样信息?"
+        android:text="是否确认添加该员工？ 添加后不可修改"
         android:gravity="center"
         android:textSize="14sp"
-        android:background="@color/bg_background_white"
         android:paddingBottom="25dp"
+        android:background="@color/bg_background_white"
         android:paddingTop="25dp"
         android:textColor="@color/text_main"
         android:layout_height="wrap_content" />
@@ -29,8 +29,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="horizontal"
-        android:paddingTop="10dp"
         android:padding="10dp"
+        android:paddingTop="10dp"
         android:background="@drawable/bg_dialog_down"
         android:layout_height="wrap_content">
 

@@ -79,7 +79,7 @@ public class SmallCounterAdapter extends RecyclerView.Adapter<SmallCounterAdapte
 //
         Log.e("111",refund+"呵呵");
         ismoren=true;
-       int refunds= Integer.parseInt(bean.getRefundAmount());
+       long refunds= Long.parseLong(bean.getRefundAmount());
         if (bean.getCount()!=0){
             viewHolder.et_money.setText(bean.getRefundAmount());
             bean.setMoney(refunds);
@@ -113,9 +113,9 @@ public class SmallCounterAdapter extends RecyclerView.Adapter<SmallCounterAdapte
                }else {
 //                   viewHolder.et_money.setText("");
                     money=s.toString();
-                    int edit= Integer.parseInt(money);
+                    long edit= Long.parseLong(money);
                     bean.setMoney(edit);
-                    int num= Integer.parseInt(bean.getRefundAmount());
+                    long num= Long.parseLong(bean.getRefundAmount());
 
                    if (edit>num){
                        Toast toast=  Toast.makeText(context, null, Toast.LENGTH_SHORT);
@@ -134,7 +134,7 @@ public class SmallCounterAdapter extends RecyclerView.Adapter<SmallCounterAdapte
 //                       ReturnAllCounterActivity.more_total = edit;
 //                       money_all.add(num);
                    }
-                   int all_should=0;
+                   long all_should=0;
                    for (int i = 0; i < list.size(); i++) {
                            all_should = all_should+list.get(i).getMoney();
                            Log.e("111", all + "集合1======"+i);

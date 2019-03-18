@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.liaoinstan.springview.widget.SpringView;
 import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
 import com.youzheng.zhejiang.robertmoog.Base.request.OkHttpClientManager;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
@@ -19,10 +20,13 @@ import com.youzheng.zhejiang.robertmoog.Home.adapter.CouponActionAdapter;
 import com.youzheng.zhejiang.robertmoog.Home.adapter.RecycleViewDivider;
 import com.youzheng.zhejiang.robertmoog.Home.adapter.ShopActionAdapter;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
+import com.youzheng.zhejiang.robertmoog.Model.Home.ComboPromoBean;
 import com.youzheng.zhejiang.robertmoog.Model.Home.PromoIdDetailsData;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.utils.SoftInputUtils;
 import com.youzheng.zhejiang.robertmoog.utils.CommonAdapter;
+import com.youzheng.zhejiang.robertmoog.utils.View.MyFooter;
+import com.youzheng.zhejiang.robertmoog.utils.View.MyHeader;
 import com.youzheng.zhejiang.robertmoog.utils.View.NoScrollListView;
 import com.youzheng.zhejiang.robertmoog.utils.ViewHolder;
 
@@ -56,29 +60,70 @@ public class ShopActionDetailsActivity extends BaseActivity {
     private View no_data, no_web;
     private RelativeLayout layout_header;
     private View head;
+    private SpringView springView;
+    private List<ComboPromoBean> comboPromo = new ArrayList<>();
+    private String protype;
+    private int page=1;
+    private int pageSize=10;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shop_action_details_layout);
         promoId = getIntent().getIntExtra("promoId", 0);
+        protype=getIntent().getStringExtra("promtypes");
         initView();
         initData();
+        initEvent();
+    }
+
+    private void initEvent() {
+       springView.setListener(new SpringView.OnFreshListener() {
+           @Override
+           public void onRefresh() {
+               page=1;
+               shop_adapter.clear();
+               initData();
+
+
+           }
+
+           @Override
+           public void onLoadmore() {
+             page++;
+             initData();
+           }
+       });
+
+
+
+
     }
 
     private void initData() {
         Map<String, Object> map = new HashMap<>();
         map.put("promoId", promoId);
+        if (protype.equals("SET_MEAL")){
+            map.put("promoId", promoId);
+          map.put("pageNum",page);
+          map.put("pageSize",pageSize);
+        }else {
+            map.put("promoId", promoId);
+        }
+
         OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.ACTION_LIST_DETAILS + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
             public void onFailure(Request request, IOException e) {
-
+                  springView.onFinishFreshAndLoad();
             }
 
             @Override
             public void onResponse(String response) {
+                springView.onFinishFreshAndLoad();
                 BaseModel baseModel = gson.fromJson(response, BaseModel.class);
                 if (baseModel.getCode() == PublicUtils.code) {
                     PromoIdDetailsData promoIdDetails = gson.fromJson(gson.toJson(baseModel.getDatas()), PromoIdDetailsData.class);
+
                     tv_name.setText(promoIdDetails.getData().getPromoName());
                     tv_start_time.setText(promoIdDetails.getData().getStartTime());
                     tv_end_time.setText(promoIdDetails.getData().getEndTime());
@@ -98,29 +143,60 @@ public class ShopActionDetailsActivity extends BaseActivity {
                         adapter.notifyDataSetChanged();
                         // tv_goods.setVisibility(View.VISIBLE);
                         ls.setVisibility(View.VISIBLE);
+                        springView.setVisibility(View.GONE);
+                        recycler_view.setVisibility(View.GONE);
+
+                        tv_text.setVisibility(View.GONE);
+                        rv_coupon.setVisibility(View.GONE);
+
 
                     } else {
                         // tv_goods.setVisibility(View.GONE);
-                        ls.setVisibility(View.GONE);
+                        //ls.setVisibility(View.GONE);
 
                     }
-                    if (promoIdDetails.getData().getComboPromo().size() > 0) {
+                    List<ComboPromoBean> comboPromoBeanList=promoIdDetails.getData().getComboPromo();
+                    if (comboPromoBeanList.size()!=0){
+                        ls.setVisibility(View.GONE);
+                        tv_text.setVisibility(View.GONE);
+                        rv_coupon.setVisibility(View.GONE);
+
                         findViewById(R.id.iv_next).setVisibility(View.VISIBLE);
                         // tv_meal.setVisibility(View.VISIBLE);
                         recycler_view.setVisibility(View.VISIBLE);
-                        LinearLayoutManager manager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
-                        recycler_view.setLayoutManager(manager);
-                        shop_adapter = new ShopActionAdapter(promoIdDetails.getData().getComboPromo(), mContext);
-                        recycler_view.setAdapter(shop_adapter);
-                        recycler_view.addItemDecoration(new RecycleViewDivider(mContext, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
+                        springView.setVisibility(View.VISIBLE);
+
+//                        comboPromo.clear();
+                        comboPromo.addAll(comboPromoBeanList);
+                        shop_adapter.setUI(comboPromo);
+
+
+                    }else {
+                        findViewById(R.id.iv_next).setVisibility(View.GONE);
+                        if (protype.equals("SET_MEAL")){
+                            showToasts(getString(R.string.load_list_erron));
+                        }
+                    }
+
+
+                    if (promoIdDetails.getData().getComboPromo().size() > 0) { //套餐
+
+
+
                     } else {
                         //tv_meal.setVisibility(View.GONE);
-                        recycler_view.setVisibility(View.VISIBLE);
-                        findViewById(R.id.iv_next).setVisibility(View.GONE);
+//                        springView.setVisibility(View.GONE);
+//                        recycler_view.setVisibility(View.GONE);
+
+
                     }
 
                     if (promoIdDetails.getData().getCouponPromo().size() > 0) {
                         //tv_coupon.setVisibility(View.VISIBLE);
+                        springView.setVisibility(View.GONE);
+                        recycler_view.setVisibility(View.GONE);
+                        ls.setVisibility(View.GONE);
+
                         tv_text.setVisibility(View.VISIBLE);
                         rv_coupon.setVisibility(View.VISIBLE);
                         LinearLayoutManager manager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
@@ -130,8 +206,8 @@ public class ShopActionDetailsActivity extends BaseActivity {
                         rv_coupon.addItemDecoration(new RecycleViewDivider(mContext, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
                     } else {
                         //tv_coupon.setVisibility(View.GONE);
-                        tv_text.setVisibility(View.GONE);
-                        rv_coupon.setVisibility(View.GONE);
+//                        tv_text.setVisibility(View.GONE);
+//                        rv_coupon.setVisibility(View.GONE);
                     }
                 } else {
                     if (!TextUtils.isEmpty(baseModel.getMsg())) {
@@ -148,6 +224,7 @@ public class ShopActionDetailsActivity extends BaseActivity {
         if (status == -1) {
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.VISIBLE);
+            no_data.setVisibility(View.GONE);
         } else {
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.GONE);
@@ -197,6 +274,17 @@ public class ShopActionDetailsActivity extends BaseActivity {
         ls.setAdapter(adapter);
 
         recycler_view = findViewById(R.id.recycler_view);
+        LinearLayoutManager manager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
+        recycler_view.setLayoutManager(manager);
+        shop_adapter = new ShopActionAdapter(comboPromo, mContext);
+        recycler_view.setAdapter(shop_adapter);
+        recycler_view.addItemDecoration(new RecycleViewDivider(mContext, LinearLayoutManager.VERTICAL, 10, getResources().getColor(R.color.bg_all)));
+
+
+            springView = (SpringView) findViewById(R.id.springView);
+            springView.setHeader(new MyHeader(this));
+            springView.setFooter(new MyFooter(this));
+
 
 
 

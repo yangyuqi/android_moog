@@ -33,7 +33,7 @@ public class CouponRecordAdapter extends RecyclerView.Adapter<CouponRecordAdapte
     }
 
     public void setListRefreshUi(List<CouponRecord.OrderMonthDataListBean> list){
-        this.list = list;
+        this.list=list;
         notifyDataSetChanged();
     }
 

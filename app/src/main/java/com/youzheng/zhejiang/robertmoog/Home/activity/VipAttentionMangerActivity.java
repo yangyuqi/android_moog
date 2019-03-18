@@ -29,6 +29,7 @@ import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.listener.OnRecyclerViewAdapterItemClickListener;
 import com.youzheng.zhejiang.robertmoog.Store.listener.VipDeleteListener;
 import com.youzheng.zhejiang.robertmoog.utils.QRcode.android.CaptureActivity;
+import com.youzheng.zhejiang.robertmoog.utils.SharedPreferencesUtils;
 import com.youzheng.zhejiang.robertmoog.utils.View.RemarkDialog;
 
 import java.io.IOException;
@@ -60,7 +61,7 @@ public class VipAttentionMangerActivity extends BaseActivity implements View.OnC
     private View no_data, no_web;
     private String remark_id;
     /**
-     * 暂无数据!
+     * 暂无数据
      */
     private TextView tv_text;
     private RelativeLayout layout_header;
@@ -75,6 +76,15 @@ public class VipAttentionMangerActivity extends BaseActivity implements View.OnC
      * 修改备注
      */
     private TextView tv_update_intent;
+    private String id;
+    String employedid;
+    private TextView mTvTexts;
+    /**
+     * 添加备注
+     */
+    private TextView mTvUpdateContent;
+    private LinearLayout mLinOverUp;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +97,7 @@ public class VipAttentionMangerActivity extends BaseActivity implements View.OnC
         manager.getDefaultDisplay().getMetrics(outMetrics);
         widWidth = outMetrics.widthPixels;
         EventBus.getDefault().register(this);
+        employedid = (String) SharedPreferencesUtils.getParam(this, PublicUtils.EMPLOYEDID, "");
         initView();
 
     }
@@ -151,10 +162,23 @@ public class VipAttentionMangerActivity extends BaseActivity implements View.OnC
         List<VipGoods.IntentInfoListBean> listBeans = vipGoods.getIntentInfoList();
         if (listBeans.size() != 0) {
             intentInfoListBeans.addAll(listBeans);
-            adapter.setLists(listBeans);
+            adapter.setLists(intentInfoListBeans);
             rv_list.setVisibility(View.VISIBLE);
             lin_over.setVisibility(View.GONE);
             tv_no_data.setVisibility(View.GONE);
+            boolean isappear=false;
+            for (VipGoods.IntentInfoListBean bean : listBeans) {
+                if (bean.getId().equals(employedid)){
+                    isappear=true;
+                    break;
+                }
+            }
+            if (isappear) {
+                mLinOverUp.setVisibility(View.GONE);
+            } else {
+                mLinOverUp.setVisibility(View.VISIBLE);
+            }
+
 //            no_data.setVisibility(View.GONE);
         } else {
             rv_list.setVisibility(View.GONE);
@@ -203,6 +227,10 @@ public class VipAttentionMangerActivity extends BaseActivity implements View.OnC
         tv_attention = (TextView) findViewById(R.id.tv_attention);
         tv_update_intent = (TextView) findViewById(R.id.tv_update_intent);
         tv_update_intent.setOnClickListener(this);
+        mTvTexts = (TextView) findViewById(R.id.tv_texts);
+        mTvUpdateContent = (TextView) findViewById(R.id.tv_update_content);
+        mTvUpdateContent.setOnClickListener(this);
+        mLinOverUp = (LinearLayout) findViewById(R.id.lin_over_up);
     }
 
     @Override
@@ -212,6 +240,7 @@ public class VipAttentionMangerActivity extends BaseActivity implements View.OnC
         if (status == -1) {
             include_state.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.VISIBLE);
+            no_data.setVisibility(View.GONE);
         } else {
             include_state.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.GONE);
@@ -256,21 +285,34 @@ public class VipAttentionMangerActivity extends BaseActivity implements View.OnC
 
                 break;
             case R.id.tv_update_intent:
-                    if (bean != null) {
-                        remark_id = bean.getCustomerId();
-                        Log.e("remark_id", remark_id + "111111111" + bean.getCustomerId());
-                    }
-                    if (registerBean != null) {
-                        remark_id = registerBean.getCustomerId() + "";
-                        Log.e("remark_id", remark_id + "22222222" + registerBean.getCustomerId());
+                if (bean != null) {
+                    remark_id = bean.getCustomerId();
+                    Log.e("remark_id", remark_id + "111111111" + bean.getCustomerId());
+                }
+                if (registerBean != null) {
+                    remark_id = registerBean.getCustomerId() + "";
+                    Log.e("remark_id", remark_id + "22222222" + registerBean.getCustomerId());
 
-                    }
-                    Log.e("remark_id", remark_id);
-                    RemarkDialog remarkDialog = new RemarkDialog(VipAttentionMangerActivity.this, remark_id, "", false);
-                    remarkDialog.show();
+                }
+                Log.e("remark_id", remark_id);
+                RemarkDialog remarkDialog = new RemarkDialog(VipAttentionMangerActivity.this, remark_id, "", false);
+                remarkDialog.show();
 
 
+                break;
+            case R.id.tv_update_content:
+                if (bean != null) {
+                    remark_id = bean.getCustomerId();
+                    Log.e("remark_id", remark_id + "111111111" + bean.getCustomerId());
+                }
+                if (registerBean != null) {
+                    remark_id = registerBean.getCustomerId() + "";
+                    Log.e("remark_id", remark_id + "22222222" + registerBean.getCustomerId());
 
+                }
+                Log.e("remark_id", remark_id);
+                RemarkDialog remarkDialog1 = new RemarkDialog(VipAttentionMangerActivity.this, remark_id, "", false);
+                remarkDialog1.show();
 
                 break;
         }

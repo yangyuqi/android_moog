@@ -73,7 +73,7 @@ public class SetMealActivity extends BaseActivity implements TextWatcher {
      */
     private TextView tv_text;
     private RelativeLayout layout_header;
-
+    private int who;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -133,6 +133,8 @@ public class SetMealActivity extends BaseActivity implements TextWatcher {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 typeId = tab_id.get(tab.getPosition());
+                pageNum=1;
+                adapter.clear();
                 refreshData(tab_id.get(tab.getPosition()));
             }
 
@@ -151,6 +153,7 @@ public class SetMealActivity extends BaseActivity implements TextWatcher {
             @Override
             public void onRefresh() {
                 pageNum = 1;
+                data.clear();
                 refreshData(typeId);
             }
 
@@ -167,7 +170,7 @@ public class SetMealActivity extends BaseActivity implements TextWatcher {
             @Override
             public void onClick(View v) {
                 showPopuWindow();
-
+                goodsTitleAdapter.setSelectItem(who);
 
             }
         });
@@ -179,6 +182,7 @@ public class SetMealActivity extends BaseActivity implements TextWatcher {
         if (status == -1) {
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.VISIBLE);
+            no_data.setVisibility(View.GONE);
         } else {
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.GONE);
@@ -239,6 +243,7 @@ public class SetMealActivity extends BaseActivity implements TextWatcher {
                     showToasts("请输入商品sku/套餐号");
                 } else {
                     SKU = tv_search.getText().toString().trim();
+                    pageNum=1;
                     refreshData(typeId);
                 }
 
@@ -292,7 +297,7 @@ public class SetMealActivity extends BaseActivity implements TextWatcher {
         view_down = inflate.findViewById(R.id.view_down);
         goodsTitleAdapter = new GoodsTitleAdapter2(MealMainData, this);
         mGvTitle.setAdapter(goodsTitleAdapter);
-        goodsTitleAdapter.notifyDataSetChanged();
+//        goodsTitleAdapter.notifyDataSetChanged();
 
         iv_more.setImageResource(R.mipmap.group_12_3);
         mGvTitle.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -300,6 +305,7 @@ public class SetMealActivity extends BaseActivity implements TextWatcher {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 goodsTitleAdapter.setSelectItem(position);
                 tab.getTabAt(position).select();
+                who=position;
                 window.dismiss();
             }
         });

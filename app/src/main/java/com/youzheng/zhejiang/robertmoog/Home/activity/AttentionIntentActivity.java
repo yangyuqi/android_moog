@@ -52,6 +52,7 @@ public class AttentionIntentActivity extends BaseActivity {
         setContentView(R.layout.attention_intent_layout);
         if (access_token.equals("")) {
             startActivity(new Intent(mContext, LoginActivity.class));
+            finish();
             return;
         }
 
@@ -86,6 +87,7 @@ public class AttentionIntentActivity extends BaseActivity {
         if (status == -1) {
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.VISIBLE);
+            no_data.setVisibility(View.GONE);
         } else {
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.GONE);
@@ -95,7 +97,7 @@ public class AttentionIntentActivity extends BaseActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        onNewIntent(intent);
+        setIntent(intent);
     }
 
     @Override
@@ -110,6 +112,7 @@ public class AttentionIntentActivity extends BaseActivity {
         } else if (role.equals(PublicUtils.SHOP_LEADER)) {
             tabLayout.setVisibility(View.VISIBLE);
             Log.e("eqeq", tabposition + "");
+            data.clear();
             initData(tabposition);
         }
     }

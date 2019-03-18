@@ -92,6 +92,7 @@ public class SampleOutDetailActivity extends BaseActivity implements View.OnClic
         if (status==-1){
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.VISIBLE);
+            no_data.setVisibility(View.GONE);
         }else {
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.GONE);
@@ -126,7 +127,7 @@ public class SampleOutDetailActivity extends BaseActivity implements View.OnClic
         if (pic!=null){
             if (pic.size() != 0) {
                 list.addAll(pic);
-                adapter.setPic(pic);
+                adapter.setPic(list);
                 no_data.setVisibility(View.GONE);
             } else {
                 no_data.setVisibility(View.VISIBLE);

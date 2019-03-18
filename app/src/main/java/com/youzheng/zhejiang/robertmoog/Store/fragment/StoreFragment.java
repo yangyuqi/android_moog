@@ -50,19 +50,22 @@ public class StoreFragment extends BaseFragment implements BaseFragment.ReloadIn
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        role = (String) SharedPreferencesUtils.getParam(getActivity(), PublicUtils.role, "");
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.store_fragment_layout, null);
-        role = (String) SharedPreferencesUtils.getParam(getActivity(), PublicUtils.role, "");
+
         initView();
         setUpView(mView);
         setReloadInterface(this);
 
         return mView;
     }
+
+
 
     @Override
     public void onResume() {

@@ -163,7 +163,7 @@
             android:paddingLeft="@dimen/space_15"
             android:textSize="@dimen/text_size_14"
             android:textColor="@color/colorPrimaryDark"
-            android:text="活动门店"
+            android:text="活动门店:"
             />
 
 

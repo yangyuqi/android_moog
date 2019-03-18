@@ -51,7 +51,7 @@
             android:inputType="number"
             android:gravity="center_vertical|right"
             android:layout_marginTop="2dp"
-            android:paddingRight="15dp"
+            android:paddingRight="25dp"
             android:background="@color/bg_background_white"
             />
 

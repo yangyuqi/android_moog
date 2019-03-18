@@ -7,9 +7,6 @@
     android:layout_height="match_parent">
 
     <include layout="@layout/title_bar"/>
-    <include layout="@layout/layout_no_web"
-        android:id="@+id/no_web"
-        android:visibility="gone"/>
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tab"
@@ -17,6 +14,7 @@
         android:layout_height="50dp"
         android:background="@color/bg_background_white"
         >
+
 
         <android.support.design.widget.TabItem
             android:layout_width="wrap_content"
@@ -91,6 +89,9 @@
 
         </LinearLayout>
     </RelativeLayout>
+    <include layout="@layout/layout_no_web"
+        android:id="@+id/no_web"
+        android:visibility="gone"/>
     <include layout="@layout/layout_no_data"
         android:id="@+id/no_data"
         android:visibility="gone"/>

@@ -15,10 +15,49 @@
     <include layout="@layout/layout_no_web"
         android:id="@+id/no_web"
         android:visibility="gone"/>
+
+    <LinearLayout
+        android:id="@+id/lin_over_up"
+        android:padding="@dimen/space_15"
+        android:paddingBottom="@dimen/space_10"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:background="@color/bg_background_white"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_texts"
+            android:textSize="@dimen/text_size_14"
+            android:textColor="@color/text_main"
+            android:layout_above="@+id/tv_update_intent"
+
+            />
+
+        <TextView
+            android:layout_marginTop="@dimen/space_10"
+            android:id="@+id/tv_update_content"
+            android:drawablePadding="@dimen/space_10"
+            android:textColor="@color/text_blue"
+            android:gravity="center_vertical"
+            android:text="@string/add_note"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:drawableLeft="@mipmap/group_75_2"
+            />
+
+
+    </LinearLayout>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_list"
         android:layout_width="match_parent"
         android:visibility="visible"
+        android:background="@color/bg_all"
         android:layout_height="match_parent"
         ></android.support.v7.widget.RecyclerView>
 
@@ -48,7 +87,7 @@
             android:drawablePadding="@dimen/space_10"
             android:textColor="@color/text_blue"
             android:gravity="center_vertical"
-            android:text="@string/xiugai_note"
+            android:text="@string/add_note"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"

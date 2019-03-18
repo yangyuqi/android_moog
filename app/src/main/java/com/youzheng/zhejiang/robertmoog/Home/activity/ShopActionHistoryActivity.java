@@ -38,7 +38,7 @@ public class ShopActionHistoryActivity extends BaseActivity {
 
     ListView ls;
     private String promoType = "current";
-    int pageNum = 1, pageSize = 20, totalPage;
+    int pageNum = 1, pageSize = 10, totalPage;
     private Integer customerId;
 
     SpringView springView;
@@ -60,20 +60,41 @@ public class ShopActionHistoryActivity extends BaseActivity {
         setContentView(R.layout.shop_action_layout);
 
         initView();
+        setListener();
+        initData(pageNum,pageSize);
+    }
 
+    private void setListener() {
+        springView.setListener(new SpringView.OnFreshListener() {
+            @Override
+            public void onRefresh() {
+                pageNum = 1;
+                adapter.clear();
+                initData(pageNum,pageSize);
+            }
+
+            @Override
+            public void onLoadmore() {
+                if (totalPage > pageNum) {
+                    pageNum++;
+                    initData(pageNum,pageSize);
+                } else {
+                    springView.onFinishFreshAndLoad();
+                }
+            }
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        data.clear();
-        initData();
+
     }
 
-    private void initData() {
+    private void initData(int pagNum,int pagSize) {
         Map<String, Object> map = new HashMap<>();
-        map.put("pageNum", pageNum);
-        map.put("pageSize", pageSize);
+        map.put("pageNum", pagNum);
+        map.put("pageSize", pagSize);
         if (customerId != 0) {
             map.put("customerId", customerId);
         }
@@ -136,9 +157,11 @@ public class ShopActionHistoryActivity extends BaseActivity {
         if (status == -1) {
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.VISIBLE);
+            no_data.setVisibility(View.GONE);
         } else {
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.GONE);
+
         }
     }
 
@@ -195,8 +218,12 @@ public class ShopActionHistoryActivity extends BaseActivity {
                 helper.getView(R.id.tv_see_details).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        adapter.clear();
                         Intent intent = new Intent(mContext, ShopActionDetailsActivity.class);
+                        if (item.getProType().equals("SET_MEAL")){
+                            intent.putExtra("promtypes", item.getProType());
+                        }else {
+                            intent.putExtra("promtypes","");
+                        }
                         intent.putExtra("promoId", item.getPromoId());
                         startActivity(intent);
                     }
@@ -218,25 +245,7 @@ public class ShopActionHistoryActivity extends BaseActivity {
         springView.setHeader(new MyHeader(this));
         springView.setFooter(new MyFooter(this));
 
-        springView.setListener(new SpringView.OnFreshListener() {
-            @Override
-            public void onRefresh() {
-                pageNum = 1;
-                data.clear();
-                adapter.clear();
-                initData();
-            }
 
-            @Override
-            public void onLoadmore() {
-                if (totalPage > pageNum) {
-                    pageNum++;
-                    initData();
-                } else {
-                    springView.onFinishFreshAndLoad();
-                }
-            }
-        });
 
     }
 }

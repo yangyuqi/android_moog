@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -14,10 +15,8 @@ import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
 import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.R;
-import com.youzheng.zhejiang.robertmoog.Store.adapter.CheckResultAdapter;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.CheckStoreDetailAdapter;
 import com.youzheng.zhejiang.robertmoog.Store.bean.CheckStoreDetail;
-import com.youzheng.zhejiang.robertmoog.Store.bean.CheckStoreList;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -43,10 +42,11 @@ public class CheckStoreDetailActivity extends BaseActivity implements View.OnCli
      * 整体合规，但需要注意展厅整洁问题
      */
     private TextView tv_result_content;
-    private List<CheckStoreDetail.PatrolShopDetailBean> list=new ArrayList<>();
+    private List<CheckStoreDetail.PatrolShopDetailBean> list = new ArrayList<>();
     private CheckStoreDetailAdapter adapter;
     private int checkid;
-    private View no_data,no_web;
+    private View no_data, no_web;
+    private LinearLayout lin_bottom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +57,7 @@ public class CheckStoreDetailActivity extends BaseActivity implements View.OnCli
 
     private void initView() {
         no_web = findViewById(R.id.no_web);
-        no_data=findViewById(R.id.no_data);
+        no_data = findViewById(R.id.no_data);
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
         textHeadTitle = (TextView) findViewById(R.id.textHeadTitle);
@@ -67,28 +67,32 @@ public class CheckStoreDetailActivity extends BaseActivity implements View.OnCli
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);
         lv_list = (ListView) findViewById(R.id.lv_list);
         tv_result_content = (TextView) findViewById(R.id.tv_result_content);
-        checkid=getIntent().getIntExtra("checkID",0);
+        checkid = getIntent().getIntExtra("checkID", 0);
 
-        adapter=new CheckStoreDetailAdapter(list,this);
+        adapter = new CheckStoreDetailAdapter(list, this);
         lv_list.setAdapter(adapter);
         adapter.notifyDataSetChanged();
         initData();
 
+        lin_bottom = (LinearLayout) findViewById(R.id.lin_bottom);
     }
+
     @Override
     public void onChangeListener(int status) {
         super.onChangeListener(status);
-        if (status==-1){
+        if (status == -1) {
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.VISIBLE);
-        }else {
+            no_data.setVisibility(View.GONE);
+        } else {
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.GONE);
         }
     }
+
     private void initData() {
-        HashMap<String,Object> map=new HashMap<>();
-        map.put("patrolShopId",checkid);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("patrolShopId", checkid);
 
         OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.CHECK_STORE_DETAIL + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override
@@ -98,13 +102,13 @@ public class CheckStoreDetailActivity extends BaseActivity implements View.OnCli
 
             @Override
             public void onResponse(String response) {
-                Log.e("巡店详情",response);
+                Log.e("巡店详情", response);
 
-                BaseModel baseModel = gson.fromJson(response,BaseModel.class);
-                if (baseModel.getCode()==PublicUtils.code){
-                    CheckStoreDetail checkStoreDetail = gson.fromJson(gson.toJson(baseModel.getDatas()),CheckStoreDetail.class);
+                BaseModel baseModel = gson.fromJson(response, BaseModel.class);
+                if (baseModel.getCode() == PublicUtils.code) {
+                    CheckStoreDetail checkStoreDetail = gson.fromJson(gson.toJson(baseModel.getDatas()), CheckStoreDetail.class);
                     setData(checkStoreDetail);
-                }else {
+                } else {
                     showToasts(baseModel.getMsg());
                 }
             }
@@ -115,19 +119,21 @@ public class CheckStoreDetailActivity extends BaseActivity implements View.OnCli
     }
 
     private void setData(CheckStoreDetail checkStoreDetail) {
-        if (checkStoreDetail.getPatrolShopDetail()==null) return;
-        if (!checkStoreDetail.getRemarks().equals("")||checkStoreDetail.getRemarks()==null){
+        if (checkStoreDetail.getPatrolShopDetail() == null) return;
+        if (!checkStoreDetail.getRemarks().equals("") || checkStoreDetail.getRemarks() == null) {
+            lin_bottom.setVisibility(View.VISIBLE);
             tv_result_content.setText(checkStoreDetail.getRemarks());
-        }else {
-            tv_result_content.setText(getString(R.string.have_no));
+        } else {
+            //tv_result_content.setText(getString(R.string.have_no));
+            lin_bottom.setVisibility(View.GONE);
         }
 
-        List<CheckStoreDetail.PatrolShopDetailBean> beanList=checkStoreDetail.getPatrolShopDetail();
-        if (beanList.size()!=0){
+        List<CheckStoreDetail.PatrolShopDetailBean> beanList = checkStoreDetail.getPatrolShopDetail();
+        if (beanList.size() != 0) {
             list.addAll(beanList);
             no_data.setVisibility(View.GONE);
-            lv_list .setVisibility(View.VISIBLE);
-        }else {
+            lv_list.setVisibility(View.VISIBLE);
+        } else {
             no_data.setVisibility(View.VISIBLE);
             lv_list.setVisibility(View.GONE);
         }

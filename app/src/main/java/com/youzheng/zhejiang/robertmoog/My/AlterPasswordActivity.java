@@ -13,6 +13,7 @@ import com.youzheng.zhejiang.robertmoog.Base.utils.UrlUtils;
 import com.youzheng.zhejiang.robertmoog.Home.activity.LoginActivity;
 import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.R;
+import com.youzheng.zhejiang.robertmoog.utils.ClickUtils;
 import com.youzheng.zhejiang.robertmoog.utils.SharedPreferencesUtils;
 
 import java.io.IOException;
@@ -63,38 +64,53 @@ public class AlterPasswordActivity extends BaseActivity {
                     return;
                 }
 
+                if (edt_password.getText().toString().length()<6){
+                    showToasts("新密码不能小于6位");
+                    return;
+                }
+
                 if (edt_again_password.getText().toString().equals("")){
                     showToasts(mContext.getResources().getString(R.string.login_pwd_again));
                     return;
                 }
+
+
+
                 if (edt_phone.getText().toString().equals(edt_again_password.getText().toString())){
                     showToasts("新密不能与原密码重复");
                     return;
                 }
 
-                Map<String,Object> map = new HashMap<>();
-                map.put("originalPassword", PublicUtils.getSHA256StrJava(edt_phone.getText().toString()));
-                map.put("newPassword",PublicUtils.getSHA256StrJava(edt_password.getText().toString()));
-                map.put("confirmNewPassword",PublicUtils.getSHA256StrJava(edt_again_password.getText().toString()));
-                OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.CHANGE_PSW + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
-                    @Override
-                    public void onFailure(Request request, IOException e) {
+                if (ClickUtils.isFastDoubleClick()){
+                    return;
 
-                    }
+                }else {
+                    Map<String,Object> map = new HashMap<>();
+                    map.put("originalPassword", PublicUtils.getSHA256StrJava(edt_phone.getText().toString()));
+                    map.put("newPassword",PublicUtils.getSHA256StrJava(edt_password.getText().toString()));
+                    map.put("confirmNewPassword",PublicUtils.getSHA256StrJava(edt_again_password.getText().toString()));
+                    OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.CHANGE_PSW + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
+                        @Override
+                        public void onFailure(Request request, IOException e) {
 
-                    @Override
-                    public void onResponse(String response) {
-                        BaseModel baseModel = gson.fromJson(response,BaseModel.class);
-                        if (baseModel.getCode()==PublicUtils.code){
-                            showToasts(getString(R.string.change_psd_success));
-                            SharedPreferencesUtils.clear(mContext);
-                            startActivity(new Intent(mContext,LoginActivity.class));
-                            finish();
-                        }else {
-                            showToasts(baseModel.getMsg());
                         }
-                    }
-                });
+
+                        @Override
+                        public void onResponse(String response) {
+                            BaseModel baseModel = gson.fromJson(response,BaseModel.class);
+                            if (baseModel.getCode()==PublicUtils.code){
+                                showToasts(getString(R.string.change_psd_success));
+                                SharedPreferencesUtils.clear(mContext);
+                                startActivity(new Intent(mContext,LoginActivity.class));
+                                finish();
+                            }else {
+                                showToasts(baseModel.getMsg());
+                            }
+                        }
+                    });
+                }
+
+
             }
         });
     }

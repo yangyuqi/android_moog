@@ -16,16 +16,20 @@ import com.youzheng.zhejiang.robertmoog.Base.BaseActivity;
 import com.youzheng.zhejiang.robertmoog.Base.utils.MyConstant;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.ProfessionalCustomerPagerAdapter;
+import com.youzheng.zhejiang.robertmoog.Store.fragment.CustomerOrder2Fragment;
 import com.youzheng.zhejiang.robertmoog.Store.fragment.CustomerOrderFragment;
+import com.youzheng.zhejiang.robertmoog.Store.listener.CounterListener;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.greenrobot.event.EventBus;
+
 /**
  * 专业客户订单界面ssss
  */
-public class ProfessionalCustomerOrderActivity extends BaseActivity implements View.OnClickListener {
+public class ProfessionalCustomerOrderActivity extends BaseActivity implements View.OnClickListener, TabLayout.BaseOnTabSelectedListener {
 
     private ImageView btnBack;
     /**  */
@@ -59,6 +63,7 @@ public class ProfessionalCustomerOrderActivity extends BaseActivity implements V
         layout_header = (RelativeLayout) findViewById(R.id.layout_header);
         tab = (TabLayout) findViewById(R.id.tab);
         pager = (ViewPager) findViewById(R.id.pager);
+        tab.addOnTabSelectedListener(this);
         initPager();
     }
     @Override
@@ -66,10 +71,13 @@ public class ProfessionalCustomerOrderActivity extends BaseActivity implements V
         super.onChangeListener(status);
         if (status==-1){
             layout_header.setVisibility(View.VISIBLE);
-            no_web.setVisibility(View.VISIBLE);
+            EventBus.getDefault().post("-1");
+
+
         }else {
             layout_header.setVisibility(View.VISIBLE);
-            no_web.setVisibility(View.GONE);
+            EventBus.getDefault().post("1");
+
         }
     }
 
@@ -81,7 +89,7 @@ public class ProfessionalCustomerOrderActivity extends BaseActivity implements V
         onefragment.setArguments(upcomingBundle);
         list.add(onefragment);
         //推荐客户订单
-        CustomerOrderFragment twofragment=new CustomerOrderFragment();
+        CustomerOrder2Fragment twofragment=new CustomerOrder2Fragment();
         Bundle bundle = new Bundle();
         bundle.putString(MyConstant.LIST_TYPE ,"GROOM");
         twofragment.setArguments(bundle);
@@ -112,4 +120,23 @@ public class ProfessionalCustomerOrderActivity extends BaseActivity implements V
     }
 
 
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        if (tab.getPosition()==0){
+            EventBus.getDefault().post("MAJOR");
+        }else {
+            EventBus.getDefault().post("GROOM");
+
+        }
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+
+    }
 }

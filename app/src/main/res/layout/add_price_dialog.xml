@@ -52,6 +52,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="输入金额"
+                android:maxLength="9"
                 android:textSize="15sp"
                 android:textColor="#383838"
                 />
@@ -82,7 +83,7 @@
         android:orientation="horizontal"
         >
         <TextView
-            android:background="@drawable/bg_order"
+            android:background="@drawable/bg_order_one"
             android:id="@+id/tv_no"
             android:layout_width="0dp"
             android:layout_weight="1"

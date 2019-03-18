@@ -53,7 +53,7 @@ public class OkHttpClientManager
     private static OkHttpClientManager mInstance;
     private OkHttpClient mOkHttpClient;
     private Handler mDelivery;
-
+    public static OkHttpClient  client;
 
 
     private static final String TAG = "OkHttpClientManager";
@@ -68,6 +68,8 @@ public class OkHttpClientManager
             .hostnameVerifier(SSLSocketClient.getHostnameVerifier())//配置
             .build();
         mDelivery = new Handler(Looper.getMainLooper());
+
+
     }
 
     public static OkHttpClientManager getInstance()
@@ -525,10 +527,11 @@ public class OkHttpClientManager
                 RequestBuilder.post(requestBody);
                 Request request = RequestBuilder.build();
                 Log.e("图片网址 ",request+"");
-                OkHttpClient client = new OkHttpClient.Builder()
+                    client = new OkHttpClient.Builder()
                         .connectTimeout(4000, TimeUnit.SECONDS)//设置连接超时时间
                         .readTimeout(4000, TimeUnit.SECONDS)//设置读取超时时间
                         .build();
+
                 client.newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
@@ -549,5 +552,16 @@ public class OkHttpClientManager
         });
     }
 
+    public static void stopRequest(){
+        try {
+            if (client!=null){
+                client.dispatcher().cancelAll();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+    }
 
 }

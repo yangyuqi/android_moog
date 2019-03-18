@@ -105,6 +105,7 @@ public class AttentionGoodsActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
         adapter.clear();
         initData();
     }

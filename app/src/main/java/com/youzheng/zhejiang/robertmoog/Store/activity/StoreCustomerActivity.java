@@ -99,27 +99,27 @@ public class StoreCustomerActivity extends BaseActivity implements View.OnClickL
 //        });
 
 
-        mSpringView.setListener(new SpringView.OnFreshListener() {
-            @Override
-            public void onRefresh() {
-                if (year == calendar.get(Calendar.YEAR)) {
-                    list.clear();
-                    adapter.clear();
-                    initData(year);
-                } else {
-                    year++;
-                    list.clear();
-                    adapter.clear();
-                    initData(year);
-                }
-            }
-
-            @Override
-            public void onLoadmore() {
-                year--;
-                initData(year);
-            }
-        });
+//        mSpringView.setListener(new SpringView.OnFreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                if (year == calendar.get(Calendar.YEAR)) {
+//                    list.clear();
+//                    adapter.clear();
+//                    initData(year);
+//                } else {
+//                    year++;
+//                    list.clear();
+//                    adapter.clear();
+//                    initData(year);
+//                }
+//            }
+//
+//            @Override
+//            public void onLoadmore() {
+//                year--;
+//                initData(year);
+//            }
+//        });
 
     }
 
@@ -159,6 +159,7 @@ public class StoreCustomerActivity extends BaseActivity implements View.OnClickL
         if (status==-1){
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.VISIBLE);
+            no_data.setVisibility(View.GONE);
         }else {
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.GONE);
@@ -216,7 +217,7 @@ public class StoreCustomerActivity extends BaseActivity implements View.OnClickL
         if (coustomerListBeans!=null){
             if (coustomerListBeans.size() != 0) {
                 list.addAll(coustomerListBeans);
-                adapter.setListRefreshUi(coustomerListBeans);
+                adapter.setListRefreshUi(list);
                 no_data.setVisibility(View.GONE);
                 lv_list.setVisibility(View.VISIBLE);
             } else {

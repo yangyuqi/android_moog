@@ -100,9 +100,11 @@ public class ReturnGoodsDetailActivity extends BaseActivity implements View.OnCl
         if (status==-1){
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.VISIBLE);
+            no_data.setVisibility(View.GONE);
         }else {
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.GONE);
+
         }
     }
     private void initView() {
@@ -245,7 +247,7 @@ public class ReturnGoodsDetailActivity extends BaseActivity implements View.OnCl
 
         if (beanList.size() != 0) {
             list.addAll(beanList);
-            adapter.setRefreshUI(beanList);
+            adapter.setRefreshUI(list);
         }
 
     }

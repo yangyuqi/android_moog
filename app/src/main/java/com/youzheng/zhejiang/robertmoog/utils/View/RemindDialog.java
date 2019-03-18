@@ -51,13 +51,13 @@ public class RemindDialog extends Dialog {
         }
 
         if (type.equals("3")){
-            confrim_dialog_tv_content.setText("确认退出当前账号");
+            confrim_dialog_tv_content.setText("确认退出当前账号?");
         }
         if (type.equals("2")){
             confrim_dialog_tv_content.setText("用户还未注册，请确认是否注册？");
         }
         if (type.equals("4")){
-            confrim_dialog_tv_content.setText("地址信息未保存，是否确认返回");
+            confrim_dialog_tv_content.setText("地址信息未保存，是否确认返回?");
         }
 
         tv_no.setOnClickListener(new View.OnClickListener() {

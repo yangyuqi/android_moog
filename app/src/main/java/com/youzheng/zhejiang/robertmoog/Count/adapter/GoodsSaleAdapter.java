@@ -28,6 +28,8 @@ public class GoodsSaleAdapter extends RecyclerView.Adapter<GoodsSaleAdapter.Sale
     }
 
     public void setUI(List<GoodsSale.ProductListBean> list){
+//        this.list.clear();
+//        this.list.addAll(list);
         this.list=list;
         notifyDataSetChanged();
     }

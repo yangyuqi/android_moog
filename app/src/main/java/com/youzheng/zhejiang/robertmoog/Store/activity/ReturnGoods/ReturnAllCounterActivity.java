@@ -34,6 +34,7 @@ import com.youzheng.zhejiang.robertmoog.Store.adapter.MoreReturnCounterAdapter;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.ReturnGoodsCounterAdapter;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.SmallCounterAdapter;
 import com.youzheng.zhejiang.robertmoog.Store.adapter.oneReturnGoodsCounterAdapter;
+import com.youzheng.zhejiang.robertmoog.Store.bean.ChooseGoodsRequest;
 import com.youzheng.zhejiang.robertmoog.Store.bean.ChooseReturnGoodsDetail;
 import com.youzheng.zhejiang.robertmoog.Store.bean.ConfirmReturnRequest;
 import com.youzheng.zhejiang.robertmoog.Store.bean.ReturnGoodsCounter;
@@ -41,6 +42,7 @@ import com.youzheng.zhejiang.robertmoog.Store.bean.ReturnGoodsSuccess;
 import com.youzheng.zhejiang.robertmoog.Store.listener.GetData;
 import com.youzheng.zhejiang.robertmoog.Store.listener.GetListener;
 import com.youzheng.zhejiang.robertmoog.Store.view.SingleOptionsPicker;
+import com.youzheng.zhejiang.robertmoog.utils.ClickUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -124,9 +126,9 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
     public static int one_list_total;
     public static int more_total;
 
-    private int one_all;
-    private int all;
-    private int more_all;
+    private long one_all;
+    private long all;
+    private long more_all;
     private EditText et_other_reason;
     public static ReturnAllCounterActivity Instance;
     private List<EnumsDatasBeanDatas> list1=new ArrayList<>();
@@ -195,7 +197,7 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
 
         if (one.size() != 0) {
             onelist.addAll(one);
-            oneCounteradapter.setUI(one);
+            oneCounteradapter.setUI(onelist);
 //            requests.clear();
         } else {
             rv_list_one.setVisibility(View.GONE);
@@ -206,20 +208,20 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
 
         if (more.size() != 0) {
             morelist.addAll(more);
-            moreReturnCounterAdapter.setUI(more);
+            moreReturnCounterAdapter.setUI(morelist);
 //            requests.addAll(moreChooseReturnGoodsAdapter.getRequests());
 //            Log.e("sada",requests+"");
         } else {
             rv_list_more.setVisibility(View.GONE);
         }
-        int moren_more = 0;
+        long moren_more = 0;
         if (more.size() != 0) {
             for (int i = 0; i < more.size(); i++) {
                 for (ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean.ProductListBeanX beanX : more.get(i).getProductList()) {
                     if (beanX.getCount() == 0) {
                         moren_more = 0;
                     } else {
-                        moren_more = Integer.parseInt(beanX.getRefundAmount());
+                        moren_more = Long.parseLong(beanX.getRefundAmount());
                     }
                     more_all = more_all + moren_more;
 
@@ -228,13 +230,13 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
             }
         }
 
-        int one_list = 0;
+        long one_list = 0;
         if (one.size() != 0) {
             for (int i = 0; i < one.size(); i++) {
                 if (one.get(i).getCount() == 0) {
                     one_list = 0;
                 } else {
-                    one_list = Integer.parseInt(one.get(i).getRefundAmount());
+                    one_list = Long.parseLong(one.get(i).getRefundAmount());
                 }
 
                 one_all = one_all + one_list;
@@ -242,7 +244,7 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
         }
 
 
-        int all = one_all + more_all;
+        long all = one_all + more_all;
 
         tv_really_cut_money.setText(all + "");
 
@@ -497,7 +499,12 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
                 } else if (et_other_reason.getVisibility() == View.VISIBLE && et_other_reason.getText().toString().equals("")) {
                     showToasts(getString(R.string.please_write_reason));
                 } else {
-                    showStopDialog();
+                    if (ClickUtils.isFastDoubleClick()){
+                        return;
+                    }else {
+                        showStopDialog();
+                    }
+
                 }
                 break;
         }
@@ -544,7 +551,7 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
     }
 
     private void confirmReturn() {
-
+           request.clear();
 //        if (tv_return_type.getText().equals(getString(R.string.bank_card))) {
 //            paymentMethod = "BANK_CARD";
 //        } else if (tv_return_type.getText().equals(getString(R.string.we_chat))) {
@@ -587,18 +594,58 @@ public class ReturnAllCounterActivity extends BaseActivity implements View.OnCli
 
         if (onelist.size() != 0) {
             for (ChooseReturnGoodsDetail.ReturnOrderInfoBean.ProductListBean bean1 : onelist) {
-                ConfirmReturnRequest.ReshippedGoodsDataListBean requestBean = new ConfirmReturnRequest.ReshippedGoodsDataListBean();
-                requestBean.setOrderItemProductId(bean1.getOrderItemProductId());
-                requestBean.setCount(bean1.getCount() + "");
-                requestBean.setRefundAmount(bean1.getRefundAmount());
-                requestBean.setActualRefundAmount(bean1.getMoney() + "");
-                request.add(requestBean);
+                if (bean1.getMoney()!=0){
+                    ConfirmReturnRequest.ReshippedGoodsDataListBean requestBean = new ConfirmReturnRequest.ReshippedGoodsDataListBean();
+                    requestBean.setOrderItemProductId(bean1.getOrderItemProductId());
+                    requestBean.setCount(bean1.getCount() + "");
+                    requestBean.setRefundAmount(bean1.getRefundAmount());
+                    requestBean.setActualRefundAmount(bean1.getMoney() + "");
+                    request.add(requestBean);
+                }else {
+                    showToasts("请输入实退金额");
+                    return;
+                }
+
             }
         }
 
         if (morelist.size() != 0) {
-            request.addAll(moreReturnCounterAdapter.getRequests());
+
+            for (int i = 0; i < morelist.size(); i++) {
+                ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean beanX = morelist.get(i);
+                if (beanX != null && beanX.getProductList() != null) {
+                    for (int i1 = 0; i1 < beanX.getProductList().size(); i1++) {
+                        List<ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean.ProductListBeanX> productList = beanX.getProductList();
+                        ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean.ProductListBeanX productListBeanX = productList.get(i1);
+                        if (productListBeanX != null && productListBeanX.getMoney() != 0) {
+                            ConfirmReturnRequest.ReshippedGoodsDataListBean requests = new ConfirmReturnRequest.ReshippedGoodsDataListBean();
+                            if (productListBeanX.getMoney() != 0) {
+                                requests.setOrderItemProductId(productListBeanX.getOrderItemProductId());
+                                requests.setCount(productListBeanX.getCount() + "");
+                                requests.setRefundAmount(productListBeanX.getRefundAmount());
+                                requests.setActualRefundAmount(productListBeanX.getMoney() + "");
+                                request.add(requests);
+                            }else {
+
+                            }
+                        }else {
+                            showToasts("请输入实退金额");
+                            return;
+                        }
+                    }
+                }
+            }
+
         }
+
+//            if (moreReturnCounterAdapter.getRequests()!=null){
+//                request.addAll(moreReturnCounterAdapter.getRequests());
+//            }else {
+//                showToasts("请输入实退金额");
+//                return;
+//            }
+//
+//        }
         map.put("reshippedGoodsDataList", request);
         OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.CONFIRM_RETURN + "?access_token=" + access_token, new OkHttpClientManager.StringCallback() {
             @Override

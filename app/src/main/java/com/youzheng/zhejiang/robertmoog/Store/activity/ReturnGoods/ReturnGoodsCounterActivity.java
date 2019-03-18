@@ -42,6 +42,7 @@ import com.youzheng.zhejiang.robertmoog.Store.listener.CounterListener;
 import com.youzheng.zhejiang.robertmoog.Store.listener.GetListener;
 import com.youzheng.zhejiang.robertmoog.Store.view.RecycleViewDivider;
 import com.youzheng.zhejiang.robertmoog.Store.view.SingleOptionsPicker;
+import com.youzheng.zhejiang.robertmoog.utils.ClickUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -181,14 +182,14 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
           List<ReturnGoodsCounter.ReturnOrderInfoBean.ProductListBean> beans=counter.getReturnOrderInfo().getProductList();
           if (beans.size()!=0){
               list.addAll(beans);
-              adapter.setUI(beans);
+              adapter.setUI(list);
           }
-          int totals=0;
+          long totals=0;
           if (beans.size()!=0){
               for (int i = 0; i < beans.size(); i++) {
-                  int item= Integer.parseInt(beans.get(i).getRefundAmount());
+                  long item= Long.parseLong(beans.get(i).getRefundAmount());
 //                  int count=beans.get(i).getCount();
-                  int all=item;
+                  long all=item;
                   totals=totals+all;
               }
 
@@ -419,7 +420,12 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
                 }else if (et_other_reason.getVisibility()==View.VISIBLE&&et_other_reason.getText().toString().equals("")){
                     showToasts(getString(R.string.please_write_reason));
                 }else {
-                    showStopDialog();
+                    if (ClickUtils.isFastDoubleClick()){
+                        return;
+                    }else {
+                        showStopDialog();
+                    }
+
                 }
                 break;
         }
@@ -455,7 +461,7 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
         }
     }
     private void confirmReturn() {
-
+        request.clear();
 //        if (tv_return_type.getText().equals(getString(R.string.bank_card))){
 //            paymentMethod="BANK_CARD";
 //        }else if (tv_return_type.getText().equals(getString(R.string.we_chat))){
@@ -499,12 +505,18 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
 
         if (list.size()!=0){
             for (ReturnGoodsCounter.ReturnOrderInfoBean.ProductListBean bean1:list){
-                ConfirmReturnRequest.ReshippedGoodsDataListBean requestBean=new ConfirmReturnRequest.ReshippedGoodsDataListBean();
-                requestBean.setOrderItemProductId(bean1.getOrderItemProductId());
-                requestBean.setCount(bean1.getCount()+"");
-                requestBean.setRefundAmount(bean1.getRefundAmount());
-                requestBean.setActualRefundAmount(bean1.getMoney()+"");
-                request.add(requestBean);
+                if (bean1.getMoney()!=0){
+                    ConfirmReturnRequest.ReshippedGoodsDataListBean requestBean=new ConfirmReturnRequest.ReshippedGoodsDataListBean();
+                    requestBean.setOrderItemProductId(bean1.getOrderItemProductId());
+                    requestBean.setCount(bean1.getCount()+"");
+                    requestBean.setRefundAmount(bean1.getRefundAmount());
+                    requestBean.setActualRefundAmount(bean1.getMoney()+"");
+                    request.add(requestBean);
+                }else {
+                    showToasts("请输入实退金额");
+                    return;
+                }
+
             }
         }
         map.put("reshippedGoodsDataList",request);
@@ -582,12 +594,12 @@ public class ReturnGoodsCounterActivity extends BaseActivity implements View.OnC
     @Override
     public void getTotal(List<ReturnGoodsCounter.ReturnOrderInfoBean.ProductListBean> list) {
         if (list!=null||list.size()!=0){
-            int total=0;
+            long total=0;
 
             for (int i = 0; i <list.size() ; i++) {
-                int item_total=list.get(i).getMoney();
+                long item_total=list.get(i).getMoney();
 //                int count =list.get(i).getCount();
-                int all=item_total;
+                long all=item_total;
                 total=total+all;
             }
 

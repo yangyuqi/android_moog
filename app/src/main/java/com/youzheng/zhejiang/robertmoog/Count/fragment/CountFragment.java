@@ -37,6 +37,7 @@ import com.youzheng.zhejiang.robertmoog.Store.utils.TextTypeUtil;
 import com.youzheng.zhejiang.robertmoog.utils.SharedPreferencesUtils;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 
 import okhttp3.Request;
@@ -161,7 +162,7 @@ public class CountFragment extends BaseFragment implements BaseFragment.ReloadIn
         productName=countAll.getDayCountData().getProductName();
         setMealInfo=countAll.getDayCountData().getSetMealInfo();
         if (!shopCount.equals("")||shopCount!=null){
-            tv_sale_number.setText(shopCount);
+            tv_sale_number.setText(addComma(shopCount));
         }
         if (!setMealCount.equals("")||setMealCount!=null){
             tv_best_today_meal.setText(setMealCount);
@@ -234,6 +235,10 @@ public class CountFragment extends BaseFragment implements BaseFragment.ReloadIn
 
     }
 
+    public static String addComma(String str) {
+        DecimalFormat decimalFormat = new DecimalFormat(",###");
+        return decimalFormat.format(Double.parseDouble(str));
+    }
 
 
     @Override

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@color/bg_all"
     android:layout_width="match_parent"
@@ -145,10 +145,6 @@
             android:layout_height="@dimen/space_5"
             android:background="@color/bg_all"/>
 
-        <ScrollView
-
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
             <LinearLayout
 
@@ -208,14 +204,24 @@
                     <!--android:layout_height="@dimen/space_1"-->
                     <!--android:background="@color/bg_all"/>-->
 
-                <android.support.v7.widget.RecyclerView
-
+                <com.liaoinstan.springview.widget.SpringView
+                    android:id="@+id/springView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/recycler_view"
-                    android:background="@color/bg_background_white"
-                    android:visibility="gone"
-                    ></android.support.v7.widget.RecyclerView>
+                    android:background="@color/bg_all"
+                    android:layout_height="match_parent"
+                    app:type="follow">
+
+
+                    <android.support.v7.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/recycler_view"
+                        android:background="@color/bg_background_white"
+                        ></android.support.v7.widget.RecyclerView>
+
+                </com.liaoinstan.springview.widget.SpringView>
+
+
 
 
                 <!--<View-->
@@ -245,6 +251,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:id="@+id/rv_coupon"
+                    android:visibility="gone"
 
                     ></android.support.v7.widget.RecyclerView>
 
@@ -253,9 +260,6 @@
     </LinearLayout>
 
 
-
-
-</ScrollView>
 
     </LinearLayout>
     <TextView

@@ -65,6 +65,7 @@
             android:textColor="@color/text_blue"
             android:gravity="center_vertical"
             android:text="@string/xiugai_note"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -92,7 +93,7 @@
         android:gravity="center"
         android:textSize="15sp"
         android:visibility="visible"
-        android:background="@color/bg_background_white"
+        android:background="@color/bg_all"
         android:textColor="@color/text_main"
         android:text="暂无意向商品信息" />
 

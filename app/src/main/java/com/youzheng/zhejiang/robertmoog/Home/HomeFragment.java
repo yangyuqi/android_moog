@@ -239,22 +239,22 @@ public class HomeFragment extends BaseFragment implements BaseFragment.ReloadInt
                         if (homePageData.getHomePageData().isNewCombo()==true) {
                             isNewMeal = true;
                             gv.setAdapter(adapter);
-                           // gv.notify();
+                            // gv.notify();
                             //ata.get(4).newCombo = true;
                         }else {
                             isNewMeal = false;
                             gv.setAdapter(adapter);
-                           // gv.notify();
+                            // gv.notify();
                         }
                         if (homePageData.getHomePageData().isNewPromotion()==true) {
                             isnewCu = true;
                             gv.setAdapter(adapter);
-                          //  gv.notify();
+                            //  gv.notify();
                             //data.get(2).newPromotion = true;
                         }else {
                             isnewCu = false;
                             gv.setAdapter(adapter);
-                          //  gv.notify();
+                            //  gv.notify();
                         }
 
 

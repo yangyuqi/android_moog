@@ -143,13 +143,13 @@ public class ChooseReturnGoodsDetail {
                 private String square;
                 private boolean isSpecial;
                 private int num;
-                private int money;
+                private long money;
 
-                public int getMoney() {
+                public long getMoney() {
                     return money;
                 }
 
-                public void setMoney(int money) {
+                public void setMoney(long money) {
                     this.money = money;
                 }
 
@@ -317,7 +317,7 @@ public class ChooseReturnGoodsDetail {
                     private int count;
                     private String orderItemProductId;
                     private int num;
-                    private int money;
+                    private long money;
                     private int should;
 
                     public int getShould() {
@@ -328,11 +328,11 @@ public class ChooseReturnGoodsDetail {
                         this.should = should;
                     }
 
-                    public int getMoney() {
+                    public long getMoney() {
                         return money;
                     }
 
-                    public void setMoney(int money) {
+                    public void setMoney(long money) {
                         this.money = money;
                     }
 

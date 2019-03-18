@@ -5,6 +5,15 @@ public class GetPromoListBean {
     private String promoName ;
     private String promoTime ;
     private String promoDes ;
+    private String proType;
+
+    public String getProType() {
+        return proType;
+    }
+
+    public void setProType(String proType) {
+        this.proType = proType;
+    }
 
     public int getPromoId() {
         return promoId;

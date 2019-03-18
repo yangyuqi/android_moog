@@ -124,14 +124,17 @@ public class VipGoodsAdapter extends RecyclerView.Adapter<VipGoodsAdapter.VipGoo
             }
         }
         if (ishaveData==false){
-            vipGoodsHolder.tv_no_data.setVisibility(View.VISIBLE);
-            vipGoodsHolder.ls.setVisibility(View.GONE);
+            if (i==intentInfoListBeans.size()-1){
+                vipGoodsHolder.tv_no_data.setVisibility(View.VISIBLE);
+                vipGoodsHolder.ls.setVisibility(View.GONE);
+            }else {
+                vipGoodsHolder.ls.setVisibility(View.VISIBLE);
+                vipGoodsHolder.tv_no_data.setVisibility(View.GONE);
+            }
         }else {
             vipGoodsHolder.ls.setVisibility(View.VISIBLE);
             vipGoodsHolder.tv_no_data.setVisibility(View.GONE);
         }
-
-
 
 
 
@@ -141,6 +144,15 @@ public class VipGoodsAdapter extends RecyclerView.Adapter<VipGoodsAdapter.VipGoo
             vipGoodsHolder.tv_update_intent.setVisibility(View.VISIBLE);
         } else {
             vipGoodsHolder.tv_update_intent.setVisibility(View.GONE);
+
+        }
+
+        if (vipGoodsHolder.tv_update_intent.getVisibility()==View.GONE){
+            if (TextUtils.isEmpty(bean.getRemark())){
+                vipGoodsHolder.lin_over.setVisibility(View.GONE);
+            }else {
+                vipGoodsHolder.tv_attention.setVisibility(View.VISIBLE);
+            }
         }
 
         if (employedid.equals(bean.getId())) {
@@ -186,7 +198,7 @@ public class VipGoodsAdapter extends RecyclerView.Adapter<VipGoodsAdapter.VipGoo
                                         if (baseModel.getCode() == PublicUtils.code) {
                                             adapter.clear();
                                             listener.delete();
-                                            sendRemark(bean.getIntentId() + "");
+                                            //sendRemark(bean.getIntentId() + "");
                                             //  initData();
                                         }
                                     }

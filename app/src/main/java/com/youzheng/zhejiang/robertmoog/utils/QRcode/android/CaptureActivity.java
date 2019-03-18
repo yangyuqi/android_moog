@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,6 +13,7 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -37,6 +39,7 @@ import com.youzheng.zhejiang.robertmoog.Model.Home.IntentProductsBeanAdd;
 import com.youzheng.zhejiang.robertmoog.Model.Home.ScanDatas;
 import com.youzheng.zhejiang.robertmoog.Model.Home.ScanDatasBean;
 import com.youzheng.zhejiang.robertmoog.R;
+import com.youzheng.zhejiang.robertmoog.Store.activity.ReturnGoods.ReturnAllCounterActivity;
 import com.youzheng.zhejiang.robertmoog.Store.utils.SoftInputUtils;
 import com.youzheng.zhejiang.robertmoog.utils.ClickUtils;
 import com.youzheng.zhejiang.robertmoog.utils.QRcode.bean.ZxingConfig;
@@ -84,6 +87,7 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
      */
     private TextView tv_start;
     private FrameLayout fy;
+
 
     public ViewfinderView getViewfinderView() {
         return viewfinderView;
@@ -232,12 +236,7 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
         viewfinderView = findViewById(R.id.viewfinder_view);
         viewfinderView.setZxingConfig(config);
         ((TextView) findViewById(R.id.textHeadTitle)).setText(this.getResources().getString(R.string.home_gv_two));
-        findViewById(R.id.btnBack).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+
         findViewById(R.id.iv_next).setVisibility(View.VISIBLE);
         recycler_view = findViewById(R.id.recycler_view);
         tv_confrim = findViewById(R.id.tv_confrim);
@@ -246,6 +245,23 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
         if (type != null) {
             ((TextView) findViewById(R.id.textHeadTitle)).setText("添加意向商品");
         }
+
+        findViewById(R.id.btnBack).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (((TextView) findViewById(R.id.textHeadTitle)).getText().toString().equals("添加意向商品")){
+                    if (datasBeanList.size()!=0){
+                          showStopDialog();
+                    }else {
+                        finish();
+                    }
+                }else {
+                    finish();
+                }
+
+
+            }
+        });
         addapter = new SearchResultAdapter();
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recycler_view.setLayoutManager(manager);
@@ -269,6 +285,10 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
         tv_confrim.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (ClickUtils.isFastDoubleClick()){
+                    return;
+                }
+
                 for (ScanDatasBean scanDatasBean : datasBeanList) {
                     if (scanDatasBean.getNum() == 0) {
                         showToasts("商品数量不能为空");
@@ -282,7 +302,7 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
                         intent.putExtra("customerId", customerId);
                         intent.putExtra("data", datasBeanList);
                         intent.putExtra("address_aa", 1);
-                        Log.e("传过去的集合", String.valueOf(datasBeanList));
+                        Log.e("传过去的集合", datasBeanList.size()+"");
                         startActivity(intent);
                         // finish();
                     } else {
@@ -297,6 +317,7 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
         tv_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                countDownTimer.start();
                 isPreview = true;
                 cameraManager = new CameraManager(getApplication(), config);
                 viewfinderView.setCameraManager(cameraManager);
@@ -396,11 +417,11 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
             addData(rawResult.getText());
         }
 
-
+        countDownTimer.cancel();
         previewView.setBackgroundColor(getResources().getColor(R.color.text_drak_gray));
         viewfinderView.setVisibility(View.GONE);
         fy.setVisibility(View.VISIBLE);
-
+           countDownTimer.cancel();
 
 //        Toast.makeText(this,rawResult.getText(),Toast.LENGTH_SHORT).show();
     }
@@ -484,9 +505,52 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
         super.onPause();
     }
 
+
+    public void showStopDialog() {
+        final AlertDialog dialogBuilder = new AlertDialog.Builder(CaptureActivity.this, R.style.mydialog).create();
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_confirm_return11, null);
+        dialogBuilder.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogBuilder.show();
+        dialogBuilder.setContentView(dialogView);
+
+        TextView tv_no = dialogView.findViewById(R.id.tv_no);
+        TextView tv_ok = dialogView.findViewById(R.id.tv_ok);
+
+        tv_no.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogBuilder.dismiss();
+            }
+        });
+
+        tv_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                datasBeanList.clear();
+                finish();
+                dialogBuilder.dismiss();
+            }
+        });
+
+        Window window = dialogBuilder.getWindow();
+        //这句设置我们dialog在底部
+        window.setGravity(Gravity.CENTER);
+        WindowManager.LayoutParams lp = window.getAttributes();
+        //这句就是设置dialog横向满屏了。
+        DisplayMetrics d = this.getResources().getDisplayMetrics(); // 获取屏幕宽、高用
+        lp.width = (int) (d.widthPixels * 0.9); // 高度设置为屏幕的0.6
+        // lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        window.setAttributes(lp);
+
+
+    }
+
     @Override
     protected void onDestroy() {
         inactivityTimer.shutdown();
+        countDownTimer.cancel();
         super.onDestroy();
     }
 
@@ -514,32 +578,68 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
     public void onClick(View view) {
     }
 
+    private CountDownTimer countDownTimer=new CountDownTimer(60000,1000) {
+        @Override
+        public void onTick(long millisUntilFinished) {
+
+        }
+
+        @Override
+        public void onFinish() {
+
+            Toast toast = Toast.makeText(CaptureActivity.this, null, Toast.LENGTH_SHORT);
+            toast.setText("条形码识别失败");
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+
+            isPreview = false;
+            if (handler != null) {
+                handler.quitSynchronously();
+                handler = null;
+            }
+            inactivityTimer.shutdown();
+            beepManager.close();
+            cameraManager.closeDriver();
+
+            if (!hasSurface) {
+                surfaceHolder.removeCallback(CaptureActivity.this);
+            }
+
+
+            previewView.setBackgroundColor(getResources().getColor(R.color.text_drak_gray));
+            viewfinderView.setVisibility(View.GONE);
+            fy.setVisibility(View.VISIBLE);
+        }
+    };
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == Constant.REQUEST_IMAGE && resultCode == RESULT_OK) {
-            String path = ImageUtil.getImageAbsolutePath(this, data.getData());
+            final String path = ImageUtil.getImageAbsolutePath(this, data.getData());
 
-            new DecodeImgThread(path, new DecodeImgCallback() {
-                @Override
-                public void onImageDecodeSuccess(Result result) {
-                    Log.e("扫码", "扫码成功");
-                    handleDecode(result);
+                    new DecodeImgThread(path, new DecodeImgCallback() {
+                        @Override
+                        public void onImageDecodeSuccess(Result result) {
+                            Log.e("扫码", "扫码成功");
+                            handleDecode(result);
+                            countDownTimer.cancel();
 
+                        }
 
-                }
+                        @Override
+                        public void onImageDecodeFailed() {
+                            Log.e("扫码", "扫码失败");
+                            Toast toast = Toast.makeText(CaptureActivity.this, null, Toast.LENGTH_SHORT);
+                            toast.setText("条形码识别失败");
+                            toast.setGravity(Gravity.CENTER, 0, 0);
+                            toast.show();
+                            countDownTimer.cancel();
+                        }
+                    }).run();
 
-                @Override
-                public void onImageDecodeFailed() {
-                    Log.e("扫码", "扫码失败");
-                    Toast toast = Toast.makeText(CaptureActivity.this, null, Toast.LENGTH_SHORT);
-                    toast.setText("条形码识别失败");
-                    toast.setGravity(Gravity.CENTER, 0, 0);
-                    toast.show();
-                }
-            }).run();
 
         }
 
@@ -561,6 +661,7 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
                 datasBeanList.addAll(map.values());
                 if (type == null) {
                     addapter.setDate(datasBeanList, mContext, "2", widWidth);
+                    addapter.setCount(1);
                 } else {
                     addapter.setDate(datasBeanList, mContext, "4", widWidth);
                 }
@@ -575,11 +676,13 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
             @Override
             public void onFailure(Request request, IOException e) {
                 Log.e("接口", "失败111" + e);
+                countDownTimer.cancel();
             }
 
             @Override
             public void onResponse(String response) {
                 Log.e("接口", response);
+                countDownTimer.cancel();
                 BaseModel baseModel = gson.fromJson(response, BaseModel.class);
                 if (baseModel.getCode() == PublicUtils.code) {
                     ScanDatas scanDatas = gson.fromJson(gson.toJson(baseModel.getDatas()), ScanDatas.class);
@@ -612,6 +715,7 @@ public class CaptureActivity extends BaseActivity implements SurfaceHolder.Callb
                     if (!TextUtils.isEmpty(baseModel.getMsg())) {
                         // showToast("条形码识别失败");
                         Log.e("接口", "失败222");
+                        countDownTimer.cancel();
                         showToasts(baseModel.getMsg());
                     }
 

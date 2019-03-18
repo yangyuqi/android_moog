@@ -137,6 +137,7 @@ public class CheckResultActivity extends BaseActivity implements View.OnClickLis
         if (status==-1){
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.VISIBLE);
+            no_data.setVisibility(View.GONE);
         }else {
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.GONE);
@@ -221,7 +222,7 @@ public class CheckResultActivity extends BaseActivity implements View.OnClickLis
         List<CheckStoreList.PatrolShopListBean> beans = checkStoreList.getPatrolShopList();
         if (beans.size() != 0) {
             list.addAll(beans);
-            adapter.setUI(beans);
+            adapter.setUI(list);
             no_data.setVisibility(View.GONE);
             mSpringView.setVisibility(View.VISIBLE);
         } else {

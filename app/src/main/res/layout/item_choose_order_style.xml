@@ -57,11 +57,54 @@
             android:paddingTop="10dp"
             android:paddingBottom="10dp">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_list_pic"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="88dp"
-                android:paddingLeft="15dp"></android.support.v7.widget.RecyclerView>
+                android:layout_height="match_parent">
+
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_list_pic"
+                    android:layout_width="match_parent"
+                    android:paddingLeft="15dp"
+                    android:layout_height="88dp"></android.support.v7.widget.RecyclerView>
+
+                <LinearLayout
+                    android:id="@+id/lin_code"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    android:layout_marginLeft="105dp">
+
+                    <TextView
+                        android:id="@+id/tv_goods_SKU"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textColor="@color/text_main"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:layout_marginLeft="10dp"/>
+
+                    <TextView
+                        android:id="@+id/tv_goods_contents"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textColor="@color/text_main"
+                        android:maxLines="3"
+                        android:ellipsize="end"
+                        android:textSize="13sp"
+                        android:layout_marginRight="18dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginLeft="10dp"/>
+
+
+                </LinearLayout>
+
+
+
+            </FrameLayout>
 
 
         </LinearLayout>

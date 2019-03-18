@@ -9,6 +9,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.youzheng.zhejiang.robertmoog.R;
+import com.youzheng.zhejiang.robertmoog.Store.listener.OnRecyclerViewAdapterItemClickListener;
 
 import java.util.List;
 
@@ -16,7 +17,11 @@ public class MoreGoodsAdapter extends RecyclerView.Adapter<MoreGoodsAdapter.PicH
     private List<String> list;
     private Context context;
     private LayoutInflater layoutInflater;
+    private OnRecyclerViewAdapterItemClickListener mOnItemClickListener;
 
+    public void setOnItemClickListener(OnRecyclerViewAdapterItemClickListener mOnItemClickListener) {
+        this.mOnItemClickListener = mOnItemClickListener;
+    }
     public MoreGoodsAdapter(List<String> list, Context context) {
         this.list = list;
         this.context = context;
@@ -31,7 +36,19 @@ public class MoreGoodsAdapter extends RecyclerView.Adapter<MoreGoodsAdapter.PicH
     @Override
     public PicHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view=layoutInflater.inflate(R.layout.item_order_list_pic,parent,false);
-        PicHolder picHolder=new PicHolder(view);
+        final PicHolder picHolder=new PicHolder(view);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                int position = picHolder.getLayoutPosition();
+                //设置监听
+                if (mOnItemClickListener != null) {
+                    mOnItemClickListener.onItemClick(view, position);
+                }
+
+            }
+        });
         return picHolder;
     }
 

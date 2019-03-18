@@ -213,7 +213,7 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
 
         if (one.size()!=0){
             onelist.addAll(one);
-            oneOrderDetailAdapter.setUI(one);
+            oneOrderDetailAdapter.setUI(onelist);
 //            requests.clear();
         }else {
             rv_list_one.setVisibility(View.GONE);
@@ -224,7 +224,7 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
 
         if (more.size()!=0){
             morelist.addAll(more);
-            moreChooseReturnGoodsAdapter.setUI(more);
+            moreChooseReturnGoodsAdapter.setUI(morelist);
 //            requests.addAll(moreChooseReturnGoodsAdapter.getRequests());
 //            Log.e("sada",requests+"");
         }else {
@@ -261,7 +261,7 @@ public class ChooseReturnGoodsActivity extends BaseActivity implements View.OnCl
                 }
 
                 if (morelist.size()!=0){
-//                        requests.addAll(moreChooseReturnGoodsAdapter.getRequests());
+                       // requests.addAll(moreChooseReturnGoodsAdapter.getRequests());
                     for (int i = 0; i < morelist.size(); i++) {
                         ChooseReturnGoodsDetail.ReturnOrderInfoBean.SetMealListBean setMealListBean = morelist.get(i);
                         if (setMealListBean!=null&&setMealListBean.getProductList()!=null){

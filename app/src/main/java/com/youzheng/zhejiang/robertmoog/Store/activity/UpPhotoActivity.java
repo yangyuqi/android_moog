@@ -7,9 +7,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -31,6 +33,7 @@ import com.youzheng.zhejiang.robertmoog.Store.adapter.AddphotoAdapter;
 import com.youzheng.zhejiang.robertmoog.Store.listener.DeleteListener;
 import com.youzheng.zhejiang.robertmoog.Store.listener.OnRecyclerViewAdapterItemClickListener;
 import com.youzheng.zhejiang.robertmoog.Store.utils.AndroidScheduler;
+import com.youzheng.zhejiang.robertmoog.utils.View.RemindDialog;
 
 import java.io.File;
 import java.io.IOException;
@@ -85,6 +88,7 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
     private ArrayList<File> fileList = new ArrayList<>();
     private String response;
     private LinearLayout lin_show;
+    private int count=1;
 
 
     @Override
@@ -241,6 +245,7 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
                 list.clear();
                 fileList.clear();
                 adapter.clear();
+                count++;
                 finish();
                 dialogBuilder.dismiss();
             }
@@ -271,7 +276,9 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
                     list.clear();
                     fileList.clear();
                     adapter.clear();
+                    count++;
                     finish();
+
                 }
 
                 break;
@@ -299,6 +306,28 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
         }
     }
 
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        //返回事件
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (list.size()!=0){
+                stopfinish();
+            }else {
+                list.clear();
+                fileList.clear();
+                adapter.clear();
+                count++;
+                finish();
+
+            }
+
+
+        }
+
+
+        return super.onKeyDown(keyCode, event);
+    }
 
     private void LuBan(String picpath) {
         Luban.with(this)
@@ -347,7 +376,10 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
                     public void onError(Throwable throwable) {
                         Log.e("图片上传失败", throwable.getMessage());
 //                        showToast("图片上传失败");
-                        showToasts("服务器忙,请稍候重试");
+                        if (count==1){
+                            showToasts("服务器忙,请稍候重试");
+                        }
+
                         lin_show.setVisibility(View.GONE);
                     }
 
@@ -359,10 +391,16 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
                             Log.e("图片上传成功", s);
                             showToasts("图片上传成功");
                             startActivity(new Intent(UpPhotoActivity.this,SampleOutDetailActivity.class));
+                            list.clear();
+                            fileList.clear();
+                            adapter.clear();
                             finish();
                         }else {
                             Log.e("图片上传失败",s);
-                            showToasts(baseModel.getMsg());
+                            if (!TextUtils.isEmpty(baseModel.getMsg())){
+                                showToasts(baseModel.getMsg());
+                            }
+
                         }
                     }
                 });
@@ -412,6 +450,13 @@ public class UpPhotoActivity extends BaseCameraActivity implements View.OnClickL
         window.setAttributes(lp);
 
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        count++;
+        OkHttpClientManager.stopRequest();
     }
 
     @Override

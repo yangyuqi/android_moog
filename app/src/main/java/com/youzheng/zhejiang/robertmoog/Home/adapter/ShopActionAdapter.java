@@ -33,10 +33,20 @@ public class ShopActionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         notifyDataSetChanged();
     }
 
+    public void setUI(List<ComboPromoBean> comboPromo){
+        this.comboPromo=comboPromo;
+        notifyDataSetChanged();
+    }
+
+    public void clear(){
+        comboPromo.clear();
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(context).inflate(R.layout.shop_action_details_rv_item,null);
+        View view = LayoutInflater.from(context).inflate(R.layout.shop_action_details_rv_item,viewGroup,false);
         return new ShoptViewHolder(view);
     }
 

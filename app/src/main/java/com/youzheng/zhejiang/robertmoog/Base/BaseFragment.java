@@ -1,11 +1,14 @@
 package com.youzheng.zhejiang.robertmoog.Base;
 
 import android.content.Context;
+import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +20,8 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.youzheng.zhejiang.robertmoog.Base.utils.PublicUtils;
 import com.youzheng.zhejiang.robertmoog.R;
+import com.youzheng.zhejiang.robertmoog.utils.NetBroadcastReceiver;
+import com.youzheng.zhejiang.robertmoog.utils.NetUtil;
 
 public class BaseFragment extends Fragment {
 
@@ -32,6 +37,11 @@ public class BaseFragment extends Fragment {
 
     protected String access_token ;
 
+    /**
+     * 网络类型
+     */
+    private int netMobile;
+    private View no_data;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,8 +52,12 @@ public class BaseFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         return super.onCreateView(inflater,container,savedInstanceState);
     }
+
+
+
 
     public void setUpView(View view){
         mRootBaseView = view.findViewById(R.id.activity_base_root);
@@ -91,6 +105,8 @@ public class BaseFragment extends Fragment {
     public void setReloadInterface(ReloadInterface reloadInterface) {
         this.reloadInterface = reloadInterface;
     }
+
+
 
     public interface ReloadInterface {
         void reloadClickListener();

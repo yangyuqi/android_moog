@@ -19,6 +19,7 @@ import com.youzheng.zhejiang.robertmoog.Model.BaseModel;
 import com.youzheng.zhejiang.robertmoog.Model.Home.AddressDatas;
 import com.youzheng.zhejiang.robertmoog.Model.Home.AddressDatasBean;
 import com.youzheng.zhejiang.robertmoog.R;
+import com.youzheng.zhejiang.robertmoog.utils.ClickUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -58,6 +59,7 @@ public class LocationManageActivity extends BaseActivity implements View.OnClick
     @Override
     protected void onResume() {
         super.onResume();
+//        data.clear();
         initData();
     }
 
@@ -100,6 +102,7 @@ public class LocationManageActivity extends BaseActivity implements View.OnClick
         if (status == -1) {
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.VISIBLE);
+            no_data.setVisibility(View.GONE);
         } else {
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.GONE);
@@ -152,9 +155,13 @@ public class LocationManageActivity extends BaseActivity implements View.OnClick
         findViewById(R.id.tv_add).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, AddNewAddressActivity.class);
-                intent.putExtra("customerId", customerId);
-                startActivity(intent);
+                if (ClickUtils.isFastDoubleClick()){
+                    return;
+                }else {
+                    Intent intent = new Intent(mContext, AddNewAddressActivity.class);
+                    intent.putExtra("customerId", customerId);
+                    startActivity(intent);
+                }
             }
         });
         textHeadNext = (TextView) findViewById(R.id.textHeadNext);

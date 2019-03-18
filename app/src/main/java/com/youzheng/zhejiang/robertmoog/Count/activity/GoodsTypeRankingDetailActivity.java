@@ -141,6 +141,7 @@ public class GoodsTypeRankingDetailActivity extends BaseActivity implements View
         if (status==-1){
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.VISIBLE);
+            no_data.setVisibility(View.GONE);
         }else {
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.GONE);
@@ -238,7 +239,7 @@ public class GoodsTypeRankingDetailActivity extends BaseActivity implements View
         List<GoodsTypeDetail.ProductListBean> beanList = goodsTypeDetail.getProductList();
         if (beanList.size() != 0) {
             list.addAll(beanList);
-            adapter.setUI(beanList);
+            adapter.setUI(list);
             no_data.setVisibility(View.GONE);
             mSpringView.setVisibility(View.VISIBLE);
         } else {

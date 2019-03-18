@@ -102,15 +102,20 @@
     <include layout="@layout/layout_no_data"
         android:id="@+id/no_data"
         android:visibility="gone"/>
-    <android.support.v4.view.ViewPager
-        android:id="@+id/pager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/bg_background_white"></android.support.v4.view.ViewPager>
+  <com.liaoinstan.springview.widget.SpringView
+      android:id="@+id/springView"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      app:type="follow">
 
-    <ListView
-        android:id="@+id/search_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"></ListView>
+      <ListView
+          android:id="@+id/search_list"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:background="@color/bg_background_white"
+          android:visibility="visible"></ListView>
+
+
+  </com.liaoinstan.springview.widget.SpringView>
+
 </LinearLayout>

@@ -57,7 +57,7 @@ public class ChooseOrderListActivity extends BaseActivity implements View.OnClic
     private SpringView mSpringView;
     //  private String type="ALL";//订单类型（ALL:全部，GROOM:推荐订单，MAJOR:专业）默认是全部
     public static ChooseOrderListActivity Instance;
-    private View no_data;
+    private View no_data,no_web;
     /**
      * 暂无数据!
      */
@@ -97,7 +97,7 @@ public class ChooseOrderListActivity extends BaseActivity implements View.OnClic
             @Override
             public void onRefresh() {
                 page = 1;
-                list.clear();
+                adapter.clear();
                 initData(page, pageSize, orderCode, timeQuantum, isCustomer);
             }
 
@@ -113,7 +113,7 @@ public class ChooseOrderListActivity extends BaseActivity implements View.OnClic
     @Override
     protected void onResume() {
         super.onResume();
-        //list.clear();
+        list.clear();
         adapter.clear();
         page = 1;
         pageSize = 10;
@@ -121,6 +121,7 @@ public class ChooseOrderListActivity extends BaseActivity implements View.OnClic
     }
 
     private void initView() {
+        no_web = findViewById(R.id.no_web);
         no_data = findViewById(R.id.no_data);
         btnBack = (ImageView) findViewById(R.id.btnBack);
         btnBack.setOnClickListener(this);
@@ -143,6 +144,20 @@ public class ChooseOrderListActivity extends BaseActivity implements View.OnClic
         mSpringView.setHeader(new MyHeader(this));
         mSpringView.setFooter(new MyFooter(this));
         tv_text = (TextView) findViewById(R.id.tv_text);
+    }
+
+    @Override
+    public void onChangeListener(int status) {
+        super.onChangeListener(status);
+        if (status == -1) {
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.VISIBLE);
+            no_data.setVisibility(View.GONE);
+        } else {
+            layout_header.setVisibility(View.VISIBLE);
+            no_web.setVisibility(View.GONE);
+
+        }
     }
 
     private void initData(int page, int pageSize, String orderCode, String timeQuantum, Boolean isCustomer) {

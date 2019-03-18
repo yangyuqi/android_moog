@@ -38,7 +38,7 @@ public class ReturnGoodsCounterAdapter extends RecyclerView.Adapter<ReturnGoodsC
     private List<Integer> money_all=new ArrayList<>();
     public static int totals=0;
     private List<EditText> textList=new ArrayList<>();
-    private int refund;
+    private long refund;
     CounterListener listener;
 
     public ReturnGoodsCounterAdapter(List<ReturnGoodsCounter.ReturnOrderInfoBean.ProductListBean> list, Context context,CounterListener listener) {
@@ -72,10 +72,10 @@ public class ReturnGoodsCounterAdapter extends RecyclerView.Adapter<ReturnGoodsC
         oneHolder.tv_number.setText("X "+bean.getCount()+"");
 
 
-          refund= Integer.parseInt(bean.getRefundAmount());
+          refund= Long.parseLong(bean.getRefundAmount());
         if (bean.isIsSpecial()==true){
             oneHolder.tv_area.setVisibility(View.VISIBLE);
-            if (bean.getSquare()!=0){
+            if (!TextUtils.isEmpty(bean.getSquare())){
                 oneHolder.tv_area.setText(bean.getSquare()+"平方");
             }
         }else {
@@ -83,7 +83,7 @@ public class ReturnGoodsCounterAdapter extends RecyclerView.Adapter<ReturnGoodsC
 
         }
 
-        int refunds= Integer.parseInt(bean.getRefundAmount());
+        long refunds= Long.parseLong(bean.getRefundAmount());
         if (bean.getCount()!=0){
             oneHolder.et_money.setText(bean.getRefundAmount());
             bean.setMoney(refunds);
@@ -94,36 +94,7 @@ public class ReturnGoodsCounterAdapter extends RecyclerView.Adapter<ReturnGoodsC
             oneHolder.tv_item_total.setText("0");
             bean.setMoney(0);
         }
-        //ReturnGoodsCounterActivity.tv_really_cut_money.setText("");
 
-//        bean.setMoney(bean.getMoney());
-//        oneHolder.et_money.setTag(position);
-//        textList.add((EditText) oneHolder.et_money);
-//        oneHolder.et_money.setText(bean.getRefundAmount());
-//        money_all.clear();
-//        totals=0;
-//        for (EditText editText:textList){
-//            String mo=editText.getText().toString().trim();
-//            int num_mon= Integer.parseInt(mo);
-//            int count=bean.getCount();
-//            int alls=num_mon*count;
-//            bean.setMoney(alls);
-//            oneHolder.tv_item_total.setText(alls+"");
-//
-//            Log.e("111",alls+"总和");
-//
-//            money_all.add(alls);
-//
-//            for (int i = 0; i <money_all.size() ; i++) {
-//                all=money_all.get(i);
-//                Log.e("111",all+"集合");
-//
-//            }
-//            totals=all+totals;
-//            Log.e("111",totals+"计算总和");
-//            ReturnGoodsCounterActivity.tv_really_cut_money.setText(context.getString(R.string.label_money)+totals+"");
-//        }
-//
 
 
 
@@ -135,20 +106,7 @@ public class ReturnGoodsCounterAdapter extends RecyclerView.Adapter<ReturnGoodsC
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                  if (money.length()==0){
-//                      money_all.clear();
-//                      totals=0;
-//                      all=0;
-//                      ReturnGoodsCounterActivity.tv_really_cut_money.setText("");
-//                  }
 
-
-//                   for (ReturnGoodsCounter.ReturnOrderInfoBean.ProductListBean productListBean:list){
-//                       money_num+=productListBean.getMoney()*productListBean.getCount();
-//                   }
-
-
-              //  notifyDataSetChanged();
             }
 
             @Override
@@ -158,9 +116,9 @@ public class ReturnGoodsCounterAdapter extends RecyclerView.Adapter<ReturnGoodsC
                     bean.setMoney(0);
                 }else {
                     money=s.toString();
-                    int edit= Integer.parseInt(money);
+                    long edit= Long.parseLong(money);
                     bean.setMoney(edit);
-                    int num= Integer.parseInt(bean.getRefundAmount());
+                    long num= Long.parseLong(bean.getRefundAmount());
 
                     if (edit>num){
                         Toast toast = Toast.makeText(context, null, Toast.LENGTH_SHORT);
@@ -178,7 +136,7 @@ public class ReturnGoodsCounterAdapter extends RecyclerView.Adapter<ReturnGoodsC
 
                         bean.setMoney(edit);
                     }
-                    int all_should=0;
+                    long all_should=0;
                     for (int i = 0; i < list.size(); i++) {
                         all_should = all_should+list.get(i).getMoney();
                         Log.e("111", all + "集合1======"+i);

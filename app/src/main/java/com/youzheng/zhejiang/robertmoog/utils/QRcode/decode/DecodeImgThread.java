@@ -13,7 +13,10 @@ import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
 
 import java.util.Hashtable;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.Vector;
+import java.util.logging.Handler;
 
 public class DecodeImgThread extends Thread {
 
@@ -71,6 +74,7 @@ public class DecodeImgThread extends Thread {
             e.printStackTrace();
             //  Log.i("解析的图片结果","失败");
         }
+
 
         if (rawResult != null) {
             callback.onImageDecodeSuccess(rawResult);

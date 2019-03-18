@@ -40,6 +40,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.greenrobot.event.EventBus;
 import okhttp3.Request;
 
 public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -105,7 +106,7 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
                         }
                         CommonAdapter<ProductListBean> commonAdapter = new CommonAdapter<ProductListBean>(context,listBeanList,R.layout.customer_nols_item) {
                             @Override
-                            public void convert(ViewHolder helper, ProductListBean item) {
+                            public void convert(ViewHolder helper, final ProductListBean item) {
 
                                     helper.setText(R.id.tv_name,item.getSku());
                                     helper.setText(R.id.tv_time,item.getCreateDate());
@@ -127,7 +128,7 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
                                             @Override
                                             public void isDelete(boolean isdelete) {
                                                 Map<String,Object> map = new HashMap<>();
-                                                map.put("id",data.get(i).getGoodsId());
+                                                map.put("id",item.getId());
                                                 OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.DELETE_GOODS + "?access_token=" + token, new OkHttpClientManager.StringCallback() {
                                                     @Override
                                                     public void onFailure(Request request, IOException e) {
@@ -138,12 +139,9 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
                                                     public void onResponse(String response) {
                                                         BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                                                         if (baseModel.getCode()==PublicUtils.code){
-                                                            listBeanList.remove(i);
-                                                            listener.refresh(data);
-                                                            //listBeanList.remove(i);
-//                                                            commonAdapter.notifyDataSetChanged();
+                                                            listBeanList.remove(item);
+                                                            EventBus.getDefault().post("refresh");
                                                             notifyDataSetChanged();
-                                                            //notifyItemInserted(i);
                                                         }
                                                     }
                                                 });
@@ -151,12 +149,6 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
                                         });
                                     }
                                 });
-//                                helper.getView(R.id.main_right_drawer_layout).setOnClickListener(new View.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(View v) {
-//
-//                                    }
-//                                });
                             }
                         };
                         ((CustomerIntentViewHolder) viewHolder).ls.setAdapter(commonAdapter);
@@ -167,23 +159,17 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
             }else  if (data.get(i).getProductList().size()==0) {
                 ((CustomerIntentViewHolder) viewHolder).rl_show.setVisibility(View.GONE);
                 ((CustomerIntentViewHolder) viewHolder).lin_one.setVisibility(View.GONE);
+
+            }else if (data.get(i).getProductList().size()==1){
+                ((CustomerIntentViewHolder) viewHolder).rl_show.setVisibility(View.GONE);
+                ((CustomerIntentViewHolder) viewHolder).lin_one.setVisibility(View.VISIBLE);
+
             }else {
                 ((CustomerIntentViewHolder) viewHolder).rl_show.setVisibility(View.GONE);
+
             }
 
 
-//            LinearLayout view = ((CustomerIntentViewHolder) viewHolder).ll_width;
-//            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
-//            params.width = (int) PublicUtils.dip2px(PublicUtils.px2dip(widWidth));
-//            view.setLayoutParams(params);
-
-//
-//            ((CustomerIntentViewHolder) viewHolder).hsv.setOnTouchListener(new View.OnTouchListener() {
-//                @Override
-//                public boolean onTouch(View v, MotionEvent event) {
-//                    return true;
-//                }
-//            });
 
             ((CustomerIntentViewHolder) viewHolder).tv_phone.setText(data.get(i).getCustCode());
             ((CustomerIntentViewHolder) viewHolder).tv_name.setText(data.get(i).getSku());
@@ -197,11 +183,11 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
 //            }else {
 //                ((CustomerIntentViewHolder) viewHolder).hsv.setVisibility(View.GONE);
 //            }
-//              if (TextUtils.isEmpty(data.get(i).getRemark())){
-//                  ((CustomerIntentViewHolder) viewHolder).iv_message.setVisibility(View.GONE);
-//              }else {
-//                  ((CustomerIntentViewHolder) viewHolder).iv_message.setVisibility(View.VISIBLE);
-//              }
+              if (TextUtils.isEmpty(data.get(i).getRemark())){
+                  ((CustomerIntentViewHolder) viewHolder).iv_message.setVisibility(View.GONE);
+              }else {
+                  ((CustomerIntentViewHolder) viewHolder).iv_message.setVisibility(View.VISIBLE);
+              }
             ((CustomerIntentViewHolder) viewHolder).iv_message.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -227,8 +213,8 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
                     dialog.OnDeleteBtn(new DeleteDialogInterface() {
                         @Override
                         public void isDelete(boolean isdelete) {
-                            Map<String,Object> map = new HashMap<>() ;
-                            map.put("id",data.get(i).getGoodsId());
+                            Map<String,Object> map = new HashMap<>();
+                            map.put("id",data.get(i).getId());
                             OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.DELETE_INTENT + "?access_token=" + token, new OkHttpClientManager.StringCallback() {
                                 @Override
                                 public void onFailure(Request request, IOException e) {
@@ -239,8 +225,11 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
                                 public void onResponse(String response) {
                                     BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                                     if (baseModel.getCode()==PublicUtils.code){
-                                        listBeanList.remove(i);
+                                        data.remove(i);
+                                        listener.refresh(data);
                                         notifyDataSetChanged();
+                                    }else {
+
                                     }
                                 }
                             });
@@ -272,8 +261,9 @@ public class CustomerGoodsAdapter extends RecyclerView.Adapter<RecyclerView.View
                                 public void onResponse(String response) {
                                     BaseModel baseModel = gson.fromJson(response,BaseModel.class);
                                     if (baseModel.getCode()==PublicUtils.code){
-                                        data.remove(i);
-                                        listener.refresh(data);
+//                                        data.remove(i);
+//                                        listener.refresh(data);
+                                        EventBus.getDefault().post("refresh");
                                         notifyDataSetChanged();
                                     }
                                 }

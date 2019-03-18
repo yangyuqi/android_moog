@@ -1,10 +1,16 @@
 package com.youzheng.zhejiang.robertmoog.Store.activity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -108,15 +114,50 @@ public class AddStaffActivity extends BaseActivity implements View.OnClickListen
                  }else if (TextUtils.isEmpty(name)){
                      showToasts(getString(R.string.no_name));
                  }else {
-                     addStaff(name,phone);
-
-
-
+                     showStopDialog();
                  }
                 break;
         }
     }
+    public void showStopDialog() {
+        final AlertDialog dialogBuilder = new AlertDialog.Builder(AddStaffActivity.this, R.style.mydialog).create();
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_add_staff, null);
+        dialogBuilder.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogBuilder.show();
+        dialogBuilder.setContentView(dialogView);
 
+        TextView tv_no = dialogView.findViewById(R.id.tv_no);
+        TextView tv_ok = dialogView.findViewById(R.id.tv_ok);
+
+        tv_no.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogBuilder.dismiss();
+            }
+        });
+
+        tv_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addStaff(name,phone);
+                dialogBuilder.dismiss();
+            }
+        });
+
+        Window window = dialogBuilder.getWindow();
+        //这句设置我们dialog在底部
+        window.setGravity(Gravity.CENTER);
+        WindowManager.LayoutParams lp = window.getAttributes();
+        //这句就是设置dialog横向满屏了。
+        DisplayMetrics d = this.getResources().getDisplayMetrics(); // 获取屏幕宽、高用
+        lp.width = (int) (d.widthPixels * 0.9); // 高度设置为屏幕的0.6
+        // lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        window.setAttributes(lp);
+
+
+    }
     private void addStaff(String name,String phone){
         tv_add.setClickable(false);
         lin_show.setVisibility(View.VISIBLE);

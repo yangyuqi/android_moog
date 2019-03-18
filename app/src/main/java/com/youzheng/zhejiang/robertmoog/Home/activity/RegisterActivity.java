@@ -34,6 +34,7 @@ import com.youzheng.zhejiang.robertmoog.Store.activity.PeopleMangerActivity;
 import com.youzheng.zhejiang.robertmoog.Store.bean.Code;
 import com.youzheng.zhejiang.robertmoog.Store.bean.UnqualifiedContent;
 import com.youzheng.zhejiang.robertmoog.Store.utils.PermissionUtils;
+import com.youzheng.zhejiang.robertmoog.utils.ClickUtils;
 import com.youzheng.zhejiang.robertmoog.utils.PhoneUtil;
 import com.youzheng.zhejiang.robertmoog.utils.View.MyCountDownTimer;
 import com.youzheng.zhejiang.robertmoog.utils.View.NoteInfoDialog;
@@ -50,13 +51,20 @@ public class RegisterActivity  extends BaseActivity implements TextWatcher {
     Button btn_send_code ;
     private MyCountDownTimer timer ;
     private String phone;
-
+    private String url;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register_layout);
         phone=getIntent().getStringExtra("no_phone");
         initView();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getCode();
+
     }
 
     private void initView() {
@@ -91,31 +99,37 @@ public class RegisterActivity  extends BaseActivity implements TextWatcher {
                     showToasts(getString(R.string.code_not_null));
                     return;
                 }
-                Map<String,Object> map = new HashMap<>();
-                map.put("phone",edt_phone.getText().toString());
-                map.put("checkCode",edt_code.getText().toString());
-                OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.REGISTER_USER+"?access_token="+access_token, new OkHttpClientManager.StringCallback() {
-                    @Override
-                    public void onFailure(Request request, IOException e) {
 
-                    }
+                if (ClickUtils.isFastDoubleClick()){
+                    return;
+                }else {
+                    Map<String,Object> map = new HashMap<>();
+                    map.put("phone",edt_phone.getText().toString());
+                    map.put("checkCode",edt_code.getText().toString());
+                    OkHttpClientManager.postAsynJson(gson.toJson(map), UrlUtils.REGISTER_USER+"?access_token="+access_token, new OkHttpClientManager.StringCallback() {
+                        @Override
+                        public void onFailure(Request request, IOException e) {
 
-                    @Override
-                    public void onResponse(String response) {
-                        BaseModel baseModel = gson.fromJson(response,BaseModel.class);
-                        if (baseModel.getCode()==PublicUtils.code){
-                           // showToast(getString(R.string.register_success));
-                            RegisterBean registerBean = gson.fromJson(gson.toJson(baseModel.getDatas()),RegisterBean.class);
-                            Intent intent = new Intent(mContext,RegisterSuccessActivity.class);
-                            intent.putExtra("register",registerBean);
-                            Log.e("customerid","注册"+registerBean.getCustomerId());
-                            startActivity(intent);
-                            finish();
-                        }else {
-                            showToasts(baseModel.getMsg());
                         }
-                    }
-                });
+
+                        @Override
+                        public void onResponse(String response) {
+                            BaseModel baseModel = gson.fromJson(response,BaseModel.class);
+                            if (baseModel.getCode()==PublicUtils.code){
+                                // showToast(getString(R.string.register_success));
+                                RegisterBean registerBean = gson.fromJson(gson.toJson(baseModel.getDatas()),RegisterBean.class);
+                                Intent intent = new Intent(mContext,RegisterSuccessActivity.class);
+                                intent.putExtra("register",registerBean);
+                                Log.e("customerid","注册"+registerBean.getCustomerId());
+                                startActivity(intent);
+                                finish();
+                            }else {
+                                showToasts(baseModel.getMsg());
+                            }
+                        }
+                    });
+                }
+
 
             }
         });
@@ -147,7 +161,7 @@ public class RegisterActivity  extends BaseActivity implements TextWatcher {
                             if (baseModel.getCode()== PublicUtils.code){
                                 Code code = gson.fromJson(gson.toJson(baseModel.getDatas()),Code.class);
                                 timer.start();
-                                showStopDialog(code.getCheckCode());
+                                //showStopDialog(code.getCheckCode());
                             }else {
                                 if (!TextUtils.isEmpty(baseModel.getMsg())){
                                     showToasts(baseModel.getMsg());
@@ -164,58 +178,57 @@ public class RegisterActivity  extends BaseActivity implements TextWatcher {
         ((ImageView)findViewById(R.id.iv_next)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                OkHttpClientManager.postAsynJson(gson.toJson(new HashMap<>()), UrlUtils.SHOP_SCVAN+"?access_token="+access_token, new OkHttpClientManager.StringCallback() {
-                    @Override
-                    public void onFailure(Request request, IOException e) {
-
-                    }
-
-                    @Override
-                    public void onResponse(String response) {
-                        BaseModel baseModel = gson.fromJson(response,BaseModel.class);
-                        if (baseModel.getCode()==PublicUtils.code){
-                            ShopQRCodeBean qrCodeBean = gson.fromJson(gson.toJson(baseModel.getDatas()),ShopQRCodeBean.class);
-                            if (!TextUtils.isEmpty(qrCodeBean.getShopQRCode())){
+                if (Build.VERSION.SDK_INT >= 23) {
+                    if (PermissionUtils.permissionIsOpen(RegisterActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            ){
 
 
-                                if (Build.VERSION.SDK_INT >= 23) {
-                                    if (PermissionUtils.permissionIsOpen(RegisterActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                                            ){
+                        NoteInfoDialog infoDialog = new NoteInfoDialog(mContext,url);
+                        infoDialog.show();
+                    } else {
 
+                        if (!shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE) ){
+                            PermissionUtils.showCameraDialog(getString(R.string.content_str_read)
+                                    ,RegisterActivity.this);
+                        } else {
 
-                                        NoteInfoDialog infoDialog = new NoteInfoDialog(mContext,qrCodeBean.getShopQRCode());
-                                        infoDialog.show();
-                                    } else {
+                            PermissionUtils.openSinglePermission(RegisterActivity.this
+                                    , Manifest.permission.WRITE_EXTERNAL_STORAGE
+                                    , PermissionUtils.CODE_MULTI);
 
-                                        if (!shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE) ){
-                                            PermissionUtils.showCameraDialog(getString(R.string.content_str_read)
-                                                    ,RegisterActivity.this);
-                                        } else {
-
-                                            PermissionUtils.openSinglePermission(RegisterActivity.this
-                                                    , Manifest.permission.WRITE_EXTERNAL_STORAGE
-                                                    , PermissionUtils.CODE_MULTI);
-
-                                        }
-
-                                    }
-                                }else{
-                                    NoteInfoDialog infoDialog = new NoteInfoDialog(mContext,qrCodeBean.getShopQRCode());
-                                    infoDialog.show();
-                                }
-
-
-                            }
                         }
+
                     }
-                });
+                }else{
+                    NoteInfoDialog infoDialog = new NoteInfoDialog(mContext,url);
+                    infoDialog.show();
+                }
+
             }
         });
 
     }
 
 
+    private void getCode(){
+        OkHttpClientManager.postAsynJson(gson.toJson(new HashMap<>()), UrlUtils.SHOP_SCVAN+"?access_token="+access_token, new OkHttpClientManager.StringCallback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
 
+            }
+
+            @Override
+            public void onResponse(String response) {
+                BaseModel baseModel = gson.fromJson(response,BaseModel.class);
+                if (baseModel.getCode()==PublicUtils.code){
+                    ShopQRCodeBean qrCodeBean = gson.fromJson(gson.toJson(baseModel.getDatas()),ShopQRCodeBean.class);
+                    if (!TextUtils.isEmpty(qrCodeBean.getShopQRCode())){
+                       url=qrCodeBean.getShopQRCode();
+                    }
+                }
+            }
+        });
+    }
     public void showStopDialog(final String code) {
         final AlertDialog dialogBuilder = new AlertDialog.Builder(RegisterActivity.this,R.style.mydialog).create();
         LayoutInflater inflater = this.getLayoutInflater();

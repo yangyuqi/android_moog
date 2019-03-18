@@ -103,6 +103,7 @@ public class StoreCustomerInsideActivity extends BaseActivity implements View.On
         if (status == -1) {
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.VISIBLE);
+            no_data.setVisibility(View.GONE);
         } else {
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.GONE);
@@ -181,8 +182,9 @@ public class StoreCustomerInsideActivity extends BaseActivity implements View.On
         if (storeCustomerDetail.getMonthCoustomerDetail() == null) return;
         List<StoreCustomerDetail.MonthCoustomerDetailBean> monthCoustomerDetailBeans = storeCustomerDetail.getMonthCoustomerDetail();
         if (monthCoustomerDetailBeans.size() != 0) {
+            list.clear();
             list.addAll(monthCoustomerDetailBeans);
-            adapter.refreshUI(monthCoustomerDetailBeans);
+            adapter.refreshUI(list);
             no_data.setVisibility(View.GONE);
             mSpringView.setVisibility(View.VISIBLE);
         } else {

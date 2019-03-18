@@ -1,6 +1,7 @@
 package com.youzheng.zhejiang.robertmoog.Store.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,7 +58,12 @@ public class UnqualifiedAdapter extends BaseAdapter {
             viewHolder= (ViewHolder) convertView.getTag();
         }
         UnqualifiedContent.PatrolShopProblemDetailBean.QuestionImagesBean bean=list.get(position);
-        Glide.with(context).load(bean.getImageImgUrl()).error(R.mipmap.type_icon).into(viewHolder.iv_photo);
+        if (TextUtils.isEmpty(bean.getImageImgUrl())){
+            viewHolder.iv_photo.setVisibility(View.GONE);
+        }else {
+            Glide.with(context).load(bean.getImageImgUrl()).error(R.mipmap.type_icon).into(viewHolder.iv_photo);
+        }
+
         return convertView;
     }
     class ViewHolder{

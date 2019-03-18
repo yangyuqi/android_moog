@@ -155,6 +155,7 @@ public class StoreSaleInsideActivity extends BaseActivity implements View.OnClic
         if (status==-1){
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.VISIBLE);
+            no_data.setVisibility(View.GONE);
         }else {
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.GONE);
@@ -247,7 +248,7 @@ public class StoreSaleInsideActivity extends BaseActivity implements View.OnClic
         List<ShopSaleDetail.ShopDataBean> shopDataBeans=shopSaleDetail.getShopData();
         if (shopDataBeans.size()!=0){
             list.addAll(shopDataBeans);
-            adapter.setUI(shopDataBeans);
+            adapter.setUI(list);
             no_data.setVisibility(View.GONE);
             pr_list.setVisibility(View.VISIBLE);
 

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/bg_all"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -507,7 +508,8 @@
 
 
                 <EditText
-                    android:text=""
+                    android:hint="0"
+                    android:textColorHint="@color/text_main"
                     android:layout_marginRight="@dimen/space_15"
                     android:id="@+id/edt_door_ticket"
                     android:layout_width="80dp"
@@ -517,6 +519,7 @@
                     android:gravity="center"
                     android:background="@drawable/bg_order"
                     android:padding="5dp"
+                    android:maxLength="9"
                     android:paddingLeft="@dimen/space_15"
                     android:paddingRight="@dimen/space_15"
                     android:numeric="integer"
@@ -590,6 +593,8 @@
                         android:layout_marginTop="2dp"
                         android:background="@color/bg_background_white"
                         />
+
+
                     <TextView
                         android:id="@+id/tv_should_money"
                         android:layout_width="wrap_content"
@@ -631,7 +636,7 @@
                         android:id="@+id/tv_cut_money_of_juan"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="-¥0"
+                        android:text=""
                         android:textColor="@color/text_main"
                         android:textSize="13sp"
                         android:gravity="center_vertical"
@@ -668,7 +673,7 @@
                         android:id="@+id/tv_cut_money_of_promotion"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="-¥0"
+                        android:text=""
                         android:textColor="@color/text_main"
                         android:textSize="13sp"
                         android:gravity="center_vertical"
@@ -704,7 +709,7 @@
                         android:id="@+id/tv_cut_money_of_store"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="-¥0"
+                        android:text=""
                         android:textColor="@color/text_main"
                         android:textSize="13sp"
                         android:gravity="center_vertical"
@@ -736,6 +741,8 @@
                         android:layout_marginTop="2dp"
                         android:background="@color/bg_background_white"
                         />
+
+
                     <TextView
                         android:id="@+id/tv_get_money_of_now"
                         android:layout_width="wrap_content"

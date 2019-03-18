@@ -23,6 +23,7 @@ import com.youzheng.zhejiang.robertmoog.Model.Home.ProvinceList;
 import com.youzheng.zhejiang.robertmoog.Model.Home.StreetList;
 import com.youzheng.zhejiang.robertmoog.R;
 import com.youzheng.zhejiang.robertmoog.Store.utils.SoftInputUtils;
+import com.youzheng.zhejiang.robertmoog.utils.ClickUtils;
 import com.youzheng.zhejiang.robertmoog.utils.PhoneUtil;
 import com.youzheng.zhejiang.robertmoog.utils.View.RemindDialog;
 
@@ -105,8 +106,12 @@ public class AddNewAddressActivity extends BaseActivity {
         findViewById(R.id.tv_add).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (ClickUtils.isFastDoubleClick()){
+                    return;
+                }else {
+                    addAddress();
+                }
 
-                addAddress();
             }
         });
 

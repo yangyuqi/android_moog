@@ -87,8 +87,9 @@ public class SearchMealInfoActivity extends BaseActivity implements View.OnClick
         if (searchMeal.getSelectProducts() == null) return;
         List<SearchMeal.SelectProductsBean> beans = searchMeal.getSelectProducts();
         if (beans.size() != 0) {
+            list.clear();
             list.addAll(beans);
-            adapter.setUI(beans);
+            adapter.setUI(list);
         } else {
             showToasts(getString(R.string.load_list_erron));
         }
@@ -99,6 +100,7 @@ public class SearchMealInfoActivity extends BaseActivity implements View.OnClick
         if (status==-1){
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.VISIBLE);
+            no_data.setVisibility(View.GONE);
         }else {
             layout_header.setVisibility(View.VISIBLE);
             no_web.setVisibility(View.GONE);
